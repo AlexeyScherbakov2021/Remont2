@@ -31,6 +31,18 @@ public:
     QList<Modul> listModules;
 
     explicit Product() {}
+
+    QString numAndComment()
+    {
+        QString res = number;
+        Status status = listStatus.last();
+        if(listStatus.size() > 0 && !status.Comment.isEmpty())
+        {
+            res = number + " (" + status.Comment + ")";
+        }
+        return res;
+    }
+
 };
 
 #endif // PRODUCT_H

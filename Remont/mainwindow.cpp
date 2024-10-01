@@ -2,6 +2,11 @@
 #include "ui_mainwindow.h"
 #include "cardprodwindow.h"
 #include "selectdevicewindow.h"
+#include "createdevicewindow.h"
+#include "platewindow.h"
+#include "complectproductwindow.h"
+#include "otkcontrolwindow.h"
+#include "listshipwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -65,9 +70,9 @@ void MainWindow::on_pbApplyRemont_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbRegister_clicked()
 {
-    // CreateDeviceWindow *win = new CreateDeviceWindow(this);
-    // win->setAttribute(Qt::WA_DeleteOnClose);
-    // win->show();
+    CreateDeviceWindow *win = new CreateDeviceWindow(this);
+    win->setAttribute(Qt::WA_DeleteOnClose);
+    win->show();
 }
 
 
@@ -76,9 +81,9 @@ void MainWindow::on_pbRegister_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbOTK_clicked()
 {
-    // OTKControlWindow *win = new OTKControlWindow(this);
-    // win->setAttribute(Qt::WA_DeleteOnClose);
-    // win->show();
+    OTKControlWindow *win = new OTKControlWindow(this);
+    win->setAttribute(Qt::WA_DeleteOnClose);
+    win->show();
 }
 
 
@@ -87,8 +92,8 @@ void MainWindow::on_pbOTK_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbCreatePlate_clicked()
 {
-    // PlateWindow *win = new PlateWindow(this);
-    // win->exec();
+    PlateWindow *win = new PlateWindow(this);
+    win->exec();
 
 }
 
@@ -98,8 +103,8 @@ void MainWindow::on_pbCreatePlate_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbShip_clicked()
 {
-    // ListShipWindow *win = new ListShipWindow(this);
-    // win->exec();
+    ListShipWindow *win = new ListShipWindow(this);
+    win->exec();
 }
 
 
@@ -108,8 +113,8 @@ void MainWindow::on_pbShip_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbComplect_clicked()
 {
-    // ComplectProductWindow *win = new ComplectProductWindow(this);
-    // win->exec();
+    ComplectProductWindow *win = new ComplectProductWindow(this);
+    win->exec();
 }
 
 

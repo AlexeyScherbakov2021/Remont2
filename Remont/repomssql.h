@@ -16,6 +16,7 @@ class Modul;
 class Plate;
 class SetterOut;
 class Shipment;
+class Status;
 
 class RepoMSSQL
 {
@@ -51,11 +52,12 @@ public:
 
     void FindItems(const QString &number, QList<Product> &listProduct, int status = 0);
     void FindItems(const QString &number, QList<Modul> &listModul, int status = 0);
-    void FindItems(const QString &number, QList<Plate> &listlate, int status = 0);
+    void FindItems(const QString &number, QList<Plate> &listPlate, int status = 0);
 
     void FindItems(QList<Product> &listProduct, int status = 0);
     void FindItems(QList<Modul> &listModul, int status = 0);
-    void FindItems(QList<Plate> &listlate, int status = 0);
+    void FindItems(QList<Plate> &listPlate, int status = 0);
+    void FindItems(QList<Shipment> &listShip, int status = 0);
 
     void LoadProductType(QMap<int, QString> &listTypeProduct);
 
@@ -68,8 +70,16 @@ public:
     void LoadChildProduct(Product &prod);
     void LoadChildSetter(SetterOut &setter);
     void LoadShipment(QList<Shipment> &listShip, bool isFinish);
+    void LoadShipSetter(QList<SetterOut> &listSetter, int idShip);
+    void LoadShipModule(QList<Modul> &listModul, int idShip);
+    void LoadShipProduct(QList<Product> &listProduct, int idShip);
 
+    bool AddStatus(Modul &modul, Status &status);
+    bool AddStatus(Product &product, Status &status);
+
+    void LoadOrganization(QMap<int, QString> &listOrg);
 };
+
 
 
 #endif // REPOMSSQL_H

@@ -32,8 +32,8 @@ SelectDeviceWindow::~SelectDeviceWindow()
 //--------------------------------------------------------------------------------------------------
 void SelectDeviceWindow::on_tbSearch_clicked()
 {
-    if(ui->leSearch->text().isEmpty())
-        return;
+    // if(ui->leSearch->text().isEmpty())
+    //     return;
 
     int resMod = 0;
     int resProd = 0;
@@ -93,7 +93,11 @@ int SelectDeviceWindow::SearchModul(QString number, int status)
 {
 
     ui->twModul->setRowCount(0);
-    listModul.FindItems(number, status);
+
+    if(number.isEmpty())
+        listModul.FindItems(status);
+    else
+        listModul.FindItems(number, status);
 
     int row = 0;
     for(auto const &it : listModul.listItems)
@@ -136,7 +140,10 @@ int SelectDeviceWindow::SearchProduct(QString number, int status)
 {
     ui->twProduct->setRowCount(0);
 
-    listProduct.FindItems(number, status);
+    if(number.isEmpty())
+        listProduct.FindItems(status);
+    else
+        listProduct.FindItems(number, status);
 
     int row = 0;
     for(auto const &it : listProduct.listItems)

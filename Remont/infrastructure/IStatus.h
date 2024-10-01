@@ -43,17 +43,20 @@ class StatusList
 public:
     QVector<Status> listStatus;
 
-    void LoadStatus(T &device/*, RepoMSSQL *repo*/)
+
+    void LoadStatus(T &device)
     {
         RepoMSSQL repo;
         repo.LoadStatus(device);
     }
 
-    void AddStatus(T &device, Status stat/*, RepoMSSQL *repo*/)
+
+    void AddStatus(T &device, Status stat)
     {
-
-
+        RepoMSSQL repo;
+        repo.AddStatus(device, stat);
     }
+
 
     QString getNameLastStatus() const
     {

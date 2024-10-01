@@ -37,13 +37,14 @@ CreateDeviceWindow::~CreateDeviceWindow()
 //---------------------------------------------------------------------------------
 void CreateDeviceWindow::on_tbDeleteModul_clicked()
 {
-    // QTreeWidgetItem *item = ui->twModul->currentItem();
-    // if(item->parent() != nullptr)
-    //     item = item->parent();
+    QTreeWidgetItem *item = ui->twModul->currentItem();
+    if(item->parent() != nullptr)
+        item = item->parent();
 
-    // int id = item->data(0, Qt::UserRole).toInt();
-    // if(repo.DeleteModul(id))
-    //     delete item;
+    Modul mod;
+    mod.id = item->data(0, Qt::UserRole).toInt();
+    if(repo.DeleteItem(mod))
+        delete item;
 }
 
 
@@ -52,35 +53,35 @@ void CreateDeviceWindow::on_tbDeleteModul_clicked()
 //---------------------------------------------------------------------------------
 void CreateDeviceWindow::on_tbSearchPlate_clicked()
 {
-    // QString s = ui->leSearchPlate->text();
-    // ListPlate listPlate;
+    QString s = ui->leSearchPlate->text();
+    ListPlate listPlate;
 
-    // // Убрать уже добавленные платы
-    // listPlate.FindItems(s, listPlate);
+    // Убрать уже добавленные платы
+    listPlate.FindItems(s);
 
-    // if(listPlate.size() == 0)
-    //     return;
+    if(listPlate.listItems.size() == 0)
+        return;
 
-    // int currentIndex = 0;
+    int currentIndex = 0;
 
-    // if(listPlate.size() > 1)
-    // {
-    //     SelectPlateWindow win(listPlate, this);
-    //     if(win.exec() == QDialog::Accepted)
-    //         currentIndex = win.selectedIndex;
-    //     else
-    //         return;
-    // }
+    if(listPlate.listItems.size() > 1)
+    {
+        SelectPlateWindow win(listPlate.listItems, this);
+        if(win.exec() == QDialog::Accepted)
+            currentIndex = win.selectedIndex;
+        else
+            return;
+    }
 
-    // Plate plate = listPlate.at(currentIndex);
+    Plate plate = listPlate.listItems.at(currentIndex);
 
-    // // Сделать проверку на повтор
+    // Сделать проверку на повтор
 
-    // listAddingPlate.push_back(plate);
+    listAddingPlate.push_back(plate);
 
-    // addLinePlate(&plate);
-    // ui->twPlates->resizeColumnsToContents();
-    // ui->twPlates->resizeRowsToContents();
+    addLinePlate(&plate);
+    ui->twPlates->resizeColumnsToContents();
+    ui->twPlates->resizeRowsToContents();
 
 
 }
@@ -92,10 +93,10 @@ void CreateDeviceWindow::on_tbSearchPlate_clicked()
 //---------------------------------------------------------------------------------
 void CreateDeviceWindow::on_tbDeleteProduct_clicked()
 {
-    // int id = ui->lwProduct->currentItem()->data(Qt::UserRole).toInt();
-    // if(repo.DeleteProduct(id) )
-    //     delete ui->lwProduct->currentItem();
-
+    Product prod;
+    prod.id = ui->lwProduct->currentItem()->data(Qt::UserRole).toInt();
+    if(repo.DeleteItem(prod) )
+        delete ui->lwProduct->currentItem();
 }
 
 
@@ -179,7 +180,7 @@ void CreateDeviceWindow::on_pbRegProduct_clicked()
         status.idDevice = prod.id;
         status.idStatus = Status::CREATE;
         status.dateStatus = QDateTime::currentDateTime();
-        prod.AddStatus(prod, status, &repo);
+        prod.AddStatus(prod, status);
         // repo.AddStatusProduct(status);
 
         QString s = ui->cbProduct->currentText();
@@ -216,7 +217,7 @@ void CreateDeviceWindow::on_pbRegModul_clicked()
         status.idDevice = mod.id;
         status.idStatus = Status::CREATE;
         status.dateStatus = QDateTime::currentDateTime();
-        mod.AddStatus(mod, status, &repo);
+        mod.AddStatus(mod, status);
         // repo.AddStatusModul(status);
         for(auto &it : mod.listPlate)
             lModul.LinkPlate(it.id, mod.id);

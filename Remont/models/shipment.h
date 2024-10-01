@@ -20,6 +20,7 @@ public:
     QString numUPD;
     QDateTime dateUPD;
     QString buyer;
+    int idOrganization;
 
     QString customer;
     QString questList;

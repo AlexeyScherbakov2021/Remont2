@@ -36,13 +36,13 @@ public:
     }
 
 
-    void FindItems(const QString &number, int status)
+    void FindItems(const QString &number, int status = 0)
     {
         repo.FindItems(number, listItems, status);
     }
 
 
-    void FindItems(int status)
+    void FindItems(int status = 0)
     {
         repo.FindItems(listItems, status);
     }

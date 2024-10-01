@@ -105,30 +105,88 @@ bool RepoMSSQL::UpdateItem(Plate &/*plate*/)
     return true;
 }
 
-bool RepoMSSQL::DeleteItem(Product &/*prod*/)
+//------------------------------------------------------------------------------------------------------
+// Удаление изделия
+//------------------------------------------------------------------------------------------------------
+bool RepoMSSQL::DeleteItem(Product &prod)
 {
-    return true;
+    bool res;
+    QSqlQuery query;
+
+    query.prepare("delete from Product where id=:id");
+    query.bindValue(":id", prod.id);
+    res = query.exec();
+
+    if(!res)
+        qDebug() << "Ошибка при удалении записи в Product";
+
+    return res;
 }
 
-bool RepoMSSQL::DeleteItem(Modul &/*mod*/)
+//------------------------------------------------------------------------------------------------------
+// Удаление модуля
+//------------------------------------------------------------------------------------------------------
+bool RepoMSSQL::DeleteItem(Modul &mod)
 {
-    return true;
+    bool res;
+    QSqlQuery query;
+
+    query.prepare("delete from Modules where id=:id");
+    query.bindValue(":id", mod.id);
+    res = query.exec();
+
+    if(!res)
+        qDebug() << "Ошибка при удалении записи в Modules";
+
+    return res;
 }
 
-bool RepoMSSQL::DeleteItem(Plate &/*plate*/)
+
+
+//------------------------------------------------------------------------------------------------------
+// Удаление платы
+//------------------------------------------------------------------------------------------------------
+bool RepoMSSQL::DeleteItem(Plate &plate)
 {
-    return true;
+    bool res;
+    QSqlQuery query;
+
+    query.prepare("delete from Plate where id=:id");
+    query.bindValue(":id", plate.id);
+    res = query.exec();
+
+    if(!res)
+        qDebug() << "Ошибка при добавлении записи в RemontM";
+
+    return res;
 }
 
+
+//------------------------------------------------------------------------------------------------------
+// Удаление отгрузки
+//------------------------------------------------------------------------------------------------------
 bool RepoMSSQL::DeleteItem(Shipment &/*ship*/)
 {
     return true;
 
 }
 
+//------------------------------------------------------------------------------------------------------
+// Удаление набора
+//------------------------------------------------------------------------------------------------------
 bool RepoMSSQL::DeleteItem(SetterOut &setter)
 {
-    return false;
+    bool res;
+    QSqlQuery query;
+
+    query.prepare("delete from SetterOut where id=:id");
+    query.bindValue(":id", setter.id);
+    res = query.exec();
+
+    if(!res)
+        qDebug() << "Ошибка при удалении записи в SetterOut";
+
+    return res;
 }
 
 
@@ -309,12 +367,29 @@ void RepoMSSQL::FindItems(QList<Modul> &listModul, int status)
 //------------------------------------------------------------------------------------------------------
 // Поиск модулей по серийному номеру
 //------------------------------------------------------------------------------------------------------
-void RepoMSSQL::FindItems(const QString &serialNumber, QList<Modul> &listModul, int /*status*/)
+void RepoMSSQL::FindItems(const QString &serialNumber, QList<Modul> &listModul, int status)
 {
     listModul.clear();
     QSqlQuery query;
-    query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,m_zip "
-                  "from Modules where m_number like :number order by m_name");
+
+    if(status == Status::NONE)
+    {
+        query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,m_zip "
+                      "from Modules where m_number like :number order by m_name");
+    }
+    else
+    {
+        query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,m_zip "
+                      "from Modules m "
+                      "join "
+                      "(select idModul, max(DateStatus) dateStatus, max(idStatus) as idStatus "
+                      "from ModulStatus group by idModul "
+                      "having max(idStatus)=:idStatus "
+                      ") ms on ms.idModul=m.id where m_number like :number order by m_name"
+                      );
+
+        query.bindValue(":idStatus", status);
+    }
 
     query.bindValue(":number", QString("%%1%").arg(serialNumber));
 
@@ -576,7 +651,7 @@ bool RepoMSSQL::AddItem(Shipment &ship)
 
 }
 
-bool RepoMSSQL::AddItem(SetterOut &setter)
+bool RepoMSSQL::AddItem(SetterOut &/*setter*/)
 {
     return false;
 }
@@ -730,6 +805,216 @@ void RepoMSSQL::LoadChildSetter(SetterOut &setter)
         prod.isZip = query.value(19).toBool();
         LoadStatus(prod);
         setter.listProduct.push_back(prod);
+    }
+
+}
+
+//------------------------------------------------------------------------------------------------------
+// Добавление статуса модулю
+//------------------------------------------------------------------------------------------------------
+bool RepoMSSQL::AddStatus(Modul &modul, Status &status)
+{
+    bool res;
+    QSqlQuery query;
+
+    query.prepare("insert into ModulStatus (idModul,idStatus,DateStatus,Comment) "
+                  "output inserted.id values(:idModul,:idStatus,:DateStatus,:Comment)");
+
+    query.bindValue(":idModul", modul.id);
+    query.bindValue(":idStatus", status.idStatus);
+    query.bindValue(":DateStatus", status.dateStatus);
+    query.bindValue(":Comment", status.Comment);
+
+    res = query.exec();
+    if(!res)
+        qDebug() << "Ошибка при добавлении записи в ModulStatus";
+    else
+    {
+        if(query.next())
+            status.id = query.value(0).toInt();
+    }
+
+    return res;
+
+}
+
+//------------------------------------------------------------------------------------------------------
+// Добавление статуса изделию
+//------------------------------------------------------------------------------------------------------
+bool RepoMSSQL::AddStatus(Product &product, Status &status)
+{
+    bool res;
+    QSqlQuery query;
+
+    query.prepare("insert into ProductStatus (idProduct,idStatus,DateStatus,Comment) "
+                  "output inserted.id values(:idProduct,:idStatus,:DateStatus,:Comment)");
+
+    query.bindValue(":idProduct", product.id);
+    query.bindValue(":idStatus", status.idStatus);
+    query.bindValue(":DateStatus", status.dateStatus);
+    query.bindValue(":Comment", status.Comment);
+
+    res = query.exec();
+    if(!res)
+        qDebug() << "Ошибка при добавлении записи в ModulStatus";
+    else
+    {
+        if(query.next())
+            status.id = query.value(0).toInt();
+    }
+
+    return res;
+
+}
+
+//------------------------------------------------------------------------------------------------------
+// Загрузка списка отгрузок
+//------------------------------------------------------------------------------------------------------
+void RepoMSSQL::FindItems(QList<Shipment> &listShip, int isFinish)
+{
+    listShip.clear();
+    QSqlQuery query;
+
+    query.prepare("select c_number,c_objectInstall,c_dateOut,c_customer,c_questList,"
+                  "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,id,idOrganization "
+                  "from Shipment where c_dateOut is null");
+
+    query.exec();
+    while(query.next())
+    {
+        Shipment ship;
+        ship.number = query.value(0).toString();
+        ship.objectInstall = query.value(1).toString();
+        ship.dateRegister = query.value(2).toDateTime();
+        ship.customer = query.value(3).toString();
+        ship.questList = query.value(4).toString();
+        ship.schet = query.value(5).toString();
+        ship.cardOrder = query.value(6).toString();
+        ship.numberUPD = query.value(7).toString();
+        ship.buyer = query.value(8).toString();
+        ship.dateUPD = query.value(9).toDateTime();
+        ship.id = query.value(10).toInt();
+        ship.idOrganization = query.value(11).toInt();
+        listShip.push_back(ship);
+    }
+
+}
+
+void RepoMSSQL::LoadOrganization(QMap<int, QString> &listOrg)
+{
+    QSqlQuery query;
+    listOrg.clear();
+
+    query.prepare("select id,OrgName from Organization");
+
+    query.exec();
+    while(query.next())
+    {
+        int id = query.value(0).toInt();
+        QString name = query.value(1).toString();
+        listOrg.insert(id, name);
+    }
+}
+
+//------------------------------------------------------------------------------------------------------
+// Загрузка наборов в отгрузке
+//------------------------------------------------------------------------------------------------------
+void RepoMSSQL::LoadShipSetter(QList<SetterOut> &listSetter, int idShip)
+{
+    listSetter.clear();
+    QSqlQuery query;
+
+    query.prepare("select id,s_name,s_orderNum "
+                  "from SetterOut where idShipment=:idShipment");
+
+    query.bindValue(":idShipment", idShip);
+
+    query.exec();
+    while(query.next())
+    {
+        SetterOut setter;
+        setter.id = query.value(0).toInt();
+        setter.idShipment = idShip;
+        setter.name = query.value(1).toString();
+        setter.orderNumber = query.value(2).toString();
+        listSetter.push_back(setter);
+    }
+}
+
+//------------------------------------------------------------------------------------------------------
+// Загрузка модулей в отгрузке
+//------------------------------------------------------------------------------------------------------
+void RepoMSSQL::LoadShipModule(QList<Modul> &listModul, int idShip)
+{
+    listModul.clear();
+    QSqlQuery query;
+
+    query.prepare("select id,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,m_zip "
+                  "from Modules where idShipment=:idShipment");
+
+    query.bindValue(":idShipment", idShip);
+
+    query.exec();
+    while(query.next())
+    {
+        Modul mod;
+        mod.idShipment = idShip;
+        mod.id = query.value(0).toInt();
+        mod.idProduct = query.value(1).toInt();
+        mod.idType = query.value(2).toInt();
+        mod.name = query.value(3).toString();
+        mod.number = query.value(4).toString();
+        mod.number2 = query.value(5).toString();
+        mod.dateRegister = query.value(7).toDateTime();
+        mod.isZip = query.value(8).toBool();
+        LoadStatus(mod);
+        listModul.push_back(mod);
+    }
+
+}
+
+//------------------------------------------------------------------------------------------------------
+// Загрузка изделий в отгрузке
+//------------------------------------------------------------------------------------------------------
+void RepoMSSQL::LoadShipProduct(QList<Product> &listProduct, int idShip)
+{
+    listProduct.clear();
+    QSqlQuery query;
+
+    query.prepare("select id,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
+                  "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
+                  "g_numberUSIKP,g_shunt,g_zip "
+                  "from Product where idShipment = :idShipment");
+
+    query.bindValue(":idShipment", idShip);
+
+    query.exec();
+    while(query.next())
+    {
+        Product prod;
+        prod.id = query.value(0).toInt();
+        prod.idShipment = idShip;
+        prod.idSetterOut = query.value(1).toInt();
+        prod.prodTypeId = query.value(2).toInt();
+        prod.name = query.value(3).toString();
+        prod.number = query.value(4).toString();
+        prod.number2 = query.value(5).toString();
+        prod.dateRegister = query.value(6).toDateTime();
+        prod.redaction1 = query.value(7).toString();
+        prod.redaction2 = query.value(8).toString();
+        prod.redactionPS = query.value(9).toString();
+        prod.questList = query.value(10).toString();
+        prod.isAvr = query.value(11).toBool();
+        prod.isAkb = query.value(12).toBool();
+        prod.isCooler = query.value(13).toBool();
+        prod.isSkm = query.value(14).toBool();
+        prod.numberBI = query.value(15).toString();
+        prod.numberUSIKP = query.value(16).toString();
+        prod.shunt = query.value(17).toString();
+        prod.isZip = query.value(18).toBool();
+        LoadStatus(prod);
+        listProduct.push_back(prod);
+
     }
 
 }

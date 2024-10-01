@@ -10,6 +10,9 @@ CONFIG += c++17
 
 SOURCES += \
     cardprodwindow.cpp \
+    complectproductwindow.cpp \
+    createdevicewindow.cpp \
+    listshipwindow.cpp \
     main.cpp \
     mainwindow.cpp \
     models/listdevice.cpp \
@@ -18,12 +21,19 @@ SOURCES += \
     models/listproduct.cpp \
     models/listsetter.cpp \
     models/listshipment.cpp \
+    otkcontrolwindow.cpp \
+    platewindow.cpp \
     repomssql.cpp \
-    selectdevicewindow.cpp
+    selectdevicewindow.cpp \
+    selectplatewindow.cpp \
+    shipwindow.cpp
 
 HEADERS += \
     cardprodwindow.h \
+    complectproductwindow.h \
+    createdevicewindow.h \
     infrastructure/IStatus.h \
+    listshipwindow.h \
     models/IDevice.h \
     models/claim.h \
     models/entity.h \
@@ -40,13 +50,24 @@ HEADERS += \
     models/remontstep.h \
     models/setterout.h \
     models/shipment.h \
+    otkcontrolwindow.h \
+    platewindow.h \
     repomssql.h \
-    selectdevicewindow.h
+    selectdevicewindow.h \
+    selectplatewindow.h \
+    shipwindow.h
 
 FORMS += \
     cardprodwindow.ui \
+    complectproductwindow.ui \
+    createdevicewindow.ui \
+    listshipwindow.ui \
     mainwindow.ui \
-    selectdevicewindow.ui
+    otkcontrolwindow.ui \
+    platewindow.ui \
+    selectdevicewindow.ui \
+    selectplatewindow.ui \
+    shipwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
