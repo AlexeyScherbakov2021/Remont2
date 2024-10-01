@@ -7,6 +7,8 @@
 #include "complectproductwindow.h"
 #include "otkcontrolwindow.h"
 #include "listshipwindow.h"
+#include "startworkwindow.h"
+#include "claimwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -29,8 +31,8 @@ MainWindow::~MainWindow()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbClaim_clicked()
 {
-    // ClaimWindow *win = new ClaimWindow;
-    // win->show();
+    ClaimWindow *win = new ClaimWindow;
+    win->show();
 }
 
 
@@ -133,8 +135,8 @@ void MainWindow::on_pbStartRemont_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbStartWork_clicked()
 {
-    // StartWorkWindow *win = new StartWorkWindow(this);
-    // win->exec();
+    StartWorkWindow *win = new StartWorkWindow(this);
+    win->exec();
 }
 
 

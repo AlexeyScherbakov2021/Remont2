@@ -17,6 +17,7 @@ class Plate;
 class SetterOut;
 class Shipment;
 class Status;
+class Claim;
 
 class RepoMSSQL
 {
@@ -32,18 +33,21 @@ public:
     bool AddItem(Plate &plate);
     bool AddItem(Shipment &ship);
     bool AddItem(SetterOut &setter);
+    bool AddItem(Claim &claim);
 
     bool UpdateItem(Product &prod);
     bool UpdateItem(Modul &mod);
     bool UpdateItem(Plate &plate);
     bool UpdateItem(Shipment &ship);
     bool UpdateItem(SetterOut &setter);
+    bool UpdateItem(Claim &claim);
 
     bool DeleteItem(Product &prod);
     bool DeleteItem(Modul &mod);
     bool DeleteItem(Plate &plate);
     bool DeleteItem(Shipment &ship);
     bool DeleteItem(SetterOut &setter);
+    bool DeleteItem(Claim &claim);
 
     Product GetProduct(int id);
     Shipment GetShipment(int id);
@@ -78,6 +82,13 @@ public:
     bool AddStatus(Product &product, Status &status);
 
     void LoadOrganization(QMap<int, QString> &listOrg);
+
+    void LoadClaim(QList<Claim> &listClaim);
+    void LoadClaimType(QMap<int, QString> &listTypeClaim);
+    void LoadClaimModules(int idClaim, QList<Modul> &listModul);
+    void LoadClaimProducts(int idClaim, QList<Product> &listProduct);
+    bool AddModulToClaim(int idModul, int idClaim);
+    bool AddProductToClaim(int idProd, int idClaim);
 };
 
 

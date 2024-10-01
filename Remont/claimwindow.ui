@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ClaimWindow</class>
+ <widget class="QDialog" name="ClaimWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>909</width>
+    <height>481</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Список рекламаций</string>
+  </property>
+  <widget class="QTableWidget" name="twClaim">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>90</y>
+     <width>871</width>
+     <height>371</height>
+    </rect>
+   </property>
+   <property name="alternatingRowColors">
+    <bool>true</bool>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+   </property>
+   <property name="selectionBehavior">
+    <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+   </property>
+   <column>
+    <property name="text">
+     <string>№</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Дата поступления</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>От кого получена</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Тип рекламации</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Организация</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Объект усьановки</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Описание</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Тип комплектующих</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>ВНФТ</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Тип оборудования</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>№ модуля</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>№ модуля замены</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>№ оборудования</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Дата отгрузки</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="pbAdd">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>40</y>
+     <width>131</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Добавить</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pbEdit">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>40</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Изменить</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pbDelete">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>40</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Удалить</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pbSelect">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>40</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Выбрать</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

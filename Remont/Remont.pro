@@ -10,11 +10,14 @@ CONFIG += c++17
 
 SOURCES += \
     cardprodwindow.cpp \
+    claimdetail.cpp \
+    claimwindow.cpp \
     complectproductwindow.cpp \
     createdevicewindow.cpp \
     listshipwindow.cpp \
     main.cpp \
     mainwindow.cpp \
+    models/listclaim.cpp \
     models/listdevice.cpp \
     models/listmodul.cpp \
     models/listplate.cpp \
@@ -26,10 +29,13 @@ SOURCES += \
     repomssql.cpp \
     selectdevicewindow.cpp \
     selectplatewindow.cpp \
-    shipwindow.cpp
+    shipwindow.cpp \
+    startworkwindow.cpp
 
 HEADERS += \
     cardprodwindow.h \
+    claimdetail.h \
+    claimwindow.h \
     complectproductwindow.h \
     createdevicewindow.h \
     infrastructure/IStatus.h \
@@ -38,6 +44,7 @@ HEADERS += \
     models/claim.h \
     models/entity.h \
     mainwindow.h \
+    models/listclaim.h \
     models/listdevice.h \
     models/listmodul.h \
     models/listplate.h \
@@ -55,10 +62,13 @@ HEADERS += \
     repomssql.h \
     selectdevicewindow.h \
     selectplatewindow.h \
-    shipwindow.h
+    shipwindow.h \
+    startworkwindow.h
 
 FORMS += \
     cardprodwindow.ui \
+    claimdetail.ui \
+    claimwindow.ui \
     complectproductwindow.ui \
     createdevicewindow.ui \
     listshipwindow.ui \
@@ -67,7 +77,8 @@ FORMS += \
     platewindow.ui \
     selectdevicewindow.ui \
     selectplatewindow.ui \
-    shipwindow.ui
+    shipwindow.ui \
+    startworkwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
