@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>604</width>
+    <height>392</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Учет изделий</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="pbClaim">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>20</y>
+      <width>170</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Рекламации</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbCard">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>20</y>
+      <width>170</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Карточка устройства</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbApplyRemont">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>70</y>
+      <width>170</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Принять в ОСО</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbStartRemont">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>120</y>
+      <width>170</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Принять в ремонт</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbEndRemont">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>170</y>
+      <width>170</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Закончить ремонт</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbRegister">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>70</y>
+      <width>170</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Регистрация устройств</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbOTK">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>173</y>
+      <width>170</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Проверка ОТК</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbCreatePlate">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>170</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Регистрация плат</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbShip">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>230</y>
+      <width>170</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Отгрузки</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbComplect">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>120</y>
+      <width>170</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Установка в оборудование</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbStartWork">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>290</y>
+      <width>170</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Запущен в работу</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>604</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
