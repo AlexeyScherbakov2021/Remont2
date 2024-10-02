@@ -28,12 +28,12 @@ public:
 
     int id;
     int idDevice;
-    int idStatus;
+    Stat idStatus;
     QString nameStatus;
     QDateTime dateStatus;
     QString Comment;
 
-    Status() : id(0), dateStatus(QDateTime::currentDateTime()) {}
+    Status() : id(0), idDevice(0), idStatus(Status::NONE), dateStatus(QDateTime::currentDateTime()) {}
 
 };
 
@@ -50,17 +50,34 @@ public:
         repo.LoadStatus(device);
     }
 
-
-    void AddStatus(T &device, Status stat)
+    void AddStatus(T &device, Status::Stat idStat, QString comment = "")
     {
+        AddStatus(device, idStat, QDateTime::currentDateTime(), comment );
+    }
+
+
+    void AddStatus(T &device, Status::Stat idStat, const QDateTime &dateRegister,  QString comment = "")
+    {
+        Status status;
+        status.idStatus = idStat;
+        status.idDevice = device.id;
+        status.dateStatus = dateRegister;
+        status.Comment = comment;
         RepoMSSQL repo;
-        repo.AddStatus(device, stat);
+        if(repo.AddStatus(device, status))
+            listStatus.push_back(status);
+
     }
 
 
     QString getNameLastStatus() const
     {
         return listStatus.last().nameStatus;
+    }
+
+    QString getLastComment() const
+    {
+        return listStatus.last().Comment;
     }
 
 };

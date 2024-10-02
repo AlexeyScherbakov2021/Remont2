@@ -46,12 +46,13 @@ void StartWorkWindow::on_pbProdToWork_clicked()
     Product prod;
     prod.id = item->data(Qt::UserRole).toInt();
 
-    Status status;
-    status.idStatus = Status::Stat::WORK;
-    status.idDevice = prod.id;
-    status.dateStatus = ui->deDate->dateTime();
+    // Status status;
+    // status.idStatus = Status::Stat::WORK;
+    // status.idDevice = prod.id;
+    // status.dateStatus = ui->deDate->dateTime();
 
-    prod.AddStatus(prod, status);
+
+    prod.AddStatus(prod, Status::WORK, ui->deDate->dateTime());
     // repo.AddStatusProduct(status);
 
     delete item;
@@ -67,12 +68,12 @@ void StartWorkWindow::on_pbModulToWork_clicked()
     Modul mod;
     mod.id = item->data(Qt::UserRole).toInt();
 
-    Status status;
-    status.idStatus = Status::Stat::WORK;
-    status.idDevice = mod.id;
-    status.dateStatus = ui->deDate->dateTime();
+    // Status status;
+    // status.idStatus = Status::Stat::WORK;
+    // status.idDevice = mod.id;
+    // status.dateStatus = ui->deDate->dateTime();
 
-    mod.AddStatus(mod, status);
+    mod.AddStatus(mod, Status::WORK, ui->deDate->dateTime());
     // repo.AddStatusModul(status);
 
     delete item;

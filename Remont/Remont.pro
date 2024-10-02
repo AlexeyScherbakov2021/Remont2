@@ -9,11 +9,13 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    acceptremontwindow.cpp \
     cardprodwindow.cpp \
     claimdetail.cpp \
     claimwindow.cpp \
     complectproductwindow.cpp \
     createdevicewindow.cpp \
+    endremontwindow.cpp \
     listshipwindow.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -26,6 +28,7 @@ SOURCES += \
     models/listshipment.cpp \
     otkcontrolwindow.cpp \
     platewindow.cpp \
+    remontwindow.cpp \
     repomssql.cpp \
     selectdevicewindow.cpp \
     selectplatewindow.cpp \
@@ -33,11 +36,13 @@ SOURCES += \
     startworkwindow.cpp
 
 HEADERS += \
+    acceptremontwindow.h \
     cardprodwindow.h \
     claimdetail.h \
     claimwindow.h \
     complectproductwindow.h \
     createdevicewindow.h \
+    endremontwindow.h \
     infrastructure/IStatus.h \
     listshipwindow.h \
     models/IDevice.h \
@@ -59,6 +64,7 @@ HEADERS += \
     models/shipment.h \
     otkcontrolwindow.h \
     platewindow.h \
+    remontwindow.h \
     repomssql.h \
     selectdevicewindow.h \
     selectplatewindow.h \
@@ -66,15 +72,18 @@ HEADERS += \
     startworkwindow.h
 
 FORMS += \
+    acceptremontwindow.ui \
     cardprodwindow.ui \
     claimdetail.ui \
     claimwindow.ui \
     complectproductwindow.ui \
     createdevicewindow.ui \
+    endremontwindow.ui \
     listshipwindow.ui \
     mainwindow.ui \
     otkcontrolwindow.ui \
     platewindow.ui \
+    remontwindow.ui \
     selectdevicewindow.ui \
     selectplatewindow.ui \
     shipwindow.ui \

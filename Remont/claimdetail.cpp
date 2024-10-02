@@ -61,23 +61,23 @@ void ClaimDetail::on_pbOK_clicked()
     // claim->TypeComplectId = ui->cbTypeComplect->currentData(Qt::UserRole).toInt();
     // claim->TypeDeviceId = ui->cbTypeDevice->currentData(Qt::UserRole).toInt();
 
-    Status status;
-    status.idStatus = Status::Stat::FAULTY_ON_OBJECT;
-    status.dateStatus = QDateTime::currentDateTime();
+    // Status status;
+    // status.idStatus = Status::Stat::FAULTY_ON_OBJECT;
+    // status.dateStatus = QDateTime::currentDateTime();
 
     for(auto &it : listAddModul)
     {
         repo.AddModulToClaim(it.id, claim->id);
-        status.idDevice = it.id;
-        it.AddStatus(it, status);
+        // status.idDevice = it.id;
+        it.AddStatus(it, Status::FAULTY_ON_OBJECT);
         // repo.AddStatusModul(status);
     }
 
     for(auto &it : listAddProduct)
     {
         repo.AddProductToClaim(it.id, claim->id);
-        status.idDevice = it.id;
-        it.AddStatus(it, status);
+        // status.idDevice = it.id;
+        it.AddStatus(it, Status::FAULTY_ON_OBJECT);
         // repo.AddStatusProduct(status);
     }
 

@@ -158,7 +158,7 @@ void ComplectProductWindow::on_pbOK_clicked()
         mod.idProduct = prod.id;
         // записать в базу новый статус и id изделия для модуля
         if(repo.UpdateItem(mod))
-            mod.AddStatus(mod, status);
+            mod.AddStatus(mod, Status::INSTALL);
             // repo.AddStatusModul(status);
 
     }

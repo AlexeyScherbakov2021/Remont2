@@ -29,7 +29,7 @@ void OTKControlWindow::loadCreatedDevice()
     for(auto &it : Modules.listItems)
     {
         QListWidgetItem *item = new QListWidgetItem();
-        item->setText(it.numAndComment());
+        item->setText(it.name + " №" + it.numAndComment());
         item->setData(Qt::UserRole, it.id);
         ui->lwModul->addItem(item);
     }
@@ -40,7 +40,7 @@ void OTKControlWindow::loadCreatedDevice()
     for(auto &it : Products.listItems)
     {
         QListWidgetItem *item = new QListWidgetItem();
-        item->setText(it.numAndComment());
+        item->setText(it.name + " №" + it.numAndComment());
         item->setData(Qt::UserRole, it.id);
         ui->lwProduct->addItem(item);
     }
@@ -56,7 +56,7 @@ void OTKControlWindow::loadBrockenDevice()
     for(auto &it : Modules.listItems)
     {
         QListWidgetItem *item = new QListWidgetItem();
-        item->setText(it.numAndComment());
+        item->setText(it.name + " №" + it.numAndComment());
         item->setData(Qt::UserRole, it.id);
         ui->lwModul->addItem(item);
     }
@@ -67,7 +67,7 @@ void OTKControlWindow::loadBrockenDevice()
     for(auto &it : Products.listItems)
     {
         QListWidgetItem *item = new QListWidgetItem();
-        item->setText(it.numAndComment());
+        item->setText(it.name + " №" + it.numAndComment());
         item->setData(Qt::UserRole, it.id);
         ui->lwProduct->addItem(item);
     }
@@ -273,16 +273,14 @@ void OTKControlWindow::on_OTKControlWindow_accepted()
     {
         Modul mod;
         mod.id = it.idDevice;
-        mod.AddStatus(mod, it);
-        // repo.AddStatusModul(it);
+        mod.AddStatus(mod, it.idStatus, it.Comment);
     }
 
     for(auto &it : listStatusProd)
     {
         Product prod;
         prod.id = it.idDevice;
-        prod.AddStatus(prod, it);
-        // repo.AddStatusProduct(it);
+        prod.AddStatus(prod, it.idStatus, it.Comment);
     }
 }
 

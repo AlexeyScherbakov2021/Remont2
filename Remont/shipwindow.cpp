@@ -271,7 +271,8 @@ void ShipWindow::on_pbDelete_clicked()
             break;
     }
 
-    listID.remove(setter.id * 10 + type);
+    if(res)
+        listID.remove(setter.id * 10 + type);
 
     delete item;
 }
@@ -313,15 +314,14 @@ void ShipWindow::on_pbFinish_clicked()
 //-----------------------------------------------------------------------------------
 void ShipWindow::SetStatusProduct(QList<Product> &listProduct)
 {
-    Status status;
-    status.dateStatus = QDateTime::currentDateTime();
-    status.idStatus = Status::Stat::SHIPPED;
+    // Status status;
+    // status.dateStatus = QDateTime::currentDateTime();
+    // status.idStatus = Status::Stat::SHIPPED;
 
     for(auto &itProd : listProduct)
     {
-        status.idDevice = itProd.id;
-        itProd.AddStatus(itProd, status);
-        // repo.AddStatusProduct(status);
+        // status.idDevice = itProd.id;
+        itProd.AddStatus(itProd, Status::SHIPPED);
 
         SetStatusModules(itProd.listModules);
     }
@@ -332,14 +332,14 @@ void ShipWindow::SetStatusProduct(QList<Product> &listProduct)
 //-----------------------------------------------------------------------------------
 void ShipWindow::SetStatusModules(QList<Modul> &listModules)
 {
-    Status status;
-    status.dateStatus = QDateTime::currentDateTime();
-    status.idStatus = Status::Stat::SHIPPED;
+    // Status status;
+    // status.dateStatus = QDateTime::currentDateTime();
+    // status.idStatus = Status::Stat::SHIPPED;
 
     for(auto &itMod : listModules)
     {
-        status.idDevice = itMod.id;
-        itMod.AddStatus(itMod, status);
+        // status.idDevice = itMod.id;
+        itMod.AddStatus(itMod, Status::SHIPPED);
         // repo.AddStatusModul(status);
     }
 }
@@ -348,7 +348,7 @@ void ShipWindow::SetStatusModules(QList<Modul> &listModules)
 //-----------------------------------------------------------------------------------
 // Событие закрытия окна
 //-----------------------------------------------------------------------------------
-void ShipWindow::on_ShipWindow_finished(int result)
+void ShipWindow::on_ShipWindow_finished(int /*result*/)
 {
     ship->buyer = ui->leBuyer->text();
     ship->cardOrder = ui->leCardOrder->text();

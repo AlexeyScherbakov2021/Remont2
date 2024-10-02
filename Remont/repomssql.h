@@ -44,7 +44,7 @@ public:
 
     bool DeleteItem(Product &prod);
     bool DeleteItem(Modul &mod);
-    bool DeleteItem(Plate &plate);
+    bool  DeleteItem(Plate &plate);
     bool DeleteItem(Shipment &ship);
     bool DeleteItem(SetterOut &setter);
     bool DeleteItem(Claim &claim);
@@ -89,6 +89,10 @@ public:
     void LoadClaimProducts(int idClaim, QList<Product> &listProduct);
     bool AddModulToClaim(int idModul, int idClaim);
     bool AddProductToClaim(int idProd, int idClaim);
+    bool LoadClaimForProduct(int ProdId, Claim &claim);
+    bool LoadClaimForModul(int ModulId, Claim &claim);
+
+    void LoadRemontReason(QMap<int, QString> &listReason);
 };
 
 

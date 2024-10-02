@@ -15,7 +15,6 @@ public:
     QString shunt;
 
     int idSetterOut;
-    int prodTypeId;
     QString redaction1;
     QString redaction2;
     QString redactionPS;
@@ -34,13 +33,16 @@ public:
 
     QString numAndComment()
     {
-        QString res = number;
-        Status status = listStatus.last();
-        if(listStatus.size() > 0 && !status.Comment.isEmpty())
-        {
-            res = number + " (" + status.Comment + ")";
-        }
-        return res;
+        QString comment = getLastComment().isEmpty() ? "" : " (" + getLastComment() + ")";
+        return number + comment;
+
+        // QString res = number;
+        // Status status = listStatus.last();
+        // if(listStatus.size() > 0 && !status.Comment.isEmpty())
+        // {
+        //     res = number + " (" + status.Comment + ")";
+        // }
+        // return res;
     }
 
 };

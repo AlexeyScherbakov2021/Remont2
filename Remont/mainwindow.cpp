@@ -9,6 +9,9 @@
 #include "listshipwindow.h"
 #include "startworkwindow.h"
 #include "claimwindow.h"
+#include "acceptremontwindow.h"
+#include "remontwindow.h"
+#include "endremontwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -62,8 +65,8 @@ void MainWindow::on_pbCard_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbApplyRemont_clicked()
 {
-    // AcceptRemontWindow *win = new AcceptRemontWindow(this);
-    // win->show();
+    AcceptRemontWindow *win = new AcceptRemontWindow(this);
+    win->show();
 }
 
 
@@ -125,8 +128,8 @@ void MainWindow::on_pbComplect_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbStartRemont_clicked()
 {
-    // RemontWindow *win = new RemontWindow(this);
-    // win->show();
+    RemontWindow *win = new RemontWindow(this);
+    win->show();
 }
 
 
@@ -142,7 +145,7 @@ void MainWindow::on_pbStartWork_clicked()
 
 void MainWindow::on_pbEndRemont_clicked()
 {
-    // EndRemontWindow *win = new EndRemontWindow(this);
-    // win->exec();
+    EndRemontWindow *win = new EndRemontWindow(this);
+    win->exec();
 }
 

@@ -172,15 +172,15 @@ void CreateDeviceWindow::on_pbRegProduct_clicked()
     // Добавление изделия в  базу данных со статусом Создан
     prod.number = ui->leNumProduct->text();
     prod.name = ui->leNameProd->text();
-    prod.prodTypeId = ui->cbProduct->currentData(Qt::UserRole).toInt();
+    prod.idType = ui->cbProduct->currentData(Qt::UserRole).toInt();
     prod.dateRegister = QDateTime::currentDateTime();
     if(repo.AddItem(prod))
     {
-        Status status;
-        status.idDevice = prod.id;
-        status.idStatus = Status::CREATE;
-        status.dateStatus = QDateTime::currentDateTime();
-        prod.AddStatus(prod, status);
+        // Status status;
+        // status.idDevice = prod.id;
+        // status.idStatus = Status::CREATE;
+        // status.dateStatus = QDateTime::currentDateTime();
+        prod.AddStatus(prod, Status::CREATE);
         // repo.AddStatusProduct(status);
 
         QString s = ui->cbProduct->currentText();
@@ -213,11 +213,11 @@ void CreateDeviceWindow::on_pbRegModul_clicked()
     mod.listPlate = listAddingPlate;
     if(repo.AddItem(mod))
     {
-        Status status;
-        status.idDevice = mod.id;
-        status.idStatus = Status::CREATE;
-        status.dateStatus = QDateTime::currentDateTime();
-        mod.AddStatus(mod, status);
+        // Status status;
+        // status.idDevice = mod.id;
+        // status.idStatus = Status::CREATE;
+        // status.dateStatus = QDateTime::currentDateTime();
+        mod.AddStatus(mod, Status::CREATE);
         // repo.AddStatusModul(status);
         for(auto &it : mod.listPlate)
             lModul.LinkPlate(it.id, mod.id);
