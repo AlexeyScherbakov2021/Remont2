@@ -21,9 +21,7 @@ public:
 
 private slots:
     void on_pbOK_clicked();
-
     void on_tbAddDevice_clicked();
-
     void on_tbDeleteDevice_clicked();
 
 private:
@@ -36,6 +34,8 @@ private:
 
     QMap<int, Product> listAddProduct;
     QMap<int, Modul> listAddModul;
+    QMap<int, Product> listDelProduct;
+    QMap<int, Modul> listDelModul;
 
     RepoMSSQL repo;
 

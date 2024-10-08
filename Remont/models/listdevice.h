@@ -18,17 +18,14 @@ public:
     explicit ListDevice() {}
 
 
+
     virtual bool AddItem(T &item)
     {
         return repo.AddItem(item);
     }
 
 
-    virtual bool DeleteItem(T &item)
-    {
-        return repo.DeleteItem(item);
-    }
-
+    virtual bool DeleteItem(int id) = 0;
 
     virtual bool UpdateItem(T &item)
     {
@@ -42,10 +39,10 @@ public:
     }
 
 
-    void FindItems(int status = 0)
-    {
-        repo.FindItems(listItems, status);
-    }
+    // void FindItems(int status = 0)
+    // {
+    //     repo.FindItems("", listItems, status);
+    // }
 
     virtual T GetItem(int id) = 0;
     // {
@@ -58,6 +55,7 @@ public:
 
 
     virtual void Load() = 0;
+
     virtual QVariant getData(int row, int col) const = 0;
 protected:
     RepoMSSQL repo;

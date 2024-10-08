@@ -2,6 +2,8 @@
 #include "selectplatewindow.h"
 #include "ui_createdevicewindow.h"
 
+// #include <models/listmodul.h>
+// #include <models/listplate.h>
 #include <models/listmodul.h>
 #include <models/listplate.h>
 #include <models/modul.h>
@@ -17,12 +19,13 @@ CreateDeviceWindow::CreateDeviceWindow(QWidget *parent)
     repo.LoadProductType(listTypeProduct);
 
     for(auto it = listTypeModule.cbegin(); it != listTypeModule.cend(); ++it)
-        ui->cbModul->addItem(*it, it.key());
+        ui->cbModul->addItem((*it).name, it.key());
 
     for(auto it = listTypeProduct.cbegin(); it != listTypeProduct.cend(); ++it)
-        ui->cbProduct->addItem(*it, it.key());
+        ui->cbProduct->addItem((*it).name, it.key());
 
-
+    // ui->cbModul->setCurrentIndex(-1);
+    // ui->cbProduct->setCurrentIndex(-1);
 }
 
 CreateDeviceWindow::~CreateDeviceWindow()
@@ -41,9 +44,9 @@ void CreateDeviceWindow::on_tbDeleteModul_clicked()
     if(item->parent() != nullptr)
         item = item->parent();
 
-    Modul mod;
-    mod.id = item->data(0, Qt::UserRole).toInt();
-    if(repo.DeleteItem(mod))
+    // Modul mod;
+    int id = item->data(0, Qt::UserRole).toInt();
+    if(repo.DeleteModul(id))
         delete item;
 }
 
@@ -93,9 +96,9 @@ void CreateDeviceWindow::on_tbSearchPlate_clicked()
 //---------------------------------------------------------------------------------
 void CreateDeviceWindow::on_tbDeleteProduct_clicked()
 {
-    Product prod;
-    prod.id = ui->lwProduct->currentItem()->data(Qt::UserRole).toInt();
-    if(repo.DeleteItem(prod) )
+    // Product prod;
+    int id = ui->lwProduct->currentItem()->data(Qt::UserRole).toInt();
+    if(repo.DeleteProduct(id) )
         delete ui->lwProduct->currentItem();
 }
 
@@ -174,6 +177,7 @@ void CreateDeviceWindow::on_pbRegProduct_clicked()
     prod.name = ui->leNameProd->text();
     prod.idType = ui->cbProduct->currentData(Qt::UserRole).toInt();
     prod.dateRegister = QDateTime::currentDateTime();
+    prod.garantMonth = listTypeProduct[prod.idType].garantMonth;
     if(repo.AddItem(prod))
     {
         // Status status;
@@ -211,6 +215,7 @@ void CreateDeviceWindow::on_pbRegModul_clicked()
     // mod.numberFW = ui->lbNumberFWPlate->text();
     mod.dateRegister = QDateTime::currentDateTime();
     mod.listPlate = listAddingPlate;
+    mod.garantMonth = listTypeModule[mod.idType].garantMonth;
     if(repo.AddItem(mod))
     {
         // Status status;
@@ -229,10 +234,14 @@ void CreateDeviceWindow::on_pbRegModul_clicked()
     }
 
     listAddingPlate.clear();
-    ui->twPlates->clear();
+    ui->twPlates->clearContents();
+    ui->twPlates->setRowCount(0);
 }
 
 
+//---------------------------------------------------------------------------------
+// Кнопка Удалить плату
+//---------------------------------------------------------------------------------
 void CreateDeviceWindow::on_tbDelPlate_clicked()
 {
     // QTableWidgetItem *item = ui->twPlates->currentItem();
@@ -250,6 +259,32 @@ void CreateDeviceWindow::on_tbDelPlate_clicked()
 
     // auto plate_iter = std::find_if(listAddingPlate.begin(), listAddingPlate.end(), [id](Plate &p) { return p.id == id;});
     // std::remove_if(listAddingPlate.begin(), listAddingPlate.end(), [id](Plate &p) { return p.id == id;});
+}
 
+
+
+//---------------------------------------------------------------------------------
+// Изменение типа изделия в выпадающем списке
+//---------------------------------------------------------------------------------
+void CreateDeviceWindow::on_cbProduct_currentIndexChanged(int index)
+{
+    if(index < 0)
+        return;
+
+    int key = ui->cbProduct->currentData().toInt();
+    ui->lbGarantProd->setText(QString::number(listTypeProduct[key].garantMonth));
+
+}
+
+//---------------------------------------------------------------------------------
+// Изменение типа модуля в выпадающем списке
+//---------------------------------------------------------------------------------
+void CreateDeviceWindow::on_cbModul_currentIndexChanged(int index)
+{
+    if(index < 0)
+        return;
+
+    int key = ui->cbModul->currentData().toInt();
+    ui->lbGarantMod->setText(QString::number(listTypeModule[key].garantMonth));
 }
 

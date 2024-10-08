@@ -8,6 +8,7 @@
 #include <infrastructure/IStatus.h>
 #include <models/shipment.h>
 #include <models/setterout.h>
+// #include <models/enumvariable.h>
 
 namespace Ui {
 class SelectDeviceWindow;
@@ -20,11 +21,17 @@ class SelectDeviceWindow : public QDialog
 public:
     enum TypeDevice {TypeAll, TypeProduct, TypeModul};
 
-    explicit SelectDeviceWindow(QWidget *parent = nullptr, QString searchNum = "",
-                                Status::Stat status = Status::NONE, TypeDevice typeDevice = TypeAll);
+    SelectDeviceWindow(QWidget *parent = nullptr);
+
+    IDevice* SelectDevice(bool isNow, QString searchNum = "", QVector<Status::Stat> statusList = QVector<Status::Stat>());
+    IDevice* SelectDevice(bool isNow, QString searchNum = "", Status::Stat status = Status::Stat::NONE);
+    void setTypeSearch(TypeDevice type);
+    void setDisaleSearch();
+
     ~SelectDeviceWindow();
-    Product prod;// = nullptr;
-    Modul modul;// = nullptr;
+    // Product *prod = nullptr;
+    // Modul *modul = nullptr;
+    IDevice *device = nullptr;
 
 private slots:
     void on_tbSearch_clicked();
@@ -38,13 +45,16 @@ private:
     ListModul listModul;
     RepoMSSQL repo;
     Status::Stat status;
+    QVector<Status::Stat> listStatus;
     TypeDevice typeDevice;
 
     int SearchModul(QString number, int status);
     int SearchProduct(QString number, int status);
+    void Search(QString searchNum);
+    void listToScreen();
 
 protected:
-    void timerEvent(QTimerEvent *event) override;
+    // void timerEvent(QTimerEvent *event) override;
 };
 
 

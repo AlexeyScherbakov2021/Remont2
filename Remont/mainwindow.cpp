@@ -45,13 +45,20 @@ void MainWindow::on_pbClaim_clicked()
 void MainWindow::on_pbCard_clicked()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    if(win->exec() == QDialog::Accepted)
+    IDevice *dev = win->SelectDevice(false, "", Status::NONE);
+    if(dev != nullptr)
     {
         CardProdWindow *winCard;
-        if(win->prod.id != 0 )
-            winCard = new CardProdWindow(win->prod, this);
-        else if(win->modul.id != 0)
-            winCard = new CardProdWindow(win->modul, this);
+        if(dev->typeDevice == ev::PRODUCT )
+        {
+            Product* prod = static_cast<Product*>(dev);
+            winCard = new CardProdWindow(*prod, this);
+        }
+        else if(dev->typeDevice == ev::MODUL)
+        {
+            Modul* modul = static_cast<Modul*>(dev);
+            winCard = new CardProdWindow(*modul, this);
+        }
         else
             return;
 
@@ -147,5 +154,32 @@ void MainWindow::on_pbEndRemont_clicked()
 {
     EndRemontWindow *win = new EndRemontWindow(this);
     win->exec();
+}
+
+
+
+
+
+//----------------------------------------------------------------------------------------------
+// Регистрация платы
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aRegPlate_triggered()
+{
+    PlateWindow *win = new PlateWindow(this);
+    win->setAttribute(Qt::WA_DeleteOnClose);
+    win->show();
+
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Регистрация устройства
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aRegDevice_triggered()
+{
+    CreateDeviceWindow *win = new CreateDeviceWindow(this);
+    win->setAttribute(Qt::WA_DeleteOnClose);
+    win->show();
+
 }
 

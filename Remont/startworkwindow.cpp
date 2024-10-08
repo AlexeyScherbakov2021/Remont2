@@ -7,10 +7,8 @@ StartWorkWindow::StartWorkWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    products.FindItems(Status::SHIPPED);
-    modules.FindItems(Status::SHIPPED);
-    // repo.LoadProducts(listProduct, Status::Stat::SHIPPED);
-    // repo.LoadModulsStatus(listModul, Status::Stat::SHIPPED);
+    products.FindItems("", Status::SHIPPED);
+    // modules.FindItems(Status::SHIPPED);
 
     for(auto &it : products.listItems)
     {
@@ -20,15 +18,15 @@ StartWorkWindow::StartWorkWindow(QWidget *parent)
         ui->lwProduct->addItem(item);
     }
 
-    for(auto &it : modules.listItems)
-    {
-        if(it.idProduct > 0)
-            continue;
-        QListWidgetItem *item = new QListWidgetItem();
-        item->setText(it.name + " (" + it.number + ")");
-        item->setData(Qt::UserRole, it.id);
-        ui->lwModul->addItem(item);
-    }
+    // for(auto &it : modules.listItems)
+    // {
+    //     if(it.idProduct > 0)
+    //         continue;
+    //     QListWidgetItem *item = new QListWidgetItem();
+    //     item->setText(it.name + " (" + it.number + ")");
+    //     item->setData(Qt::UserRole, it.id);
+    //     ui->lwModul->addItem(item);
+    // }
     ui->deDate->setDateTime(QDateTime::currentDateTime());
 }
 
@@ -59,24 +57,19 @@ void StartWorkWindow::on_pbProdToWork_clicked()
 }
 
 
-void StartWorkWindow::on_pbModulToWork_clicked()
-{
-    auto item = ui->lwModul->currentItem();
-    if(item == nullptr)
-        return;
+// void StartWorkWindow::on_pbModulToWork_clicked()
+// {
+//     auto item = ui->lwModul->currentItem();
+//     if(item == nullptr)
+//         return;
 
-    Modul mod;
-    mod.id = item->data(Qt::UserRole).toInt();
+//     Modul mod;
+//     mod.id = item->data(Qt::UserRole).toInt();
 
-    // Status status;
-    // status.idStatus = Status::Stat::WORK;
-    // status.idDevice = mod.id;
-    // status.dateStatus = ui->deDate->dateTime();
 
-    mod.AddStatus(mod, Status::WORK, ui->deDate->dateTime());
-    // repo.AddStatusModul(status);
+//     mod.AddStatus(mod, Status::WORK, ui->deDate->dateTime());
 
-    delete item;
+//     delete item;
 
-}
+// }
 

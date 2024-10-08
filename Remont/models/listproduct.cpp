@@ -4,7 +4,7 @@ ListProduct::ListProduct() {}
 
 void ListProduct::Load()
 {
-    repo.FindItems(listItems, 0);
+    repo.FindItems("", listItems, 0);
 }
 
 QVariant ListProduct::getData(int row, int col) const
@@ -37,3 +37,9 @@ Product ListProduct::GetItem(int /*id*/)
     return prod;
 }
 
+
+
+bool ListProduct::DeleteItem(int id)
+{
+    return repo.DeleteProduct(id);
+}

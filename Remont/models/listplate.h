@@ -18,6 +18,8 @@ public:
 public:
     void LoadChild(Plate &plate) override;
     Plate GetItem(int id) override;
+
+    bool DeleteItem(int id) override;
 };
 
 #endif // LISTPLATE_H

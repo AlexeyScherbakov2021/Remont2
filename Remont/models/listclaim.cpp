@@ -22,3 +22,9 @@ QVariant ListClaim::getData(int /*row*/, int /*col*/) const
 {
     return QVariant();
 }
+
+
+bool ListClaim::DeleteItem(int id)
+{
+    return repo.DeleteClaim(id);
+}

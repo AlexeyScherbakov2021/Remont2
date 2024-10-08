@@ -45,8 +45,15 @@ AcceptRemontWindow::~AcceptRemontWindow()
 
 void AcceptRemontWindow::on_pbExchange_clicked()
 {
-    ComplectProductWindow *win = new ComplectProductWindow(this);
-    win->show();
+    if(idMod == 0 || idParentProd == 0)
+    {
+        QMessageBox::critical(this, "Предупреждение", "Заменить можно только модуль в составе изделия.");
+        return;
+    }
+
+    Product prod = repo.GetProduct(idParentProd);
+    ComplectProductWindow *win = new ComplectProductWindow(this, &prod);
+    win->exec();
 }
 
 
@@ -106,30 +113,39 @@ void AcceptRemontWindow::on_tbNumber_clicked()
 {
     idMod =idProd = 0;
 
-    SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumber->text(),Status::FAULTY_ON_OBJECT);
-    if(win->exec() == QDialog::Accepted)
+    // SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumber->text(),Status::FAULTY_ON_OBJECT);
+    SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    IDevice *dev = win->SelectDevice(true, ui->leNumber->text(), Status::FAULTY_ON_OBJECT);
+
+    if(dev != nullptr)
     {
         Claim claim;
-        if(win->modul.id != 0)
+        // modul = dynamic_cast<Modul*> (dev);
+        if(dev->typeDevice == ev::MODUL)
+        // if(win->modul->id != 0)
         {
-            if(repo.LoadClaimForModul(win->modul.id, claim))
+            Modul *modul = static_cast<Modul*> (dev);
+            if(repo.LoadClaimForModul(modul->id, claim))
                 ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
 
-            ui->lbNumber->setText(win->modul.number);
-            ui->lbName->setText(win->modul.name);
+            ui->lbNumber->setText(modul->number);
+            ui->lbName->setText(modul->name);
             ui->lbDevice->setText("Модуль");
-            idMod = win->modul.id;
+            idMod = modul->id;
+            idParentProd = modul->idProduct;
         }
 
-        if(win->prod.id != 0)
+        // prod = dynamic_cast<Product*> (dev);
+        if(dev->typeDevice == ev::PRODUCT )
         {
-            if(repo.LoadClaimForProduct(win->prod.id, claim))
+            Product *prod = static_cast<Product*> (dev);
+            if(repo.LoadClaimForProduct(prod->id, claim))
                 ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
 
-            ui->lbNumber->setText(win->prod.number);
-            ui->lbName->setText(win->prod.name);
+            ui->lbNumber->setText(prod->number);
+            ui->lbName->setText(prod->name);
             ui->lbDevice->setText("Изделие");
-            idProd = win->prod.id;
+            idProd = prod->id;
         }
         ui->leNumber->clear();
     }

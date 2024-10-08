@@ -6,7 +6,7 @@ ListModul::ListModul() {}
 
 void ListModul::Load()
 {
-    repo.FindItems(listItems, 0);
+    repo.FindItems("", listItems, 0);
 }
 
 QVariant ListModul::getData(int /*row*/, int /*col*/) const
@@ -31,3 +31,9 @@ Modul ListModul::GetItem(int /*id*/)
     return mod;
 }
 
+
+
+bool ListModul::DeleteItem(int id)
+{
+    return repo.DeleteModul(id);
+}

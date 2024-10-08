@@ -30,6 +30,8 @@ private:
     RepoMSSQL repo;
     // QList<Shipment> listShip;
     ListShipment Ship;
+
+    void addRowWidget(Shipment &ship, int row = -1);
 };
 
 #endif // LISTSHIPWINDOW_H

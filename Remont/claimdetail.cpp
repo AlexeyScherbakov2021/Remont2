@@ -12,15 +12,6 @@ ClaimDetail::ClaimDetail(Claim *cl,QWidget *parent)
     for(auto it = listTypeClaim.cbegin(); it != listTypeClaim.cend(); ++it)
         ui->cbTypeClaim->addItem(*it, it.key());
 
-    // repo.LoadModuleType(listTypeModule);
-    // for(auto it = listTypeModule.cbegin(); it != listTypeModule.cend(); ++it)
-    //     ui->cbTypeComplect->addItem(*it, it.key());
-
-    // repo.LoadProductType(listTypeProduct);
-    // for(auto it = listTypeProduct.cbegin(); it != listTypeProduct.cend(); ++it)
-    //     ui->cbTypeDevice->addItem(*it, it.key());
-
-
     repo.LoadClaimModules(claim->id, claim->listModul);
     repo.LoadClaimProducts(claim->id, claim->listProduct);
 
@@ -36,20 +27,18 @@ ClaimDetail::~ClaimDetail()
     delete ui;
 }
 
+
+//-----------------------------------------------------------------------------------------
+// Кнопка ОК
+//-----------------------------------------------------------------------------------------
 void ClaimDetail::on_pbOK_clicked()
 {
     claim->number = ui->leNumber->text();
     claim->dateRegister = ui->deDateClaim->dateTime();
     claim->FromWho = ui->leFromWho->text();
-    // claim->idOrg = ui->leOrganiz->text();
     claim->ObjectInstall = ui->leObjectInst->text();
     claim->Descript = ui->leDescript->text();
-    // claim->VNFT = ui->leVNFT->text();
-    // claim->Quantity = ui->sbQuantity->value();
-    // claim->NumberModul = ui->leNumModul->text();
-    // claim->NumberNewModul = ui->leNumNewModul->text();
-    // claim->NumberDevice = ui->leNumDevice->text();
-    // claim->DateOut = ui->deDateOut->dateTime();
+    // claim->idOrg = ui->leOrganiz->text();
     claim->Reason = ui->leReason->text();
     claim->DateRepair = ui->deDateRepair->dateTime();
     claim->DoRepair = ui->leDoRepair->text();
@@ -58,32 +47,41 @@ void ClaimDetail::on_pbOK_clicked()
     claim->IsGuarantee = ui->cbGuarantee->isChecked();
 
     claim->idTypeClaim = ui->cbTypeClaim->currentData(Qt::UserRole).toInt();
-    // claim->TypeComplectId = ui->cbTypeComplect->currentData(Qt::UserRole).toInt();
-    // claim->TypeDeviceId = ui->cbTypeDevice->currentData(Qt::UserRole).toInt();
 
-    // Status status;
-    // status.idStatus = Status::Stat::FAULTY_ON_OBJECT;
-    // status.dateStatus = QDateTime::currentDateTime();
+    if(claim->id == 0)
+        repo.AddItem(*claim);
 
     for(auto &it : listAddModul)
     {
-        repo.AddModulToClaim(it.id, claim->id);
-        // status.idDevice = it.id;
-        it.AddStatus(it, Status::FAULTY_ON_OBJECT);
-        // repo.AddStatusModul(status);
+        if(repo.AddModulToClaim(it.id, claim->id))
+            it.AddStatus(it, Status::FAULTY_ON_OBJECT);
+    }
+    for(auto &it : listDelModul)
+    {
+        if(repo.DelModulFromClaim(it.id, claim->id))
+            it.DeleteLastStatus(it);
+
     }
 
     for(auto &it : listAddProduct)
     {
-        repo.AddProductToClaim(it.id, claim->id);
-        // status.idDevice = it.id;
-        it.AddStatus(it, Status::FAULTY_ON_OBJECT);
-        // repo.AddStatusProduct(status);
+        if(repo.AddProductToClaim(it.id, claim->id))
+            it.AddStatus(it, Status::FAULTY_ON_OBJECT);
+    }
+
+    for(auto &it : listDelProduct)
+    {
+        if(repo.DelProductToClaim(it.id, claim->id))
+            it.DeleteLastStatus(it);
+
     }
 
     accept();
 }
 
+//-----------------------------------------------------------------------------------------
+// Отображение данных на экран
+//-----------------------------------------------------------------------------------------
 void ClaimDetail::ClaimToScreen(Claim *claim)
 {
     ui->leNumber->setText(claim->number);
@@ -92,12 +90,6 @@ void ClaimDetail::ClaimToScreen(Claim *claim)
     // ui->leOrganiz->setText(claim->idOrg);
     ui->leObjectInst->setText(claim->ObjectInstall);
     ui->leDescript->setText(claim->Descript);
-    // ui->leVNFT->setText(claim->VNFT);
-    // ui->sbQuantity->setValue(claim->Quantity);
-    // ui->leNumModul->setText(claim->NumberModul);
-    // ui->leNumNewModul->setText(claim->NumberNewModul);
-    // ui->leNumDevice->setText(claim->NumberDevice);
-    // ui->deDateOut->setDateTime(claim->DateOut);
     ui->leReason->setText(claim->Reason);
     ui->deDateRepair->setDateTime(claim->DateRepair);
     ui->leDoRepair->setText(claim->DoRepair);
@@ -106,8 +98,6 @@ void ClaimDetail::ClaimToScreen(Claim *claim)
     ui->cbGuarantee->setChecked(claim->IsGuarantee);
 
     ui->cbTypeClaim->setCurrentText(listTypeClaim[claim->idTypeClaim]);
-    // ui->cbTypeComplect->setCurrentText(listTypeModule[claim->TypeComplectId]);
-    // ui->cbTypeDevice->setCurrentText(listTypeProduct[claim->TypeDeviceId]);
 
     for(auto &it : claim->listModul)
         AddModulToTableScreen(it);
@@ -117,11 +107,16 @@ void ClaimDetail::ClaimToScreen(Claim *claim)
 }
 
 
+//-----------------------------------------------------------------------------------------
+// Добавление модуля в таблицу экрана
+//-----------------------------------------------------------------------------------------
 void ClaimDetail::AddModulToTableScreen(const Modul &modul)
 {
     int row = ui->tableWidget->rowCount();
     ui->tableWidget->insertRow(row);
     QTableWidgetItem *item = new QTableWidgetItem();
+    item->setData(Qt::UserRole, modul.id);
+    item->setData(Qt::UserRole + 1, 1);
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     item->setText("Модуль");
     ui->tableWidget->setItem(row, 0, item);
@@ -136,11 +131,16 @@ void ClaimDetail::AddModulToTableScreen(const Modul &modul)
 
 }
 
+//-----------------------------------------------------------------------------------------
+// Добавление изделия в таблицу экрана
+//-----------------------------------------------------------------------------------------
 void ClaimDetail::AddProductToTableScreen(const Product &prod)
 {
     int row = ui->tableWidget->rowCount();
     ui->tableWidget->insertRow(row);
     QTableWidgetItem *item = new QTableWidgetItem();
+    item->setData(Qt::UserRole, prod.id);
+    item->setData(Qt::UserRole + 1, 0);
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     item->setText("Изделие");
     ui->tableWidget->setItem(row, 0, item);
@@ -152,7 +152,6 @@ void ClaimDetail::AddProductToTableScreen(const Product &prod)
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     item->setText(prod.name);
     ui->tableWidget->setItem(row, 2, item);
-
 }
 
 
@@ -161,46 +160,24 @@ void ClaimDetail::AddProductToTableScreen(const Product &prod)
 //-----------------------------------------------------------------------------------------
 void ClaimDetail::on_tbAddDevice_clicked()
 {
-    SelectDeviceWindow *win = new SelectDeviceWindow(this, "", Status::Stat::WORK);
-    if(win->exec() == QDialog::Accepted)
-    {
-        // int row = ui->tableWidget->rowCount();
+    SelectDeviceWindow *win = new SelectDeviceWindow(this);
 
-        if(win->prod.id != 0)
+    QVector<Status::Stat> listStatus = {Status::WORK, Status::SHIPPED};
+    IDevice *dev = win->SelectDevice(false, "", listStatus);
+    if(dev != nullptr)
+    // if(win->exec() == QDialog::Accepted)
+    {
+        if(dev->typeDevice == ev::PRODUCT)
         {
-            AddProductToTableScreen(win->prod);
-            // ui->tableWidget->insertRow(row);
-            // QTableWidgetItem *item = new QTableWidgetItem();
-            // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-            // item->setText("Изделие");
-            // ui->tableWidget->setItem(row, 0, item);
-            // item = new QTableWidgetItem();
-            // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-            // item->setText(win->prod.number);
-            // ui->tableWidget->setItem(row, 1, item);
-            // item = new QTableWidgetItem();
-            // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-            // item->setText(win->prod.name);
-            // ui->tableWidget->setItem(row, 2, item);
-            listAddProduct.insert(win->prod.id, win->prod);
+            Product* prod = static_cast<Product*>(dev);
+            AddProductToTableScreen(*prod);
+            listAddProduct.insert(prod->id, *prod);
         }
-        else if(win->modul.id != 0)
+        else if(dev->typeDevice == ev::MODUL)
         {
-            AddModulToTableScreen(win->modul);
-            // ui->tableWidget->insertRow(row);
-            // QTableWidgetItem *item = new QTableWidgetItem();
-            // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-            // item->setText("Модуль");
-            // ui->tableWidget->setItem(row, 0, item);
-            // item = new QTableWidgetItem();
-            // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-            // item->setText(win->modul.number);
-            // ui->tableWidget->setItem(row, 1, item);
-            // item = new QTableWidgetItem();
-            // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-            // item->setText(win->modul.name);
-            // ui->tableWidget->setItem(row, 2, item);
-            listAddModul.insert(win->modul.id, win->modul);
+            Modul *modul = static_cast<Modul*>(dev);
+            AddModulToTableScreen(*modul);
+            listAddModul.insert(modul->id, *modul);
         }
         ui->tableWidget->resizeColumnsToContents();
         ui->tableWidget->resizeRowsToContents();
@@ -214,5 +191,37 @@ void ClaimDetail::on_tbAddDevice_clicked()
 void ClaimDetail::on_tbDeleteDevice_clicked()
 {
 
+    QTableWidgetItem *item = ui->tableWidget->item(ui->tableWidget->currentRow(), 0);
+    if(item == nullptr)
+        return;
+
+    int id = item->data(Qt::UserRole).toInt();
+    int type = item->data(Qt::UserRole + 1).toInt();
+
+    if(type == 0)
+    {
+        if(listAddProduct.contains(id))
+            listAddProduct.remove(id);
+        else
+        {
+            auto prod_iter = std::find_if(claim->listProduct.cbegin(), claim->listProduct.cend(), [id] (Product p) { return p.id == id;});
+            if(prod_iter != claim->listProduct.cend())
+                listDelProduct.insert(id, *prod_iter);
+        }
+    }
+
+    else
+    {
+        if(listAddModul.contains((id)))
+            listAddModul.remove(id);
+        else
+        {
+            auto mod_iter = std::find_if(claim->listModul.cbegin(), claim->listModul.cend(), [id] (Modul m) { return m.id == id;});
+            if(mod_iter != claim->listModul.cend())
+                listDelModul.insert(id, *mod_iter);
+        }
+    }
+
+    ui->tableWidget->removeRow(ui->tableWidget->currentRow());
 }
 

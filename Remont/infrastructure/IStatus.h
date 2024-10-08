@@ -56,6 +56,13 @@ public:
     }
 
 
+    void DeleteLastStatus(T &device)
+    {
+        RepoMSSQL repo;
+        repo.DelLastStatus(device);
+    }
+
+
     void AddStatus(T &device, Status::Stat idStat, const QDateTime &dateRegister,  QString comment = "")
     {
         Status status;

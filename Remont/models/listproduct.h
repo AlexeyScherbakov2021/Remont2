@@ -17,6 +17,8 @@ public:
     QVariant getData(int row, int col) const override;
     void LoadChild(Product &prod) override;
     Product GetItem(int id) override;
+
+    bool DeleteItem(int id) override;
 };
 
 #endif // LISTPRODUCT_H

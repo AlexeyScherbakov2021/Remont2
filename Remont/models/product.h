@@ -4,13 +4,14 @@
 #include "IDevice.h"
 #include <infrastructure/IStatus.h>
 #include "modul.h"
+// #include "enumvariable.h"
 
 #define ColumnProduct 13
 
 class Product : public IDevice, public StatusList<Product>
 {
 public:
-    int idSetter;
+    // int idSetter;
     QString listQuest;
     QString shunt;
 
@@ -29,21 +30,16 @@ public:
 
     QList<Modul> listModules;
 
-    explicit Product() {}
+    explicit Product() : idSetterOut(0) {}
 
     QString numAndComment()
     {
         QString comment = getLastComment().isEmpty() ? "" : " (" + getLastComment() + ")";
         return number + comment;
 
-        // QString res = number;
-        // Status status = listStatus.last();
-        // if(listStatus.size() > 0 && !status.Comment.isEmpty())
-        // {
-        //     res = number + " (" + status.Comment + ")";
-        // }
-        // return res;
     }
+
+    void setKindDevice() override { typeDevice = ev::DeviceKind::PRODUCT; }
 
 };
 

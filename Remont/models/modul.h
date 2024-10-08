@@ -4,6 +4,7 @@
 #include "IDevice.h"
 #include "plate.h"
 #include "modul.h"
+// #include "enumvariable.h"
 
 #include <QString>
 #include <infrastructure/IStatus.h>
@@ -13,10 +14,10 @@ class Modul : public IDevice, public StatusList<Modul>
 public:
     int idProduct;
 
-    QList<IDevice> listChild;
+    // QList<IDevice> listChild;
     QList<Plate> listPlate;
 
-    explicit Modul() {}
+    explicit Modul() : idProduct(0) {}
 
     bool operator==(const Modul &other) const { return this->id == other.id; }
 
@@ -31,8 +32,13 @@ public:
         return res;
     }
 
-
+    void setKindDevice() override { typeDevice = ev::DeviceKind::MODUL; }
 };
+
+// void Modul::setKindDevice()
+// {
+
+// }
 
 inline size_t qHash(const Modul &key/*, uint seed*/){
     return qHash(key.id);

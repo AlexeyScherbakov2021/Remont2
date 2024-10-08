@@ -31,6 +31,8 @@ private slots:
 
     void on_ShipWindow_finished(int result);
 
+    void on_pbClose_clicked();
+
 private:
     Ui::ShipWindow *ui;
 

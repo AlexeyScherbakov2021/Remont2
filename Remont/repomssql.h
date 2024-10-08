@@ -6,11 +6,6 @@
 #include <QSqlQuery>
 #include <QDebug>
 
-// #include <models/product.h>
-// #include <models/setterout.h>
-// #include <models/shipment.h>
-// #include <models/modul.h>
-
 class Product;
 class Modul;
 class Plate;
@@ -18,11 +13,17 @@ class SetterOut;
 class Shipment;
 class Status;
 class Claim;
+class ProductType;
+class ModulType;
 
 class RepoMSSQL
 {
 private:
     QSqlDatabase db;
+    void FindItems(QList<Product> &listProduct, int status = 0);
+    void FindItems(QList<Modul> &listModul, int status = 0);
+    // void FindItems(QList<Plate> &listPlate, int status = 0);
+    void FindItems(QList<Shipment> &listShip, int status = 0);
 
 public:
     RepoMSSQL();
@@ -42,12 +43,12 @@ public:
     bool UpdateItem(SetterOut &setter);
     bool UpdateItem(Claim &claim);
 
-    bool DeleteItem(Product &prod);
-    bool DeleteItem(Modul &mod);
-    bool  DeleteItem(Plate &plate);
-    bool DeleteItem(Shipment &ship);
-    bool DeleteItem(SetterOut &setter);
-    bool DeleteItem(Claim &claim);
+    bool DeleteProduct(int id);
+    bool DeleteModul(int id);
+    bool DeletePlate(int id);
+    bool DeleteShipment(int id);
+    bool DeleteSetter(int id);
+    bool DeleteClaim(int id);
 
     Product GetProduct(int id);
     Shipment GetShipment(int id);
@@ -57,15 +58,13 @@ public:
     void FindItems(const QString &number, QList<Product> &listProduct, int status = 0);
     void FindItems(const QString &number, QList<Modul> &listModul, int status = 0);
     void FindItems(const QString &number, QList<Plate> &listPlate, int status = 0);
+    void FindItems(const QString &number, QList<Shipment> &listShip, int status = 0);
 
-    void FindItems(QList<Product> &listProduct, int status = 0);
-    void FindItems(QList<Modul> &listModul, int status = 0);
-    void FindItems(QList<Plate> &listPlate, int status = 0);
-    void FindItems(QList<Shipment> &listShip, int status = 0);
+    // void LoadProductType(QMap<int, QString> &listTypeProduct);
+    void LoadProductType(QMap<int, ProductType> &listTypeProduct);
 
-    void LoadProductType(QMap<int, QString> &listTypeProduct);
-
-    void LoadModuleType(QMap<int, QString> &listTypeModule);
+    // void LoadModuleType(QMap<int, QString> &listTypeModule);
+    void LoadModuleType(QMap<int, ModulType> &listTypeModule);
 
     void LoadStatus(Product &prod);
     void LoadStatus(Modul &modul);
@@ -80,6 +79,8 @@ public:
 
     bool AddStatus(Modul &modul, Status &status);
     bool AddStatus(Product &product, Status &status);
+    bool DelLastStatus(Modul &modul);
+    bool DelLastStatus(Product &product);
 
     void LoadOrganization(QMap<int, QString> &listOrg);
 
@@ -88,7 +89,9 @@ public:
     void LoadClaimModules(int idClaim, QList<Modul> &listModul);
     void LoadClaimProducts(int idClaim, QList<Product> &listProduct);
     bool AddModulToClaim(int idModul, int idClaim);
+    bool DelModulFromClaim(int idModul, int idClaim);
     bool AddProductToClaim(int idProd, int idClaim);
+    bool DelProductToClaim(int idProd, int idClaim);
     bool LoadClaimForProduct(int ProdId, Claim &claim);
     bool LoadClaimForModul(int ModulId, Claim &claim);
 

@@ -19,6 +19,8 @@ public:
     void Load() override;
     QVariant getData(int row, int col) const override;
 
+
+    bool DeleteItem(int id) override;
 };
 
 #endif // LISTSETTER_H

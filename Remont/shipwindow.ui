@@ -388,22 +388,5 @@
   <tabstop>tbAddSetterProd</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>pbClose</sender>
-   <signal>clicked()</signal>
-   <receiver>ShipWindow</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>699</x>
-     <y>491</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>398</x>
-     <y>276</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

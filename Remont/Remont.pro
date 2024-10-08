@@ -49,6 +49,7 @@ HEADERS += \
     models/claim.h \
     models/entity.h \
     mainwindow.h \
+    models/enumvariable.h \
     models/listclaim.h \
     models/listdevice.h \
     models/listmodul.h \
@@ -57,7 +58,9 @@ HEADERS += \
     models/listsetter.h \
     models/listshipment.h \
     models/modul.h \
+    models/modultype.h \
     models/plate.h \
+    models/prodtype.h \
     models/product.h \
     models/remontstep.h \
     models/setterout.h \

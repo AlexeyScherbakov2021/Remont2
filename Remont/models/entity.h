@@ -9,7 +9,6 @@ class IEntity
 public:
     int id;
     QString number;
-    QDateTime dateRegister;
 
     explicit IEntity() : id(0) {}
 private:

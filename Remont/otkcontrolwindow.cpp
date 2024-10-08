@@ -22,7 +22,7 @@ OTKControlWindow::~OTKControlWindow()
 
 void OTKControlWindow::loadCreatedDevice()
 {
-    Modules.FindItems(Status::CREATE);
+    Modules.FindItems("", Status::CREATE);
     // repo.LoadModulsStatus(listModul, Status::CREATE);
 
     ui->lwModul->clear();
@@ -34,7 +34,7 @@ void OTKControlWindow::loadCreatedDevice()
         ui->lwModul->addItem(item);
     }
 
-    Products.FindItems(Status::CREATE);
+    Products.FindItems("", Status::CREATE);
     // repo.LoadProducts(listProduct, Status::CREATE);
     ui->lwProduct->clear();
     for(auto &it : Products.listItems)
@@ -49,7 +49,7 @@ void OTKControlWindow::loadCreatedDevice()
 
 void OTKControlWindow::loadBrockenDevice()
 {
-    Modules.FindItems(Status::FAULTY);
+    Modules.FindItems("", Status::FAULTY);
     // repo.LoadModulsStatus(listModul, Status::FAULTY);
 
     ui->lwModul->clear();
@@ -61,7 +61,7 @@ void OTKControlWindow::loadBrockenDevice()
         ui->lwModul->addItem(item);
     }
 
-    Products.FindItems(Status::FAULTY);
+    Products.FindItems("", Status::FAULTY);
     // repo.LoadProducts(listProduct, Status::FAULTY);
     ui->lwProduct->clear();
     for(auto &it : Products.listItems)

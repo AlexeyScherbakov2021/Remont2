@@ -17,7 +17,7 @@ class ComplectProductWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit ComplectProductWindow(QWidget *parent = nullptr);
+    explicit ComplectProductWindow(QWidget *parent = nullptr, Product *prod = nullptr);
     ~ComplectProductWindow();
 
 private slots:
@@ -35,6 +35,8 @@ private:
     ListModul Modules;
     QSet<Modul> addModul;
     QSet<Modul> delModul;
+
+    void LoadProductToScreen(Product &prod);
 
 };
 

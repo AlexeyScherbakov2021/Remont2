@@ -13,6 +13,9 @@ class SelectPlateWindow : public QDialog
 {
     Q_OBJECT
 
+private:
+    Ui::SelectPlateWindow *ui;
+
 public:
     explicit SelectPlateWindow(QList<Plate> &listPlate, QWidget *parent = nullptr);
     ~SelectPlateWindow();
@@ -24,8 +27,6 @@ private slots:
 
     void on_tableWidget_cellDoubleClicked(int row, int column);
 
-private:
-    Ui::SelectPlateWindow *ui;
 };
 
 #endif // SELECTPLATEWINDOW_H

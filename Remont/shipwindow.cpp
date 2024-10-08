@@ -59,17 +59,21 @@ ShipWindow::~ShipWindow()
 //-----------------------------------------------------------------------------------
 void ShipWindow::on_tbNumProd_clicked()
 {
-    SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumProd->text(),
-            Status::CORRECT, SelectDeviceWindow::TypeDevice::TypeProduct);
-
-    if(win->exec() == QDialog::Accepted)
+    // SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumProd->text(),
+    //         Status::CORRECT, SelectDeviceWindow::TypeDevice::TypeProduct);
+    SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeProduct);
+    IDevice *dev = win->SelectDevice(true, ui->leNumProd->text(),Status::CORRECT);
+    if(dev != nullptr)
+    // if(win->exec() == QDialog::Accepted)
     {
         if(ship->id == 0)
             repo.AddItem(*ship);
 
-        win->prod.idShipment = ship->id;
-        if(repo.UpdateItem(win->prod))
-            AddItemProd(win->prod);
+        Product* prod = static_cast<Product*>(dev);
+        prod->idShipment = ship->id;
+        if(repo.UpdateItem(*prod))
+            AddItemProd(*prod);
     }
 }
 
@@ -87,11 +91,16 @@ void ShipWindow::on_tbAddSetterProd_clicked()
             return;
     }
 
-    SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumProd->text(),
-                        Status::CORRECT, SelectDeviceWindow::TypeDevice::TypeProduct);
+    // SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumProd->text(),
+    //                     Status::CORRECT, SelectDeviceWindow::TypeDevice::TypeProduct);
+    SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeProduct);
+    IDevice *dev = win->SelectDevice(true, ui->leNumProd->text(), Status::CORRECT);
 
-    if(win->exec() == QDialog::Accepted)
+    if(dev != nullptr)
+    // if(win->exec() == QDialog::Accepted)
     {
+        Product* prod = static_cast<Product*>(dev);
         if(ship->id == 0)
             repo.AddItem(*ship);
 
@@ -99,22 +108,22 @@ void ShipWindow::on_tbAddSetterProd_clicked()
         {
             // Добавление набора в класс Shipment
             SetterOut setter;
-            setter.name = "_" + win->prod.name;
+            setter.name = "_" + prod->name;
             setter.idShipment = ship->id;
-            setter.listProduct.push_back(win->prod);
+            setter.listProduct.push_back(*prod);
             if(repo.AddItem(setter))
                 item = AddItemTree(setter.name, setter.id, TypeItemTree::SET);
-            win->prod.idSetterOut = setter.id;
+            prod->idSetterOut = setter.id;
             ship->listSetterOut.push_back(setter);
         }
         else
         {
-            win->prod.idSetterOut = item->data(0, Qt::UserRole).toInt();
+            prod->idSetterOut = item->data(0, Qt::UserRole).toInt();
             // shipLog.listSetterOut
         }
 
-        if(repo.UpdateItem(win->prod))
-            AddItemProd(win->prod, item);
+        if(repo.UpdateItem(*prod))
+            AddItemProd(*prod, item);
         // Добавление изделия в класс Shipment
     }
 
@@ -145,21 +154,24 @@ QTreeWidgetItem* ShipWindow::AddItemProd(Product &prod, QTreeWidgetItem *parent)
 //-----------------------------------------------------------------------------------
 void ShipWindow::on_tbNumModul_clicked()
 {
-    SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumModul->text(),
-                                                     Status::CORRECT, SelectDeviceWindow::TypeDevice::TypeModul);
-
-    if(win->exec() == QDialog::Accepted)
+    // SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumModul->text(),
+    //                                                  Status::CORRECT, SelectDeviceWindow::TypeDevice::TypeModul);
+    SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeModul);
+    IDevice *dev = win->SelectDevice(true, ui->leNumModul->text(), Status::CORRECT);
+    if(dev != nullptr)
+    // if(win->exec() == QDialog::Accepted)
     {
-        Modul mod = win->modul;
-        AddItemTree(mod.name + " (" + mod.number + ")", mod.id, TypeItemTree::MODUL);
+        Modul* mod = static_cast<Modul*>(dev);
+        AddItemTree(mod->name + " (" + mod->number + ")", mod->id, TypeItemTree::MODUL);
         // Добавление модуля в класс Shipment
-        ship->listModules.push_back(mod);
+        ship->listModules.push_back(*mod);
 
         if(ship->id == 0)
             repo.AddItem(*ship);
 
-        mod.idShipment = ship->id;
-        repo.UpdateItem(mod);
+        mod->idShipment = ship->id;
+        repo.UpdateItem(*mod);
     }
 }
 
@@ -233,8 +245,8 @@ void ShipWindow::on_pbDelete_clicked()
 
     }
 
-    SetterOut setter;
-    setter.id = item->data(0, Qt::UserRole).toInt();
+    // SetterOut setter;
+    int id = item->data(0, Qt::UserRole).toInt();
     TypeItemTree type = (TypeItemTree)item->data(0, Qt::UserRole + 1).toInt();
 
     bool res = false;
@@ -243,7 +255,7 @@ void ShipWindow::on_pbDelete_clicked()
         case TypeItemTree::PRODUCT:
             {
                 auto prod_it = std::find_if(ship->listProduct.cbegin(), ship->listProduct.cend(),
-                                            [&](const Product &p) { return p.id == setter.id; });
+                                            [&](const Product &p) { return p.id == id; });
 
                 if(prod_it != ship->listProduct.cend())
                 {
@@ -257,7 +269,7 @@ void ShipWindow::on_pbDelete_clicked()
         case TypeItemTree::MODUL:
             {
                 auto mod_it = std::find_if(ship->listModules.cbegin(), ship->listModules.cend(),
-                                           [&](const Modul &m) { return m.id == setter.id; });
+                                           [&](const Modul &m) { return m.id == id; });
                 if(mod_it != ship->listModules.cend())
                 {
                     Modul modul = *mod_it;
@@ -267,12 +279,12 @@ void ShipWindow::on_pbDelete_clicked()
             }
             break;
         case TypeItemTree::SET:
-            res = repo.DeleteItem(setter);
+            res = repo.DeleteSetter(id);
             break;
     }
 
     if(res)
-        listID.remove(setter.id * 10 + type);
+        listID.remove(id * 10 + type);
 
     delete item;
 }
@@ -283,6 +295,12 @@ void ShipWindow::on_pbDelete_clicked()
 //-----------------------------------------------------------------------------------
 void ShipWindow::on_pbFinish_clicked()
 {
+    if(ui->leNumUPD->text().isEmpty())
+    {
+        QMessageBox::warning(this, "Предупреждение", "Для отгрузки необходимо указать документ УПД.");
+        return;
+    }
+
 
     ship->dateRegister = QDateTime::currentDateTime();
 
@@ -305,7 +323,6 @@ void ShipWindow::on_pbFinish_clicked()
     //     SetStatusProduct(ship->listProduct);
     //     SetStatusModules(ship->listModules);
     // }
-
     accept();
 }
 
@@ -359,6 +376,16 @@ void ShipWindow::on_ShipWindow_finished(int /*result*/)
     ship->dateUPD = ui->deDateUPD->dateTime();
 
     repo.UpdateItem(*ship);
+
+}
+
+
+void ShipWindow::on_pbClose_clicked()
+{
+    if(ship->id == 0)
+        reject();
+    else
+        accept();
 
 }
 

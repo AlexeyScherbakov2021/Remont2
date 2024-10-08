@@ -2,6 +2,7 @@
 #define IDEVICE_H
 
 #include "entity.h"
+#include "enumvariable.h"
 
 class IDevice : public IEntity
 {
@@ -12,8 +13,13 @@ public:
     int idShipment;
     int idType;
     bool isZip;
+    QDateTime EndGarantee;
+    QDateTime dateRegister;
+    int garantMonth;
+    int typeDevice;
 
     explicit IDevice() : idParent(0) {}
+    virtual void setKindDevice() = 0;
 };
 
 #endif // IDEVICE_H

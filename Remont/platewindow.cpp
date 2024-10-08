@@ -54,11 +54,11 @@ void PlateWindow::on_tbDelete_clicked()
     if(item == nullptr)
         return;
 
-    Plate plate;
-    plate.id = item->data(Qt::UserRole).toInt();
+    // Plate plate;
+    int id = item->data(Qt::UserRole).toInt();
 
     // удаление платы из базы
-    if(repo.DeleteItem(plate))
+    if(repo.DeletePlate(id))
         delete ui->listWidget->currentItem();
 }
 

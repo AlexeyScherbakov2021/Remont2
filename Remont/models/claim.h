@@ -34,6 +34,8 @@ public:
     QString TypeClaimString;
     QString TypeComplectString;
     QString TypeDeviceString;
+    QDateTime dateRegister;
+
 
     QList<Modul> listModul;
     QList<Product> listProduct;

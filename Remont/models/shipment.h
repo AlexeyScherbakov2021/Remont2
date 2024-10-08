@@ -21,7 +21,7 @@ public:
     QDateTime dateUPD;
     QString buyer;
     int idOrganization;
-
+    QDateTime dateRegister;
     QString customer;
     QString questList;
     QString numberUPD;

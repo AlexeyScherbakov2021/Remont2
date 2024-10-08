@@ -18,6 +18,8 @@ public:
     bool LinkPlate(int idPlate, int idModul);
     void LoadChild(Modul &modul) override;
     Modul GetItem(int id) override;
+
+    bool DeleteItem(int id) override;
 };
 
 #endif // LISTMODUL_H

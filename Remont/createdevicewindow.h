@@ -6,7 +6,11 @@
 #include <QDialog>
 #include <QTreeWidget>
 
+// #include <models/modultype.h>
+#include <models/modultype.h>
 #include <models/plate.h>
+#include <models/prodtype.h>
+// #include <models/prodtype.h>
 
 namespace Ui {
 class CreateDeviceWindow;
@@ -28,12 +32,15 @@ private slots:
     void on_pbRegModul_clicked();
     void on_tbDelPlate_clicked();
 
+    void on_cbProduct_currentIndexChanged(int index);
+
+    void on_cbModul_currentIndexChanged(int index);
+
 private:
     Ui::CreateDeviceWindow *ui;
     RepoMSSQL repo;
-    QMap<int, QString> listTypeModule;
-    QMap<int, QString> listTypeProduct;
-    // int selectIdPlate;
+    QMap<int, ModulType> listTypeModule;
+    QMap<int, ProductType> listTypeProduct;
     void addLinePlate(Plate *plate);
     void addLineModul(Modul &mod);
 

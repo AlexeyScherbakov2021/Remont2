@@ -16,6 +16,8 @@ public:
     void Load() override;
     QVariant getData(int row, int col) const override;
     Shipment GetItem(int id) override;
+
+    bool DeleteItem(int id) override;
 };
 
 #endif // LISTSHIPMENT_H

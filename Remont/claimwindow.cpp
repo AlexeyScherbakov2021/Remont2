@@ -40,7 +40,8 @@ void ClaimWindow::on_pbAdd_clicked()
         int row = AddLineScreen(&claim);
         ui->twClaim->resizeColumnsToContents();
         ui->twClaim->resizeRowToContents(row);
-        if(repo.AddItem(claim))
+        // if(repo.AddItem(claim))
+        if(claim.id > 0)
             claims.listItems.push_back(claim);
     }
 }
@@ -140,7 +141,7 @@ void ClaimWindow::on_pbDelete_clicked()
                              QString("Удалить рекламацию № %1 ?").arg(claims.listItems.at(row).number), QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes)
         return;
 
-    if(repo.DeleteItem(claims.listItems[row]))
+    if(repo.DeleteClaim(claims.listItems[row].id))
     {
         claims.listItems.removeAt(row);
         ui->twClaim->removeRow(row);

@@ -167,8 +167,128 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Платы</string>
+    </property>
+    <addaction name="aRegPlate"/>
+    <addaction name="aListFreePlate"/>
+    <addaction name="aListPlate"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>Производство</string>
+    </property>
+    <addaction name="aRegDevice"/>
+    <addaction name="aInstallModul"/>
+    <addaction name="aControlOTK"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>Отгрузки</string>
+    </property>
+    <addaction name="aNewShip"/>
+    <addaction name="aShipBefore"/>
+    <addaction name="aShipping"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>Ремонты</string>
+    </property>
+    <addaction name="aClaim"/>
+    <addaction name="aGetOSO"/>
+    <addaction name="aGetRepair"/>
+    <addaction name="aEndRepair"/>
+    <addaction name="aExchModul"/>
+   </widget>
+   <widget class="QMenu" name="menu_5">
+    <property name="title">
+     <string>Отчеты</string>
+    </property>
+    <addaction name="aCardDevice"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
+   <addaction name="menu_4"/>
+   <addaction name="menu_5"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="aRegPlate">
+   <property name="text">
+    <string>Регитрация плат</string>
+   </property>
+  </action>
+  <action name="aListFreePlate">
+   <property name="text">
+    <string>Список непривязанных</string>
+   </property>
+  </action>
+  <action name="aListPlate">
+   <property name="text">
+    <string>Список всех</string>
+   </property>
+  </action>
+  <action name="aRegDevice">
+   <property name="text">
+    <string>Регистрация устройств</string>
+   </property>
+  </action>
+  <action name="aInstallModul">
+   <property name="text">
+    <string>Установка модулей</string>
+   </property>
+  </action>
+  <action name="aControlOTK">
+   <property name="text">
+    <string>Проверка ОТК</string>
+   </property>
+  </action>
+  <action name="aNewShip">
+   <property name="text">
+    <string>Новая отгрузка</string>
+   </property>
+  </action>
+  <action name="aShipBefore">
+   <property name="text">
+    <string>Готовые для отгрузки</string>
+   </property>
+  </action>
+  <action name="aShipping">
+   <property name="text">
+    <string>Отгруженные</string>
+   </property>
+  </action>
+  <action name="aClaim">
+   <property name="text">
+    <string>Рекламации</string>
+   </property>
+  </action>
+  <action name="aGetOSO">
+   <property name="text">
+    <string>Принять в ОСО</string>
+   </property>
+  </action>
+  <action name="aGetRepair">
+   <property name="text">
+    <string>Принять в ремонт</string>
+   </property>
+  </action>
+  <action name="aEndRepair">
+   <property name="text">
+    <string>Закончить ремонт</string>
+   </property>
+  </action>
+  <action name="aExchModul">
+   <property name="text">
+    <string>Замена модуля</string>
+   </property>
+  </action>
+  <action name="aCardDevice">
+   <property name="text">
+    <string>Карточка устройства</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

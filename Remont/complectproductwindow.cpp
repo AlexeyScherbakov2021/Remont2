@@ -4,11 +4,18 @@
 
 #include <models/modul.h>
 
-ComplectProductWindow::ComplectProductWindow(QWidget *parent)
+ComplectProductWindow::ComplectProductWindow(QWidget *parent, Product *product)
     : QDialog(parent)
     , ui(new Ui::ComplectProductWindow)
 {
     ui->setupUi(this);
+
+    if(product != nullptr)
+    {
+        prod = *product;
+        ui->leNumProdSearch->setVisible(false);
+        LoadProductToScreen(prod);
+    }
 
 }
 
@@ -53,17 +60,48 @@ void ComplectProductWindow::on_tbSearchModul_clicked()
 //----------------------------------------------------------------------------------------------
 void ComplectProductWindow::on_tbProdSearch_clicked()
 {
-    SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumProdSearch->text(), Status::CREATE, SelectDeviceWindow::TypeProduct);
-    if(win->exec() != QDialog::Accepted)
-    {
+    // SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumProdSearch->text(), Status::CREATE, SelectDeviceWindow::TypeProduct);
+    QVector<Status::Stat> stat {Status::CREATE};
+    SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    win->setTypeSearch(SelectDeviceWindow::TypeProduct);
+    IDevice *dev = win->SelectDevice(true, ui->leNumProdSearch->text(), stat);
+    // Product prod = statuc_cast<Product>(dev);
+    // if(win->exec() != QDialog::Accepted)
+    Product *prod = static_cast<Product*>(dev);
+
+    if(prod == nullptr)
         return;
-    }
 
     // prod = repo.GetProduct(ui->leNumProdSearch->text());
-    prod = win->prod;
-    if(prod.id == 0)
-        return;
 
+    // prod = win->prod;
+    // if(prod.id != 0)
+        // return;
+    LoadProductToScreen(*prod);
+
+    // repo.LoadChildProduct(prod);
+    // ui->lbNameProd->setText(prod.name);
+    // ui->lbNumProd->setText(prod.number);
+    // // ui->lbTypeProd->setText(prod.);
+
+    // ui->lwInnerModule->clear();
+    // for(auto &it : prod.listModules)
+    // {
+    //     repo.LoadStatus(it);
+    //     QListWidgetItem *item = new QListWidgetItem;
+    //     item->setText(it.number + " (" + it.name + ")");
+    //     QVariant var;
+    //     var.setValue(it);
+    //     item->setData(Qt::UserRole, var);
+    //     ui->lwInnerModule->addItem(item);
+
+    //     // ui->lwInnerModule->addItem(it.number + " (" + it.name + ")");
+    // }
+}
+
+
+void ComplectProductWindow::LoadProductToScreen(Product &prod)
+{
     repo.LoadChildProduct(prod);
     ui->lbNameProd->setText(prod.name);
     ui->lbNumProd->setText(prod.number);
@@ -82,7 +120,9 @@ void ComplectProductWindow::on_tbProdSearch_clicked()
 
         // ui->lwInnerModule->addItem(it.number + " (" + it.name + ")");
     }
+
 }
+
 
 //----------------------------------------------------------------------------------------------
 // Добавление модуля в изделие

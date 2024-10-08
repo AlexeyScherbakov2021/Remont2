@@ -33,30 +33,35 @@ void EndRemontWindow::on_tbNumber_clicked()
 {
     idMod =idProd = 0;
 
-    SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumber->text(),Status::REMONT);
-    if(win->exec() == QDialog::Accepted)
+    // SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumber->text(),Status::REMONT);
+    // if(win->exec() == QDialog::Accepted)
+    SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    IDevice *dev = win->SelectDevice(true, ui->leNumber->text(),Status::REMONT);
+    if(dev != nullptr)
     {
         Claim claim;
-        if(win->modul.id != 0)
+        if(dev->typeDevice == ev::MODUL)
         {
-            if(repo.LoadClaimForModul(win->modul.id, claim))
+            Modul* modul = static_cast<Modul*>(dev);
+            if(repo.LoadClaimForModul(modul->id, claim))
                 ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
 
-            ui->lbNumber->setText(win->modul.number);
-            ui->lbName->setText(win->modul.name);
+            ui->lbNumber->setText(modul->number);
+            ui->lbName->setText(modul->name);
             ui->lbDevice->setText("Модуль");
-            idMod = win->modul.id;
+            idMod = modul->id;
         }
 
-        if(win->prod.id != 0)
+        if(dev->typeDevice == ev::PRODUCT)
         {
-            if(repo.LoadClaimForProduct(win->prod.id, claim))
+            Product* prod = static_cast<Product*>(dev);
+            if(repo.LoadClaimForProduct(prod->id, claim))
                 ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
 
-            ui->lbNumber->setText(win->prod.number);
-            ui->lbName->setText(win->prod.name);
+            ui->lbNumber->setText(prod->number);
+            ui->lbName->setText(prod->name);
             ui->lbDevice->setText("Изделие");
-            idProd = win->prod.id;
+            idProd = prod->id;
         }
         ui->leNumber->clear();
     }

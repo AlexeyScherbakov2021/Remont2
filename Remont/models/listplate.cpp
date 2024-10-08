@@ -29,3 +29,9 @@ Plate ListPlate::GetItem(int /*id*/)
     return plate;
 }
 
+
+
+bool ListPlate::DeleteItem(int id)
+{
+    return repo.DeletePlate(id);
+}

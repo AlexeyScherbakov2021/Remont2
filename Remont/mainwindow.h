@@ -44,6 +44,10 @@ private slots:
 
     void on_pbEndRemont_clicked();
 
+    void on_aRegPlate_triggered();
+
+    void on_aRegDevice_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
