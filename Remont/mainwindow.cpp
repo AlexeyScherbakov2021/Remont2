@@ -105,7 +105,7 @@ void MainWindow::on_pbOTK_clicked()
 void MainWindow::on_pbCreatePlate_clicked()
 {
     PlateWindow *win = new PlateWindow(this);
-    win->exec();
+    win->show();
 
 }
 
@@ -116,7 +116,7 @@ void MainWindow::on_pbCreatePlate_clicked()
 void MainWindow::on_pbShip_clicked()
 {
     ListShipWindow *win = new ListShipWindow(this);
-    win->exec();
+    win->show();
 }
 
 
@@ -126,7 +126,7 @@ void MainWindow::on_pbShip_clicked()
 void MainWindow::on_pbComplect_clicked()
 {
     ComplectProductWindow *win = new ComplectProductWindow(this);
-    win->exec();
+    win->show();
 }
 
 
@@ -146,18 +146,18 @@ void MainWindow::on_pbStartRemont_clicked()
 void MainWindow::on_pbStartWork_clicked()
 {
     StartWorkWindow *win = new StartWorkWindow(this);
-    win->exec();
+    win->show();
 }
 
 
+//----------------------------------------------------------------------------------------------
+// Кнопка Окончание ремонта
+//----------------------------------------------------------------------------------------------
 void MainWindow::on_pbEndRemont_clicked()
 {
     EndRemontWindow *win = new EndRemontWindow(this);
-    win->exec();
+    win->show();
 }
-
-
-
 
 
 //----------------------------------------------------------------------------------------------
@@ -181,5 +181,27 @@ void MainWindow::on_aRegDevice_triggered()
     win->setAttribute(Qt::WA_DeleteOnClose);
     win->show();
 
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Кнопка Установка в оборудование
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aInstallModul_triggered()
+{
+    ComplectProductWindow *win = new ComplectProductWindow(this);
+    win->show();
+
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Кнопка Проверка ОТК
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aControlOTK_triggered()
+{
+    OTKControlWindow *win = new OTKControlWindow(this);
+    win->setAttribute(Qt::WA_DeleteOnClose);
+    win->show();
 }
 

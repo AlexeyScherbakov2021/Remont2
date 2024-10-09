@@ -24,6 +24,10 @@ private slots:
 
     void on_tbDelete_clicked();
 
+    void on_leNumber_textChanged(const QString &arg1);
+
+    void on_listWidget_currentRowChanged(int currentRow);
+
 private:
     Ui::PlateWindow *ui;
     RepoMSSQL repo;

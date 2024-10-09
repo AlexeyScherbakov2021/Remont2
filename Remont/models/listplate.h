@@ -20,6 +20,17 @@ public:
     Plate GetItem(int id) override;
 
     bool DeleteItem(int id) override;
+
+    void FindItemsExclude(const QString &number, QList<Plate> &listExclude, int status = 0)
+    {
+        ListDevice::FindItems(number, status);
+
+        for(auto it : listExclude)
+        {
+            listItems.removeIf([it](const Plate p) { return p.id == it.id;});
+        }
+    }
+
 };
 
 #endif // LISTPLATE_H

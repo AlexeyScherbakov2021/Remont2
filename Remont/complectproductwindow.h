@@ -30,7 +30,7 @@ private slots:
 private:
     Ui::ComplectProductWindow *ui;
     RepoMSSQL repo;
-    Product prod;
+    Product *prod = nullptr;
     // QList<Modul> listModul;
     ListModul Modules;
     QSet<Modul> addModul;

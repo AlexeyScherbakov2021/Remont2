@@ -117,6 +117,9 @@
        </item>
        <item row="6" column="1">
         <widget class="QPushButton" name="pbAdd">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -128,6 +131,9 @@
            <width>100</width>
            <height>16777215</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>Добавить плату</string>
          </property>
          <property name="text">
           <string>Добавить</string>
@@ -165,11 +171,17 @@
          </item>
          <item>
           <widget class="QToolButton" name="tbDelete">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="minimumSize">
             <size>
              <width>30</width>
              <height>0</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>Удалить из списка</string>
            </property>
            <property name="text">
             <string>-</string>
@@ -212,6 +224,17 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>leNumber</tabstop>
+  <tabstop>leNumberFW</tabstop>
+  <tabstop>leVNFT</tabstop>
+  <tabstop>leNumberDoc</tabstop>
+  <tabstop>deCreateDate</tabstop>
+  <tabstop>pbAdd</tabstop>
+  <tabstop>tbDelete</tabstop>
+  <tabstop>pbCancel</tabstop>
+  <tabstop>listWidget</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

@@ -62,3 +62,15 @@ void PlateWindow::on_tbDelete_clicked()
         delete ui->listWidget->currentItem();
 }
 
+
+void PlateWindow::on_leNumber_textChanged(const QString &arg1)
+{
+    ui->pbAdd->setEnabled(!arg1.isEmpty());
+}
+
+
+void PlateWindow::on_listWidget_currentRowChanged(int currentRow)
+{
+    ui->tbDelete->setEnabled(currentRow >= 0);
+}
+

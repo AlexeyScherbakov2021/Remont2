@@ -48,6 +48,10 @@ private slots:
 
     void on_aRegDevice_triggered();
 
+    void on_aInstallModul_triggered();
+
+    void on_aControlOTK_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;

@@ -9,6 +9,8 @@
 #include <models/modul.h>
 #include <models/product.h>
 
+#include <QMessageBox>
+
 CreateDeviceWindow::CreateDeviceWindow(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::CreateDeviceWindow)/*, selectIdPlate(0)*/
@@ -60,21 +62,21 @@ void CreateDeviceWindow::on_tbSearchPlate_clicked()
     ListPlate listPlate;
 
     // Убрать уже добавленные платы
-    listPlate.FindItems(s);
+    listPlate.FindItemsExclude(s, listAddingPlate);
 
     if(listPlate.listItems.size() == 0)
         return;
 
     int currentIndex = 0;
 
-    if(listPlate.listItems.size() > 1)
-    {
+    // if(listPlate.listItems.size() > 1)
+    // {
         SelectPlateWindow win(listPlate.listItems, this);
         if(win.exec() == QDialog::Accepted)
             currentIndex = win.selectedIndex;
         else
             return;
-    }
+    // }
 
     Plate plate = listPlate.listItems.at(currentIndex);
 
@@ -194,6 +196,8 @@ void CreateDeviceWindow::on_pbRegProduct_clicked()
         ui->leNumProduct->clear();
         ui->leNumProduct->setFocus();
     }
+    else
+        QMessageBox::warning(this, "Ошибка", QString("Серийный номер %1 уже присутствует в базе данных.").arg(prod.number));
 
 }
 
@@ -231,11 +235,14 @@ void CreateDeviceWindow::on_pbRegModul_clicked()
         addLineModul(mod);
         ui->leNumModul->clear();
         ui->leNumModul->setFocus();
-    }
 
-    listAddingPlate.clear();
-    ui->twPlates->clearContents();
-    ui->twPlates->setRowCount(0);
+        listAddingPlate.clear();
+        ui->twPlates->clearContents();
+        ui->twPlates->setRowCount(0);
+    }
+    else
+        QMessageBox::warning(this, "Ошибка", QString("Серийный номер %1 уже присутствует в базе данных.").arg(mod.number));
+
 }
 
 

@@ -6,490 +6,467 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>888</width>
-    <height>516</height>
+    <width>905</width>
+    <height>552</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Регистрация устройств</string>
   </property>
-  <widget class="QPushButton" name="pbClose">
-   <property name="geometry">
-    <rect>
-     <x>399</x>
-     <y>463</y>
-     <width>101</width>
-     <height>41</height>
-    </rect>
+  <property name="styleSheet">
+   <string notr="true">QGroupBox {
+    border: 1px solid #9F9F9F;
+    font-size: 14px;
+    font-weight: 800;
+    color: black;
+    border-radius: 4px;
+    margin-top: 2.5ex; 
+    padding-top: 2ex;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+}
+
+
+QPushButton {
+    border-radius: 3px;
+    border: 1px solid #9F9F9F;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+QPushButton:hover { 
+	background-color: white;
+}
+
+QPushButton:pressed {
+background-color: LightGray;
+    position: relative;
+     top: 4px; left: 4px;
+}
+
+</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0">
+   <property name="bottomMargin">
+    <number>15</number>
    </property>
-   <property name="text">
-    <string>Закрыть</string>
-   </property>
-  </widget>
-  <widget class="QTabWidget" name="tabWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>821</width>
-     <height>441</height>
-    </rect>
-   </property>
-   <property name="currentIndex">
-    <number>0</number>
-   </property>
-   <widget class="QWidget" name="tab">
-    <attribute name="title">
-     <string>Изделия</string>
-    </attribute>
-    <widget class="QListWidget" name="lwProduct">
-     <property name="geometry">
-      <rect>
-       <x>550</x>
-       <y>30</y>
-       <width>261</width>
-       <height>371</height>
-      </rect>
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="styleSheet">
+      <string notr="true">QWidget#tab, QWidget#tab_2 {
+background-color: #eeeeee
+}</string>
      </property>
-    </widget>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>580</x>
-       <y>10</y>
-       <width>141</width>
-       <height>16</height>
-      </rect>
+     <property name="currentIndex">
+      <number>0</number>
      </property>
-     <property name="text">
-      <string>Добавленные изделия</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="leNumProduct">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>180</y>
-       <width>221</width>
-       <height>24</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_10">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>160</y>
-       <width>111</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Серийный номер</string>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="cbProduct">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>50</y>
-       <width>221</width>
-       <height>24</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_8">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>91</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Тип изделия</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_23">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>90</y>
-       <width>91</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Наименование</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="leNameProd">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>120</y>
-       <width>221</width>
-       <height>24</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pbRegProduct">
-     <property name="geometry">
-      <rect>
-       <x>400</x>
-       <y>90</y>
-       <width>121</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Зарегестрировать</string>
-     </property>
-    </widget>
-    <widget class="QToolButton" name="tbDeleteProduct">
-     <property name="geometry">
-      <rect>
-       <x>783</x>
-       <y>6</y>
-       <width>23</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>-</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_4">
-     <property name="geometry">
-      <rect>
-       <x>260</x>
-       <y>50</y>
-       <width>101</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Гарантия (мес.)</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="lbGarantProd">
-     <property name="geometry">
-      <rect>
-       <x>360</x>
-       <y>50</y>
-       <width>49</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="tab_2">
-    <attribute name="title">
-     <string>Модули</string>
-    </attribute>
-    <widget class="QTreeWidget" name="twModul">
-     <property name="geometry">
-      <rect>
-       <x>550</x>
-       <y>30</y>
-       <width>261</width>
-       <height>371</height>
-      </rect>
-     </property>
-     <attribute name="headerVisible">
-      <bool>false</bool>
-     </attribute>
-     <column>
-      <property name="text">
-       <string/>
-      </property>
-     </column>
-    </widget>
-    <widget class="QLabel" name="label_2">
-     <property name="geometry">
-      <rect>
-       <x>580</x>
-       <y>10</y>
-       <width>131</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Добавленные модули</string>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="cbModul">
-     <property name="geometry">
-      <rect>
-       <x>115</x>
-       <y>10</y>
-       <width>200</width>
-       <height>24</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_9">
-     <property name="geometry">
-      <rect>
-       <x>8</x>
-       <y>13</y>
-       <width>100</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Тип модуля</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_22">
-     <property name="geometry">
-      <rect>
-       <x>8</x>
-       <y>43</y>
-       <width>100</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Наименование</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="leModulName">
-     <property name="geometry">
-      <rect>
-       <x>115</x>
-       <y>39</y>
-       <width>200</width>
-       <height>24</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="leNumModul">
-     <property name="geometry">
-      <rect>
-       <x>115</x>
-       <y>69</y>
-       <width>200</width>
-       <height>24</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_11">
-     <property name="geometry">
-      <rect>
-       <x>8</x>
-       <y>73</y>
-       <width>100</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Серийный номер</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pbRegModul">
-     <property name="geometry">
-      <rect>
-       <x>390</x>
-       <y>50</y>
-       <width>121</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Зарегестрировать</string>
-     </property>
-    </widget>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>110</y>
-       <width>531</width>
-       <height>291</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Привязка плат</string>
-     </property>
-     <widget class="QTableWidget" name="twPlates">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>66</y>
-        <width>511</width>
-        <height>211</height>
-       </rect>
-      </property>
-      <property name="alternatingRowColors">
-       <bool>true</bool>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
-      </property>
-      <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
-      </property>
-      <attribute name="verticalHeaderVisible">
-       <bool>false</bool>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Изделия</string>
       </attribute>
-      <column>
-       <property name="text">
-        <string>№</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>№ прошивки</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>№ накладной</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>ВНФТ</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Дата регистрации</string>
-       </property>
-      </column>
+      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1">
+       <item>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <property name="sizeConstraint">
+          <enum>QLayout::SizeConstraint::SetMinimumSize</enum>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="spacing">
+          <number>6</number>
+         </property>
+         <item row="5" column="0">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_10">
+           <property name="text">
+            <string>Серийный номер</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="cbProduct"/>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>Тип изделия</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLabel" name="lbGarantProd">
+           <property name="baseSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="baseSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Гарантия (мес.)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_23">
+           <property name="text">
+            <string>Наименование</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="2">
+          <widget class="QPushButton" name="pbRegProduct">
+           <property name="maximumSize">
+            <size>
+             <width>150</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Зарегестрировать</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="leNameProd"/>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="leNumProduct"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Добавленные изделия</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="tbDeleteProduct">
+             <property name="minimumSize">
+              <size>
+               <width>24</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QListWidget" name="lwProduct"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
-     <widget class="QLineEdit" name="leSearchPlate">
-      <property name="geometry">
-       <rect>
-        <x>210</x>
-        <y>30</y>
-        <width>201</width>
-        <height>24</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_3">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>35</y>
-        <width>191</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Привязать плату с серийным №</string>
-      </property>
-     </widget>
-     <widget class="QToolButton" name="tbSearchPlate">
-      <property name="geometry">
-       <rect>
-        <x>410</x>
-        <y>31</y>
-        <width>23</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>...</string>
-      </property>
-     </widget>
-     <widget class="QToolButton" name="tbDelPlate">
-      <property name="geometry">
-       <rect>
-        <x>490</x>
-        <y>40</y>
-        <width>23</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>-</string>
-      </property>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Модули</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="20,10">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <property name="spacing">
+          <number>20</number>
+         </property>
+         <item>
+          <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0">
+           <property name="sizeConstraint">
+            <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+           </property>
+           <property name="verticalSpacing">
+            <number>6</number>
+           </property>
+           <item row="2" column="1">
+            <widget class="QLineEdit" name="leNumModul"/>
+           </item>
+           <item row="3" column="2">
+            <widget class="QPushButton" name="pbRegModul">
+             <property name="text">
+              <string>Зарегестрировать</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="cbModul"/>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLineEdit" name="leModulName"/>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="lbGarantMod">
+             <property name="font">
+              <font>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_22">
+             <property name="text">
+              <string>Наименование</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>Тип модуля</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_11">
+             <property name="text">
+              <string>Серийный номер</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Гарантия (мес.)</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox">
+           <property name="title">
+            <string>Привязка плат</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,0,0">
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <property name="sizeConstraint">
+               <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
+              </property>
+              <item>
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string>Привязать плату с серийным №</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_4">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>40</number>
+                </property>
+                <item>
+                 <widget class="QLineEdit" name="leSearchPlate"/>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="tbSearchPlate">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QToolButton" name="tbDelPlate">
+                <property name="minimumSize">
+                 <size>
+                  <width>24</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Удалить из списка</string>
+                </property>
+                <property name="text">
+                 <string>-</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="twPlates">
+              <property name="alternatingRowColors">
+               <bool>true</bool>
+              </property>
+              <property name="selectionMode">
+               <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+              </property>
+              <property name="selectionBehavior">
+               <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+              </property>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <column>
+               <property name="text">
+                <string>№</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>№ прошивки</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>№ накладной</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>ВНФТ</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Дата регистрации</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Добавленные модули</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="tbDeleteModul">
+             <property name="minimumSize">
+              <size>
+               <width>24</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>10</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QTreeWidget" name="twModul">
+           <attribute name="headerVisible">
+            <bool>false</bool>
+           </attribute>
+           <column>
+            <property name="text">
+             <string/>
+            </property>
+           </column>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
     </widget>
-    <widget class="QToolButton" name="tbDeleteModul">
-     <property name="geometry">
-      <rect>
-       <x>787</x>
-       <y>6</y>
-       <width>23</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>15</pointsize>
-       <bold>true</bold>
-      </font>
+   </item>
+   <item alignment="Qt::AlignmentFlag::AlignHCenter">
+    <widget class="QPushButton" name="pbClose">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
      </property>
      <property name="text">
-      <string>-</string>
+      <string>Закрыть</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_5">
-     <property name="geometry">
-      <rect>
-       <x>340</x>
-       <y>13</y>
-       <width>101</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Гарантия (мес.)</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="lbGarantMod">
-     <property name="geometry">
-      <rect>
-       <x>440</x>
-       <y>13</y>
-       <width>49</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </widget>
-  </widget>
+   </item>
+  </layout>
  </widget>
  <tabstops>
-  <tabstop>leNumProduct</tabstop>
-  <tabstop>leNumModul</tabstop>
-  <tabstop>leSearchPlate</tabstop>
-  <tabstop>tbDeleteModul</tabstop>
-  <tabstop>tabWidget</tabstop>
-  <tabstop>cbModul</tabstop>
   <tabstop>cbProduct</tabstop>
-  <tabstop>tbSearchPlate</tabstop>
-  <tabstop>pbClose</tabstop>
-  <tabstop>lwProduct</tabstop>
-  <tabstop>tbDeleteProduct</tabstop>
-  <tabstop>leModulName</tabstop>
-  <tabstop>leNameProd</tabstop>
-  <tabstop>twModul</tabstop>
-  <tabstop>twPlates</tabstop>
-  <tabstop>tbDelPlate</tabstop>
-  <tabstop>pbRegModul</tabstop>
   <tabstop>pbRegProduct</tabstop>
+  <tabstop>tbDeleteProduct</tabstop>
+  <tabstop>leSearchPlate</tabstop>
+  <tabstop>tbSearchPlate</tabstop>
+  <tabstop>tbDelPlate</tabstop>
+  <tabstop>tbDeleteModul</tabstop>
+  <tabstop>pbClose</tabstop>
+  <tabstop>twModul</tabstop>
+  <tabstop>lwProduct</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>twPlates</tabstop>
  </tabstops>
  <resources/>
  <connections>
