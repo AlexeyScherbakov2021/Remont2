@@ -26,12 +26,10 @@ public:
     IDevice* SelectDevice(bool isNow, QString searchNum = "", QVector<Status::Stat> statusList = QVector<Status::Stat>());
     IDevice* SelectDevice(bool isNow, QString searchNum = "", Status::Stat status = Status::Stat::NONE);
     void setTypeSearch(TypeDevice type);
-    void setFreeDevice();
+    void setNotShipped();
     void setDisaleSearch();
 
     ~SelectDeviceWindow();
-    // Product *prod = nullptr;
-    // Modul *modul = nullptr;
     IDevice *device = nullptr;
 
 private slots:
@@ -48,7 +46,7 @@ private:
     Status::Stat status;
     QVector<Status::Stat> listStatus;
     TypeDevice typeDevice;
-    bool isFreeDevice = true;
+    bool isNotShipped = true;
 
     // int SearchModul(QString number, int status);
     // int SearchProduct(QString number, int status);

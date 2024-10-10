@@ -67,7 +67,7 @@ void ShipWindow::on_tbNumProd_clicked()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
     win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeProduct);
-    win->setFreeDevice();
+    win->setNotShipped();
     IDevice *dev = win->SelectDevice(true, ui->leNumProd->text(),Status::CORRECT);
     if(dev != nullptr)
     {
@@ -76,6 +76,7 @@ void ShipWindow::on_tbNumProd_clicked()
 
         Product* prod = static_cast<Product*>(dev);
         prod->idShipment = ship->id;
+        ship->listProduct.push_back(*prod);
         if(repo.UpdateItem(*prod))
             AddItemProd(*prod);
     }
@@ -100,7 +101,7 @@ void ShipWindow::on_tbAddSetterProd_clicked()
 
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
     win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeProduct);
-    win->setFreeDevice();
+    win->setNotShipped();
     IDevice *dev = win->SelectDevice(true, ui->leNumProd->text(), Status::CORRECT);
 
     if(dev != nullptr)
@@ -124,7 +125,10 @@ void ShipWindow::on_tbAddSetterProd_clicked()
         // }
         // else
         // {
-            prod->idSetterOut = item->data(0, Qt::UserRole).toInt();
+        prod->idSetterOut = item->data(0, Qt::UserRole).toInt();
+        auto setter_it = std::find_if(ship->listSetterOut.begin(), ship->listSetterOut.end(), [prod](const SetterOut s) { return s.id == prod->idSetterOut; });
+        if(setter_it != ship->listSetterOut.end())
+            (*setter_it).listProduct.push_back(*prod);
         // qDebug() << "Добавлено изделие в набор id=" << prod->idSetterOut;
         // }
 
@@ -162,7 +166,7 @@ void ShipWindow::on_tbNumModul_clicked()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
     win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeModul);
-    win->setFreeDevice();
+    win->setNotShipped();
     IDevice *dev = win->SelectDevice(true, ui->leNumModul->text(), Status::CORRECT);
     if(dev != nullptr)
     {
@@ -263,26 +267,28 @@ void ShipWindow::on_pbDelete_clicked()
                     auto prod_it = std::find_if(ship->listProduct.cbegin(), ship->listProduct.cend(),
                                             [id](const Product &p) { return p.id == id; });
                     if(prod_it != ship->listProduct.cend())
+                    {
                         prod = *prod_it;
+                        ship->listProduct.removeIf([prod] (auto p) { return prod.id == p.id; });
+                    }
                 }
                 else
                 {
                     // изделие находится в наборе
                     int id_parent = item->parent()->data(0, Qt::UserRole).toInt();
-                    auto set_it = std::find_if(ship->listSetterOut.cbegin(), ship->listSetterOut.cend(),
+                    auto set_it = std::find_if(ship->listSetterOut.begin(), ship->listSetterOut.end(),
                                                [id_parent](const SetterOut &s) { return s.id == id_parent; });
 
-                    if(set_it != ship->listSetterOut.cend())
+                    if(set_it != ship->listSetterOut.end())
                     {
-                        auto prod_it = std::find_if((*set_it).listProduct.begin(), (*set_it).listProduct.end(),
+                        auto prod_it = std::find_if((*set_it).listProduct.cbegin(), (*set_it).listProduct.cend(),
                                            [&](const Product &p) { return p.id == id; });
-                        if(prod_it != (*set_it).listProduct.end())
+                        if(prod_it != (*set_it).listProduct.cend())
                         {
-                            SetterOut set;
-                            set.listProduct.remove(0);
                             prod = *prod_it;
+                            // SetterOut setter = *set_it;
+                            (*set_it).listProduct.removeIf( [prod](const Product p) { return prod.id == p.id; } );
                         }
-
                     }
                 }
 
@@ -304,6 +310,7 @@ void ShipWindow::on_pbDelete_clicked()
                     Modul modul = *mod_it;
                     modul.idShipment = 0;
                     res = repo.UpdateItem(modul);
+                    ship->listModules.removeIf([modul] (auto m) { return modul.id == m.id;});
                 }
             }
             break;
@@ -325,6 +332,21 @@ void ShipWindow::on_pbDelete_clicked()
 //-----------------------------------------------------------------------------------
 void ShipWindow::on_pbFinish_clicked()
 {
+
+    int countProd = 0;
+
+    for(auto &it : ship->listSetterOut)
+        countProd += it.listProduct.size();
+
+
+    if(ship->listModules.size() == 0
+        && ship->listProduct.size() == 0
+        && countProd == 0)
+    {
+        QMessageBox::warning(this, "Предупреждение", "Не сформирован состав отгрузки.");
+        return;
+    }
+
     if(ui->leNumUPD->text().isEmpty())
     {
         QMessageBox::warning(this, "Предупреждение", "Для отгрузки необходимо указать документ УПД.");
@@ -428,7 +450,7 @@ void ShipWindow::on_tbAddSetProd_clicked()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
     win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeProduct);
-    win->setFreeDevice();
+    win->setNotShipped();
     IDevice *dev = win->SelectDevice(true, ui->leNumProd->text(), Status::CORRECT);
 
     if(dev != nullptr)

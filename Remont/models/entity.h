@@ -11,6 +11,7 @@ public:
     QString number;
 
     explicit IEntity() : id(0) {}
+
 private:
 };
 

@@ -22,11 +22,11 @@ IDevice* SelectDeviceWindow::SelectDevice(bool isNow, QString searchNum, QVector
     listStatus = statusList;
     ui->leSearch->setText(searchNum);
 
-    // есди был введен серийный номер, то сразу поиск
+    // есди , то сразу поиск
     if(isNow)
     {
         Search(searchNum);
-        if(listProduct.listItems.size() + listModul.listItems.size() == 1)
+        if(listProduct.listItems.size() + listModul.listItems.size() == 1 && !searchNum.isEmpty())
         {
             // если найден единственный экземпляр, то выходим
             if(listProduct.listItems.size() == 1)
@@ -82,9 +82,9 @@ void SelectDeviceWindow::setTypeSearch(TypeDevice type)
 
 }
 
-void SelectDeviceWindow::setFreeDevice()
+void SelectDeviceWindow::setNotShipped()
 {
-    isFreeDevice = false;
+    isNotShipped = false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -111,14 +111,14 @@ void SelectDeviceWindow::Search(QString number)
         if(typeDevice != TypeDevice::TypeModul)
         {
             QList<Product> products;
-            repo.FindItems(number, products, it, isFreeDevice);
+            repo.FindItems(number, products, it, isNotShipped);
             listProduct.listItems += products;
         }
 
         if(typeDevice != TypeDevice::TypeProduct)
         {
             QList<Modul> moduls;
-            repo.FindItems(number, moduls, it, isFreeDevice);
+            repo.FindItems(number, moduls, it, isNotShipped);
             listModul.listItems += moduls;
         }
     }

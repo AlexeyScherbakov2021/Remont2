@@ -40,6 +40,7 @@ public:
     }
 
     void setKindDevice() override { typeDevice = ev::DeviceKind::PRODUCT; }
+    // bool operator==(const Product& other) { return other.id == id;}
 
 };
 
