@@ -106,11 +106,12 @@ void ComplectProductWindow::on_pbAddModul_clicked()
     QVariant var = ui->lwOuterModule->item(ui->lwOuterModule->currentRow())->data(Qt::UserRole);
     Modul mod = var.value<Modul>();
 
-    if(delModul.contains(mod))
-        delModul.remove(mod);
-    else
-    // добавление в список отслеживания
-        addModul.insert(mod);
+    trackModul.AddRecord(mod);
+    // if(delModul.contains(mod))
+    //     delModul.remove(mod);
+    // else
+    // // добавление в список отслеживания
+    //     addModul.insert(mod);
 
     // Добавление в список изделия
 
@@ -137,10 +138,11 @@ void ComplectProductWindow::on_pbDeleteModul_clicked()
     QVariant var = ui->lwInnerModule->item(ui->lwInnerModule->currentRow())->data(Qt::UserRole);
     Modul mod = var.value<Modul>();
 
-    if(addModul.contains(mod))
-        addModul.remove(mod);
-    else
-        delModul.insert(mod);
+    trackModul.DelRecord(mod);
+    // if(addModul.contains(mod))
+    //     addModul.remove(mod);
+    // else
+    //     delModul.insert(mod);
 
     QListWidgetItem *item = new QListWidgetItem;
     item->setText(mod.number + " (" + mod.name + ")");
@@ -158,11 +160,14 @@ void ComplectProductWindow::on_pbDeleteModul_clicked()
 //----------------------------------------------------------------------------------------------
 void ComplectProductWindow::on_pbOK_clicked()
 {
-    QSet<Modul> res = addModul;
-    res.intersect(delModul);
-    addModul.subtract(res);
-    delModul.subtract(res);
+    // QSet<Modul> res = addModul;
+    // res.intersect(delModul);
+    // addModul.subtract(res);
+    // delModul.subtract(res);
 
+    // trackModul.setResult();
+
+    QSet<Modul> addModul = trackModul.getListAdd();
     // Добавление модулей в изделие и изменение статуса на  Установлен в оборудование
 
     for(auto &it : addModul)
@@ -181,6 +186,7 @@ void ComplectProductWindow::on_pbOK_clicked()
     }
 
     // Удаление модулей из изделия и изменение статуса на исправен на производстве
+    QSet<Modul> delModul = trackModul.getListDel();
     for(auto &it : delModul)
     {
         Modul mod = it;

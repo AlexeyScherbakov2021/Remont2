@@ -350,26 +350,34 @@ bool RepoMSSQL::DeleteClaim(int id)
 //------------------------------------------------------------------------------------------------------
 // Поиск изделий по строке серийного номера
 //------------------------------------------------------------------------------------------------------
-void RepoMSSQL::FindItems(const QString &serialNumber, QList<Product> &listProduct, int status)
+void RepoMSSQL::FindItems(const QString &serialNumber, QList<Product> &listProduct, int status, bool isFree)
 {
     listProduct.clear();
     QSqlQuery query;
 
     if(serialNumber.isEmpty())
-        return FindItems(listProduct, status);
+        return FindItems(listProduct, status, isFree);
 
 
     if(status == Status::NONE)
     {
-        query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
+        if(isFree)
+            query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
                       "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
                       "g_numberUSIKP,g_shunt,g_zip,g_garantMonth "
                       "from Product where g_number like :number order by g_name");
-
+        else
+        {
+            query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
+                          "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
+                          "g_numberUSIKP,g_shunt,g_zip,g_garantMonth "
+                          "from Product where g_number like :number and idShipment is null and idSetter is null order by g_name");
+        }
     }
     else
     {
-        query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
+        if(isFree)
+            query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
                       "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
                       "g_numberUSIKP,g_shunt,g_zip,g_garantMonth "
                       "from Product p "
@@ -379,6 +387,17 @@ void RepoMSSQL::FindItems(const QString &serialNumber, QList<Product> &listProdu
                       "having max(idStatus)=:idStatus "
                       ") ms on ms.idProduct=p.id where g_number like :number order by g_name"
                       );
+        else
+            query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
+                          "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
+                          "g_numberUSIKP,g_shunt,g_zip,g_garantMonth "
+                          "from Product p "
+                          "join "
+                          "(select idProduct, max(DateStatus) dateStatus, max(idStatus) as idStatus "
+                          "from ProductStatus group by idProduct "
+                          "having max(idStatus)=:idStatus "
+                          ") ms on ms.idProduct=p.id where g_number like :number and idShipment is null and idSetter is null order by g_name"
+                          );
 
         query.bindValue(":idStatus", status);
     }
@@ -419,7 +438,7 @@ void RepoMSSQL::FindItems(const QString &serialNumber, QList<Product> &listProdu
 //------------------------------------------------------------------------------------------------------
 // Поиск изделий
 //------------------------------------------------------------------------------------------------------
-void RepoMSSQL::FindItems(QList<Product> &listProduct, int status)
+void RepoMSSQL::FindItems(QList<Product> &listProduct, int status, bool isFree)
 {
     listProduct.clear();
     QSqlQuery query;
@@ -427,14 +446,21 @@ void RepoMSSQL::FindItems(QList<Product> &listProduct, int status)
 
     if(status == Status::NONE)
     {
-        query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
+        if(isFree)
+            query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
                   "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
                   "g_numberUSIKP,g_shunt,g_zip,g_garantMonth "
                   "from Product order by g_name");
+        else
+            query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
+                          "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
+                          "g_numberUSIKP,g_shunt,g_zip,g_garantMonth "
+                          "from Product where idShipment is null and idSetter is null order by g_name");
     }
     else
     {
-        query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
+        if(isFree)
+            query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
                   "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
                   "g_numberUSIKP,g_shunt,g_zip,g_garantMonth "
                   "from Product p "
@@ -444,6 +470,17 @@ void RepoMSSQL::FindItems(QList<Product> &listProduct, int status)
                   "having max(idStatus)=:idStatus "
                   ") ms on ms.idProduct=p.id order by g_name"
                   );
+        else
+            query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
+                          "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
+                          "g_numberUSIKP,g_shunt,g_zip,g_garantMonth "
+                          "from Product p "
+                          "join "
+                          "(select idProduct, max(DateStatus) dateStatus, max(idStatus) as idStatus "
+                          "from ProductStatus group by idProduct "
+                          "having max(idStatus)=:idStatus "
+                          ") ms on ms.idProduct=p.id where idShipment is null and idSetter is null order by g_name"
+                          );
 
         query.bindValue(":idStatus", status);
     }
@@ -483,20 +520,26 @@ void RepoMSSQL::FindItems(QList<Product> &listProduct, int status)
 //------------------------------------------------------------------------------------------------------
 // Поиск модулей
 //------------------------------------------------------------------------------------------------------
-void RepoMSSQL::FindItems(QList<Modul> &listModul, int status)
+void RepoMSSQL::FindItems(QList<Modul> &listModul, int status, bool isFree)
 {
     listModul.clear();
     QSqlQuery query;
 
     if(status == Status::NONE)
     {
-        query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
+        if(isFree)
+            query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
                       "m_zip,m_garantMonth "
                   "from Modules order by m_name");
+        else
+            query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
+                          "m_zip,m_garantMonth "
+                          "from Modules where idShipment is null order by m_name");
     }
     else
     {
-        query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
+        if(isFree)
+            query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
                     "m_zip,m_garantMonth "
                     "from Modules m "
                     "join "
@@ -505,6 +548,17 @@ void RepoMSSQL::FindItems(QList<Modul> &listModul, int status)
                     "having max(idStatus)=:idStatus "
                     ") ms on ms.idModul=m.id order by m_name"
                   );
+        else
+            query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
+                          "m_zip,m_garantMonth "
+                          "from Modules m "
+                          "join "
+                          "(select idModul, max(DateStatus) dateStatus, max(idStatus) as idStatus "
+                          "from ModulStatus  group by idModul "
+                          "having max(idStatus)=:idStatus "
+                          ") ms on ms.idModul=m.id  where idShipment is null order by m_name"
+                          );
+
         query.bindValue(":idStatus", status);
     }
 
@@ -531,19 +585,24 @@ void RepoMSSQL::FindItems(QList<Modul> &listModul, int status)
 //------------------------------------------------------------------------------------------------------
 // Поиск модулей по серийному номеру
 //------------------------------------------------------------------------------------------------------
-void RepoMSSQL::FindItems(const QString &serialNumber, QList<Modul> &listModul, int status)
+void RepoMSSQL::FindItems(const QString &serialNumber, QList<Modul> &listModul, int status, bool isFree)
 {
     listModul.clear();
     QSqlQuery query;
 
     if(serialNumber.isEmpty())
-        return FindItems(listModul, status);
+        return FindItems(listModul, status, isFree);
 
     if(status == Status::NONE)
     {
-        query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
+        if(isFree)
+            query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
                       "m_zip,m_garantMonth "
                       "from Modules where m_number like :number order by m_name");
+        else
+            query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
+                          "m_zip,m_garantMonth "
+                          "from Modules where m_number like :number and idShipment is null order by m_name");
     }
     else
     {
@@ -718,7 +777,7 @@ void RepoMSSQL::LoadProductType(QMap<int, ProductType> &listTypeProduct)
 //------------------------------------------------------------------------------------------------------
 // Поиск списка плат по номеру
 //------------------------------------------------------------------------------------------------------
-void RepoMSSQL::FindItems(const QString &number, QList<Plate> &listPlate, int /*status*/)
+void RepoMSSQL::FindItems(const QString &number, QList<Plate> &listPlate, int /*status*/, bool /*isFree*/)
 {
     QSqlQuery query;
     listPlate.clear();

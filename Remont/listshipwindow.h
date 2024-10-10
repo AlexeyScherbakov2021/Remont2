@@ -28,10 +28,10 @@ private slots:
 private:
     Ui::ListShipWindow *ui;
     RepoMSSQL repo;
-    // QList<Shipment> listShip;
     ListShipment Ship;
 
     void addRowWidget(Shipment &ship, int row = -1);
+    void setRowWidget(Shipment &ship, int row);
 };
 
 #endif // LISTSHIPWINDOW_H

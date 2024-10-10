@@ -7,6 +7,7 @@
 
 #include <models/listmodul.h>
 #include <models/product.h>
+#include <infrastructure/trackrecord.h>
 
 namespace Ui {
 class ComplectProductWindow;
@@ -33,8 +34,9 @@ private:
     Product *prod = nullptr;
     // QList<Modul> listModul;
     ListModul Modules;
-    QSet<Modul> addModul;
-    QSet<Modul> delModul;
+    TrackRecord<Modul> trackModul;
+    // QSet<Modul> addModul;
+    // QSet<Modul> delModul;
 
     void LoadProductToScreen(Product &prod);
 

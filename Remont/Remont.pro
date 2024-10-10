@@ -16,6 +16,7 @@ SOURCES += \
     complectproductwindow.cpp \
     createdevicewindow.cpp \
     endremontwindow.cpp \
+    infrastructure/trackrecord.cpp \
     listshipwindow.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     createdevicewindow.h \
     endremontwindow.h \
     infrastructure/IStatus.h \
+    infrastructure/trackrecord.h \
     listshipwindow.h \
     models/IDevice.h \
     models/claim.h \

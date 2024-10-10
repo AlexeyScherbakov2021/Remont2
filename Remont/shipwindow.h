@@ -25,25 +25,19 @@ private slots:
     void on_tbNumProd_clicked();
     void on_tbNumModul_clicked();
     void on_tbAddSetterProd_clicked();
-    void on_pbAddSet_clicked();
+    // void on_pbAddSet_clicked();
     void on_pbDelete_clicked();
     void on_pbFinish_clicked();
-
     void on_ShipWindow_finished(int result);
-
     void on_pbClose_clicked();
+    void slotIsEditing();
+    void on_tbAddSetter_clicked();
+
+    void on_tbAddSetProd_clicked();
 
 private:
     Ui::ShipWindow *ui;
-
-    // QMap<int, Product> listAddingProductToSet;
-    // QMap<int, Product> listAddingProduct;
-    // QList<Modul> listAddingModul;
-    // QList<SetterOut> listAddingSet;
-    // QList<Product> listDelProduct;
-    // QList<Modul> listDelModul;
-    // QList<SetterOut> listDelSet;
-
+    bool isEditing = false;
     RepoMSSQL repo;
     Shipment *ship;
     QHash<int, int> listID;

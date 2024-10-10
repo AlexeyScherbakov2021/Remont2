@@ -82,6 +82,11 @@ void SelectDeviceWindow::setTypeSearch(TypeDevice type)
 
 }
 
+void SelectDeviceWindow::setFreeDevice()
+{
+    isFreeDevice = false;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Установка флага немедленного поиска
 //--------------------------------------------------------------------------------------------------
@@ -106,14 +111,14 @@ void SelectDeviceWindow::Search(QString number)
         if(typeDevice != TypeDevice::TypeModul)
         {
             QList<Product> products;
-            repo.FindItems(number, products, it);
+            repo.FindItems(number, products, it, isFreeDevice);
             listProduct.listItems += products;
         }
 
         if(typeDevice != TypeDevice::TypeProduct)
         {
             QList<Modul> moduls;
-            repo.FindItems(number, moduls, it);
+            repo.FindItems(number, moduls, it, isFreeDevice);
             listModul.listItems += moduls;
         }
     }

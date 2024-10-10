@@ -26,6 +26,7 @@ public:
     IDevice* SelectDevice(bool isNow, QString searchNum = "", QVector<Status::Stat> statusList = QVector<Status::Stat>());
     IDevice* SelectDevice(bool isNow, QString searchNum = "", Status::Stat status = Status::Stat::NONE);
     void setTypeSearch(TypeDevice type);
+    void setFreeDevice();
     void setDisaleSearch();
 
     ~SelectDeviceWindow();
@@ -47,9 +48,10 @@ private:
     Status::Stat status;
     QVector<Status::Stat> listStatus;
     TypeDevice typeDevice;
+    bool isFreeDevice = true;
 
-    int SearchModul(QString number, int status);
-    int SearchProduct(QString number, int status);
+    // int SearchModul(QString number, int status);
+    // int SearchProduct(QString number, int status);
     void Search(QString searchNum);
     void listToScreen();
 
