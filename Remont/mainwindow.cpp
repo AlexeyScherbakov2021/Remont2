@@ -49,18 +49,20 @@ void MainWindow::on_pbCard_clicked()
     if(dev != nullptr)
     {
         CardProdWindow *winCard;
-        if(dev->typeDevice == ev::PRODUCT )
-        {
-            Product* prod = static_cast<Product*>(dev);
-            winCard = new CardProdWindow(*prod, this);
-        }
-        else if(dev->typeDevice == ev::MODUL)
-        {
-            Modul* modul = static_cast<Modul*>(dev);
-            winCard = new CardProdWindow(*modul, this);
-        }
-        else
-            return;
+        winCard = new CardProdWindow(dev, this);
+
+        // if(dev->typeDevice == ev::PRODUCT )
+        // {
+        //     Product* prod = static_cast<Product*>(dev);
+        //     winCard = new CardProdWindow(*prod, this);
+        // }
+        // else if(dev->typeDevice == ev::MODUL)
+        // {
+        //     Modul* modul = static_cast<Modul*>(dev);
+        //     winCard = new CardProdWindow(*modul, this);
+        // }
+        // else
+        //     return;
 
         winCard->show();
     }
@@ -106,7 +108,6 @@ void MainWindow::on_pbCreatePlate_clicked()
 {
     PlateWindow *win = new PlateWindow(this);
     win->show();
-
 }
 
 
@@ -168,7 +169,6 @@ void MainWindow::on_aRegPlate_triggered()
     PlateWindow *win = new PlateWindow(this);
     win->setAttribute(Qt::WA_DeleteOnClose);
     win->show();
-
 }
 
 
@@ -180,7 +180,6 @@ void MainWindow::on_aRegDevice_triggered()
     CreateDeviceWindow *win = new CreateDeviceWindow(this);
     win->setAttribute(Qt::WA_DeleteOnClose);
     win->show();
-
 }
 
 
@@ -191,7 +190,6 @@ void MainWindow::on_aInstallModul_triggered()
 {
     ComplectProductWindow *win = new ComplectProductWindow(this);
     win->show();
-
 }
 
 
@@ -213,6 +211,86 @@ void MainWindow::on_aShipBefore_triggered()
 {
     ListShipWindow *win = new ListShipWindow(this);
     win->show();
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Принять в работу
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aStartWork_triggered()
+{
+    StartWorkWindow *win = new StartWorkWindow(this);
+    win->show();
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Реламации
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aClaim_triggered()
+{
+    ClaimWindow *win = new ClaimWindow;
+    win->show();
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Принять в ОСО
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aGetOSO_triggered()
+{
+    AcceptRemontWindow *win = new AcceptRemontWindow(this);
+    win->show();
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Кнопка Принять в ремонт
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aGetRepair_triggered()
+{
+    RemontWindow *win = new RemontWindow(this);
+    win->show();
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Кнопка Окончание ремонта
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aEndRepair_triggered()
+{
+    EndRemontWindow *win = new EndRemontWindow(this);
+    win->show();
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Кнопка Карточка устройства
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aCardDevice_triggered()
+{
+    SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    IDevice *dev = win->SelectDevice(false, "", Status::NONE);
+    if(dev != nullptr)
+    {
+        CardProdWindow *winCard;
+        winCard = new CardProdWindow(dev, this);
+
+        // if(dev->typeDevice == ev::PRODUCT )
+        // {
+        //     Product* prod = static_cast<Product*>(dev);
+        //     winCard = new CardProdWindow(*prod, this);
+        // }
+        // else if(dev->typeDevice == ev::MODUL)
+        // {
+        //     Modul* modul = static_cast<Modul*>(dev);
+        //     winCard = new CardProdWindow(*modul, this);
+        // }
+        // else
+        //     return;
+
+        winCard->show();
+    }
 
 }
 

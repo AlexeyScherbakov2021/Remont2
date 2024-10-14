@@ -21,8 +21,9 @@ class CardProdWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit CardProdWindow(Modul &modul, QWidget *parent = nullptr);
-    explicit CardProdWindow(Product &prod, QWidget *parent = nullptr);
+    // explicit CardProdWindow(Modul &modul, QWidget *parent = nullptr);
+    // explicit CardProdWindow(Product &prod, QWidget *parent = nullptr);
+    CardProdWindow(IDevice *device, QWidget *parent = nullptr);
     ~CardProdWindow();
 
 private slots:

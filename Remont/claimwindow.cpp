@@ -4,9 +4,9 @@
 
 #include <QMessageBox>
 
-ClaimWindow::ClaimWindow(QWidget *parent, bool isSelected)
+ClaimWindow::ClaimWindow(QWidget *parent/*, bool isSelected*/)
     : QDialog(parent)
-    , ui(new Ui::ClaimWindow), isSelected(isSelected)
+    , ui(new Ui::ClaimWindow)//, isSelected(isSelected)
 {
     ui->setupUi(this);
 
@@ -18,7 +18,7 @@ ClaimWindow::ClaimWindow(QWidget *parent, bool isSelected)
     ui->twClaim->resizeColumnsToContents();
     ui->twClaim->resizeRowsToContents();
 
-    ui->pbSelect->setVisible(isSelected);
+    // ui->pbSelect->setVisible(isSelected);
 }
 
 ClaimWindow::~ClaimWindow()
@@ -48,7 +48,7 @@ void ClaimWindow::on_pbAdd_clicked()
 
 
 //----------------------------------------------------------------------------------------
-// Кнопка Добавить рекламацию
+// Добавить рекламацию строку в таблицу
 //----------------------------------------------------------------------------------------
 int ClaimWindow::AddLineScreen(const Claim *claim)
 {
@@ -204,9 +204,9 @@ void ClaimWindow::on_pbEdit_clicked()
 //----------------------------------------------------------------------------------------
 void ClaimWindow::on_twClaim_cellDoubleClicked(int /*row*/, int /*column*/)
 {
-    if(isSelected)
-        on_pbSelect_clicked();
-    else
+    // if(isSelected)
+    //     on_pbSelect_clicked();
+    // else
         on_pbEdit_clicked();
 }
 
@@ -214,14 +214,14 @@ void ClaimWindow::on_twClaim_cellDoubleClicked(int /*row*/, int /*column*/)
 //----------------------------------------------------------------------------------------
 // Кнопка Выбрать рекламацию
 //----------------------------------------------------------------------------------------
-void ClaimWindow::on_pbSelect_clicked()
-{
-    int row = ui->twClaim->currentRow();
-    if(row < 0 )
-        return;
+// void ClaimWindow::on_pbSelect_clicked()
+// {
+//     int row = ui->twClaim->currentRow();
+//     if(row < 0 )
+//         return;
 
-    selectedClaim = claims.listItems[row];
+//     selectedClaim = claims.listItems[row];
 
-    accept();
-}
+//     accept();
+// }
 

@@ -8,7 +8,6 @@ StartWorkWindow::StartWorkWindow(QWidget *parent)
     ui->setupUi(this);
 
     products.FindItems("", Status::SHIPPED);
-    // modules.FindItems(Status::SHIPPED);
 
     for(auto &it : products.listItems)
     {
@@ -17,16 +16,6 @@ StartWorkWindow::StartWorkWindow(QWidget *parent)
         item->setData(Qt::UserRole, it.id);
         ui->lwProduct->addItem(item);
     }
-
-    // for(auto &it : modules.listItems)
-    // {
-    //     if(it.idProduct > 0)
-    //         continue;
-    //     QListWidgetItem *item = new QListWidgetItem();
-    //     item->setText(it.name + " (" + it.number + ")");
-    //     item->setData(Qt::UserRole, it.id);
-    //     ui->lwModul->addItem(item);
-    // }
     ui->deDate->setDateTime(QDateTime::currentDateTime());
 }
 
@@ -35,41 +24,34 @@ StartWorkWindow::~StartWorkWindow()
     delete ui;
 }
 
+
+//----------------------------------------------------------------------------
+// Кнопка ввести в работу
+//----------------------------------------------------------------------------
 void StartWorkWindow::on_pbProdToWork_clicked()
 {
     auto item = ui->lwProduct->currentItem();
     if(item == nullptr)
         return;
 
-    Product prod;
-    prod.id = item->data(Qt::UserRole).toInt();
-
-    // Status status;
-    // status.idStatus = Status::Stat::WORK;
-    // status.idDevice = prod.id;
-    // status.dateStatus = ui->deDate->dateTime();
-
-
+    int id = item->data(Qt::UserRole).toInt();
+    Product prod = products.GetItem(id);
+    // qDebug() << ui->deDate->dateTime() << prod.garantMonth;
+    prod.EndGarant = ui->deDate->dateTime().addMonths(prod.garantMonth);
+    // qDebug() << prod.EndGarant;
+    repo.LoadChildProduct(prod);
     prod.AddStatus(prod, Status::WORK, ui->deDate->dateTime());
-    // repo.AddStatusProduct(status);
+
+    for(auto &it : prod.listModules)
+    {
+        it.EndGarant = ui->deDate->dateTime().addMonths(it.garantMonth);
+        repo.UpdateItem(it);
+        it.AddStatus(it,Status::WORK, ui->deDate->dateTime());
+    }
+
+    repo.UpdateItem(prod);
 
     delete item;
 }
 
-
-// void StartWorkWindow::on_pbModulToWork_clicked()
-// {
-//     auto item = ui->lwModul->currentItem();
-//     if(item == nullptr)
-//         return;
-
-//     Modul mod;
-//     mod.id = item->data(Qt::UserRole).toInt();
-
-
-//     mod.AddStatus(mod, Status::WORK, ui->deDate->dateTime());
-
-//     delete item;
-
-// }
 

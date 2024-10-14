@@ -30,7 +30,7 @@ public:
 
     QList<Modul> listModules;
 
-    explicit Product() : idSetterOut(0) {}
+    explicit Product() : idSetterOut(0) { typeDevice = ev::DeviceKind::PRODUCT;}
 
     QString numAndComment()
     {
@@ -39,7 +39,7 @@ public:
 
     }
 
-    void setKindDevice() override { typeDevice = ev::DeviceKind::PRODUCT; }
+    // void setKindDevice() override { typeDevice = ev::DeviceKind::PRODUCT; }
     // bool operator==(const Product& other) { return other.id == id;}
 
 };

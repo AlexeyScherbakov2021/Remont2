@@ -3,6 +3,8 @@
 #include "selectdevicewindow.h"
 #include "ui_remontwindow.h"
 
+#include <QMessageBox>
+
 RemontWindow::RemontWindow(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::RemontWindow)
@@ -23,15 +25,10 @@ RemontWindow::~RemontWindow()
 //--------------------------------------------------------------------------------------------
 void RemontWindow::on_pbOK_clicked()
 {
-    // Status status;
-    // status.idStatus = Status::Stat::REMONT;
-    // status.dateStatus = ui->deDate->dateTime();
-
     if(idProd != 0)
     {
         Product prod;
         prod.id = idProd;
-        // status.idDevice = idProd;
         prod.AddStatus(prod, Status::REMONT);
     }
 
@@ -39,10 +36,18 @@ void RemontWindow::on_pbOK_clicked()
     {
         Modul mod;
         mod.id = idMod;
-        // status.idDevice = idMod;
         mod.AddStatus(mod, Status::REMONT);
     }
     idProd = idMod = 0;
+
+    QMessageBox::information(this, "Сообщение", QString("%1 #%2 %3 принят в ремонт.")
+                .arg(ui->lbDevice->text()).arg(ui->lbNumber->text()).arg(ui->lbName->text()));
+
+    ui->lbDevice->clear();
+    ui->lbNumber->clear();
+    ui->lbName->clear();
+    ui->lbClaim->clear();
+
 }
 
 
@@ -50,11 +55,9 @@ void RemontWindow::on_tbNumber_clicked()
 {
     idMod = idProd = 0;
 
-    // SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumber->text(),Status::FAULTY_ON_OSO);
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
     IDevice *dev = win->SelectDevice(true, ui->leNumber->text(),Status::FAULTY_ON_OSO);
     if(dev != nullptr)
-    // if(win->exec() == QDialog::Accepted)
     {
         Claim claim;
         if(dev->typeDevice == ev::MODUL)

@@ -12,6 +12,7 @@ SelectDeviceWindow::SelectDeviceWindow(QWidget *parent)
 SelectDeviceWindow::~SelectDeviceWindow()
 {
     delete ui;
+    delete device;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -31,15 +32,16 @@ IDevice* SelectDeviceWindow::SelectDevice(bool isNow, QString searchNum, QVector
             // если найден единственный экземпляр, то выходим
             if(listProduct.listItems.size() == 1)
             {
-                device = new Product;
-                *device = listProduct.listItems.first();
+                Product* prod = new Product;
+                *prod = listProduct.listItems.first();
+                device = prod;
                 // return listProduct.listItems.first();
             }
             else
             {
-                device = new Modul;
-                *device = listModul.listItems.first();
-
+                Modul* mod = new Modul;
+                *mod = listModul.listItems.first();
+                device = mod;
                 // return listModul.listItems.first();
             }
             // accept();
@@ -249,14 +251,16 @@ void SelectDeviceWindow::on_pbSelect_clicked()
 
     if(ui->tabWidget->currentIndex() == 0 && ui->twProduct->currentRow() >= 0)
     {
-        device = new Product;
-        *device = listProduct.listItems[ui->twProduct->currentRow()];
+        Product *prod = new Product;
+        *prod = listProduct.listItems[ui->twProduct->currentRow()];
+        device = prod;
     }
 
     if(ui->tabWidget->currentIndex() == 1 && ui->twModul->currentRow() >= 0)
     {
-        device = new Modul;
-        *device = listModul.listItems[ui->twModul->currentRow()];
+        Modul *mod = new Modul;
+        *mod = listModul.listItems[ui->twModul->currentRow()];
+        device = mod;
     }
 
     accept();

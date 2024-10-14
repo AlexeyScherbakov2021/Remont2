@@ -28,7 +28,9 @@ EndRemontWindow::~EndRemontWindow()
 }
 
 
-
+//---------------------------------------------------------------------------------------
+// Кнопка Поиск по номеру
+//---------------------------------------------------------------------------------------
 void EndRemontWindow::on_tbNumber_clicked()
 {
     idMod =idProd = 0;
@@ -69,6 +71,9 @@ void EndRemontWindow::on_tbNumber_clicked()
 }
 
 
+//---------------------------------------------------------------------------------------
+// Кнопка Закончить ремонт
+//---------------------------------------------------------------------------------------
 void EndRemontWindow::on_pbEndRemont_clicked()
 {
     Status::Stat stat = ui->cbScrap->isChecked() ? Status::END_WORK : Status::CORRECT_OSO;

@@ -17,7 +17,7 @@ public:
     // QList<IDevice> listChild;
     QList<Plate> listPlate;
 
-    explicit Modul() : idProduct(0) {}
+    explicit Modul() : idProduct(0)  { typeDevice = ev::DeviceKind::MODUL; }
 
     bool operator==(const Modul &other) const { return this->id == other.id; }
 
@@ -32,7 +32,7 @@ public:
         return res;
     }
 
-    void setKindDevice() override { typeDevice = ev::DeviceKind::MODUL; }
+    // void setKindDevice() override { typeDevice = ev::DeviceKind::MODUL; }
 };
 
 // void Modul::setKindDevice()

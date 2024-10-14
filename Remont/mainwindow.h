@@ -54,6 +54,18 @@ private slots:
 
     void on_aShipBefore_triggered();
 
+    void on_aStartWork_triggered();
+
+    void on_aClaim_triggered();
+
+    void on_aGetOSO_triggered();
+
+    void on_aGetRepair_triggered();
+
+    void on_aEndRepair_triggered();
+
+    void on_aCardDevice_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;

@@ -106,7 +106,7 @@ void ComplectProductWindow::on_pbAddModul_clicked()
     QVariant var = ui->lwOuterModule->item(ui->lwOuterModule->currentRow())->data(Qt::UserRole);
     Modul mod = var.value<Modul>();
 
-    trackModul.AddRecord(mod);
+    trackModul.AddRecord(mod.id, mod);
     // if(delModul.contains(mod))
     //     delModul.remove(mod);
     // else
@@ -138,7 +138,7 @@ void ComplectProductWindow::on_pbDeleteModul_clicked()
     QVariant var = ui->lwInnerModule->item(ui->lwInnerModule->currentRow())->data(Qt::UserRole);
     Modul mod = var.value<Modul>();
 
-    trackModul.DelRecord(mod);
+    trackModul.DelRecord(mod.id, mod);
     // if(addModul.contains(mod))
     //     addModul.remove(mod);
     // else
@@ -167,17 +167,18 @@ void ComplectProductWindow::on_pbOK_clicked()
 
     // trackModul.setResult();
 
-    QSet<Modul> addModul = trackModul.getListAdd();
+    QList<Modul> addModul;
+    trackModul.getListAdd(addModul);
     // Добавление модулей в изделие и изменение статуса на  Установлен в оборудование
 
     for(auto &it : addModul)
     {
         Modul mod = it;
-        Status status;
-        status.dateStatus = QDateTime::currentDateTime();
-        status.idStatus = Status::INSTALL;
-        status.idDevice = mod.id;
-        mod.listStatus.push_back(status);
+        // Status status;
+        // status.dateStatus = QDateTime::currentDateTime();
+        // status.idStatus = Status::INSTALL;
+        // status.idDevice = mod.id;
+        // mod.listStatus.push_back(status);
         mod.idProduct = prod->id;
         // записать в базу новый статус и id изделия для модуля
         if(repo.UpdateItem(mod))
@@ -186,7 +187,8 @@ void ComplectProductWindow::on_pbOK_clicked()
     }
 
     // Удаление модулей из изделия и изменение статуса на исправен на производстве
-    QSet<Modul> delModul = trackModul.getListDel();
+    QList<Modul> delModul;
+    trackModul.getListDel(delModul);
     for(auto &it : delModul)
     {
         Modul mod = it;

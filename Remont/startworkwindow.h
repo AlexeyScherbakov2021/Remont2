@@ -23,13 +23,10 @@ public:
 
 private slots:
     void on_pbProdToWork_clicked();
-    // void on_pbModulToWork_clicked();
 
 private:
     Ui::StartWorkWindow *ui;
     RepoMSSQL repo;
-    // QList<Product> listProduct;
-    // QList<Modul> listModul;
     ListProduct products;
     ListModul modules;
 };

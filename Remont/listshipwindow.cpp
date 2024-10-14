@@ -137,10 +137,15 @@ void ListShipWindow::on_tableWidget_cellDoubleClicked(int row, int /*column*/)
     if(win->exec() == QDialog::Accepted)
     {
         if(ship.dateRegister.isValid())
+        {
             Ship.listItems.removeIf([ship](Shipment s) { return s.id == ship.id; });
+            ui->tableWidget->removeRow(row);
+        }
         else
+        {
             setRowWidget(ship, row);
-        Ship.listItems[row] = ship;
+            Ship.listItems[row] = ship;
+        }
     }
 }
 

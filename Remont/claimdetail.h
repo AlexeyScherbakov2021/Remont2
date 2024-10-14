@@ -7,6 +7,8 @@
 
 #include <models/claim.h>
 
+#include <infrastructure/trackrecord.h>
+
 namespace Ui {
 class ClaimDetail;
 }
@@ -32,10 +34,13 @@ private:
     QMap<int, QString> listTypeModule;
     QMap<int, QString> listTypeProduct;
 
-    QMap<int, Product> listAddProduct;
-    QMap<int, Modul> listAddModul;
-    QMap<int, Product> listDelProduct;
-    QMap<int, Modul> listDelModul;
+
+    TrackRecord<Product> trackProduct;
+    TrackRecord<Modul> trackModul;
+    // QMap<int, Product> listAddProduct;
+    // QMap<int, Modul> listAddModul;
+    // QMap<int, Product> listDelProduct;
+    // QMap<int, Modul> listDelModul;
 
     RepoMSSQL repo;
 

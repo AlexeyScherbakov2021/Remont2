@@ -44,11 +44,14 @@ public:
     //     repo.FindItems("", listItems, status);
     // }
 
-    virtual T GetItem(int id) = 0;
-    // {
-    //     T res = repo.GetItem(id);
-    //     return res;
-    // }
+    virtual T GetItem(int id)
+    {
+        T resT;
+        auto res = std::find_if(listItems.cbegin(), listItems.cend(), [id] (auto it) { return it.id == id; });
+        if(res != listItems.cend())
+            resT = *res;
+        return resT;
+    }
 
 
     virtual void LoadChild(T &item) = 0;

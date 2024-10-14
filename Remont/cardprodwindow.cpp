@@ -20,59 +20,94 @@ CardProdWindow::CardProdWindow(const QString &name, QWidget *parent)
 //-------------------------------------------------------------------------------------------------------
 // Конструктор для модуля
 //-------------------------------------------------------------------------------------------------------
-CardProdWindow::CardProdWindow(Modul &mod, QWidget *parent) : CardProdWindow(mod.name, parent)
-{
-    // modul = mod;
+// CardProdWindow::CardProdWindow(Modul &mod, QWidget *parent) : CardProdWindow(mod.name, parent)
+// {
+//     // modul = mod;
 
-    // remontEntity = new RemontModul(mod);
+//     // remontEntity = new RemontModul(mod);
 
-    // qDebug() << &mod << &((RemontModul*)remontEntity)->modul;
-    // qDebug() << &mod.listRemont << remontEntity->listRemont;
+//     // qDebug() << &mod << &((RemontModul*)remontEntity)->modul;
+//     // qDebug() << &mod.listRemont << remontEntity->listRemont;
 
-    Product prod = repo.GetProduct(mod.idProduct);
-    number = mod.number;
-    // ui->leNumber->setText(mod.number);
-    loadShipmentToForm(&prod);
+//     Product prod = repo.GetProduct(mod.idProduct);
+//     number = mod.number;
+//     // ui->leNumber->setText(mod.number);
+//     loadShipmentToForm(&prod);
 
-    // remontEntity->LoadListRemont(&repo);
-    // repo.LoadRemontM(modul.listRemont, modul.id);
+//     // remontEntity->LoadListRemont(&repo);
+//     // repo.LoadRemontM(modul.listRemont, modul.id);
 
-    LoadHistoryToForm(mod.listStatus);
+//     LoadHistoryToForm(mod.listStatus);
 
-    // for(auto &it : *remontEntity->listRemont)
-    //     AddRowRemont(it);
+//     // for(auto &it : *remontEntity->listRemont)
+//     //     AddRowRemont(it);
 
-    // for(auto &it : modul.listRemont)
-    // {
-    //     AddRowRemont(it);
-    // }
+//     // for(auto &it : modul.listRemont)
+//     // {
+//     //     AddRowRemont(it);
+//     // }
 
-}
+// }
 
 
 //-------------------------------------------------------------------------------------------------------
 // Конструктор для изделия
 //-------------------------------------------------------------------------------------------------------
-CardProdWindow::CardProdWindow(Product &prod, QWidget *parent) : CardProdWindow(prod.name, parent)
+// CardProdWindow::CardProdWindow(Product &prod, QWidget *parent) : CardProdWindow(prod.name, parent)
+// {
+//     // remontEntity = new RemontProduct(prod);
+
+//     // // qDebug() << &prod << &((RemontProduct*)remontEntity)->product;
+//     // // qDebug() << &prod.listRemont << remontEntity->listRemont;
+
+//     // ListProduct lProduct;
+//     // lProduct.LoadChild(prod);
+
+//     repo.LoadChildProduct(prod);
+//     prod.LoadStatus(prod);
+
+//     // repo.LoadChildProduct(prod);
+//     number = prod.number;
+//     loadInclude(&prod);
+//     loadShipmentToForm(&prod);
+
+//     LoadHistoryToForm(prod.listStatus);
+
+//     // remontEntity->LoadListRemont(&repo);
+//     // for(auto &it : *remontEntity->listRemont)
+//     //     AddRowRemont(it);
+
+// }
+
+CardProdWindow::CardProdWindow(IDevice *device, QWidget *parent) : CardProdWindow(device->name, parent)
 {
-    // remontEntity = new RemontProduct(prod);
+    Product *prod;
+    Product product;
 
-    // // qDebug() << &prod << &((RemontProduct*)remontEntity)->product;
-    // // qDebug() << &prod.listRemont << remontEntity->listRemont;
+    if(device->typeDevice == ev::MODUL)
+    {
+        Modul *mod = static_cast<Modul*>(device);
+        product = repo.GetProduct(mod->idProduct);
+        prod = &product;
+        mod->LoadStatus(*mod);
+        LoadHistoryToForm(mod->listStatus);
+    }
+    if(device->typeDevice == ev::PRODUCT)
+    {
+        prod = static_cast<Product*>(device);
+        repo.LoadChildProduct(*prod);
+        prod->LoadStatus(*prod);
+        loadInclude(prod);
+        LoadHistoryToForm(prod->listStatus);
 
-    ListProduct lProduct;
-    lProduct.LoadChild(prod);
+    }
 
-    // repo.LoadChildProduct(prod);
-    number = prod.number;
-    loadInclude(&prod);
-    loadShipmentToForm(&prod);
+    ui->lbGarant->setText(device->EndGarant.toString("dd.MM.yyyy"));
+    ui->lbDateCreate->setText(device->dateRegister.toString("dd.MM.yyyy"));
+    ui->lbNumber->setText(device->number);
 
-    LoadHistoryToForm(prod.listStatus);
-
-    // remontEntity->LoadListRemont(&repo);
-    // for(auto &it : *remontEntity->listRemont)
-    //     AddRowRemont(it);
+    number = device->number;
+    loadShipmentToForm(prod);
 
 }
 
@@ -150,13 +185,12 @@ void CardProdWindow::loadShipmentToForm(const Product *prod)
         repo.LoadChildProduct(it);
     }
 
-    ui->leNumber->setText(number);
-    ui->leContract->setText(ship.schet);
-    ui->leCardOrder->setText(ship.cardOrder);
-    ui->leObjectInstall->setText(ship.objectInstall);
-    ui->leProduction->setText(prod->name);
-    ui->dDateUPD->setDateTime(ship.dateUPD);
-    ui->leNumberUPD->setText(ship.numberUPD);
+    ui->lbContract->setText(ship.schet);
+    ui->lbCardOrder->setText(ship.cardOrder);
+    ui->lbObjectInstall->setText(ship.objectInstall);
+    ui->lbProduction->setText(prod->name);
+    ui->lbDateUPD->setText(ship.dateUPD.toString("dd.MM.yyyy"));
+    ui->lbNumberUPD->setText(ship.numberUPD);
 
     QTreeWidgetItem *top = new QTreeWidgetItem();
     top->setText(0, setter.name);

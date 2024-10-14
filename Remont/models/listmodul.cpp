@@ -25,11 +25,11 @@ void ListModul::LoadChild(Modul &/*modul*/)
 }
 
 
-Modul ListModul::GetItem(int /*id*/)
-{
-    Modul mod;
-    return mod;
-}
+// Modul ListModul::GetItem(int /*id*/)
+// {
+//     Modul mod;
+//     return mod;
+// }
 
 
 

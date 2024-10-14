@@ -43,6 +43,10 @@ AcceptRemontWindow::~AcceptRemontWindow()
     delete ui;
 }
 
+
+//-------------------------------------------------------------------------------------------------
+// Кнопка Произвести замену
+//-------------------------------------------------------------------------------------------------
 void AcceptRemontWindow::on_pbExchange_clicked()
 {
     if(idMod == 0 || idParentProd == 0)
@@ -58,18 +62,10 @@ void AcceptRemontWindow::on_pbExchange_clicked()
 
 
 //------------------------------------------------------------------------
-// Кнопка принят в ремонт
+// Кнопка принять в ремонт
 //------------------------------------------------------------------------
 void AcceptRemontWindow::on_pbApply_clicked()
 {
-
-    // TypeDevice type = (TypeDevice)ui->cbDevice->currentData(Qt::UserRole + 1).toInt();
-    // int id = ui->cbDevice->currentData(Qt::UserRole).toInt();
-
-    // Status status;
-    // status.idStatus = Status::Stat::FAULTY_ON_OSO;
-    // status.dateStatus = ui->deDate->dateTime();
-
     if(idProd != 0)
     {
         Product prod;
@@ -87,6 +83,14 @@ void AcceptRemontWindow::on_pbApply_clicked()
     }
 
     idProd = idMod = 0;
+
+    QMessageBox::information(this, "Сообщение", QString("%1 #%2 %3 принят в ОСО.")
+                .arg(ui->lbDevice->text()).arg(ui->lbNumber->text()).arg(ui->lbName->text()));
+
+    ui->lbDevice->clear();
+    ui->lbNumber->clear();
+    ui->lbName->clear();
+    ui->lbClaim->clear();
 
     // RemontM remont;
     // remont.workDate = QDateTime::currentDateTime();
@@ -109,6 +113,9 @@ void AcceptRemontWindow::on_pbApply_clicked()
 }
 
 
+//-------------------------------------------------------------------------------------------------
+// Кнопка Найти устройство
+//-------------------------------------------------------------------------------------------------
 void AcceptRemontWindow::on_tbNumber_clicked()
 {
     idMod =idProd = 0;

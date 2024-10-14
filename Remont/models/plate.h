@@ -12,7 +12,7 @@ public:
 
     explicit Plate () {}
 
-    void setKindDevice() override { typeDevice = ev::DeviceKind::PLATE; }
+    // void setKindDevice() override { typeDevice = ev::DeviceKind::PLATE; }
 
 };
 

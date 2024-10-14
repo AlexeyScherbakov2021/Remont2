@@ -31,11 +31,11 @@ void ListProduct::LoadChild(Product &prod)
 }
 
 
-Product ListProduct::GetItem(int /*id*/)
-{
-    Product prod;
-    return prod;
-}
+// Product ListProduct::GetItem(int /*id*/)
+// {
+//     Product prod;
+//     return prod;
+// }
 
 
 

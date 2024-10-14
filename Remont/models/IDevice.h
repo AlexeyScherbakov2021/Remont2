@@ -13,13 +13,15 @@ public:
     int idShipment;
     int idType;
     bool isZip;
-    QDateTime EndGarantee;
+    QDateTime EndGarant;
     QDateTime dateRegister;
+    QDateTime dateUtil;
     int garantMonth;
     int typeDevice;
 
-    explicit IDevice() : idParent(0) {}
-    virtual void setKindDevice() = 0;
+    explicit IDevice() : idParent(0) { }
+// protected:
+    // virtual void setKindDevice() = 0;
 };
 
 #endif // IDEVICE_H
