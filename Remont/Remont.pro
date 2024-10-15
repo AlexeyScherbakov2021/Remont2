@@ -64,6 +64,7 @@ HEADERS += \
     models/plate.h \
     models/prodtype.h \
     models/product.h \
+    models/remont.h \
     models/remontstep.h \
     models/setterout.h \
     models/shipment.h \

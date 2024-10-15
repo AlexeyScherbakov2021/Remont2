@@ -26,10 +26,6 @@ public:
     CardProdWindow(IDevice *device, QWidget *parent = nullptr);
     ~CardProdWindow();
 
-private slots:
-    void on_pbAddRemont_clicked();
-    void on_pbEditStatus_clicked();
-
 private:
     explicit CardProdWindow(const QString &name, QWidget *parent = nullptr);
     Ui::CardProdWindow *ui;
@@ -42,7 +38,8 @@ private:
     void loadShipmentToForm(const Product *prod);
     void loadInclude(const Product *prod);
     // void AddRowRemont(RemontM &rem);
-    void LoadHistoryToForm(QList<Status> listStatus);
+    void LoadHistoryToForm(QList<Status> &listStatus);
+    void LoadRemontToForm(QList<Remont> &listRemmont);
 };
 
 #endif // CARDPRODWINDOW_H

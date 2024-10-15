@@ -2,12 +2,13 @@
 #include <models/claim.h>
 #include <models/modul.h>
 #include <models/product.h>
-#include <models/remontm.h>
+// #include <models/remontm.h>
 #include <models/setterout.h>
 #include <models/shipment.h>
 #include<models/plate.h>
 #include <models/prodtype.h>
 #include <models/modultype.h>
+#include <models/remont.h>
 #include <QSqlRecord>
 #include "repomssql.h"
 
@@ -144,7 +145,7 @@ bool RepoMSSQL::AddItem(Plate &plate)
     res = query.exec();
 
     if(!res)
-        qDebug() << "Ошибка при добавлении записи в RemontM";
+        qDebug() << "Ошибка при добавлении записи в Plate";
     else
     {
         if(query.next())
@@ -163,7 +164,7 @@ bool RepoMSSQL::UpdateItem(Product &prod)
                   ",g_name=:g_name,g_number=:g_number,g_numberBox=:g_numberBox,g_dateRegister=:g_dateRegister,"
                   "g_questList=:g_questList,g_avr=:g_avr,g_akb=:g_akb,g_cooler=:g_cooler,g_skm=:g_skm,"
                   "g_numberBI=:g_numberBI,g_numberUSIKP=:g_numberUSIKP,g_shunt=:g_shunt,g_zip=:g_zip,"
-                  "g_garantMonth=:g_garantMonth,g_endGarant=:g_endGarant where id=:id");
+                  "g_garantMonth=:g_garantMonth,g_endGarant=:g_endGarant,g_dateOn=:g_dateOn where id=:id");
 
     QVariant var = prod.idShipment > 0 ? prod.idShipment : QVariant();
     query.bindValue(":idShipment", var);
@@ -187,6 +188,7 @@ bool RepoMSSQL::UpdateItem(Product &prod)
     query.bindValue(":g_zip", prod.isZip);
     query.bindValue(":g_garantMonth", prod.garantMonth);
     query.bindValue(":g_endGarant", prod.EndGarant);
+    query.bindValue(":g_dateOn", prod.dateOn);
 
     query.bindValue(":id", prod.id);
 
@@ -204,7 +206,7 @@ bool RepoMSSQL::UpdateItem(Modul &modul)
 
     query.prepare("update Modules set idShipment=:idShipment,idProduct=:idProduct,m_modTypeId=:m_modTypeId,m_name=:m_name,"
                   "m_number=:m_number,m_numberFW=:m_numberFW,m_dateCreate=:m_dateCreate,m_zip=:m_zip,"
-                  "m_garantMonth=:m_garantMonth,m_endGarant=:m_endGarant "
+                  "m_garantMonth=:m_garantMonth,m_endGarant=:m_endGarant,m_dateOn=:m_dateOn "
                   "where id=:id");
 
     QVariant var = modul.idShipment > 0 ? modul.idShipment : QVariant();
@@ -219,6 +221,7 @@ bool RepoMSSQL::UpdateItem(Modul &modul)
     query.bindValue(":m_zip", modul.isZip);
     query.bindValue(":m_garantMonth", modul.garantMonth);
     query.bindValue(":m_endGarant", modul.EndGarant);
+    query.bindValue(":m_dateOn", modul.dateOn);
     query.bindValue(":id", modul.id);
 
     res = query.exec();
@@ -367,13 +370,13 @@ void RepoMSSQL::FindItems(const QString &serialNumber, QList<Product> &listProdu
         if(isFree)
             query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
                       "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-                      "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant "
+                      "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
                       "from Product where g_number like :number order by g_name");
         else
         {
             query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
                           "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-                          "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant "
+                          "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
                           "from Product where g_number like :number and idShipment is null and idSetter is null order by g_name");
         }
     }
@@ -382,7 +385,7 @@ void RepoMSSQL::FindItems(const QString &serialNumber, QList<Product> &listProdu
         if(isFree)
             query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
                       "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-                      "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant "
+                      "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
                       "from Product p "
                       "join "
                       "(select idProduct, max(DateStatus) dateStatus, max(idStatus) as idStatus "
@@ -393,7 +396,7 @@ void RepoMSSQL::FindItems(const QString &serialNumber, QList<Product> &listProdu
         else
             query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
                           "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-                          "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant "
+                          "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
                           "from Product p "
                           "join "
                           "(select idProduct, max(DateStatus) dateStatus, max(idStatus) as idStatus "
@@ -433,6 +436,7 @@ void RepoMSSQL::FindItems(const QString &serialNumber, QList<Product> &listProdu
         prod.isZip = query.value(19).toBool();
         prod.garantMonth = query.value(20).toInt();
         prod.EndGarant = query.value(21).toDateTime();
+        prod.dateOn = query.value(22).toDateTime();
         LoadStatus(prod/*, this*/);
         listProduct.push_back(prod);
     }
@@ -453,12 +457,12 @@ void RepoMSSQL::FindItems(QList<Product> &listProduct, int status, bool isFree)
         if(isFree)
             query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
                   "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-                  "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant "
+                  "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
                   "from Product order by g_name");
         else
             query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
                           "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-                          "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant "
+                          "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
                           "from Product where idShipment is null and idSetter is null order by g_name");
     }
     else
@@ -466,7 +470,7 @@ void RepoMSSQL::FindItems(QList<Product> &listProduct, int status, bool isFree)
         if(isFree)
             query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
                   "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-                  "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant "
+                  "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
                   "from Product p "
                   "join "
                   "(select idProduct, max(DateStatus) dateStatus, max(idStatus) as idStatus "
@@ -477,7 +481,7 @@ void RepoMSSQL::FindItems(QList<Product> &listProduct, int status, bool isFree)
         else
             query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
                           "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-                          "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant "
+                          "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
                           "from Product p "
                           "join "
                           "(select idProduct, max(DateStatus) dateStatus, max(idStatus) as idStatus "
@@ -516,6 +520,7 @@ void RepoMSSQL::FindItems(QList<Product> &listProduct, int status, bool isFree)
         prod.isZip = query.value(19).toBool();
         prod.garantMonth = query.value(20).toInt();
         prod.EndGarant = query.value(21).toDateTime();
+        prod.dateOn = query.value(22).toDateTime();
         LoadStatus(prod/*, this*/);
         listProduct.push_back(prod);
     }
@@ -534,18 +539,18 @@ void RepoMSSQL::FindItems(QList<Modul> &listModul, int status, bool isFree)
     {
         if(isFree)
             query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
-                      "m_zip,m_garantMonth,m_endGarant "
+                      "m_zip,m_garantMonth,m_endGarant,m_dateOn "
                   "from Modules order by m_name");
         else
             query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
-                          "m_zip,m_garantMonth,m_endGarant "
+                          "m_zip,m_garantMonth,m_endGarant,m_dateOn "
                           "from Modules where idShipment is null order by m_name");
     }
     else
     {
         if(isFree)
             query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
-                    "m_zip,m_garantMonth,m_endGarant "
+                    "m_zip,m_garantMonth,m_endGarant,m_dateOn "
                     "from Modules m "
                     "join "
                     "(select idModul, max(DateStatus) dateStatus, max(idStatus) as idStatus "
@@ -555,7 +560,7 @@ void RepoMSSQL::FindItems(QList<Modul> &listModul, int status, bool isFree)
                   );
         else
             query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
-                          "m_zip,m_garantMonth,m_endGarant "
+                          "m_zip,m_garantMonth,m_endGarant,m_dateOn "
                           "from Modules m "
                           "join "
                           "(select idModul, max(DateStatus) dateStatus, max(idStatus) as idStatus "
@@ -583,6 +588,7 @@ void RepoMSSQL::FindItems(QList<Modul> &listModul, int status, bool isFree)
         mod.isZip = query.value(9).toBool();
         mod.garantMonth = query.value(10).toInt();
         mod.EndGarant = query.value(11).toDateTime();
+        mod.dateOn = query.value(12).toDateTime();
         LoadStatus(mod/*, this*/);
         listModul.push_back(mod);
     }
@@ -603,18 +609,18 @@ void RepoMSSQL::FindItems(const QString &serialNumber, QList<Modul> &listModul, 
     {
         if(isFree)
             query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
-                      "m_zip,m_garantMonth,m_endGarant "
+                      "m_zip,m_garantMonth,m_endGarant,m_dateOn "
                       "from Modules where m_number like :number order by m_name");
         else
             query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
-                          "m_zip,m_garantMonth,m_endGarant "
+                          "m_zip,m_garantMonth,m_endGarant,m_dateOn "
                           "from Modules where m_number like :number and idShipment is null order by m_name");
     }
     else
     {
         if(isFree)
             query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
-                      "m_zip,m_garantMonth,m_endGarant "
+                      "m_zip,m_garantMonth,m_endGarant,m_dateOn "
                       "from Modules m "
                       "join "
                       "(select idModul, max(DateStatus) dateStatus, max(idStatus) as idStatus "
@@ -624,7 +630,7 @@ void RepoMSSQL::FindItems(const QString &serialNumber, QList<Modul> &listModul, 
                       );
         else
             query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
-                          "m_zip,m_garantMonth,m_endGarant "
+                          "m_zip,m_garantMonth,m_endGarant,m_dateOn "
                           "from Modules m "
                           "join "
                           "(select idModul, max(DateStatus) dateStatus, max(idStatus) as idStatus "
@@ -654,6 +660,7 @@ void RepoMSSQL::FindItems(const QString &serialNumber, QList<Modul> &listModul, 
         mod.isZip = query.value(9).toBool();
         mod.garantMonth = query.value(10).toInt();
         mod.EndGarant = query.value(11).toDateTime();
+        mod.dateOn = query.value(12).toDateTime();
         LoadStatus(mod);
         listModul.push_back(mod);
     }
@@ -855,7 +862,8 @@ void RepoMSSQL::LoadChildProduct(Product &prod)
 {
     prod.listModules.clear();
     QSqlQuery query;
-    query.prepare("select id,idShipment,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,m_zip,m_garantMonth,m_endGarant"
+    query.prepare("select id,idShipment,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,m_zip,"
+                  "m_garantMonth,m_endGarant,m_dateOn "
                   "from Modules where idProduct = :idProduct");
 
     query.bindValue(":idProduct", prod.id);
@@ -876,6 +884,7 @@ void RepoMSSQL::LoadChildProduct(Product &prod)
         mod.isZip = query.value(8).toBool();
         mod.garantMonth = query.value(9).toInt();
         mod.EndGarant = query.value(10).toDateTime();
+        mod.dateOn = query.value(11).toDateTime();
         prod.listModules.push_back(mod);
     }
 }
@@ -912,9 +921,10 @@ Product RepoMSSQL::GetProduct(int id)
 
     query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
                   "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-                  "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant "
+                  "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
                   "from Product where id=:id");
 
+    query.bindValue(":id", id);
     query.exec();
     if(query.next())
     {
@@ -940,6 +950,7 @@ Product RepoMSSQL::GetProduct(int id)
         prod.isZip = query.value(19).toBool();
         prod.garantMonth = query.value(20).toInt();
         prod.EndGarant = query.value(21).toDateTime();
+        prod.dateOn = query.value(22).toDateTime();
         LoadStatus(prod);
     }
     return prod;
@@ -1214,7 +1225,7 @@ void RepoMSSQL::LoadChildSetter(SetterOut &setter)
     QSqlQuery query;
     query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
                   "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-                  "g_numberUSIKP,g_shunt,g_zip "
+                  "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
                   "from Product where idSetter = :idSetter");
 
     query.bindValue(":idSetter", setter.id);
@@ -1244,6 +1255,9 @@ void RepoMSSQL::LoadChildSetter(SetterOut &setter)
         prod.numberUSIKP = query.value(17).toString();
         prod.shunt = query.value(18).toString();
         prod.isZip = query.value(19).toBool();
+        prod.garantMonth = query.value(20).toInt();
+        prod.EndGarant = query.value(21).toDateTime();
+        prod.dateOn = query.value(22).toDateTime();
         LoadStatus(prod);
         setter.listProduct.push_back(prod);
     }
@@ -1425,7 +1439,8 @@ void RepoMSSQL::LoadShipModule(QList<Modul> &listModul, int idShip)
     listModul.clear();
     QSqlQuery query;
 
-    query.prepare("select id,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,m_zip "
+    query.prepare("select id,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,m_zip,"
+                  "m_garantMonth,m_endGarant,m_dateOn "
                   "from Modules where idShipment=:idShipment");
 
     query.bindValue(":idShipment", idShip);
@@ -1443,6 +1458,9 @@ void RepoMSSQL::LoadShipModule(QList<Modul> &listModul, int idShip)
         mod.number2 = query.value(5).toString();
         mod.dateRegister = query.value(7).toDateTime();
         mod.isZip = query.value(8).toBool();
+        mod.garantMonth = query.value(9).toInt();
+        mod.EndGarant = query.value(10).toDateTime();
+        mod.dateOn = query.value(11).toDateTime();
         LoadStatus(mod);
         listModul.push_back(mod);
     }
@@ -1459,7 +1477,7 @@ void RepoMSSQL::LoadShipProduct(QList<Product> &listProduct, int idShip)
 
     query.prepare("select id,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
                   "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-                  "g_numberUSIKP,g_shunt,g_zip "
+                  "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
                   "from Product where idShipment = :idShipment");
 
     query.bindValue(":idShipment", idShip);
@@ -1488,6 +1506,9 @@ void RepoMSSQL::LoadShipProduct(QList<Product> &listProduct, int idShip)
         prod.numberUSIKP = query.value(16).toString();
         prod.shunt = query.value(17).toString();
         prod.isZip = query.value(18).toBool();
+        prod.garantMonth = query.value(19).toInt();
+        prod.EndGarant = query.value(20).toDateTime();
+        prod.dateOn = query.value(21).toDateTime();
         LoadStatus(prod);
         listProduct.push_back(prod);
 
@@ -1805,6 +1826,48 @@ bool RepoMSSQL::LoadClaimForModul(int ModulId, Claim &claim)
 
 }
 
+Claim RepoMSSQL::GetClaim(int id)
+{
+    QSqlQuery query;
+    Claim claim;
+
+    query.prepare("select id,Number,DateClaim,FromWho,TypeClaimId,idOrg,ObjectInstall,"
+                  "Descript,TypeComplectId,VNFT,Quantity,TypeDeviceId,NumberModul,NumberNewModul,"
+                  "NumberDevice,DateOut,Guarantee,Reason,DateRepair,DoRepair,FileAnswer,TextResult "
+                  "from Claim where id=:id");
+
+    query.bindValue(":id", id);
+
+    query.exec();
+    if(query.next())
+    {
+        claim.id = query.value(0).toInt();
+        claim.number = query.value(1).toString();
+        claim.dateRegister = query.value(2).toDateTime();
+        claim.FromWho = query.value(3).toString();
+        claim.idTypeClaim = query.value(4).toInt();
+        claim.idOrg = query.value(5).toInt();
+        claim.ObjectInstall = query.value(6).toString();
+        claim.Descript = query.value(7).toString();
+        claim.TypeComplectId = query.value(8).toInt();
+        claim.VNFT = query.value(9).toString();
+        claim.Quantity = query.value(10).toInt();
+        claim.idTypeClaim = query.value(11).toInt();
+        claim.NumberModul = query.value(12).toString();
+        claim.NumberNewModul = query.value(13).toString();
+        claim.NumberDevice = query.value(14).toString();
+        claim.DateOut = query.value(15).toDateTime();
+        claim.IsGuarantee = query.value(16).toBool();
+        claim.Reason = query.value(17).toString();
+        claim.DateRepair = query.value(18).toDateTime();
+        claim.DoRepair = query.value(19).toString();
+        claim.FileAnswer = query.value(20).toString();
+        claim.TextResult = query.value(21).toString();
+    }
+    return claim;
+
+}
+
 //------------------------------------------------------------------------------------------------------
 // Загрузка причин ремонта
 //------------------------------------------------------------------------------------------------------
@@ -1819,5 +1882,180 @@ void RepoMSSQL::LoadRemontReason(QMap<int, QString> &listReason)
     {
         listReason.insert(query.value(0).toInt(), query.value(1).toString());
     }
+}
+
+QString RepoMSSQL::GetRemontReason(int id)
+{
+    QString s;
+    QSqlQuery query;
+    query.prepare("select name from RemontReason where id=:id");
+    query.bindValue(":id", id);
+
+    query.exec();
+    if(query.next())
+    {
+        s = query.value(0).toString();
+    }
+
+    return s;
+}
+
+
+//------------------------------------------------------------------------------------------------------
+// Добавление ремонта
+//------------------------------------------------------------------------------------------------------
+bool RepoMSSQL::AddRemont(Remont &remont, ev::DeviceKind kindDevice)
+{
+    bool res;
+    QSqlQuery query;
+
+    if(kindDevice == ev::PRODUCT)
+    {
+        query.prepare("insert into RemontP (idProduct,idReclamation,StartDate) "
+                  "output inserted.id values(:idProduct,:idReclamation,:StartDate)");
+        query.bindValue(":idProduct", remont.idParent);
+
+    }
+    else if(kindDevice == ev::MODUL)
+    {
+        query.prepare("insert into RemontM (idModul,idReclamation,StartDate) "
+                      "output inserted.id values(:idModul,:idReclamation,:StartDate)");
+
+        query.bindValue(":idModul", remont.idParent);
+    }
+    else
+        return false;
+
+    query.bindValue(":idReclamation", remont.idReclamation);
+    query.bindValue(":StartDate", remont.startDate);
+
+    res = query.exec();
+
+    if(!res)
+        qDebug() << "Ошибка при добавлении записи в Remont";
+    else
+    {
+        if(query.next())
+            remont.id = query.value(0).toInt();
+    }
+
+    return res;
+
+}
+
+//------------------------------------------------------------------------------------------------------
+// Обновление ремонта
+//------------------------------------------------------------------------------------------------------
+bool RepoMSSQL::UpdateRemont(Remont &remont, ev::DeviceKind kindDevice)
+{
+    bool res;
+    QSqlQuery query;
+
+
+    if(kindDevice == ev::PRODUCT)
+    {
+        query.prepare("update RemontP set idReason=:idReason,Action=:Action,Defect=:Defect,Remark=:Remark,endDate=:endDate "
+                  "where id=:id");
+    }
+    else if(kindDevice == ev::MODUL)
+        query.prepare("update RemontM set idReason=:idReason,Action=:Action,Defect=:Defect,Remark=:Remark,endDate=:endDate "
+                      "where id=:id");
+    else
+        return false;
+
+    query.bindValue(":id", remont.id);
+    query.bindValue(":idReason", remont.idReason);
+    query.bindValue(":Action", remont.action);
+    query.bindValue(":Defect", remont.defect);
+    query.bindValue(":Remark", remont.remark);
+    query.bindValue(":endDate", remont.endDate);
+    res = query.exec();
+
+    if(!res)
+        qDebug() << "Ошибка при обновлении записи в Remont";
+
+    return res;
+
+}
+
+//------------------------------------------------------------------------------------------------------
+// Загрузка ремонтов для id
+//------------------------------------------------------------------------------------------------------
+void RepoMSSQL::LoadRemont(QList<Remont> &list, int idParent, ev::DeviceKind kindDevice)
+{
+    list.clear();
+    QSqlQuery query;
+
+    if(kindDevice == ev::PRODUCT)
+    {
+        query.prepare("select id,idProduct,idReclamation,idReason,StartDate,Action,Defect,Remark,endDate "
+                  "from RemontP where idProduct=:idProduct");
+        query.bindValue(":idProduct", idParent);
+    }
+    else if(kindDevice == ev::MODUL)
+    {
+        query.prepare("select id,idModul,idReclamation,idReason,StartDate,Action,Defect,Remark,endDate "
+                      "from RemontM where idModul=:idModul");
+        query.bindValue(":idModul", idParent);
+
+    }
+    else
+        return;
+
+    query.exec();
+    while(query.next())
+    {
+        Remont rem;
+        rem.id = query.value(0).toInt();
+        rem.idParent = query.value(1).toInt();
+        rem.idReclamation = query.value(2).toInt();
+        rem.idReason = query.value(3).toInt();
+        rem.startDate = query.value(4).toDateTime();
+        rem.action = query.value(5).toString();
+        rem.defect = query.value(6).toString();
+        rem.remark = query.value(7).toString();
+        rem.endDate = query.value(8).toDateTime();
+        list.push_back(rem);
+    }
+}
+
+//------------------------------------------------------------------------------------------------------
+// Загрузка ремонта для id
+//------------------------------------------------------------------------------------------------------
+Remont RepoMSSQL::GetCurrentRemont(int idParent, ev::DeviceKind kindDevice)
+{
+    QSqlQuery query;
+    Remont rem;
+
+    if(kindDevice == ev::PRODUCT)
+    {
+        query.prepare("select id,idProduct,idReclamation,idReason,StartDate,Action,Defect,Remark,endDate "
+                      "from RemontP where endDate is null and idProduct=:idProduct");
+        query.bindValue(":idProduct", idParent);
+    }
+    else if(kindDevice == ev::MODUL)
+    {
+        query.prepare("select id,idModul,idReclamation,idReason,StartDate,Action,Defect,Remark,endDate "
+                      "from RemontM where endDate is null and idModul=:idModul");
+        query.bindValue(":idModul", idParent);
+
+    }
+    else
+        return rem;
+
+    query.exec();
+    if(query.next())
+    {
+        rem.id = query.value(0).toInt();
+        rem.idParent = query.value(1).toInt();
+        rem.idReclamation = query.value(2).toInt();
+        rem.idReason = query.value(3).toInt();
+        rem.startDate = query.value(4).toDateTime();
+        rem.action = query.value(5).toString();
+        rem.defect = query.value(6).toString();
+        rem.remark = query.value(7).toString();
+        rem.endDate = query.value(8).toDateTime();
+    }
+    return rem;
 }
 

@@ -5,6 +5,8 @@
 
 #include <QMessageBox>
 
+#include <models/remont.h>
+
 RemontWindow::RemontWindow(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::RemontWindow)
@@ -25,11 +27,17 @@ RemontWindow::~RemontWindow()
 //--------------------------------------------------------------------------------------------
 void RemontWindow::on_pbOK_clicked()
 {
+    Remont remont;
+    remont.startDate = ui->deDate->dateTime();
+    remont.idReclamation = claim.id;
+
     if(idProd != 0)
     {
         Product prod;
         prod.id = idProd;
         prod.AddStatus(prod, Status::REMONT);
+        remont.idParent = idProd;
+        repo.AddRemont(remont, ev::PRODUCT);
     }
 
     if(idMod != 0)
@@ -37,8 +45,9 @@ void RemontWindow::on_pbOK_clicked()
         Modul mod;
         mod.id = idMod;
         mod.AddStatus(mod, Status::REMONT);
+        remont.idParent = idMod;
+        repo.AddRemont(remont, ev::MODUL);
     }
-    idProd = idMod = 0;
 
     QMessageBox::information(this, "Сообщение", QString("%1 #%2 %3 принят в ремонт.")
                 .arg(ui->lbDevice->text()).arg(ui->lbNumber->text()).arg(ui->lbName->text()));
@@ -51,6 +60,9 @@ void RemontWindow::on_pbOK_clicked()
 }
 
 
+//--------------------------------------------------------------------------------------------
+// Поиск по номеру
+//--------------------------------------------------------------------------------------------
 void RemontWindow::on_tbNumber_clicked()
 {
     idMod = idProd = 0;
@@ -59,7 +71,6 @@ void RemontWindow::on_tbNumber_clicked()
     IDevice *dev = win->SelectDevice(true, ui->leNumber->text(),Status::FAULTY_ON_OSO);
     if(dev != nullptr)
     {
-        Claim claim;
         if(dev->typeDevice == ev::MODUL)
         {
             Modul* modul = static_cast<Modul*>(dev);

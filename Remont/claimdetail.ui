@@ -125,6 +125,9 @@
        </item>
        <item>
         <widget class="QToolButton" name="tbDeleteDevice">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="minimumSize">
           <size>
            <width>24</width>
@@ -200,6 +203,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pbOK">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>OK</string>
        </property>

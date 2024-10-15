@@ -25,6 +25,7 @@ private slots:
     void on_pbOK_clicked();
     void on_tbAddDevice_clicked();
     void on_tbDeleteDevice_clicked();
+    void slotEnabledWidget();
 
 private:
     Ui::ClaimDetail *ui;
@@ -37,16 +38,13 @@ private:
 
     TrackRecord<Product> trackProduct;
     TrackRecord<Modul> trackModul;
-    // QMap<int, Product> listAddProduct;
-    // QMap<int, Modul> listAddModul;
-    // QMap<int, Product> listDelProduct;
-    // QMap<int, Modul> listDelModul;
 
     RepoMSSQL repo;
 
     void ClaimToScreen(Claim *claim);
     void AddModulToTableScreen(const Modul &modul);
     void AddProductToTableScreen(const Product &prod);
+
 };
 
 #endif // CLAIMDETAIL_H

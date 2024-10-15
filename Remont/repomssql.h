@@ -5,6 +5,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QDebug>
+#include <models/enumvariable.h>
 
 class Product;
 class Modul;
@@ -15,6 +16,7 @@ class Status;
 class Claim;
 class ProductType;
 class ModulType;
+class Remont;
 
 class RepoMSSQL
 {
@@ -94,10 +96,15 @@ public:
     bool DelProductToClaim(int idProd, int idClaim);
     bool LoadClaimForProduct(int ProdId, Claim &claim);
     bool LoadClaimForModul(int ModulId, Claim &claim);
+    Claim GetClaim(int id);
 
     void LoadRemontReason(QMap<int, QString> &listReason);
+    QString GetRemontReason(int id);
+    bool AddRemont(Remont &remont, ev::DeviceKind kindDevice);
+    bool UpdateRemont(Remont &remont, ev::DeviceKind kindDevice);
+    void LoadRemont(QList<Remont> &list, int idParent, ev::DeviceKind kindDevice);
+    Remont GetCurrentRemont(int id, ev::DeviceKind kindDevice);
+
 };
 
-
-
-#endif // REPOMSSQL_H
+#endif

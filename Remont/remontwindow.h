@@ -5,6 +5,7 @@
 
 #include <models/modul.h>
 // #include <models/remontentity.h>
+#include <models/claim.h>
 #include <models/remontm.h>
 
 namespace Ui {
@@ -36,6 +37,7 @@ private:
     // QList<RemontStepStatus> listStatus;
     int idProd = 0;
     int idMod = 0;
+    Claim claim;
 
 };
 

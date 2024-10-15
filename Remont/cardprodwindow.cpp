@@ -1,6 +1,8 @@
 #include "cardprodwindow.h"
 #include "ui_cardprodwindow.h"
+#include <models/claim.h>
 #include <models/listproduct.h>
+#include <models/remont.h>
 #include <models/setterout.h>
 #include <models/shipment.h>
 
@@ -83,6 +85,7 @@ CardProdWindow::CardProdWindow(IDevice *device, QWidget *parent) : CardProdWindo
 {
     Product *prod;
     Product product;
+    QList<Remont> listRemont;
 
     if(device->typeDevice == ev::MODUL)
     {
@@ -91,6 +94,7 @@ CardProdWindow::CardProdWindow(IDevice *device, QWidget *parent) : CardProdWindo
         prod = &product;
         mod->LoadStatus(*mod);
         LoadHistoryToForm(mod->listStatus);
+        repo.LoadRemont(listRemont, mod->id, ev::MODUL);
     }
     if(device->typeDevice == ev::PRODUCT)
     {
@@ -99,12 +103,15 @@ CardProdWindow::CardProdWindow(IDevice *device, QWidget *parent) : CardProdWindo
         prod->LoadStatus(*prod);
         loadInclude(prod);
         LoadHistoryToForm(prod->listStatus);
-
+        repo.LoadRemont(listRemont, prod->id, ev::PRODUCT);
     }
+    LoadRemontToForm(listRemont);
 
     ui->lbGarant->setText(device->EndGarant.toString("dd.MM.yyyy"));
     ui->lbDateCreate->setText(device->dateRegister.toString("dd.MM.yyyy"));
     ui->lbNumber->setText(device->number);
+    ui->lbDateOn->setText(device->dateOn.toString("dd.MM.yyyy"));
+    // qDebug() << device->dateRegister << device->EndGarant;
 
     number = device->number;
     loadShipmentToForm(prod);
@@ -147,7 +154,7 @@ CardProdWindow::~CardProdWindow()
 //-------------------------------------------------------------------------------------------------------
 // Загрузка статусов для выбраннного изделия или модуля
 //-------------------------------------------------------------------------------------------------------
-void CardProdWindow::LoadHistoryToForm(QList<Status> listStatus)
+void CardProdWindow::LoadHistoryToForm(QList<Status> &listStatus)
 {
     ui->twHistory->setRowCount(0);
     int row = 0;
@@ -168,6 +175,49 @@ void CardProdWindow::LoadHistoryToForm(QList<Status> listStatus)
 
     ui->twHistory->resizeColumnsToContents();
     ui->twHistory->resizeRowsToContents();
+}
+
+void CardProdWindow::LoadRemontToForm(QList<Remont> &listRemont)
+{
+    // ui->twRemont->setRowCount(0);
+    ui->twRemont->setRowCount(listRemont.size());
+
+    int row = 0;
+    for(auto &it : listRemont)
+    {
+        Claim claim = repo.GetClaim(it.idReclamation);
+        QString reason = repo.GetRemontReason(it.idReason);
+
+        QTableWidgetItem *item = new QTableWidgetItem();
+        item->setText(claim.number);
+        ui->twRemont->setItem(row, 0, item);
+
+        item = new QTableWidgetItem();
+        item->setText(it.startDate.toString("dd.MM.yyyy"));
+        ui->twRemont->setItem(row, 1, item);
+
+        item = new QTableWidgetItem();
+        item->setText(it.endDate.toString("dd.MM.yyyy"));
+        ui->twRemont->setItem(row, 2, item);
+
+        item = new QTableWidgetItem();
+        item->setText(reason);
+        ui->twRemont->setItem(row, 3, item);
+
+        item = new QTableWidgetItem();
+        item->setText(it.action);
+        ui->twRemont->setItem(row, 4, item);
+
+        item = new QTableWidgetItem();
+        item->setText(it.defect);
+        ui->twRemont->setItem(row, 5, item);
+
+        item = new QTableWidgetItem();
+        item->setText(it.remark);
+        ui->twRemont->setItem(row, 6, item);
+
+        ++row;
+    }
 }
 
 
@@ -199,7 +249,10 @@ void CardProdWindow::loadShipmentToForm(const Product *prod)
     for(auto const &it : setter.listProduct)
     {
         QTreeWidgetItem *child = new QTreeWidgetItem();
-        child->setText(0, it.name + "(" + it.number + ")");
+        QString s = it.name + "(" + it.number + ")";
+        if(it.getIsRepair())
+            s += " неисправен";
+        child->setText(0, s);
         if(it.number == number)
         {
             QFont font;
@@ -208,10 +261,15 @@ void CardProdWindow::loadShipmentToForm(const Product *prod)
         }
         top->addChild(child);
         child->setExpanded(true);
-        for(auto const &mod : it.listModules)
+        for(auto mod : it.listModules)
         {
+            // Modul modul = mod;
+            mod.LoadStatus(mod);
             QTreeWidgetItem *modItem = new QTreeWidgetItem();
-            modItem->setText(0, mod.name + "(" + mod.number + ")");
+            s = mod.name + "(" + mod.number + ")";
+            if(mod.getIsRepair())
+                s += " неисправен";
+            modItem->setText(0, s);
             if(mod.number == number)
             {
                 QFont font;
@@ -234,71 +292,6 @@ void CardProdWindow::loadInclude(const Product *prod)
         modItem->setText(mod.name + "(" + mod.number + ")");
         ui->lwInclude->addItem(modItem);
     }
-}
-
-
-
-//-------------------------------------------------------------------------------------------------------
-// Кнопка добавления ремонта
-//-------------------------------------------------------------------------------------------------------
-void CardProdWindow::on_pbAddRemont_clicked()
-{
-    // RemontWindow *win = new RemontWindow(this);
-    // if(win->exec() == QDialog::Accepted)
-    //     AddRowRemont(remontEntity->listRemont->last());
-
-}
-
-
-//-------------------------------------------------------------------------------------------------------
-// Кнопка Изменение статуса
-//-------------------------------------------------------------------------------------------------------
-void CardProdWindow::on_pbEditStatus_clicked()
-{
-    // найти текущий ремонт в модуле
-    // auto res = std::find_if(modul.listRemont.cbegin(), modul.listRemont.cend(),
-    //                         [] (const RemontM &step) { return step.EndDate.isNull(); });
-
-    // if(res == modul.listRemont.cend())
-    //     return;
-
-
-    // auto res = std::find_if(remontEntity->listRemont->cbegin(), remontEntity->listRemont->cend(),
-    //                         [] (const RemontM &step) { return step.EndDate.isNull(); });
-
-    // if(res == remontEntity->listRemont->cend())
-    //     return;
-
-    // RemontM rem = *res;
-
-    // QTreeWidgetItem *top = nullptr;
-    // for(int row = 0; row < ui->trwRemont->topLevelItemCount(); ++row)
-    // {
-    //     if(ui->trwRemont->topLevelItem(row)->data(0, Qt::UserRole).toInt() == rem.id)
-    //     {
-    //         top = ui->trwRemont->topLevelItem(row);
-    //         break;
-    //     }
-    // }
-
-    // if(top == nullptr)
-    //     return;
-
-    // RemontStatusWindow *win = new RemontStatusWindow(&rem, this);
-    // if(win->exec() == QDialog::Accepted)
-    // {
-    //     RemontStep step = rem.listRemStep.last();
-    //     QTreeWidgetItem *child = new QTreeWidgetItem();
-    //     child->setText(1, step.dateStep.toString("dd.MM.yyyy"));
-    //     child->setText(2, step.status.name);
-    //     child->setText(3, step.Comment);
-    //     top->addChild(child);
-    //     top->setText(7, step.status.name);
-    //     top->setText(2, rem.EndDate.toString("dd.MM.yyyy"));
-
-    //     remontEntity->AddRemontStep(step, &repo);
-    //     // repo.AddRemontStep(step);
-    // }
 }
 
 

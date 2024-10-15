@@ -3,6 +3,9 @@
 #include "ui_endremontwindow.h"
 
 #include <models/claim.h>
+#include <models/remont.h>
+
+#include <QMessageBox>
 
 EndRemontWindow::EndRemontWindow(QWidget *parent)
     : QDialog(parent)
@@ -83,6 +86,13 @@ void EndRemontWindow::on_pbEndRemont_clicked()
         Product prod;
         prod.id = idProd;
         prod.AddStatus(prod, stat, ui->deDate->dateTime());
+        Remont rem = repo.GetCurrentRemont(idProd, ev::PRODUCT);
+        rem.action = ui->leAction->text();
+        rem.defect = ui->leDefect->text();
+        rem.endDate = ui->deDate->dateTime();
+        rem.remark = ui->ptRemark->document()->toPlainText();
+        rem.idReason = ui->cbReason->currentData(Qt::UserRole).toInt();
+        repo.UpdateRemont(rem, ev::PRODUCT);
     }
 
     if(idMod != 0)
@@ -90,9 +100,24 @@ void EndRemontWindow::on_pbEndRemont_clicked()
         Modul mod;
         mod.id = idMod;
         mod.AddStatus(mod, stat, ui->deDate->dateTime());
+        Remont rem = repo.GetCurrentRemont(idMod, ev::MODUL);
+        rem.action = ui->leAction->text();
+        rem.defect = ui->leDefect->text();
+        rem.endDate = ui->deDate->dateTime();
+        rem.idReason = ui->cbReason->currentData(Qt::UserRole).toInt();
+        repo.UpdateRemont(rem, ev::MODUL);
     }
 
     idProd = idMod = 0;
+
+    QMessageBox::information(this, "Сообщение", QString("Для %1 #%2 %3 ремонт завершен.")
+                .arg(ui->lbDevice->text()).arg(ui->lbNumber->text()).arg(ui->lbName->text()));
+
+    ui->lbNumber->clear();
+    ui->lbName->clear();
+    ui->lbDevice->clear();
+    ui->leNumber->clear();
+    ui->cbReason->clear();
 
 }
 

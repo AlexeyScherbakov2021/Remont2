@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>665</width>
+    <width>795</width>
     <height>459</height>
    </rect>
   </property>
@@ -17,7 +17,8 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="styleSheet">
-      <string notr="true">QWidget#tab, QWidget#tab_2 {
+      <string notr="true">QWidget#tab, QWidget#tab_2, QWidget#tab_3,
+QWidget#tab_4,QWidget#tab_5 {
 background-color: #eeeeee
 }</string>
      </property>
@@ -58,7 +59,7 @@ background-color: #eeeeee
          <item row="2" column="0">
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>Годен до</string>
+            <string>Гарантия до</string>
            </property>
           </widget>
          </item>
@@ -229,7 +230,7 @@ background-color: #eeeeee
          <item row="0" column="0">
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>Номер</string>
+            <string>Серийный номер</string>
            </property>
           </widget>
          </item>
@@ -249,7 +250,7 @@ background-color: #eeeeee
          <item row="10" column="0">
           <widget class="QLabel" name="label_8">
            <property name="text">
-            <string>Дата включения</string>
+            <string>Дата включения в работу</string>
            </property>
           </widget>
          </item>
@@ -292,33 +293,10 @@ background-color: #eeeeee
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QPushButton" name="pbEditStatus">
-         <property name="text">
-          <string>Изменить Статус</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pbAddRemont">
-         <property name="text">
-          <string>Вывести в ремонт</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTreeWidget" name="trwRemont">
-         <property name="animated">
-          <bool>true</bool>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-         <attribute name="headerHighlightSections">
-          <bool>true</bool>
-         </attribute>
+        <widget class="QTableWidget" name="twRemont">
          <column>
           <property name="text">
-           <string>№ рекламации</string>
+           <string>Рекламация</string>
           </property>
          </column>
          <column>
@@ -338,7 +316,7 @@ background-color: #eeeeee
          </column>
          <column>
           <property name="text">
-           <string>Действие</string>
+           <string>Действия</string>
           </property>
          </column>
          <column>
@@ -348,12 +326,7 @@ background-color: #eeeeee
          </column>
          <column>
           <property name="text">
-           <string>Замечание</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Статус</string>
+           <string>Замечания</string>
           </property>
          </column>
         </widget>

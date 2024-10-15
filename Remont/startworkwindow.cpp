@@ -37,16 +37,18 @@ void StartWorkWindow::on_pbProdToWork_clicked()
     int id = item->data(Qt::UserRole).toInt();
     Product prod = products.GetItem(id);
     // qDebug() << ui->deDate->dateTime() << prod.garantMonth;
-    prod.EndGarant = ui->deDate->dateTime().addMonths(prod.garantMonth);
+    prod.dateOn = ui->deDate->dateTime();
+    prod.EndGarant = prod.dateOn.addMonths(prod.garantMonth);
     // qDebug() << prod.EndGarant;
     repo.LoadChildProduct(prod);
-    prod.AddStatus(prod, Status::WORK, ui->deDate->dateTime());
+    prod.AddStatus(prod, Status::WORK, ui->deDate->dateTime(), ui->leDoc->text());
 
     for(auto &it : prod.listModules)
     {
-        it.EndGarant = ui->deDate->dateTime().addMonths(it.garantMonth);
+        it.dateOn = ui->deDate->dateTime();
+        it.EndGarant = it.dateOn.addMonths(it.garantMonth);
         repo.UpdateItem(it);
-        it.AddStatus(it,Status::WORK, ui->deDate->dateTime());
+        it.AddStatus(it,Status::WORK, ui->deDate->dateTime(), ui->leDoc->text());
     }
 
     repo.UpdateItem(prod);

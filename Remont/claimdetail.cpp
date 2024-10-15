@@ -20,6 +20,13 @@ ClaimDetail::ClaimDetail(Claim *cl,QWidget *parent)
     ui->tableWidget->resizeColumnsToContents();
     ui->tableWidget->resizeRowsToContents();
 
+    if(cl->dateRegister.isNull())
+        ui->deDateClaim->setDateTime(QDateTime::currentDateTime());
+
+    connect(ui->leNumber, SIGNAL(editingFinished()), SLOT(slotEnabledWidget()));
+    connect(ui->tableWidget, SIGNAL(currentCellChanged(int,int,int,int)), SLOT(slotEnabledWidget()));
+
+    slotEnabledWidget();
 }
 
 ClaimDetail::~ClaimDetail()
@@ -37,37 +44,13 @@ void ClaimDetail::on_pbOK_clicked()
     claim->dateRegister = ui->deDateClaim->dateTime();
     claim->FromWho = ui->leFromWho->text();
     claim->ObjectInstall = ui->leObjectInst->text();
-    // claim->Descript = ui->leDescript->text();
-    // claim->idOrg = ui->leOrganiz->text();
-    // claim->Reason = ui->leReason->text();
-    // claim->DateRepair = ui->deDateRepair->dateTime();
-    // claim->DoRepair = ui->leDoRepair->text();
-    // claim->FileAnswer = ui->leFileAnswer->text();
-    // claim->TextResult = ui->leTextResult->text();
-    // claim->IsGuarantee = ui->cbGuarantee->isChecked();
-
     claim->idTypeClaim = ui->cbTypeClaim->currentData(Qt::UserRole).toInt();
 
     if(claim->id == 0)
         repo.AddItem(*claim);
 
-    QList<Modul> listAddModul;
-    trackModul.getListAdd(listAddModul);
-    for(auto it : listAddModul)
-    {
-        if(repo.AddModulToClaim(it.id, claim->id))
-            it.AddStatus(it, Status::FAULTY_ON_OBJECT);
-    }
 
-    QList<Modul> listDelModul;
-    trackModul.getListDel(listDelModul);
-    for(auto it : listDelModul)
-    {
-        if(repo.DelModulFromClaim(it.id, claim->id))
-            it.DeleteLastStatus(it);
-
-    }
-
+    // Добавленные изделия
     QList<Product> listAddProduct;
     trackProduct.getListAdd(listAddProduct);
     for(auto it : listAddProduct)
@@ -76,12 +59,40 @@ void ClaimDetail::on_pbOK_clicked()
             it.AddStatus(it, Status::FAULTY_ON_OBJECT);
     }
 
+    // Удаленные изделия
     QList<Product> listDelProduct;
     trackProduct.getListDel(listDelProduct);
     for(auto it : listDelProduct)
     {
         if(repo.DelProductToClaim(it.id, claim->id))
             it.DeleteLastStatus(it);
+    }
+
+    // Добавленные модули
+    QList<Modul> listAddModul;
+    trackModul.getListAdd(listAddModul);
+    for(auto it : listAddModul)
+    {
+        if(repo.AddModulToClaim(it.id, claim->id))
+            it.AddStatus(it, Status::FAULTY_ON_OBJECT);
+
+        // установить статус изделия, если модуль входит в его состав
+        if(!trackProduct.listAdd.contains(it.idProduct))
+        {
+            Product prod = repo.GetProduct(it.idProduct);
+            if(prod.id != 0)
+                prod.AddStatus(prod, Status::FAULTY_ON_OBJECT);
+        }
+    }
+
+    // Удаленные модули
+    QList<Modul> listDelModul;
+    trackModul.getListDel(listDelModul);
+    for(auto it : listDelModul)
+    {
+        if(repo.DelModulFromClaim(it.id, claim->id))
+            it.DeleteLastStatus(it);
+
     }
 
     accept();
@@ -97,14 +108,6 @@ void ClaimDetail::ClaimToScreen(Claim *claim)
     ui->leFromWho->setText(claim->FromWho);
     // ui->leOrganiz->setText(claim->idOrg);
     ui->leObjectInst->setText(claim->ObjectInstall);
-    // ui->leDescript->setText(claim->Descript);
-    // ui->leReason->setText(claim->Reason);
-    // ui->deDateRepair->setDateTime(claim->DateRepair);
-    // ui->leDoRepair->setText(claim->DoRepair);
-    // ui->leFileAnswer->setText(claim->FileAnswer);
-    // ui->leTextResult->setText(claim->TextResult);
-    // ui->cbGuarantee->setChecked(claim->IsGuarantee);
-
     ui->cbTypeClaim->setCurrentText(listTypeClaim[claim->idTypeClaim]);
 
     for(auto &it : claim->listModul)
@@ -214,7 +217,6 @@ void ClaimDetail::on_tbAddDevice_clicked()
 //-----------------------------------------------------------------------------------------
 void ClaimDetail::on_tbDeleteDevice_clicked()
 {
-
     QTableWidgetItem *item = ui->tableWidget->item(ui->tableWidget->currentRow(), 0);
     if(item == nullptr)
         return;
@@ -226,7 +228,10 @@ void ClaimDetail::on_tbDeleteDevice_clicked()
     {
         auto prod_iter = std::find_if(claim->listProduct.cbegin(), claim->listProduct.cend(), [id] (Product p) { return p.id == id;});
         if(prod_iter != claim->listProduct.cend())
-            trackProduct.DelRecord(id, *prod_iter);
+        {
+            if(!(*prod_iter).getIsRepair())
+                trackProduct.DelRecord(id, *prod_iter);
+        }
     }
     else
     {
@@ -236,5 +241,34 @@ void ClaimDetail::on_tbDeleteDevice_clicked()
     }
 
     ui->tableWidget->removeRow(ui->tableWidget->currentRow());
+}
+
+
+void ClaimDetail::slotEnabledWidget()
+{
+    bool res = !ui->leNumber->text().isEmpty();
+    ui->pbOK->setEnabled(res);
+
+    res = (ui->tableWidget->currentRow() >= 0);
+    auto item = ui->tableWidget->item(ui->tableWidget->currentRow(), 0);
+
+    res = false;
+    if(item != nullptr)
+    {
+        int id = item->data(Qt::UserRole).toInt();
+        int type = item->data(Qt::UserRole + 1).toInt();
+
+        if(type == ev::PRODUCT)
+        {
+            auto prod_iter = std::find_if(claim->listProduct.cbegin(), claim->listProduct.cend(), [id] (Product p) { return p.id == id;});
+            res = (prod_iter != claim->listProduct.cend() && !(*prod_iter).getIsRepair());
+        }
+        else
+        {
+            auto mod_iter = std::find_if(claim->listModul.cbegin(), claim->listModul.cend(), [id] (Modul m) { return m.id == id;});
+            res = (mod_iter != claim->listModul.cend() && !(*mod_iter).getIsRepair());
+        }
+    }
+    ui->tbDeleteDevice->setEnabled(res);
 }
 

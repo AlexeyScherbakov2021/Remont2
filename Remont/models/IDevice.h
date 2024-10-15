@@ -15,6 +15,7 @@ public:
     bool isZip;
     QDateTime EndGarant;
     QDateTime dateRegister;
+    QDateTime dateOn;
     QDateTime dateUtil;
     int garantMonth;
     int typeDevice;

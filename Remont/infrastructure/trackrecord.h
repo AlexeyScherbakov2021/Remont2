@@ -21,7 +21,7 @@ public:
     void getListAdd(QList<T> &list);
     void getListDel(QList<T> &list);
 
-private:
+// private:
 
     // QSet<T> listAdd;
     // QSet<T> listDel;

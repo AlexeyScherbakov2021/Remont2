@@ -50,7 +50,7 @@ public:
         repo.LoadStatus(device);
     }
 
-    void AddStatus(T &device, Status::Stat idStat, QString comment = "")
+    void AddStatus(T &device, Status::Stat idStat, const QString &comment = "")
     {
         AddStatus(device, idStat, QDateTime::currentDateTime(), comment );
     }
@@ -63,7 +63,7 @@ public:
     }
 
 
-    void AddStatus(T &device, Status::Stat idStat, const QDateTime &dateRegister,  QString comment = "")
+    void AddStatus(T &device, Status::Stat idStat, const QDateTime &dateRegister,  const QString &comment = "")
     {
         Status status;
         status.idStatus = idStat;
@@ -85,6 +85,13 @@ public:
     QString getLastComment() const
     {
         return listStatus.last().Comment;
+    }
+
+    bool getIsRepair() const
+    {
+        if(listStatus.size() > 0)
+            return listStatus.last().idStatus > Status::FAULTY_ON_OBJECT;
+        else return false;
     }
 
 };
