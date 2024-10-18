@@ -1,4 +1,4 @@
-QT       += core gui sql
+QT       += core gui sql serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,6 +16,7 @@ SOURCES += \
     complectproductwindow.cpp \
     createdevicewindow.cpp \
     endremontwindow.cpp \
+    infrastructure/scaner.cpp \
     infrastructure/trackrecord.cpp \
     listshipwindow.cpp \
     main.cpp \
@@ -31,6 +32,7 @@ SOURCES += \
     platewindow.cpp \
     remontwindow.cpp \
     repomssql.cpp \
+    scan.cpp \
     selectdevicewindow.cpp \
     selectplatewindow.cpp \
     shipwindow.cpp \
@@ -45,6 +47,7 @@ HEADERS += \
     createdevicewindow.h \
     endremontwindow.h \
     infrastructure/IStatus.h \
+    infrastructure/scaner.h \
     infrastructure/trackrecord.h \
     listshipwindow.h \
     models/IDevice.h \
@@ -65,13 +68,13 @@ HEADERS += \
     models/prodtype.h \
     models/product.h \
     models/remont.h \
-    models/remontstep.h \
     models/setterout.h \
     models/shipment.h \
     otkcontrolwindow.h \
     platewindow.h \
     remontwindow.h \
     repomssql.h \
+    scan.h \
     selectdevicewindow.h \
     selectplatewindow.h \
     shipwindow.h \
@@ -90,6 +93,7 @@ FORMS += \
     otkcontrolwindow.ui \
     platewindow.ui \
     remontwindow.ui \
+    scan.ui \
     selectdevicewindow.ui \
     selectplatewindow.ui \
     shipwindow.ui \
@@ -99,3 +103,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    resource.qrc

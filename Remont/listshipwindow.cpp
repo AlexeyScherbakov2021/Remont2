@@ -101,14 +101,13 @@ void ListShipWindow::on_pbNew_clicked()
     ShipWindow *win = new ShipWindow(&ship, this);
     int res = win->exec();
     qDebug() << res;
-    if(res != QDialog::Accepted)
+    if(res == QDialog::Accepted)
     {
-        Ship.listItems.removeIf([ship](Shipment s) { return s.id == ship.id; });
-    }
-    else
-    {
-        Ship.listItems.push_back(ship);
-        addRowWidget(ship);
+        if(!ship.dateRegister.isValid())
+        {
+            Ship.listItems.push_back(ship);
+            addRowWidget(ship);
+        }
     }
 }
 

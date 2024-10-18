@@ -2,9 +2,7 @@
 #define CLAIMWINDOW_H
 
 #include "repomssql.h"
-
 #include <QDialog>
-
 #include <models/claim.h>
 #include <models/listclaim.h>
 

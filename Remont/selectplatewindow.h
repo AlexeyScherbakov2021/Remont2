@@ -2,7 +2,6 @@
 #define SELECTPLATEWINDOW_H
 
 #include <QDialog>
-
 #include <models/plate.h>
 
 namespace Ui {

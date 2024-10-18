@@ -2,9 +2,7 @@
 #include "remontwindow.h"
 #include "selectdevicewindow.h"
 #include "ui_remontwindow.h"
-
 #include <QMessageBox>
-
 #include <models/remont.h>
 
 RemontWindow::RemontWindow(QWidget *parent)

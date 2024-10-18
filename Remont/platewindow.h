@@ -31,6 +31,10 @@ private slots:
 private:
     Ui::PlateWindow *ui;
     RepoMSSQL repo;
+    QMetaObject::Connection conn;
+
+private slots:
+    void slotReadScan(QString s);
 };
 
 #endif // PLATEWINDOW_H

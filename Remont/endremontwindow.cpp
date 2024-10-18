@@ -36,7 +36,9 @@ EndRemontWindow::~EndRemontWindow()
 //---------------------------------------------------------------------------------------
 void EndRemontWindow::on_tbNumber_clicked()
 {
-    idMod =idProd = 0;
+    product.id = 0;
+    modul.id = 0;
+    // idMod =idProd = 0;
 
     // SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumber->text(),Status::REMONT);
     // if(win->exec() == QDialog::Accepted)
@@ -47,26 +49,28 @@ void EndRemontWindow::on_tbNumber_clicked()
         Claim claim;
         if(dev->typeDevice == ev::MODUL)
         {
-            Modul* modul = static_cast<Modul*>(dev);
-            if(repo.LoadClaimForModul(modul->id, claim))
+            // Modul* mod = static_cast<Modul*>(dev);
+            modul = *(static_cast<Modul*>(dev));
+            if(repo.LoadClaimForModul(modul.id, claim))
                 ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
 
-            ui->lbNumber->setText(modul->number);
-            ui->lbName->setText(modul->name);
+            ui->lbNumber->setText(modul.number);
+            ui->lbName->setText(modul.name);
             ui->lbDevice->setText("Модуль");
-            idMod = modul->id;
+            // idMod = modul->id;
         }
 
         if(dev->typeDevice == ev::PRODUCT)
         {
-            Product* prod = static_cast<Product*>(dev);
-            if(repo.LoadClaimForProduct(prod->id, claim))
+            // Product* prod = static_cast<Product*>(dev);
+            product = *(static_cast<Product*>(dev));
+            if(repo.LoadClaimForProduct(product.id, claim))
                 ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
 
-            ui->lbNumber->setText(prod->number);
-            ui->lbName->setText(prod->name);
+            ui->lbNumber->setText(product.number);
+            ui->lbName->setText(product.name);
             ui->lbDevice->setText("Изделие");
-            idProd = prod->id;
+            // idProd = prod->id;
         }
         ui->leNumber->clear();
     }
@@ -81,12 +85,12 @@ void EndRemontWindow::on_pbEndRemont_clicked()
 {
     Status::Stat stat = ui->cbScrap->isChecked() ? Status::END_WORK : Status::CORRECT_OSO;
 
-    if(idProd != 0)
+    if(product.id != 0)
     {
-        Product prod;
-        prod.id = idProd;
-        prod.AddStatus(prod, stat, ui->deDate->dateTime());
-        Remont rem = repo.GetCurrentRemont(idProd, ev::PRODUCT);
+        // Product prod;
+        // prod.id = idProd;
+        product.AddStatus(product, stat, ui->deDate->dateTime());
+        Remont rem = repo.GetCurrentRemont(product.id, ev::PRODUCT);
         rem.action = ui->leAction->text();
         rem.defect = ui->leDefect->text();
         rem.endDate = ui->deDate->dateTime();
@@ -95,20 +99,30 @@ void EndRemontWindow::on_pbEndRemont_clicked()
         repo.UpdateRemont(rem, ev::PRODUCT);
     }
 
-    if(idMod != 0)
+    if(modul.id != 0)
     {
-        Modul mod;
-        mod.id = idMod;
-        mod.AddStatus(mod, stat, ui->deDate->dateTime());
-        Remont rem = repo.GetCurrentRemont(idMod, ev::MODUL);
+        // Modul mod;
+        // mod.id = idMod;
+        modul.AddStatus(modul, stat, ui->deDate->dateTime());
+        Remont rem = repo.GetCurrentRemont(modul.id, ev::MODUL);
         rem.action = ui->leAction->text();
         rem.defect = ui->leDefect->text();
         rem.endDate = ui->deDate->dateTime();
+        rem.remark = ui->ptRemark->document()->toPlainText();
         rem.idReason = ui->cbReason->currentData(Qt::UserRole).toInt();
         repo.UpdateRemont(rem, ev::MODUL);
+
+        if(modul.idProduct != 0)
+        {
+            product = repo.GetProduct(modul.idProduct);
+            product.AddStatus(product, Status::WORK , ui->deDate->dateTime());
+        }
+
     }
 
-    idProd = idMod = 0;
+    product.id = 0;
+    modul.id = 0;
+    // idProd = idMod = 0;
 
     QMessageBox::information(this, "Сообщение", QString("Для %1 #%2 %3 ремонт завершен.")
                 .arg(ui->lbDevice->text()).arg(ui->lbNumber->text()).arg(ui->lbName->text()));
@@ -117,7 +131,8 @@ void EndRemontWindow::on_pbEndRemont_clicked()
     ui->lbName->clear();
     ui->lbDevice->clear();
     ui->leNumber->clear();
-    ui->cbReason->clear();
+    ui->ptRemark->clear();
+    ui->lbClaim->clear();
 
 }
 

@@ -2,13 +2,13 @@
 #include <models/claim.h>
 #include <models/modul.h>
 #include <models/product.h>
-// #include <models/remontm.h>
 #include <models/setterout.h>
 #include <models/shipment.h>
 #include<models/plate.h>
 #include <models/prodtype.h>
 #include <models/modultype.h>
 #include <models/remont.h>
+#include <QMessageBox>
 #include <QSqlRecord>
 #include "repomssql.h"
 
@@ -32,24 +32,26 @@ RepoMSSQL::RepoMSSQL()
 bool RepoMSSQL::ConnectDb()
 {
 
-// #ifdef QT_DEBUG
-    // qDebug() << "Отладочная версия.";
-    // db.setDatabaseName("DRIVER={SQL Server};SERVER=SCHERBAKOV-A\\SQLEXPRESS;DATABASE=FinGoods;Encrypt=yes;Trusted_Connection=yes");
-    db.setDatabaseName("DRIVER={SQL Server};SERVER=SCHERBAKOV-A\\SQLEXPRESS;DATABASE=FinGoods;");
-    db.setUserName("sa");
-    db.setPassword("gonduras");
+// #ifndef QT_DEBUG
+//     qDebug() << "Отладочная версия.";
+//     // db.setDatabaseName("DRIVER={SQL Server};SERVER=SCHERBAKOV-A\\SQLEXPRESS;DATABASE=FinGoods;Encrypt=yes;Trusted_Connection=yes");
+//     db.setDatabaseName("DRIVER={SQL Server};SERVER=SCHERBAKOV-A\\SQLEXPRESS;DATABASE=FinGoods;");
+//     db.setUserName("sa");
+//     db.setPassword("gonduras");
 
 // #else
-//     qDebug() << "Рабочая версия.";
-//     db.setDatabaseName("DRIVER={SQL Server};SERVER=SFP\\FPSQLN;DATABASE=FinGoods;");
-//     db.setUserName("fpLoginName");
-//     db.setPassword("ctcnhjt,s");
+    qDebug() << "Рабочая версия.";
+    db.setDatabaseName("DRIVER={SQL Server};SERVER=SFP\\FPSQLN;DATABASE=FinGoodsTest2;");
+    db.setUserName("fpLoginName");
+    db.setPassword("ctcnhjt,s");
 
 // #endif
 
     if(!db.open())
     {
         // qDebug() << "Ошибка соединения с базой данных." << db.lastError().text();
+        QMessageBox::critical(0, "Ошибка", "Ошибка соединения с базой данных.");
+        std::terminate();
         return false;
     }
 

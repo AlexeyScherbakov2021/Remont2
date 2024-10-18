@@ -2,11 +2,8 @@
 #define CLAIMDETAIL_H
 
 #include "repomssql.h"
-
 #include <QDialog>
-
 #include <models/claim.h>
-
 #include <infrastructure/trackrecord.h>
 
 namespace Ui {

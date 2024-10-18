@@ -3,7 +3,6 @@
 
 #include <QDialog>
 #include <QTreeWidgetItem>
-
 #include <models/product.h>
 #include <models/shipment.h>
 

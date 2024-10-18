@@ -31,10 +31,9 @@ private slots:
     void on_pbRegProduct_clicked();
     void on_pbRegModul_clicked();
     void on_tbDelPlate_clicked();
-
     void on_cbProduct_currentIndexChanged(int index);
-
     void on_cbModul_currentIndexChanged(int index);
+    void slotReadScan(QString s);
 
 private:
     Ui::CreateDeviceWindow *ui;
@@ -43,6 +42,7 @@ private:
     QMap<int, ProductType> listTypeProduct;
     void addLinePlate(Plate *plate);
     void addLineModul(Modul &mod);
+    QMetaObject::Connection conn;
 
     QList<Plate> listAddingPlate;
 };

@@ -2,6 +2,7 @@
 #include "ui_otkcontrolwindow.h"
 
 #include <QInputDialog>
+#include <QKeyEvent>
 
 OTKControlWindow::OTKControlWindow(QWidget *parent)
     : QDialog(parent)
@@ -70,6 +71,24 @@ void OTKControlWindow::loadBrockenDevice()
         item->setText(it.name + " №" + it.numAndComment());
         item->setData(Qt::UserRole, it.id);
         ui->lwProduct->addItem(item);
+    }
+
+}
+
+void OTKControlWindow::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return )
+    {
+        if(!scanNumber.isEmpty())
+        {
+
+        }
+
+        scanNumber.clear();
+    }
+    else
+    {
+        scanNumber += event->text();
     }
 
 }

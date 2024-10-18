@@ -12,6 +12,7 @@
 #include "acceptremontwindow.h"
 #include "remontwindow.h"
 #include "endremontwindow.h"
+#include "scan.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -19,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    Scan::scan.open("COM3");
 
 }
 
@@ -50,20 +52,6 @@ void MainWindow::on_pbCard_clicked()
     {
         CardProdWindow *winCard;
         winCard = new CardProdWindow(dev, this);
-
-        // if(dev->typeDevice == ev::PRODUCT )
-        // {
-        //     Product* prod = static_cast<Product*>(dev);
-        //     winCard = new CardProdWindow(*prod, this);
-        // }
-        // else if(dev->typeDevice == ev::MODUL)
-        // {
-        //     Modul* modul = static_cast<Modul*>(dev);
-        //     winCard = new CardProdWindow(*modul, this);
-        // }
-        // else
-        //     return;
-
         winCard->show();
     }
 }
@@ -275,22 +263,40 @@ void MainWindow::on_aCardDevice_triggered()
     {
         CardProdWindow *winCard;
         winCard = new CardProdWindow(dev, this);
-
-        // if(dev->typeDevice == ev::PRODUCT )
-        // {
-        //     Product* prod = static_cast<Product*>(dev);
-        //     winCard = new CardProdWindow(*prod, this);
-        // }
-        // else if(dev->typeDevice == ev::MODUL)
-        // {
-        //     Modul* modul = static_cast<Modul*>(dev);
-        //     winCard = new CardProdWindow(*modul, this);
-        // }
-        // else
-        //     return;
-
         winCard->show();
     }
 
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Замена модуля
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aExchModul_triggered()
+{
+    SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    IDevice *dev = win->SelectDevice(false, "", Status::NONE);
+    if(dev != nullptr)
+    {
+        Modul *mod = static_cast<Modul*>(dev);
+        RepoMSSQL repo;
+        Product prod = repo.GetProduct(mod->idProduct);
+        if(prod.id > 0)
+        {
+            ComplectProductWindow *win = new ComplectProductWindow(this, &prod);
+            win->show();
+        }
+    }
+
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Настройка сканера
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aScaner_triggered()
+{
+    Scan *win = new Scan();
+    win->exec();
 }
 

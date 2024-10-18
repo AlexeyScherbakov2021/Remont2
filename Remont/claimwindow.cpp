@@ -1,7 +1,6 @@
 #include "claimdetail.h"
 #include "claimwindow.h"
 #include "ui_claimwindow.h"
-
 #include <QMessageBox>
 
 ClaimWindow::ClaimWindow(QWidget *parent/*, bool isSelected*/)

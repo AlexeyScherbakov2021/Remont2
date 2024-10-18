@@ -1,6 +1,8 @@
 #include "startworkwindow.h"
 #include "ui_startworkwindow.h"
 
+#include <QMessageBox>
+
 StartWorkWindow::StartWorkWindow(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::StartWorkWindow)
@@ -33,6 +35,13 @@ void StartWorkWindow::on_pbProdToWork_clicked()
     auto item = ui->lwProduct->currentItem();
     if(item == nullptr)
         return;
+
+    if(ui->leDoc->text().isEmpty())
+    {
+        QMessageBox::information(this, "Сообщение", "Укажите документ.");
+        return;
+    }
+
 
     int id = item->data(Qt::UserRole).toInt();
     Product prod = products.GetItem(id);

@@ -2,9 +2,7 @@
 #define STARTWORKWINDOW_H
 
 #include "repomssql.h"
-
 #include <QDialog>
-
 #include <models/listmodul.h>
 #include <models/listproduct.h>
 #include <models/product.h>

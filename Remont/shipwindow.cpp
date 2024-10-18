@@ -332,12 +332,10 @@ void ShipWindow::on_pbDelete_clicked()
 //-----------------------------------------------------------------------------------
 void ShipWindow::on_pbFinish_clicked()
 {
-
     int countProd = 0;
 
     for(auto &it : ship->listSetterOut)
         countProd += it.listProduct.size();
-
 
     if(ship->listModules.size() == 0
         && ship->listProduct.size() == 0
@@ -352,7 +350,6 @@ void ShipWindow::on_pbFinish_clicked()
         QMessageBox::warning(this, "Предупреждение", "Для отгрузки необходимо указать документ УПД.");
         return;
     }
-
 
     ship->dateRegister = QDateTime::currentDateTime();
 

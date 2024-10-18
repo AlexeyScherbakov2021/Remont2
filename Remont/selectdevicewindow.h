@@ -8,7 +8,6 @@
 #include <infrastructure/IStatus.h>
 #include <models/shipment.h>
 #include <models/setterout.h>
-// #include <models/enumvariable.h>
 
 namespace Ui {
 class SelectDeviceWindow;

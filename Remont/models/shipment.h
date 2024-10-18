@@ -6,10 +6,6 @@
 #include "setterout.h"
 #include "product.h"
 
-// class Modul;
-// class Product;
-// class SetterOut;
-
 class Shipment : public IEntity
 {
 public:

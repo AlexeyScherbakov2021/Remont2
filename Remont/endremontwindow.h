@@ -5,6 +5,9 @@
 
 #include <QDialog>
 
+#include <models/product.h>
+#include <models/modul.h>
+
 namespace Ui {
 class EndRemontWindow;
 }
@@ -24,8 +27,10 @@ private slots:
 
 private:
     Ui::EndRemontWindow *ui;
-    int idProd = 0;
-    int idMod = 0;
+    // int idProd = 0;
+    // int idMod = 0;
+    Product product;
+    Modul modul;
     RepoMSSQL repo;
 
 };

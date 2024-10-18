@@ -295,12 +295,18 @@ background-color: LightGray;
          <property name="text">
           <string>Отгрузить</string>
          </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
        <item alignment="Qt::AlignmentFlag::AlignBottom">
         <widget class="QPushButton" name="pbClose">
          <property name="text">
           <string>Закрыть</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
          </property>
         </widget>
        </item>

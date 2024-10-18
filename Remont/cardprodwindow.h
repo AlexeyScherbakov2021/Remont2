@@ -2,15 +2,11 @@
 #define CARDPRODWINDOW_H
 
 #include "repomssql.h"
-
 #include <QDialog>
-
 #include <models/modul.h>
 #include <models/product.h>
-// #include <models/remontentity.h>
 #include <models/setterout.h>
 #include <models/shipment.h>
-
 
 namespace Ui {
 class CardProdWindow;
@@ -30,7 +26,6 @@ private:
     explicit CardProdWindow(const QString &name, QWidget *parent = nullptr);
     Ui::CardProdWindow *ui;
     RepoMSSQL repo;
-    // Modul modul;
     QString number;
 
     // RemontEntity *remontEntity;

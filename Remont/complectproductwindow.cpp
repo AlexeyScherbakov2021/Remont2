@@ -1,4 +1,5 @@
 #include "complectproductwindow.h"
+#include "scan.h"
 #include "selectdevicewindow.h"
 #include "ui_complectproductwindow.h"
 
@@ -12,15 +13,21 @@ ComplectProductWindow::ComplectProductWindow(QWidget *parent, Product *product)
 
     if(product != nullptr)
     {
-        prod = product;
+        prod = *product;
         ui->leNumProdSearch->setVisible(false);
-        LoadProductToScreen(*prod);
+        ui->tbProdSearch->setVisible(false);
+        ui->labelSearchProd->setVisible(false);
+        LoadProductToScreen(prod);
     }
+
+    connect(ui->lwOuterModule, SIGNAL(doubleClicked(QModelIndex)), SLOT(on_pbAddModul_clicked()));
+    conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
 }
 
 ComplectProductWindow::~ComplectProductWindow()
 {
+    disconnect(conn);
     delete ui;
 }
 
@@ -63,12 +70,14 @@ void ComplectProductWindow::on_tbProdSearch_clicked()
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
     win->setTypeSearch(SelectDeviceWindow::TypeProduct);
     IDevice *dev = win->SelectDevice(true, ui->leNumProdSearch->text(), stat);
-    prod = static_cast<Product*>(dev);
+    if(dev != nullptr)
+    {
+        prod = *(static_cast<Product*>(dev));
+        if(prod.id == 0)
+            return;
+    }
 
-    if(prod == nullptr)
-        return;
-
-    LoadProductToScreen(*prod);
+    LoadProductToScreen(prod);
 }
 
 
@@ -100,7 +109,7 @@ void ComplectProductWindow::LoadProductToScreen(Product &prod)
 //----------------------------------------------------------------------------------------------
 void ComplectProductWindow::on_pbAddModul_clicked()
 {
-    if(prod == nullptr)
+    if(prod.id == 0 || ui->lwOuterModule->currentRow() < 0)
         return;
 
     QVariant var = ui->lwOuterModule->item(ui->lwOuterModule->currentRow())->data(Qt::UserRole);
@@ -179,7 +188,7 @@ void ComplectProductWindow::on_pbOK_clicked()
         // status.idStatus = Status::INSTALL;
         // status.idDevice = mod.id;
         // mod.listStatus.push_back(status);
-        mod.idProduct = prod->id;
+        mod.idProduct = prod.id;
         // записать в базу новый статус и id изделия для модуля
         if(repo.UpdateItem(mod))
             mod.AddStatus(mod, Status::INSTALL);
@@ -201,4 +210,15 @@ void ComplectProductWindow::on_pbOK_clicked()
 
     accept();
 }
+
+void ComplectProductWindow::slotReadScan(QString s)
+{
+    if(isActiveWindow())
+    {
+        ui->leNumProdSearch->setText(s);
+        emit ui->tbProdSearch->clicked();
+    }
+}
+
+
 

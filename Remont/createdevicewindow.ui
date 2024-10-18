@@ -450,6 +450,9 @@ background-color: #eeeeee
      <property name="text">
       <string>Закрыть</string>
      </property>
+     <property name="autoDefault">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
   </layout>

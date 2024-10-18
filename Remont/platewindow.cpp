@@ -1,4 +1,5 @@
 #include "platewindow.h"
+#include "scan.h"
 #include "ui_platewindow.h"
 
 #include <QMessageBox>
@@ -9,10 +10,14 @@ PlateWindow::PlateWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->deCreateDate->setDateTime(QDateTime::currentDateTime());
+
+    conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
+
 }
 
 PlateWindow::~PlateWindow()
 {
+    disconnect(conn);
     delete ui;
 }
 
@@ -72,5 +77,15 @@ void PlateWindow::on_leNumber_textChanged(const QString &arg1)
 void PlateWindow::on_listWidget_currentRowChanged(int currentRow)
 {
     ui->tbDelete->setEnabled(currentRow >= 0);
+}
+
+
+//-------------------------------------------------------------------------
+// строка от сканера
+//-------------------------------------------------------------------------
+void PlateWindow::slotReadScan(QString s)
+{
+    if(isActiveWindow())
+        ui->leNumber->setText(s);
 }
 

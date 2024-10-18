@@ -4,7 +4,6 @@
 #include <QDialog>
 
 #include <models/modul.h>
-// #include <models/remontentity.h>
 #include <models/claim.h>
 #include <models/remontm.h>
 

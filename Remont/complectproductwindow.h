@@ -27,16 +27,18 @@ private slots:
     void on_pbAddModul_clicked();
     void on_pbDeleteModul_clicked();
     void on_pbOK_clicked();
+    void slotReadScan(QString s);
 
 private:
     Ui::ComplectProductWindow *ui;
     RepoMSSQL repo;
-    Product *prod = nullptr;
+    Product prod;
     // QList<Modul> listModul;
     ListModul Modules;
     TrackRecord<Modul> trackModul;
     // QSet<Modul> addModul;
     // QSet<Modul> delModul;
+    QMetaObject::Connection conn;
 
     void LoadProductToScreen(Product &prod);
 

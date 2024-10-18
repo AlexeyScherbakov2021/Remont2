@@ -48,6 +48,13 @@ private:
 
     void loadCreatedDevice();
     void loadBrockenDevice();
+
+    QString scanNumber;
+
+    // QWidget interface
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 };
+
 
 #endif // OTKCONTROLWINDOW_H

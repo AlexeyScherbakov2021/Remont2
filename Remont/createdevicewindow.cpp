@@ -1,4 +1,5 @@
 #include "createdevicewindow.h"
+#include "scan.h"
 #include "selectplatewindow.h"
 #include "ui_createdevicewindow.h"
 
@@ -28,10 +29,13 @@ CreateDeviceWindow::CreateDeviceWindow(QWidget *parent)
 
     // ui->cbModul->setCurrentIndex(-1);
     // ui->cbProduct->setCurrentIndex(-1);
+    conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
+
 }
 
 CreateDeviceWindow::~CreateDeviceWindow()
 {
+    disconnect(conn);
     delete ui;
 }
 
@@ -87,10 +91,7 @@ void CreateDeviceWindow::on_tbSearchPlate_clicked()
     addLinePlate(&plate);
     ui->twPlates->resizeColumnsToContents();
     ui->twPlates->resizeRowsToContents();
-
-
 }
-
 
 
 //---------------------------------------------------------------------------------
@@ -98,6 +99,9 @@ void CreateDeviceWindow::on_tbSearchPlate_clicked()
 //---------------------------------------------------------------------------------
 void CreateDeviceWindow::on_tbDeleteProduct_clicked()
 {
+    if(ui->lwProduct->currentItem() == nullptr)
+        return;
+
     // Product prod;
     int id = ui->lwProduct->currentItem()->data(Qt::UserRole).toInt();
     if(repo.DeleteProduct(id) )
@@ -293,5 +297,19 @@ void CreateDeviceWindow::on_cbModul_currentIndexChanged(int index)
 
     int key = ui->cbModul->currentData().toInt();
     ui->lbGarantMod->setText(QString::number(listTypeModule[key].garantMonth));
+}
+
+//---------------------------------------------------------------------------------
+// Чтение сканера
+//---------------------------------------------------------------------------------
+void CreateDeviceWindow::slotReadScan(QString s)
+{
+    if(isActiveWindow())
+    {
+        if(ui->tabWidget->currentIndex() == 0)
+            ui->leNumProduct->setText(s);
+        else
+            ui->leNumModul->setText(s);
+    }
 }
 

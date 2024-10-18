@@ -90,8 +90,10 @@ public:
     bool getIsRepair() const
     {
         if(listStatus.size() > 0)
-            return listStatus.last().idStatus > Status::FAULTY_ON_OBJECT;
-        else return false;
+            return listStatus.last().idStatus == Status::FAULTY_ON_OBJECT/*
+                   && listStatus.last().idStatus < Status::CORRECT_OSO*/;
+        else
+            return false;
     }
 
 };
