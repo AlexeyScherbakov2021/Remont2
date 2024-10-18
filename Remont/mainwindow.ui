@@ -280,6 +280,10 @@ background-color: LightGray;
    </property>
   </action>
   <action name="aInstallModul">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/image/product_link.png</normaloff>:/image/product_link.png</iconset>
+   </property>
    <property name="text">
     <string>Установка модулей</string>
    </property>
@@ -340,11 +344,17 @@ background-color: LightGray;
    </property>
   </action>
   <action name="aScaner">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/image/scaner.png</normaloff>:/image/scaner.png</iconset>
+   </property>
    <property name="text">
     <string>Сканер штрих-кода</string>
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections/>
 </ui>

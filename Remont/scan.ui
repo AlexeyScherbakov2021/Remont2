@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Настройка порта сканера</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1,0">
    <item>
@@ -88,7 +88,7 @@
       </font>
      </property>
      <property name="frameShape">
-      <enum>QFrame::Shape::Box</enum>
+      <enum>QFrame::Shape::Panel</enum>
      </property>
      <property name="text">
       <string/>

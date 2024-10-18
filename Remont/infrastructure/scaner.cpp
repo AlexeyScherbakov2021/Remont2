@@ -33,8 +33,11 @@ QString Scaner::getPort()
 void Scaner::slotRead()
 {
     QByteArray bytes = conn.readAll();
-    QString s(bytes.removeLast());
+    if(bytes.endsWith('\r'))
+        bytes.removeLast();
 
+    QString s(bytes);
+        // s = s.removeLast();
     // qDebug() << s;
 
     emit sigRead(s);
