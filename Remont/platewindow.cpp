@@ -86,6 +86,9 @@ void PlateWindow::on_listWidget_currentRowChanged(int currentRow)
 void PlateWindow::slotReadScan(QString s)
 {
     if(isActiveWindow())
+    {
         ui->leNumber->setText(s);
+        emit ui->pbAdd->click();
+    }
 }
 

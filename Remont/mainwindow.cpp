@@ -21,11 +21,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     Scan::scan.open("COM3");
-
+    conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 }
 
 MainWindow::~MainWindow()
 {
+    disconnect(conn);
     delete ui;
 }
 
@@ -298,5 +299,33 @@ void MainWindow::on_aScaner_triggered()
 {
     Scan *win = new Scan();
     win->exec();
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Срабатывание сканера
+//----------------------------------------------------------------------------------------------
+void MainWindow::slotReadScan(QString s)
+{
+    if(!isActiveWindow())
+        return;
+
+    CardProdWindow *winCard;
+    RepoMSSQL repo;
+    IDevice *dev = nullptr;
+    Product prod = repo.GetProduct(s, 0, false);
+    Modul mod = repo.GetModul(s, 0, false);
+
+    if(prod.id > 0)
+        dev = &prod;
+    else if(mod.id > 0)
+        dev = &mod;
+
+    if(dev != nullptr)
+    {
+        winCard = new CardProdWindow(dev, this);
+        winCard->show();
+    }
+
 }
 

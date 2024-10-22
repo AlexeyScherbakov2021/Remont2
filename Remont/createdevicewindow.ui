@@ -58,13 +58,36 @@ background-color: LightGray;
     <widget class="QTabWidget" name="tabWidget">
      <property name="styleSheet">
       <string notr="true">QWidget#tab, QWidget#tab_2 {
-background-color: #eeeeee
+background-color: #eeeeee;
+border: 1px solid #999999;
 }</string>
+     </property>
+     <property name="tabShape">
+      <enum>QTabWidget::TabShape::Rounded</enum>
      </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
+     <property name="iconSize">
+      <size>
+       <width>24</width>
+       <height>24</height>
+      </size>
+     </property>
+     <property name="documentMode">
+      <bool>true</bool>
+     </property>
+     <property name="tabsClosable">
+      <bool>false</bool>
+     </property>
+     <property name="movable">
+      <bool>false</bool>
+     </property>
      <widget class="QWidget" name="tab">
+      <attribute name="icon">
+       <iconset resource="resource.qrc">
+        <normaloff>:/image/product.png</normaloff>:/image/product.png</iconset>
+      </attribute>
       <attribute name="title">
        <string>Изделия</string>
       </attribute>
@@ -162,6 +185,16 @@ background-color: #eeeeee
            <property name="text">
             <string>Зарегестрировать</string>
            </property>
+           <property name="icon">
+            <iconset resource="resource.qrc">
+             <normaloff>:/image/note-2.png</normaloff>:/image/note-2.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
           </widget>
          </item>
          <item row="3" column="1">
@@ -194,6 +227,10 @@ background-color: #eeeeee
              <property name="text">
               <string>-</string>
              </property>
+             <property name="icon">
+              <iconset resource="resource.qrc">
+               <normaloff>:/image/cancel2.png</normaloff>:/image/cancel2.png</iconset>
+             </property>
             </widget>
            </item>
           </layout>
@@ -206,6 +243,10 @@ background-color: #eeeeee
       </layout>
      </widget>
      <widget class="QWidget" name="tab_2">
+      <attribute name="icon">
+       <iconset resource="resource.qrc">
+        <normaloff>:/image/modul.png</normaloff>:/image/modul.png</iconset>
+      </attribute>
       <attribute name="title">
        <string>Модули</string>
       </attribute>
@@ -230,6 +271,16 @@ background-color: #eeeeee
             <widget class="QPushButton" name="pbRegModul">
              <property name="text">
               <string>Зарегестрировать</string>
+             </property>
+             <property name="icon">
+              <iconset resource="resource.qrc">
+               <normaloff>:/image/note-2.png</normaloff>:/image/note-2.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
              </property>
             </widget>
            </item>
@@ -318,6 +369,10 @@ background-color: #eeeeee
                   <property name="text">
                    <string>...</string>
                   </property>
+                  <property name="icon">
+                   <iconset resource="resource.qrc">
+                    <normaloff>:/image/search.png</normaloff>:/image/search.png</iconset>
+                  </property>
                  </widget>
                 </item>
                </layout>
@@ -335,6 +390,10 @@ background-color: #eeeeee
                 </property>
                 <property name="text">
                  <string>-</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resource.qrc">
+                  <normaloff>:/image/cancel2.png</normaloff>:/image/cancel2.png</iconset>
                 </property>
                </widget>
               </item>
@@ -417,6 +476,10 @@ background-color: #eeeeee
              <property name="text">
               <string>-</string>
              </property>
+             <property name="icon">
+              <iconset resource="resource.qrc">
+               <normaloff>:/image/cancel2.png</normaloff>:/image/cancel2.png</iconset>
+             </property>
             </widget>
            </item>
           </layout>
@@ -450,6 +513,16 @@ background-color: #eeeeee
      <property name="text">
       <string>Закрыть</string>
      </property>
+     <property name="icon">
+      <iconset resource="resource.qrc">
+       <normaloff>:/image/Exit.png</normaloff>:/image/Exit.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
      <property name="autoDefault">
       <bool>false</bool>
      </property>
@@ -471,7 +544,9 @@ background-color: #eeeeee
   <tabstop>tabWidget</tabstop>
   <tabstop>twPlates</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>pbClose</sender>

@@ -218,10 +218,25 @@ QTreeWidgetItem* ShipWindow::AddItemTree(QString text, int id, TypeItemTree type
     if(listID.contains(id * 10 + type))
         return nullptr;
 
+    QString nameIcon;
     QTreeWidgetItem *item = new QTreeWidgetItem();
     item->setText(0, text);
     item->setData(0, Qt::UserRole, id);
     item->setData(0, Qt::UserRole + 1, type);
+    switch(type)
+    {
+    case TypeItemTree::PRODUCT:
+        nameIcon = "://image/product.png";
+        break;
+    case TypeItemTree::MODUL:
+        nameIcon = "://image/modul.png";
+        break;
+    case TypeItemTree::SET:
+        nameIcon = "://image/setter.png";
+        break;
+    }
+
+    item->setIcon(0, QIcon(nameIcon));
     if(parent == nullptr)
     {
         ui->twTreeDevice->addTopLevelItem(item);

@@ -47,14 +47,14 @@ private slots:
     void on_aGetRepair_triggered();
     void on_aEndRepair_triggered();
     void on_aCardDevice_triggered();
-
     void on_aExchModul_triggered();
-
     void on_aScaner_triggered();
+    void slotReadScan(QString s);
 
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
+    QMetaObject::Connection conn;
 
 };
 

@@ -43,6 +43,7 @@ private:
     void addLinePlate(Plate *plate);
     void addLineModul(Modul &mod);
     QMetaObject::Connection conn;
+    void AddPlateToScreen( Plate &plate);
 
     QList<Plate> listAddingPlate;
 };

@@ -15,7 +15,7 @@ public:
     // QSet<T>& getListAdd() { return listAdd; }
     // QSet<T>& getListDel() { return listDel; }
 
-    void AddRecord(int key, const T &item);
+    bool AddRecord(int key, const T &item);
     void DelRecord(int key, const T &item);
 
     void getListAdd(QList<T> &list);
@@ -51,13 +51,19 @@ public:
 // }
 
 template<typename T>
-inline void TrackRecord<T>::AddRecord(int key, const T &item)
+inline bool TrackRecord<T>::AddRecord(int key, const T &item)
 {
     if(listDel.contains(key))
         listDel.remove(key);
     else
-        listAdd.insert(key, item);
+    {
+        if(listAdd.contains(key))
+            return false;
+        else
+            listAdd.insert(key, item);
+    }
 
+    return true;
 }
 
 template<typename T>

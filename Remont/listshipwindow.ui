@@ -27,6 +27,16 @@
        <property name="text">
         <string>Создать новую</string>
        </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/image/lorry_add.png</normaloff>:/image/lorry_add.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
       </widget>
      </item>
      <item>
@@ -34,12 +44,32 @@
        <property name="text">
         <string>Изменить</string>
        </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/image/lorry.png</normaloff>:/image/lorry.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pbDeleteShip">
        <property name="text">
         <string>Удалить</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/image/lorry_delete.png</normaloff>:/image/lorry_delete.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
        </property>
       </widget>
      </item>
@@ -102,6 +132,16 @@
      <property name="text">
       <string>Закрыть</string>
      </property>
+     <property name="icon">
+      <iconset resource="resource.qrc">
+       <normaloff>:/image/Exit.png</normaloff>:/image/Exit.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
     </widget>
    </item>
   </layout>
@@ -112,7 +152,9 @@
   <tabstop>pbNew</tabstop>
   <tabstop>pbClose</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>pbClose</sender>

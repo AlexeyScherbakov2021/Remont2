@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>314</width>
-    <height>309</height>
+    <width>384</width>
+    <height>333</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -108,12 +108,41 @@
        <property name="text">
         <string>OK</string>
        </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/image/Apply24x24.png</normaloff>:/image/Apply24x24.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pbClose">
        <property name="text">
         <string>Отмена</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/image/cancel2.png</normaloff>:/image/cancel2.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+       <property name="default">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

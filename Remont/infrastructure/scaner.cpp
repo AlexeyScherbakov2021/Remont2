@@ -44,7 +44,7 @@ void Scaner::slotRead()
 
 }
 
-void Scaner::handleError(QSerialPort::SerialPortError error)
+void Scaner::handleError(QSerialPort::SerialPortError /*error*/)
 {
     // qDebug() << "Произошла ошибка." << error;
     // if(error != QSerialPort::NoError)

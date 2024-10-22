@@ -73,11 +73,9 @@ void ComplectProductWindow::on_tbProdSearch_clicked()
     if(dev != nullptr)
     {
         prod = *(static_cast<Product*>(dev));
-        if(prod.id == 0)
-            return;
+        if(prod.id > 0)
+            LoadProductToScreen(prod);
     }
-
-    LoadProductToScreen(prod);
 }
 
 
@@ -103,6 +101,36 @@ void ComplectProductWindow::LoadProductToScreen(Product &prod)
     }
 }
 
+//----------------------------------------------------------------------------------------------
+// Добавление модуля в экранной форме и удаление из списка модулей
+//----------------------------------------------------------------------------------------------
+void ComplectProductWindow::addModulToScreen(Modul &mod)
+{
+    if(trackModul.AddRecord(mod.id, mod))
+    {
+        // добавление в список экрана изделия
+        QListWidgetItem *item = new QListWidgetItem;
+        item->setText(mod.number + " (" + mod.name + ")");
+        QVariant var;
+        var.setValue(mod);
+        item->setData(Qt::UserRole, var);
+        ui->lwInnerModule->addItem(item);
+
+        // удаление из списка модулей
+        for(int row = 0; row < ui->lwOuterModule->count(); ++row)
+        {
+            auto item = ui->lwOuterModule->item(row);
+            QVariant var = item->data(Qt::UserRole);
+            Modul mod2 = var.value<Modul>();
+            if(mod2.id == mod.id)
+            {
+                delete item;
+                break;
+            }
+        }
+    }
+}
+
 
 //----------------------------------------------------------------------------------------------
 // Добавление модуля в изделие
@@ -115,24 +143,18 @@ void ComplectProductWindow::on_pbAddModul_clicked()
     QVariant var = ui->lwOuterModule->item(ui->lwOuterModule->currentRow())->data(Qt::UserRole);
     Modul mod = var.value<Modul>();
 
-    trackModul.AddRecord(mod.id, mod);
-    // if(delModul.contains(mod))
-    //     delModul.remove(mod);
-    // else
-    // // добавление в список отслеживания
-    //     addModul.insert(mod);
+    addModulToScreen(mod);
 
-    // Добавление в список изделия
+    // trackModul.AddRecord(mod.id, mod);
 
-    // добавление в список экрана изделия
-    QListWidgetItem *item = new QListWidgetItem;
-    item->setText(mod.number + " (" + mod.name + ")");
-    var.setValue(mod);
-    item->setData(Qt::UserRole, var);
-    ui->lwInnerModule->addItem(item);
+    // QListWidgetItem *item = new QListWidgetItem;
+    // item->setText(mod.number + " (" + mod.name + ")");
+    // var.setValue(mod);
+    // item->setData(Qt::UserRole, var);
+    // ui->lwInnerModule->addItem(item);
 
     // удаление из списка модулей
-    delete ui->lwOuterModule->item(ui->lwOuterModule->currentRow());
+    // delete ui->lwOuterModule->item(ui->lwOuterModule->currentRow());
 }
 
 
@@ -211,12 +233,27 @@ void ComplectProductWindow::on_pbOK_clicked()
     accept();
 }
 
+
+
 void ComplectProductWindow::slotReadScan(QString s)
 {
     if(isActiveWindow())
     {
         ui->leNumProdSearch->setText(s);
-        emit ui->tbProdSearch->clicked();
+        Product prod2 = repo.GetProduct(s, Status::CREATE);
+        if(prod2.id > 0)
+        {
+            prod = prod2;
+            LoadProductToScreen(prod);
+            return;
+        }
+
+        if(prod.id > 0)
+        {
+            Modul mod = repo.GetModul(s, Status::CREATE);
+            if(mod.id > 0)
+                addModulToScreen(mod);
+        }
     }
 }
 

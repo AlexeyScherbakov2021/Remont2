@@ -6,5 +6,28 @@
         <file>image/product_info.png</file>
         <file>image/product_link.png</file>
         <file>image/scaner.png</file>
+        <file>image/OK.png</file>
+        <file>image/lorry.png</file>
+        <file>image/lorry_add.png</file>
+        <file>image/lorry_delete.png</file>
+        <file>image/Add2.png</file>
+        <file>image/Apply24x24.png</file>
+        <file>image/ArrowLeft.png</file>
+        <file>image/ArrowRight.png</file>
+        <file>image/Down.png</file>
+        <file>image/Exit.png</file>
+        <file>image/modul.png</file>
+        <file>image/search.png</file>
+        <file>image/wrench.png</file>
+        <file>image/product_add.png</file>
+        <file>image/note-2.png</file>
+        <file>image/Notification.png</file>
+        <file>image/gear_in.png</file>
+        <file>image/newspaper.png</file>
+        <file>image/Download_32x32.png</file>
+        <file>image/arrow_refresh_small.png</file>
+        <file>image/claim_open.png</file>
+        <file>image/barcode.png</file>
+        <file>image/setter.png</file>
     </qresource>
 </RCC>

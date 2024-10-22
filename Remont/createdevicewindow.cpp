@@ -16,6 +16,7 @@ CreateDeviceWindow::CreateDeviceWindow(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::CreateDeviceWindow)/*, selectIdPlate(0)*/
 {
+
     ui->setupUi(this);
 
     repo.LoadModuleType(listTypeModule);
@@ -84,13 +85,25 @@ void CreateDeviceWindow::on_tbSearchPlate_clicked()
 
     Plate plate = listPlate.listItems.at(currentIndex);
 
-    // Сделать проверку на повтор
+    AddPlateToScreen(plate);
 
-    listAddingPlate.push_back(plate);
+    // listAddingPlate.push_back(plate);
 
-    addLinePlate(&plate);
-    ui->twPlates->resizeColumnsToContents();
-    ui->twPlates->resizeRowsToContents();
+    // addLinePlate(&plate);
+    // ui->twPlates->resizeColumnsToContents();
+    // ui->twPlates->resizeRowsToContents();
+}
+
+
+void CreateDeviceWindow::AddPlateToScreen( Plate &plate)
+{
+    if( std::find_if(listAddingPlate.cbegin(), listAddingPlate.cend(), [&plate]( const Plate &p){ return plate.id == p.id; }) == listAddingPlate.cend())
+    {
+        listAddingPlate.push_back(plate);
+        addLinePlate(&plate);
+        ui->twPlates->resizeColumnsToContents();
+        ui->twPlates->resizeRowsToContents();
+    }
 }
 
 
@@ -201,7 +214,7 @@ void CreateDeviceWindow::on_pbRegProduct_clicked()
         ui->leNumProduct->setFocus();
     }
     else
-        QMessageBox::warning(this, "Ошибка", QString("Серийный номер %1 уже присутствует в базе данных.").arg(prod.number));
+        QMessageBox::warning(this, "Ошибка", QString("Изделие с серийным номером %1 уже присутствует в базе данных.").arg(prod.number));
 
 }
 
@@ -226,15 +239,9 @@ void CreateDeviceWindow::on_pbRegModul_clicked()
     mod.garantMonth = listTypeModule[mod.idType].garantMonth;
     if(repo.AddItem(mod))
     {
-        // Status status;
-        // status.idDevice = mod.id;
-        // status.idStatus = Status::CREATE;
-        // status.dateStatus = QDateTime::currentDateTime();
         mod.AddStatus(mod, Status::CREATE);
-        // repo.AddStatusModul(status);
         for(auto &it : mod.listPlate)
             lModul.LinkPlate(it.id, mod.id);
-            // repo.LinkPlate(it.id, mod.id);
 
         addLineModul(mod);
         ui->leNumModul->clear();
@@ -245,7 +252,7 @@ void CreateDeviceWindow::on_pbRegModul_clicked()
         ui->twPlates->setRowCount(0);
     }
     else
-        QMessageBox::warning(this, "Ошибка", QString("Серийный номер %1 уже присутствует в базе данных.").arg(mod.number));
+        QMessageBox::warning(this, "Ошибка", QString("Модуль с серийным номером %1 уже присутствует в базе данных.").arg(mod.number));
 
 }
 
@@ -255,21 +262,12 @@ void CreateDeviceWindow::on_pbRegModul_clicked()
 //---------------------------------------------------------------------------------
 void CreateDeviceWindow::on_tbDelPlate_clicked()
 {
-    // QTableWidgetItem *item = ui->twPlates->currentItem();
-    // if(item == nullptr)
-    //     return;
-
-    // int id = item->data(Qt::UserRole).toInt();
-
     int row = ui->twPlates->currentRow();
     if(row < 0)
         return;
 
     listAddingPlate.removeAt(row);
     ui->twPlates->removeRow(row);
-
-    // auto plate_iter = std::find_if(listAddingPlate.begin(), listAddingPlate.end(), [id](Plate &p) { return p.id == id;});
-    // std::remove_if(listAddingPlate.begin(), listAddingPlate.end(), [id](Plate &p) { return p.id == id;});
 }
 
 
@@ -307,9 +305,22 @@ void CreateDeviceWindow::slotReadScan(QString s)
     if(isActiveWindow())
     {
         if(ui->tabWidget->currentIndex() == 0)
+        {
             ui->leNumProduct->setText(s);
+            emit ui->pbRegProduct->click();
+        }
         else
+        {
+            // выполнить поиск свободных плат
+            Plate plate = repo.GetPlate(s);
+            if(plate.id > 0 )
+            {
+                AddPlateToScreen(plate);
+                return;
+            }
             ui->leNumModul->setText(s);
+            emit ui->pbRegModul->click();
+        }
     }
 }
 

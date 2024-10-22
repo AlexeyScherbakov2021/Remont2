@@ -121,6 +121,10 @@
          <property name="text">
           <string>+</string>
          </property>
+         <property name="icon">
+          <iconset resource="resource.qrc">
+           <normaloff>:/image/Add2.png</normaloff>:/image/Add2.png</iconset>
+         </property>
         </widget>
        </item>
        <item>
@@ -136,6 +140,10 @@
          </property>
          <property name="text">
           <string>-</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resource.qrc">
+           <normaloff>:/image/cancel2.png</normaloff>:/image/cancel2.png</iconset>
          </property>
         </widget>
        </item>
@@ -209,12 +217,20 @@
        <property name="text">
         <string>OK</string>
        </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/image/Apply24x24.png</normaloff>:/image/Apply24x24.png</iconset>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pbCancel">
        <property name="text">
         <string>Отмена</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/image/cancel2.png</normaloff>:/image/cancel2.png</iconset>
        </property>
       </widget>
      </item>
@@ -235,7 +251,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>pbCancel</sender>

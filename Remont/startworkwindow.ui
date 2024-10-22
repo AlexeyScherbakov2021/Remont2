@@ -110,6 +110,16 @@ background-color: LightGray;
         <property name="text">
          <string>Ввести в работу</string>
         </property>
+        <property name="icon">
+         <iconset resource="resource.qrc">
+          <normaloff>:/image/gear_in.png</normaloff>:/image/gear_in.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
        </widget>
       </item>
       <item>
@@ -136,11 +146,23 @@ background-color: LightGray;
      <property name="text">
       <string>Закрыть</string>
      </property>
+     <property name="icon">
+      <iconset resource="resource.qrc">
+       <normaloff>:/image/Exit.png</normaloff>:/image/Exit.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
     </widget>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>pbClose</sender>

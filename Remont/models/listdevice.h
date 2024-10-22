@@ -18,7 +18,6 @@ public:
     explicit ListDevice() {}
 
 
-
     virtual bool AddItem(T &item)
     {
         return repo.AddItem(item);
@@ -43,6 +42,8 @@ public:
     // {
     //     repo.FindItems("", listItems, status);
     // }
+    // virtual T GetItem(QString number) = 0;
+
 
     virtual T GetItem(int id)
     {

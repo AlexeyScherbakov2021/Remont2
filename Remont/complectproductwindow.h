@@ -41,6 +41,7 @@ private:
     QMetaObject::Connection conn;
 
     void LoadProductToScreen(Product &prod);
+    void addModulToScreen(Modul &mod);
 
 };
 

@@ -22,8 +22,8 @@ class RepoMSSQL
 {
 private:
     QSqlDatabase db;
-    void FindItems(QList<Product> &listProduct, int status = 0, bool isFree = true);
-    void FindItems(QList<Modul> &listModul, int status = 0, bool isFree = true);
+    void FindItems(QList<Product> &listProduct, int status = 0, bool isFree = false);
+    void FindItems(QList<Modul> &listModul, int status = 0, bool isFree = false);
     // void FindItems(QList<Plate> &listPlate, int status = 0);
     void FindItems(QList<Shipment> &listShip, int status = 0);
 
@@ -53,13 +53,16 @@ public:
     bool DeleteClaim(int id);
 
     Product GetProduct(int id);
+    Product GetProduct(QString number, int status = 0, bool isFree = false);
     Shipment GetShipment(int id);
     Modul GetModul(int id);
+    Modul GetModul(QString number, int status = 0, bool isFree = false);
+    Plate GetPlate(QString number);
     SetterOut GetSetter(int id);
 
-    void FindItems(const QString &number, QList<Product> &listProduct, int status = 0, bool isFree = true);
-    void FindItems(const QString &number, QList<Modul> &listModul, int status = 0, bool isFree = true);
-    void FindItems(const QString &number, QList<Plate> &listPlate, int status = 0, bool isFree = true);
+    void FindItems(const QString &number, QList<Product> &listProduct, int status = 0, bool isFree = false);
+    void FindItems(const QString &number, QList<Modul> &listModul, int status = 0, bool isFree = false);
+    void FindItems(const QString &number, QList<Plate> &listPlate, int status = 0, bool isFree = false);
     void FindItems(const QString &number, QList<Shipment> &listShip, int status = 0);
 
     // void LoadProductType(QMap<int, QString> &listTypeProduct);

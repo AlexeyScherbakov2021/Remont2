@@ -275,6 +275,10 @@ background-color: LightGray;
    </property>
   </action>
   <action name="aRegDevice">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/image/product_add.png</normaloff>:/image/product_add.png</iconset>
+   </property>
    <property name="text">
     <string>Регистрация устройств</string>
    </property>
@@ -294,11 +298,19 @@ background-color: LightGray;
    </property>
   </action>
   <action name="aNewShip">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/image/lorry_add.png</normaloff>:/image/lorry_add.png</iconset>
+   </property>
    <property name="text">
     <string>Новая отгрузка</string>
    </property>
   </action>
   <action name="aShipBefore">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/image/lorry.png</normaloff>:/image/lorry.png</iconset>
+   </property>
    <property name="text">
     <string>Готовые для отгрузки</string>
    </property>
@@ -309,36 +321,64 @@ background-color: LightGray;
    </property>
   </action>
   <action name="aClaim">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/image/claim_open.png</normaloff>:/image/claim_open.png</iconset>
+   </property>
    <property name="text">
     <string>Рекламации</string>
    </property>
   </action>
   <action name="aGetOSO">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/image/Download_32x32.png</normaloff>:/image/Download_32x32.png</iconset>
+   </property>
    <property name="text">
     <string>Принять в ОСО</string>
    </property>
   </action>
   <action name="aGetRepair">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/image/wrench.png</normaloff>:/image/wrench.png</iconset>
+   </property>
    <property name="text">
     <string>Принять в ремонт</string>
    </property>
   </action>
   <action name="aEndRepair">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/image/Notification.png</normaloff>:/image/Notification.png</iconset>
+   </property>
    <property name="text">
     <string>Закончить ремонт</string>
    </property>
   </action>
   <action name="aExchModul">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/image/arrow_refresh_small.png</normaloff>:/image/arrow_refresh_small.png</iconset>
+   </property>
    <property name="text">
     <string>Замена модуля</string>
    </property>
   </action>
   <action name="aCardDevice">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/image/newspaper.png</normaloff>:/image/newspaper.png</iconset>
+   </property>
    <property name="text">
     <string>Карточка устройства</string>
    </property>
   </action>
   <action name="aStartWork">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/image/gear_in.png</normaloff>:/image/gear_in.png</iconset>
+   </property>
    <property name="text">
     <string>Ввести в работу</string>
    </property>
@@ -346,7 +386,7 @@ background-color: LightGray;
   <action name="aScaner">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/image/scaner.png</normaloff>:/image/scaner.png</iconset>
+     <normaloff>:/image/barcode.png</normaloff>:/image/barcode.png</iconset>
    </property>
    <property name="text">
     <string>Сканер штрих-кода</string>

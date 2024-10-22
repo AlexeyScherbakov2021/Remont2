@@ -28,4 +28,5 @@ signals:
 
 };
 
+
 #endif // SCANER_H
