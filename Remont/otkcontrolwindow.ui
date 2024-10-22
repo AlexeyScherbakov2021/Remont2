@@ -60,7 +60,7 @@ border: 1px solid #999999;
 }</string>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="iconSize">
       <size>
@@ -95,42 +95,7 @@ border: 1px solid #999999;
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QPushButton" name="pbCheckProd">
-           <property name="maximumSize">
-            <size>
-             <width>120</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Исправен</string>
-           </property>
-           <property name="icon">
-            <iconset resource="resource.qrc">
-             <normaloff>:/image/Down.png</normaloff>:/image/Down.png</iconset>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pbBrokenProd">
-           <property name="maximumSize">
-            <size>
-             <width>120</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Неисправен</string>
-           </property>
-           <property name="icon">
-            <iconset resource="resource.qrc">
-             <normaloff>:/image/Down.png</normaloff>:/image/Down.png</iconset>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <layout class="QHBoxLayout" name="horizontalLayout"/>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -240,6 +205,9 @@ border: 1px solid #999999;
        <string>Модули</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <property name="spacing">
+        <number>6</number>
+       </property>
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
@@ -253,44 +221,6 @@ border: 1px solid #999999;
           <bool>true</bool>
          </property>
         </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <widget class="QPushButton" name="pbCheck">
-           <property name="maximumSize">
-            <size>
-             <width>120</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Исправен</string>
-           </property>
-           <property name="icon">
-            <iconset resource="resource.qrc">
-             <normaloff>:/image/Down.png</normaloff>:/image/Down.png</iconset>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pbBroken">
-           <property name="maximumSize">
-            <size>
-             <width>120</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Неисправен</string>
-           </property>
-           <property name="icon">
-            <iconset resource="resource.qrc">
-             <normaloff>:/image/Down.png</normaloff>:/image/Down.png</iconset>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -398,45 +328,82 @@ border: 1px solid #999999;
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <property name="topMargin">
-        <number>20</number>
+        <number>6</number>
        </property>
        <item>
-        <widget class="QRadioButton" name="rbNewDevice">
-         <property name="text">
-          <string>Новые</string>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Устройства</string>
          </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_11">
+          <item>
+           <widget class="QRadioButton" name="rbNewDevice">
+            <property name="text">
+             <string>Новые</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rbOldDevice">
+            <property name="text">
+             <string>Неисправные</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="rbOldDevice">
-         <property name="text">
-          <string>Неисправные</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,0,0">
+      <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,0,0,0">
        <property name="bottomMargin">
         <number>20</number>
        </property>
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Результат проверки</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_10">
+          <item>
+           <widget class="QRadioButton" name="rbCheck">
+            <property name="text">
+             <string>Контроль пройден</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/image/Apply24x24.png</normaloff>:/image/Apply24x24.png</iconset>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rbUncheck">
+            <property name="text">
+             <string>Контроль не пройден</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/image/cancel2.png</normaloff>:/image/cancel2.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pbChecked">
+            <property name="text">
+             <string>Проверено</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">

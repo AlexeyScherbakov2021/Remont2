@@ -54,6 +54,15 @@ public:
         return resT;
     }
 
+    virtual T GetItem(QString number)
+    {
+        T resT;
+        auto res = std::find_if(listItems.cbegin(), listItems.cend(), [number] (auto it) { return it.number == number; });
+        if(res != listItems.cend())
+            resT = *res;
+        return resT;
+    }
+
 
     virtual void LoadChild(T &item) = 0;
 

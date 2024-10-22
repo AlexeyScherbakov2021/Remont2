@@ -4,6 +4,7 @@
 #include "repomssql.h"
 
 #include <QDialog>
+#include <QListWidgetItem>
 #include <QQueue>
 
 #include <models/listmodul.h>
@@ -24,25 +25,25 @@ public:
     ~OTKControlWindow();
 
 private slots:
-    void on_pbCheck_clicked();
-    void on_pbBroken_clicked();
+    // void on_pbCheck_clicked();
+    // void on_pbBroken_clicked();
     void on_tbDelCheck_clicked();
     void on_tbDelBroken_clicked();
-    void on_pbCheckProd_clicked();
-    void on_pbBrokenProd_clicked();
+    // void on_pbCheckProd_clicked();
+    // void on_pbBrokenProd_clicked();
     void on_tbDelCheckProd_clicked();
     void on_tbDelBrokenProd_clicked();
     void on_OTKControlWindow_accepted();
-
     void on_rbOldDevice_toggled(bool checked);
+    void slotReadScan(QString s);
+    void on_pbChecked_clicked();
 
 private:
     Ui::OTKControlWindow *ui;
     RepoMSSQL repo;
-    // QList<Modul> listModul;
+    QMetaObject::Connection conn;
     ListModul Modules;
     ListProduct Products;
-    // QList<Product> listProduct;
     QMap<int, Status> listStatus;
     QMap<int, Status> listStatusProd;
 
@@ -50,6 +51,8 @@ private:
     void loadBrockenDevice();
 
     QString scanNumber;
+
+    void ItemCheckedControl(QListWidgetItem *item);
 
     // QWidget interface
 protected:
