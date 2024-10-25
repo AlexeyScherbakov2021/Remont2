@@ -1,5 +1,6 @@
 #include "scan.h"
 #include "ui_scan.h"
+#include <QSettings>
 
 Scan::Scan(QWidget *parent)
     : QDialog(parent)
@@ -11,6 +12,9 @@ Scan::Scan(QWidget *parent)
     Scan::scan.close();
     scanPort();
     connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
+    QSettings setting("HKEY_CURRENT_USER\\Software\\Remont2", QSettings::NativeFormat);
+    QString port = setting.value("COMport").toString();
+    ui->cbCOM->setCurrentText(port);
 
 }
 
@@ -35,6 +39,7 @@ void Scan::on_cbCOM_currentIndexChanged(int /*index*/)
 void Scan::scanPort()
 {
     QSerialPort sp;
+
     for(int i = 1; i < 255; i++)
     {
         QString s = QString("COM%1").arg(i);
@@ -72,6 +77,11 @@ void Scan::on_pbClose_clicked()
 //---------------------------------------------------------------------
 void Scan::on_pbOK_clicked()
 {
+    QSettings setting("HKEY_CURRENT_USER\\Software\\Remont2", QSettings::NativeFormat);
+    // qDebug() << setting.isWritable();
+    // qDebug() << setting.value("COMport").toString();
+    setting.setValue("COMport", ui->cbCOM->currentText());
+    // qDebug() << setting.value("COMport").toString();
     accept();
 }
 

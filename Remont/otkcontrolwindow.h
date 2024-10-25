@@ -25,12 +25,8 @@ public:
     ~OTKControlWindow();
 
 private slots:
-    // void on_pbCheck_clicked();
-    // void on_pbBroken_clicked();
     void on_tbDelCheck_clicked();
     void on_tbDelBroken_clicked();
-    // void on_pbCheckProd_clicked();
-    // void on_pbBrokenProd_clicked();
     void on_tbDelCheckProd_clicked();
     void on_tbDelBrokenProd_clicked();
     void on_OTKControlWindow_accepted();
@@ -46,17 +42,14 @@ private:
     ListProduct Products;
     QMap<int, Status> listStatus;
     QMap<int, Status> listStatusProd;
-
     void loadCreatedDevice();
     void loadBrockenDevice();
-
     QString scanNumber;
-
     void ItemCheckedControl(QListWidgetItem *item);
 
     // QWidget interface
-protected:
-    void keyPressEvent(QKeyEvent *event) override;
+// protected:
+//     void keyPressEvent(QKeyEvent *event) override;
 };
 
 

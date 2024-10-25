@@ -89,11 +89,16 @@ public:
 
     bool getIsRepair() const
     {
+        bool res = false;
         if(listStatus.size() > 0)
-            return listStatus.last().idStatus == Status::FAULTY_ON_OBJECT/*
-                   && listStatus.last().idStatus < Status::CORRECT_OSO*/;
-        else
-            return false;
+        {
+            res = (listStatus.last().idStatus <= Status::FAULTY_ON_OBJECT
+                   || listStatus.last().idStatus >= Status::CORRECT_OSO);
+            qDebug() << res;
+        //     return res;
+        }
+        // else
+        return res;
     }
 
 };

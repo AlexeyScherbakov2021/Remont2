@@ -14,13 +14,17 @@
 #include "endremontwindow.h"
 #include "scan.h"
 
+#include <QSettings>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
-    Scan::scan.open("COM3");
+    QSettings setting("HKEY_CURRENT_USER\\Software\\Remont2", QSettings::NativeFormat);
+    QString port = setting.value("COMport").toString();
+    Scan::scan.open(port);
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 }
 
@@ -276,7 +280,8 @@ void MainWindow::on_aCardDevice_triggered()
 void MainWindow::on_aExchModul_triggered()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    IDevice *dev = win->SelectDevice(false, "", Status::NONE);
+    // win->setTypeSearch(SelectDeviceWindow::MODU);
+    IDevice *dev = win->SelectDevice(false, "", Status::NONE );
     if(dev != nullptr)
     {
         Modul *mod = static_cast<Modul*>(dev);

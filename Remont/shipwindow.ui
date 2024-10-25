@@ -73,7 +73,7 @@ background-color: LightGray;
         <item row="0" column="3">
          <widget class="QToolButton" name="tbAddSetterProd">
           <property name="toolTip">
-           <string>Добавить изделие  нвборе</string>
+           <string>Добавить изделие в выделенный набор</string>
           </property>
           <property name="text">
            <string>в набор</string>
@@ -137,6 +137,9 @@ background-color: LightGray;
         </item>
         <item row="2" column="2">
          <widget class="QToolButton" name="tbAddSetter">
+          <property name="toolTip">
+           <string>Добавить набор</string>
+          </property>
           <property name="text">
            <string>+</string>
           </property>
@@ -148,6 +151,9 @@ background-color: LightGray;
         </item>
         <item row="2" column="3">
          <widget class="QToolButton" name="tbAddSetProd">
+          <property name="toolTip">
+           <string>Добавить набор сразу с изделием</string>
+          </property>
           <property name="text">
            <string>с изделием</string>
           </property>

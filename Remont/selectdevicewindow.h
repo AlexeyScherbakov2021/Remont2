@@ -45,7 +45,7 @@ private:
     Status::Stat status;
     QVector<Status::Stat> listStatus;
     TypeDevice typeDevice;
-    bool isNotShipped = true;
+    bool isNotShipped = false;
 
     // int SearchModul(QString number, int status);
     // int SearchProduct(QString number, int status);

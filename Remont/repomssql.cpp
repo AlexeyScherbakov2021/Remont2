@@ -1579,16 +1579,17 @@ void RepoMSSQL::FindItems(QList<Shipment> &listShip, int /*isFinish*/)
         ship.idOrganization = query.value(11).toInt();
         listShip.push_back(ship);
     }
-
 }
 
+//------------------------------------------------------------------------------------------------------
+// Загрузка организаций
+//------------------------------------------------------------------------------------------------------
 void RepoMSSQL::LoadOrganization(QMap<int, QString> &listOrg)
 {
     QSqlQuery query;
     listOrg.clear();
 
     query.prepare("select id,OrgName from Organization");
-
     query.exec();
     while(query.next())
     {

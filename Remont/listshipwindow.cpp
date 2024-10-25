@@ -32,7 +32,6 @@ ListShipWindow::ListShipWindow(QWidget *parent)
 
     // ui->tableWidget->resizeColumnsToContents();
     ui->tableWidget->resizeRowsToContents();
-
     QApplication::restoreOverrideCursor();
 
 }

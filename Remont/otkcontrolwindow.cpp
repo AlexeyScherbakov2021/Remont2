@@ -24,10 +24,12 @@ OTKControlWindow::~OTKControlWindow()
 }
 
 
+//---------------------------------------------------------------------------------------
+// Загрузка исправных устройств
+//---------------------------------------------------------------------------------------
 void OTKControlWindow::loadCreatedDevice()
 {
     Modules.FindItems("", Status::CREATE);
-    // repo.LoadModulsStatus(listModul, Status::CREATE);
 
     ui->lwModul->clear();
     for(auto &it : Modules.listItems)
@@ -40,7 +42,6 @@ void OTKControlWindow::loadCreatedDevice()
     }
 
     Products.FindItems("", Status::CREATE);
-    // repo.LoadProducts(listProduct, Status::CREATE);
     ui->lwProduct->clear();
     for(auto &it : Products.listItems)
     {
@@ -53,10 +54,12 @@ void OTKControlWindow::loadCreatedDevice()
 }
 
 
+//---------------------------------------------------------------------------------------
+// Загрузка неисправных устройств
+//---------------------------------------------------------------------------------------
 void OTKControlWindow::loadBrockenDevice()
 {
     Modules.FindItems("", Status::FAULTY);
-    // repo.LoadModulsStatus(listModul, Status::FAULTY);
 
     ui->lwModul->clear();
     for(auto &it : Modules.listItems)
@@ -81,75 +84,22 @@ void OTKControlWindow::loadBrockenDevice()
 }
 
 
-void OTKControlWindow::keyPressEvent(QKeyEvent *event)
-{
-    if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return )
-    {
-        if(!scanNumber.isEmpty())
-        {
-
-        }
-
-        scanNumber.clear();
-    }
-    else
-    {
-        scanNumber += event->text();
-    }
-
-}
-
-
-//---------------------------------------------------------------------------------------
-// Кнопка Модуль Проверку прошел
-//---------------------------------------------------------------------------------------
-// void OTKControlWindow::on_pbCheck_clicked()
+// void OTKControlWindow::keyPressEvent(QKeyEvent *event)
 // {
-//     QListWidgetItem *item = ui->lwModul->currentItem();
-//     if(item == nullptr)
-//         return;
-//     QListWidgetItem *item2 = new QListWidgetItem(*item);
-//     int idModul = item->data(Qt::UserRole).toInt();
+//     if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return )
+//     {
+//         if(!scanNumber.isEmpty())
+//         {
 
-//     Status status;
-//     status.idDevice = idModul;
-//     status.idStatus = Status::CORRECT;
-//     status.dateStatus = QDateTime::currentDateTime();
+//         }
 
-//     listStatus[idModul] = status;;
+//         scanNumber.clear();
+//     }
+//     else
+//     {
+//         scanNumber += event->text();
+//     }
 
-//     ui->lwChecked->addItem(item2);
-//     delete item;
-// }
-
-
-//---------------------------------------------------------------------------------------
-// Кнопка Модуль Проверку не прошел
-//---------------------------------------------------------------------------------------
-// void OTKControlWindow::on_pbBroken_clicked()
-// {
-//     QListWidgetItem *item = ui->lwModul->currentItem();
-//     if(item == nullptr)
-//         return;
-
-//     QString comment = QInputDialog::getText(this, "Ввод текста", "Введите комментарий: ");
-
-//     QListWidgetItem *item2 = new QListWidgetItem(*item);
-//     int idModul = item->data(Qt::UserRole).toInt();
-//     auto modul = std::find_if(Modules.listItems.cbegin(), Modules.listItems.cend(), [&] (const Modul p) { return p.id == idModul;});
-//     Modul mod = *modul;
-
-//     Status status;
-//     status.idDevice = idModul;
-//     status.idStatus = Status::FAULTY;
-//     status.Comment = comment;
-//     status.dateStatus = QDateTime::currentDateTime();
-//     listStatus[idModul] = status;;
-//     mod.listStatus.push_back(status);
-//     item2->setText(mod.numAndComment());
-
-//     ui->lwBroken->addItem(item2);
-//     delete item;
 // }
 
 
@@ -195,59 +145,6 @@ void OTKControlWindow::on_tbDelBroken_clicked()
 
 
 //---------------------------------------------------------------------------------------
-// Кнопка Изелие Проверку прошел
-//---------------------------------------------------------------------------------------
-// void OTKControlWindow::on_pbCheckProd_clicked()
-// {
-//     QListWidgetItem *item = ui->lwProduct->currentItem();
-//     if(item == nullptr)
-//         return;
-//     QListWidgetItem *item2 = new QListWidgetItem(*item);
-//     int idProd = item->data(Qt::UserRole).toInt();
-
-//     Status status;
-//     status.idDevice = idProd;
-//     status.idStatus = Status::CORRECT;
-//     status.dateStatus = QDateTime::currentDateTime();
-
-//     listStatusProd[idProd] = status;;
-
-//     ui->lwCheckedProd->addItem(item2);
-//     delete item;
-// }
-
-
-//---------------------------------------------------------------------------------------
-// Кнопка Изелие Проверку не прошел
-//---------------------------------------------------------------------------------------
-// void OTKControlWindow::on_pbBrokenProd_clicked()
-// {
-//     QListWidgetItem *item = ui->lwProduct->currentItem();
-//     if(item == nullptr)
-//         return;
-
-//     QString comment = QInputDialog::getText(this, "Ввод текста", "Введите комментарий: ");
-
-//     QListWidgetItem *item2 = new QListWidgetItem(*item);
-
-//     int idProd = item->data(Qt::UserRole).toInt();
-//     auto prod = std::find_if(Products.listItems.cbegin(), Products.listItems.cend(), [&] (const Product p) { return p.id == idProd;});
-//     Product product = *prod;
-
-//     Status status;
-//     status.idDevice = idProd;
-//     status.Comment = comment;
-//     status.idStatus = Status::FAULTY;
-//     status.dateStatus = QDateTime::currentDateTime();
-//     listStatusProd[idProd] = status;;
-//     product.listStatus.push_back(status);
-//     item2->setText(product.numAndComment());
-//     ui->lwBrokenProd->addItem(item2);
-//     delete item;
-// }
-
-
-//---------------------------------------------------------------------------------------
 // Кнопка Изелие Удалить из списка прошедших проверку
 //---------------------------------------------------------------------------------------
 void OTKControlWindow::on_tbDelCheckProd_clicked()
@@ -286,7 +183,6 @@ void OTKControlWindow::on_tbDelBrokenProd_clicked()
     delete item;
 
 }
-
 
 
 //---------------------------------------------------------------------------------------
@@ -337,15 +233,7 @@ void OTKControlWindow::slotReadScan(QString s)
         {
             QListWidgetItem *item = ui->lwProduct->item(row);
             if(item->data(Qt::UserRole + 1).toString() == s)
-            {
                 ItemCheckedControl(item);
-
-                // status.idDevice = item->data(Qt::UserRole).toInt();
-                // listStatusProd[status.idDevice] = status;
-                // QListWidgetItem *item2 = new QListWidgetItem(*item);
-                // ui->lwCheckedProd->addItem(item2);
-                // delete item;
-            }
         }
     }
     else
@@ -354,17 +242,9 @@ void OTKControlWindow::slotReadScan(QString s)
         {
             QListWidgetItem *item = ui->lwModul->item(row);
             if(item->data(Qt::UserRole + 1).toString() == s)
-            {
                 ItemCheckedControl(item);
-                // status.idDevice = item->data(Qt::UserRole).toInt();
-                // listStatus[status.idDevice] = status;
-                // QListWidgetItem *item2 = new QListWidgetItem(*item);
-                // ui->lwChecked->addItem(item2);
-                // delete item;
-            }
         }
     }
-
 }
 
 
@@ -432,7 +312,6 @@ void OTKControlWindow::ItemCheckedControl(QListWidgetItem *item)
         mod.listStatus.push_back(status);
         delete item;
     }
-
 }
 
 
@@ -446,68 +325,11 @@ void OTKControlWindow::on_pbChecked_clicked()
     {
         QListWidgetItem *item = ui->lwProduct->currentItem();
         ItemCheckedControl(item);
-        // if(item == nullptr)
-        //     return;
-
-        // QListWidgetItem *item2 = new QListWidgetItem(*item);
-        // int idProd = item->data(Qt::UserRole).toInt();
-        // Product product = Products.GetItem(idProd);
-
-        // Status status;
-        // status.idDevice = idProd;
-        // status.dateStatus = QDateTime::currentDateTime();
-
-        // if(ui->rbCheck->isChecked())
-        // {
-        //     status.idStatus = Status::CORRECT;
-        //     ui->lwCheckedProd->addItem(item2);
-        // }
-        // else
-        // {
-        //     QString comment = QInputDialog::getText(this, "Ввод текста", "Введите комментарий: ");
-        //     status.Comment = comment;
-        //     status.idStatus = Status::FAULTY;
-
-        //     item2->setText(product.numAndComment());
-        //     ui->lwBrokenProd->addItem(item2);
-        // }
-
-        // product.listStatus.push_back(status);
-        // listStatusProd[idProd] = status;
-        // delete item;
     }
     else
     {
         QListWidgetItem *item = ui->lwModul->currentItem();
-        // if(item == nullptr)
-        //     return;
         ItemCheckedControl(item);
-
-
-        // QListWidgetItem *item2 = new QListWidgetItem(*item);
-        // int idModul = item->data(Qt::UserRole).toInt();
-        // Modul mod = Modules.GetItem(idModul);
-
-        // Status status;
-        // status.idDevice = idModul;
-        // status.dateStatus = QDateTime::currentDateTime();
-
-        // if(ui->rbCheck->isChecked())
-        // {
-        //     status.idStatus = Status::CORRECT;
-        //     ui->lwChecked->addItem(item2);
-        // }
-        // else
-        // {
-        //     QString comment = QInputDialog::getText(this, "Ввод текста", "Введите комментарий: ");
-        //     status.idStatus = Status::FAULTY;
-        //     status.Comment = comment;
-        //     item2->setText(mod.numAndComment());
-        //     ui->lwBroken->addItem(item2);
-        // }
-        // listStatus[idModul] = status;;
-        // mod.listStatus.push_back(status);
-        // delete item;
     }
 }
 
