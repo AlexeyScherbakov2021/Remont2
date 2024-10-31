@@ -10,7 +10,7 @@ public:
     QString VNFT;
     QString numberDoc;
 
-    explicit Plate () {}
+    explicit Plate ()  {}
 
     // void setKindDevice() override { typeDevice = ev::DeviceKind::PLATE; }
 

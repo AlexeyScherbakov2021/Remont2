@@ -20,7 +20,7 @@ public:
     int garantMonth;
     int typeDevice;
 
-    explicit IDevice() : idParent(0) { }
+    explicit IDevice() : idParent(0), idShipment(0) { }
 // protected:
     // virtual void setKindDevice() = 0;
 };

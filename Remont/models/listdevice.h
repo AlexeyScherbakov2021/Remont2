@@ -32,9 +32,9 @@ public:
     }
 
 
-    void FindItems(const QString &number, int status = 0)
+    void FindItems(const QString &number, int status = 0, bool isFree = false)
     {
-        repo.FindItems(number, listItems, status);
+        repo.FindItems(number, listItems, status, isFree);
     }
 
 

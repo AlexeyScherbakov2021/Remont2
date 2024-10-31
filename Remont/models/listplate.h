@@ -23,7 +23,7 @@ public:
 
     void FindItemsExclude(const QString &number, QList<Plate> &listExclude, int status = 0)
     {
-        ListDevice::FindItems(number, status);
+        ListDevice::FindItems(number, status, true);
 
         for(auto it : listExclude)
         {

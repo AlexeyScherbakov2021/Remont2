@@ -804,7 +804,7 @@ void RepoMSSQL::LoadProductType(QMap<int, ProductType> &listTypeProduct)
 //------------------------------------------------------------------------------------------------------
 // Поиск списка плат по номеру
 //------------------------------------------------------------------------------------------------------
-void RepoMSSQL::FindItems(const QString &number, QList<Plate> &listPlate, int /*status*/, bool /*isFree*/)
+void RepoMSSQL::FindItems(const QString &number, QList<Plate> &listPlate, int /*status*/, bool isFree)
 {
     QSqlQuery query;
     listPlate.clear();
@@ -812,8 +812,13 @@ void RepoMSSQL::FindItems(const QString &number, QList<Plate> &listPlate, int /*
     // if(number.isEmpty())
     //     return FindItems(listPlate, status);
 
-    query.prepare("select id,CreateDate,Number,NumberFW,NumberDoc,VNFT "
+    if(isFree)
+        query.prepare("select id,CreateDate,Number,NumberFW,NumberDoc,VNFT,idModul "
                   "from Plate where Number like :Number and idModul is null");
+    else
+        query.prepare("select id,CreateDate,Number,NumberFW,NumberDoc,VNFT,idModul "
+                      "from Plate where Number like :Number");
+
 
     query.bindValue(":Number", QString("%%1%").arg(number));
 
@@ -827,13 +832,14 @@ void RepoMSSQL::FindItems(const QString &number, QList<Plate> &listPlate, int /*
         plate.number2 = query.value(3).toString();
         plate.numberDoc = query.value(4).toString();
         plate.VNFT = query.value(5).toString();
+        plate.idParent = query.value(6).toInt();
         listPlate.push_back(plate);
     }
 }
 
-void RepoMSSQL::FindItems(const QString &/*number*/, QList<Shipment> &listShip, int status)
+void RepoMSSQL::FindItems(const QString &/*number*/, QList<Shipment> &listShip, int status, bool isFree)
 {
-    return FindItems(listShip, status);
+    return FindItems(listShip, status, isFree);
 }
 
 //------------------------------------------------------------------------------------------------------
@@ -1552,7 +1558,7 @@ bool RepoMSSQL::DelLastStatus(Product &product)
 //------------------------------------------------------------------------------------------------------
 // Загрузка списка отгрузок
 //------------------------------------------------------------------------------------------------------
-void RepoMSSQL::FindItems(QList<Shipment> &listShip, int /*isFinish*/)
+void RepoMSSQL::FindItems(QList<Shipment> &listShip, int /*isFinish*/, bool)
 {
     listShip.clear();
     QSqlQuery query;

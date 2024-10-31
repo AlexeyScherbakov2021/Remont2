@@ -25,7 +25,7 @@ private:
     void FindItems(QList<Product> &listProduct, int status = 0, bool isFree = false);
     void FindItems(QList<Modul> &listModul, int status = 0, bool isFree = false);
     // void FindItems(QList<Plate> &listPlate, int status = 0);
-    void FindItems(QList<Shipment> &listShip, int status = 0);
+    void FindItems(QList<Shipment> &listShip, int status = 0, bool isFree = false);
 
 public:
     RepoMSSQL();
@@ -63,7 +63,7 @@ public:
     void FindItems(const QString &number, QList<Product> &listProduct, int status = 0, bool isFree = false);
     void FindItems(const QString &number, QList<Modul> &listModul, int status = 0, bool isFree = false);
     void FindItems(const QString &number, QList<Plate> &listPlate, int status = 0, bool isFree = false);
-    void FindItems(const QString &number, QList<Shipment> &listShip, int status = 0);
+    void FindItems(const QString &number, QList<Shipment> &listShip, int status = 0, bool isFree = false);
 
     // void LoadProductType(QMap<int, QString> &listTypeProduct);
     void LoadProductType(QMap<int, ProductType> &listTypeProduct);

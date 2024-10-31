@@ -29,6 +29,7 @@ SOURCES += \
     models/listsetter.cpp \
     models/listshipment.cpp \
     otkcontrolwindow.cpp \
+    platelistwindow.cpp \
     platewindow.cpp \
     remontwindow.cpp \
     repomssql.cpp \
@@ -71,6 +72,7 @@ HEADERS += \
     models/setterout.h \
     models/shipment.h \
     otkcontrolwindow.h \
+    platelistwindow.h \
     platewindow.h \
     remontwindow.h \
     repomssql.h \
@@ -91,6 +93,7 @@ FORMS += \
     listshipwindow.ui \
     mainwindow.ui \
     otkcontrolwindow.ui \
+    platelistwindow.ui \
     platewindow.ui \
     remontwindow.ui \
     scan.ui \

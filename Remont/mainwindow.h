@@ -51,6 +51,8 @@ private slots:
     void on_aScaner_triggered();
     void slotReadScan(QString s);
 
+    void on_aListPlate_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;

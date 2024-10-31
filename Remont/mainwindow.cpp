@@ -13,6 +13,7 @@
 #include "remontwindow.h"
 #include "endremontwindow.h"
 #include "scan.h"
+#include "platelistwindow.h"
 
 #include <QSettings>
 
@@ -331,6 +332,14 @@ void MainWindow::slotReadScan(QString s)
         winCard = new CardProdWindow(dev, this);
         winCard->show();
     }
+
+}
+
+
+void MainWindow::on_aListPlate_triggered()
+{
+    PlateListWindow *win = new PlateListWindow(this);
+    win->exec();
 
 }
 
