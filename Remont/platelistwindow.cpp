@@ -1,12 +1,21 @@
 #include "platelistwindow.h"
 #include "ui_platelistwindow.h"
 
+#include <qmessagebox.h>
+
 PlateListWindow::PlateListWindow(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::PlateListWindow)
 {
     ui->setupUi(this);
+    RepoMSSQL repo;
+    repo.LoadTypePlate(listType);
+    for(auto &it : listType)
+        listPlateType.insert(it.id, it.VNFT);
+
     listPlate.FindItems("");
+    LinkTypePlate();
+
     UpdateForm();
 
 }
@@ -22,6 +31,7 @@ PlateListWindow::~PlateListWindow()
 void PlateListWindow::on_tbSearch_clicked()
 {
     listPlate.FindItems(ui->leSearch->text());
+    LinkTypePlate();
     UpdateForm();
 }
 
@@ -67,5 +77,52 @@ void PlateListWindow::UpdateForm()
     }
     ui->twPlates->resizeColumnsToContents();
     ui->twPlates->resizeRowsToContents();
+}
+
+
+//---------------------------------------------------------------------------------------
+// Привязка строки ВНФТ
+//---------------------------------------------------------------------------------------
+void PlateListWindow::LinkTypePlate()
+{
+    for(auto &it : listPlate.listItems)
+    {
+        if(it.idType > 0)
+        {
+            QString VNFT = listPlateType.value(it.idType);
+            it.VNFT = VNFT;
+        }
+    }
+
+}
+
+
+//---------------------------------------------------------------------------------------
+// Удаление выделенной строки
+//---------------------------------------------------------------------------------------
+void PlateListWindow::on_pbDelete_clicked()
+{
+    int row = ui->twPlates->currentRow();
+    if(row < 0)
+        return;
+
+    if(listPlate.listItems[row].idParent > 0)
+    {
+        QMessageBox::critical(this, "Ошибка", "Плата используется в модуле. Удалить нельзя.");
+        return;
+    }
+
+
+    if(QMessageBox::warning(this, "Предупреждение",
+                             QString("Удалить \"%1\"").arg(listPlate.listItems[row].number), QMessageBox::No | QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+    {
+        RepoMSSQL repo;
+        if(repo.DeletePlate(listPlate.listItems[row].id))
+        {
+            listPlate.listItems.removeAt(row);
+            ui->twPlates->removeRow(row);
+        }
+    }
+
 }
 

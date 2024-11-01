@@ -4,12 +4,25 @@
 
 #include <QMessageBox>
 
+#include <models/platetype.h>
+
 PlateWindow::PlateWindow(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::PlateWindow)
 {
     ui->setupUi(this);
     ui->deCreateDate->setDateTime(QDateTime::currentDateTime());
+
+    // model.setQuery("select pt_VNFT,pt_name from PlateType");
+    // ui->cbVNFT->setModel(&model);
+    QVector<PlateType> listVNFT;
+
+    repo.LoadTypePlate(listVNFT);
+
+    for(auto const &it : listVNFT)
+    {
+        ui->cbVNFT->addItem(it.VNFT + " " + it.name, it.id);
+    }
 
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
@@ -33,7 +46,7 @@ void PlateWindow::on_pbAdd_clicked()
     plate.number = ui->leNumber->text();
     plate.number2 = ui->leNumberFW->text();
     plate.numberDoc = ui->leNumberDoc->text();
-    plate.VNFT = ui->leVNFT->text();
+    plate.idType = ui->cbVNFT->currentData().toInt();
 
     if(!repo.AddItem(plate))
     {

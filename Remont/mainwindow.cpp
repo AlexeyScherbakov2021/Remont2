@@ -14,6 +14,7 @@
 #include "endremontwindow.h"
 #include "scan.h"
 #include "platelistwindow.h"
+#include "platevnftwindow.h"
 
 #include <QSettings>
 
@@ -336,10 +337,23 @@ void MainWindow::slotReadScan(QString s)
 }
 
 
+//----------------------------------------------------------------------------------------------
+// Список плат
+//----------------------------------------------------------------------------------------------
 void MainWindow::on_aListPlate_triggered()
 {
     PlateListWindow *win = new PlateListWindow(this);
     win->exec();
 
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Справочник плат ВНФТ
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aPlateVNFT_triggered()
+{
+    PlateVNFTWindow *win = new PlateVNFTWindow(this);
+    win->exec();
 }
 

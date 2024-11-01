@@ -4,8 +4,10 @@
 #include "repomssql.h"
 
 #include <QDialog>
+#include <qsqlquerymodel.h>
 
-#include <models/plate.h>
+#include <models/listplate.h>
+// #include <models/plate.h>
 
 namespace Ui {
 class PlateWindow;
@@ -32,6 +34,7 @@ private:
     Ui::PlateWindow *ui;
     RepoMSSQL repo;
     QMetaObject::Connection conn;
+    // QSqlQueryModel model;
 
 private slots:
     void slotReadScan(QString s);

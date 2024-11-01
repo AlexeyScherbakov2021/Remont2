@@ -53,6 +53,8 @@ private slots:
 
     void on_aListPlate_triggered();
 
+    void on_aPlateVNFT_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;

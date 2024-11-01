@@ -211,6 +211,7 @@ background-color: LightGray;
     <addaction name="aRegPlate"/>
     <addaction name="aListFreePlate"/>
     <addaction name="aListPlate"/>
+    <addaction name="aPlateVNFT"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -390,6 +391,11 @@ background-color: LightGray;
    </property>
    <property name="text">
     <string>Сканер штрих-кода</string>
+   </property>
+  </action>
+  <action name="aPlateVNFT">
+   <property name="text">
+    <string>Справочник ВНФТ плат</string>
    </property>
   </action>
  </widget>

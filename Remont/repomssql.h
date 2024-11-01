@@ -17,6 +17,7 @@ class Claim;
 class ProductType;
 class ModulType;
 class Remont;
+class PlateType;
 
 class RepoMSSQL
 {
@@ -108,6 +109,7 @@ public:
     void LoadRemont(QList<Remont> &list, int idParent, ev::DeviceKind kindDevice);
     Remont GetCurrentRemont(int id, ev::DeviceKind kindDevice);
 
+    void LoadTypePlate(QVector<PlateType> &listType);
 };
 
 #endif

@@ -30,6 +30,7 @@ SOURCES += \
     models/listshipment.cpp \
     otkcontrolwindow.cpp \
     platelistwindow.cpp \
+    platevnftwindow.cpp \
     platewindow.cpp \
     remontwindow.cpp \
     repomssql.cpp \
@@ -66,6 +67,7 @@ HEADERS += \
     models/modul.h \
     models/modultype.h \
     models/plate.h \
+    models/platetype.h \
     models/prodtype.h \
     models/product.h \
     models/remont.h \
@@ -73,6 +75,7 @@ HEADERS += \
     models/shipment.h \
     otkcontrolwindow.h \
     platelistwindow.h \
+    platevnftwindow.h \
     platewindow.h \
     remontwindow.h \
     repomssql.h \
@@ -94,6 +97,7 @@ FORMS += \
     mainwindow.ui \
     otkcontrolwindow.ui \
     platelistwindow.ui \
+    platevnftwindow.ui \
     platewindow.ui \
     remontwindow.ui \
     scan.ui \

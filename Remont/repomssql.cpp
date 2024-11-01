@@ -8,6 +8,7 @@
 #include <models/prodtype.h>
 #include <models/modultype.h>
 #include <models/remont.h>
+#include <models/platetype.h>
 #include <QMessageBox>
 #include <QSqlRecord>
 #include "repomssql.h"
@@ -135,14 +136,15 @@ bool RepoMSSQL::AddItem(Plate &plate)
     bool res;
     QSqlQuery query;
 
-    query.prepare("insert into Plate (CreateDate,Number,NumberFW,NumberDoc,VNFT) "
-                  "output inserted.id values(:CreateDate,:Number,:NumberFW,:NumberDoc,:VNFT)");
+    query.prepare("insert into Plate (CreateDate,Number,NumberFW,NumberDoc,idPlateType) "
+                  "output inserted.id values(:CreateDate,:Number,:NumberFW,:NumberDoc,:idPlateType)");
 
     query.bindValue(":CreateDate", plate.dateRegister);
     query.bindValue(":Number", plate.number);
     query.bindValue(":NumberFW", plate.number2);
     query.bindValue(":NumberDoc", plate.numberDoc);
-    query.bindValue(":VNFT", plate.VNFT);
+    // query.bindValue(":VNFT", plate.VNFT);
+    query.bindValue(":idPlateType", plate.idType);
 
     res = query.exec();
 
@@ -233,9 +235,29 @@ bool RepoMSSQL::UpdateItem(Modul &modul)
     return res;
 }
 
-bool RepoMSSQL::UpdateItem(Plate &/*plate*/)
+bool RepoMSSQL::UpdateItem(Plate &plate)
 {
-    return true;
+    bool res;
+    QSqlQuery query;
+
+    query.prepare("update Plate set CreateDate=:CreateDate,Number=:Number,NumberFW=:NumberFW,NumberDoc=:NumberDoc,"
+                  "idPlateType=:idPlateType "
+                  "where id=:id");
+
+    QVariant var = plate.idType > 0 ? plate.idType : QVariant();
+    query.bindValue(":idPlateType", var);
+    query.bindValue(":CreateDate", plate.dateRegister);
+    query.bindValue(":Number", plate.number);
+    query.bindValue(":NumberFW", plate.number2);
+    query.bindValue(":NumberDoc", plate.numberDoc);
+    // query.bindValue(":VNFT", plate.VNFT);
+    query.bindValue(":id", plate.id);
+
+    res = query.exec();
+    if(!res)
+        qDebug() << "Ошибка при изменении записи в Plate";
+
+    return res;
 }
 
 //------------------------------------------------------------------------------------------------------
@@ -813,10 +835,10 @@ void RepoMSSQL::FindItems(const QString &number, QList<Plate> &listPlate, int /*
     //     return FindItems(listPlate, status);
 
     if(isFree)
-        query.prepare("select id,CreateDate,Number,NumberFW,NumberDoc,VNFT,idModul "
+        query.prepare("select id,CreateDate,Number,NumberFW,NumberDoc,idModul,idPlateType "
                   "from Plate where Number like :Number and idModul is null");
     else
-        query.prepare("select id,CreateDate,Number,NumberFW,NumberDoc,VNFT,idModul "
+        query.prepare("select id,CreateDate,Number,NumberFW,NumberDoc,idModul,idPlateType "
                       "from Plate where Number like :Number");
 
 
@@ -831,8 +853,9 @@ void RepoMSSQL::FindItems(const QString &number, QList<Plate> &listPlate, int /*
         plate.number = query.value(2).toString();
         plate.number2 = query.value(3).toString();
         plate.numberDoc = query.value(4).toString();
-        plate.VNFT = query.value(5).toString();
-        plate.idParent = query.value(6).toInt();
+        // plate.VNFT = query.value(5).toString();
+        plate.idParent = query.value(5).toInt();
+        plate.idType = query.value(6).toInt();
         listPlate.push_back(plate);
     }
 }
@@ -2256,5 +2279,29 @@ Remont RepoMSSQL::GetCurrentRemont(int idParent, ev::DeviceKind kindDevice)
         rem.endDate = query.value(8).toDateTime();
     }
     return rem;
+}
+
+
+
+//------------------------------------------------------------------------------------------------------
+// Загрузка типа плат
+//------------------------------------------------------------------------------------------------------
+void RepoMSSQL::LoadTypePlate(QVector<PlateType> &listType)
+{
+    listType.clear();
+
+    QSqlQuery query;
+    query.prepare("select id,pt_name,pt_vnft from PlateType");
+
+    query.exec();
+    while(query.next())
+    {
+        PlateType pt;
+        pt.id =query.value(0).toInt();
+        pt.name = query.value(1).toString();
+        pt.VNFT = query.value(2).toString();
+        listType.push_back(pt);
+    }
+
 }
 
