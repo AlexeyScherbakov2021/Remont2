@@ -2,6 +2,7 @@
 #define PLATELISTWINDOW_H
 
 #include <QDialog>
+#include <qtablewidget.h>
 
 #include <models/listplate.h>
 #include <models/platetype.h>
@@ -18,19 +19,32 @@ public:
     explicit PlateListWindow(QWidget *parent = nullptr);
     ~PlateListWindow();
 
+    Plate SelectPlate(QString number = "");
+    void setSelect();
+    void setNotLinked();
+    void RemoveListPlate(QList<Plate> &listExclude);
+
 private slots:
     void on_tbSearch_clicked();
-
     void on_pbDelete_clicked();
+    void on_rbNotLink_clicked();
+    void on_rbAll_clicked();
+    void on_pbSelect_clicked();
+    void on_twPlates_itemDoubleClicked(QTableWidgetItem *item);
 
 private:
     Ui::PlateListWindow *ui;
+    bool isSelectPlate = false;
+    bool isNotLinked = false;
     ListPlate listPlate;
     QVector<PlateType> listType;
+    QList<Plate> *listExcludePlate = nullptr;
     QMap<int, QString> listPlateType;
+    Plate selectPlate;
 
     void UpdateForm();
     void LinkTypePlate();
+
 };
 
 #endif // PLATELISTWINDOW_H

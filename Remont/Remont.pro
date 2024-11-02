@@ -29,6 +29,7 @@ SOURCES += \
     models/listsetter.cpp \
     models/listshipment.cpp \
     otkcontrolwindow.cpp \
+    platefwwindow.cpp \
     platelistwindow.cpp \
     platevnftwindow.cpp \
     platewindow.cpp \
@@ -36,7 +37,6 @@ SOURCES += \
     repomssql.cpp \
     scan.cpp \
     selectdevicewindow.cpp \
-    selectplatewindow.cpp \
     shipwindow.cpp \
     startworkwindow.cpp
 
@@ -74,6 +74,7 @@ HEADERS += \
     models/setterout.h \
     models/shipment.h \
     otkcontrolwindow.h \
+    platefwwindow.h \
     platelistwindow.h \
     platevnftwindow.h \
     platewindow.h \
@@ -81,7 +82,6 @@ HEADERS += \
     repomssql.h \
     scan.h \
     selectdevicewindow.h \
-    selectplatewindow.h \
     shipwindow.h \
     startworkwindow.h
 
@@ -96,13 +96,13 @@ FORMS += \
     listshipwindow.ui \
     mainwindow.ui \
     otkcontrolwindow.ui \
+    platefwwindow.ui \
     platelistwindow.ui \
     platevnftwindow.ui \
     platewindow.ui \
     remontwindow.ui \
     scan.ui \
     selectdevicewindow.ui \
-    selectplatewindow.ui \
     shipwindow.ui \
     startworkwindow.ui
 

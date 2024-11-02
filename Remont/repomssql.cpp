@@ -1581,7 +1581,7 @@ bool RepoMSSQL::DelLastStatus(Product &product)
 //------------------------------------------------------------------------------------------------------
 // Загрузка списка отгрузок
 //------------------------------------------------------------------------------------------------------
-void RepoMSSQL::FindItems(QList<Shipment> &listShip, int /*isFinish*/, bool)
+void RepoMSSQL::FindItems(QList<Shipment> &listShip, int /*isFinish*/, bool )
 {
     listShip.clear();
     QSqlQuery query;

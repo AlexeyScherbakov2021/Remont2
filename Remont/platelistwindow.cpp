@@ -13,16 +13,68 @@ PlateListWindow::PlateListWindow(QWidget *parent)
     for(auto &it : listType)
         listPlateType.insert(it.id, it.VNFT);
 
-    listPlate.FindItems("");
-    LinkTypePlate();
-
-    UpdateForm();
+    // on_rbNotLink_clicked();
 
 }
 
 PlateListWindow::~PlateListWindow()
 {
     delete ui;
+}
+
+Plate PlateListWindow::SelectPlate(QString number)
+{
+    Plate plate;
+
+    ui->leSearch->setText(number);
+
+    if(listExcludePlate == nullptr)
+    {
+        if(isNotLinked)
+            on_rbNotLink_clicked();
+        else
+            on_rbAll_clicked();
+        // listPlate.FindItems(number);
+    }
+    else
+        listPlate.FindItemsExclude(number, *listExcludePlate);
+
+    LinkTypePlate();
+
+    if(!number.isEmpty() && listPlate.listItems.size() == 1)
+    {
+        return listPlate.listItems[0];
+    }
+
+    UpdateForm();
+
+    if(exec() == QDialog::Accepted)
+    {
+        return selectPlate;
+        // int row = ui->twPlates->currentRow();
+        // if(row >= 0)
+        // {
+        //     int id = ui->twPlates->item(row, 0)->data(Qt::UserRole).toInt();
+        //     plate = listPlate.GetItem(id);
+        // }
+    }
+
+    return plate;
+}
+
+void PlateListWindow::setSelect()
+{
+    isSelectPlate = true;
+}
+
+void PlateListWindow::setNotLinked()
+{
+    isNotLinked = true;
+}
+
+void PlateListWindow::RemoveListPlate(QList<Plate> &listExclude)
+{
+    listExcludePlate = &listExclude;
 }
 
 //---------------------------------------------------------------------------------------
@@ -40,12 +92,21 @@ void PlateListWindow::on_tbSearch_clicked()
 //---------------------------------------------------------------------------------------
 void PlateListWindow::UpdateForm()
 {
-    ui->twPlates->setRowCount(listPlate.listItems.size());
+    ui->pbSelect->setVisible(isSelectPlate);
+    ui->pbDelete->setVisible(!isSelectPlate);
+    ui->rbAll->setVisible(!isNotLinked);
+    ui->rbNotLink->setVisible(!isNotLinked);
 
-    int row;
-    for(auto it : listPlate.listItems)
+
+    ui->twPlates->setRowCount(listPlate.listItems.size());
+    // ui->twPlates->setRowCount(10);
+
+    int row = 0;
+
+    for(auto &it : listPlate.listItems)
     {
         QTableWidgetItem *item = new QTableWidgetItem(it.number);
+        item->setData(Qt::UserRole, it.id);
         item->setFlags(item->flags() & ~Qt::ItemIsEditable);
         ui->twPlates->setItem(row, 0, item);
 
@@ -66,17 +127,15 @@ void PlateListWindow::UpdateForm()
         ui->twPlates->setItem(row, 4, item);
 
         item = new QTableWidgetItem();
-        // item->setText(QString::number(it.idParent));
         item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-        item->setTextAlignment(Qt::AlignCenter);
         if(it.idParent > 0)
             item->setIcon(QIcon("://image/Apply24x24.png"));
         ui->twPlates->setItem(row, 5, item);
 
         ++row;
     }
-    ui->twPlates->resizeColumnsToContents();
-    ui->twPlates->resizeRowsToContents();
+    // ui->twPlates->resizeColumnsToContents();
+    // ui->twPlates->resizeRowsToContents();
 }
 
 
@@ -93,7 +152,6 @@ void PlateListWindow::LinkTypePlate()
             it.VNFT = VNFT;
         }
     }
-
 }
 
 
@@ -123,6 +181,52 @@ void PlateListWindow::on_pbDelete_clicked()
             ui->twPlates->removeRow(row);
         }
     }
+
+}
+
+
+//---------------------------------------------------------------------------------------
+// Выбор непривязанных плат
+//---------------------------------------------------------------------------------------
+void PlateListWindow::on_rbNotLink_clicked()
+{
+    listPlate.FindItems("", 0, true);
+    LinkTypePlate();
+    UpdateForm();
+}
+
+
+//---------------------------------------------------------------------------------------
+// Выбор всех плат
+//---------------------------------------------------------------------------------------
+void PlateListWindow::on_rbAll_clicked()
+{
+    listPlate.FindItems("");
+    LinkTypePlate();
+    UpdateForm();
+}
+
+
+void PlateListWindow::on_pbSelect_clicked()
+{
+    int row = ui->twPlates->currentRow();
+    if(row >= 0)
+    {
+        on_twPlates_itemDoubleClicked(ui->twPlates->item(row, 0));
+        // int id = ui->twPlates->item(row, 0)->data(Qt::UserRole).toInt();
+        // selectPlate = listPlate.GetItem(id);
+        // accept();
+    }
+}
+
+
+void PlateListWindow::on_twPlates_itemDoubleClicked(QTableWidgetItem *item)
+{
+    if(!isSelectPlate)
+        return;
+    int id = ui->twPlates->item(item->row(), 0)->data(Qt::UserRole).toInt();
+    selectPlate = listPlate.GetItem(id);
+    accept();
 
 }
 

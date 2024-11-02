@@ -115,6 +115,9 @@
           <property name="minimumContentsLength">
            <number>0</number>
           </property>
+          <property name="frame">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>

@@ -209,8 +209,8 @@ background-color: LightGray;
      <string>Платы</string>
     </property>
     <addaction name="aRegPlate"/>
-    <addaction name="aListFreePlate"/>
     <addaction name="aListPlate"/>
+    <addaction name="aReplaceFW"/>
     <addaction name="aPlateVNFT"/>
    </widget>
    <widget class="QMenu" name="menu_2">
@@ -272,7 +272,7 @@ background-color: LightGray;
   </action>
   <action name="aListPlate">
    <property name="text">
-    <string>Список всех</string>
+    <string>Зарегестрированные платы</string>
    </property>
   </action>
   <action name="aRegDevice">
@@ -396,6 +396,11 @@ background-color: LightGray;
   <action name="aPlateVNFT">
    <property name="text">
     <string>Справочник ВНФТ плат</string>
+   </property>
+  </action>
+  <action name="aReplaceFW">
+   <property name="text">
+    <string>Замена прошивки</string>
    </property>
   </action>
  </widget>

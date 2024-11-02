@@ -32,10 +32,10 @@ PlateVNFTWindow::~PlateVNFTWindow()
 //------------------------------------------------------------------------------------------------
 // Изменение ячейки
 //------------------------------------------------------------------------------------------------
-void PlateVNFTWindow::on_twVNFT_itemChanged(QTableWidgetItem *item)
-{
+// void PlateVNFTWindow::on_twVNFT_itemChanged(QTableWidgetItem *item)
+// {
 
-}
+// }
 
 
 //------------------------------------------------------------------------------------------------
@@ -59,7 +59,6 @@ void PlateVNFTWindow::on_tbDelete_clicked()
     QModelIndex index = ui->tableView->currentIndex();
     model2.removeRow(index.row());
 }
-
 
 void PlateVNFTWindow::on_pbSave_clicked()
 {

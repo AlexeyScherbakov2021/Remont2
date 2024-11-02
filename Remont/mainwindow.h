@@ -55,6 +55,8 @@ private slots:
 
     void on_aPlateVNFT_triggered();
 
+    void on_aReplaceFW_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;

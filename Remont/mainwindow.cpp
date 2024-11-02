@@ -15,6 +15,7 @@
 #include "scan.h"
 #include "platelistwindow.h"
 #include "platevnftwindow.h"
+#include "platefwwindow.h"
 
 #include <QSettings>
 
@@ -343,7 +344,8 @@ void MainWindow::slotReadScan(QString s)
 void MainWindow::on_aListPlate_triggered()
 {
     PlateListWindow *win = new PlateListWindow(this);
-    win->exec();
+    win->SelectPlate();
+    // win->exec();
 
 }
 
@@ -354,6 +356,16 @@ void MainWindow::on_aListPlate_triggered()
 void MainWindow::on_aPlateVNFT_triggered()
 {
     PlateVNFTWindow *win = new PlateVNFTWindow(this);
+    win->exec();
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Замена прошивки
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aReplaceFW_triggered()
+{
+    PlateFWWindow *win = new PlateFWWindow(this);
     win->exec();
 }
 

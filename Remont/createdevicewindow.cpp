@@ -1,6 +1,7 @@
 #include "createdevicewindow.h"
+#include "platelistwindow.h"
 #include "scan.h"
-#include "selectplatewindow.h"
+// #include "selectplatewindow.h"
 #include "ui_createdevicewindow.h"
 
 // #include <models/listmodul.h>
@@ -64,28 +65,35 @@ void CreateDeviceWindow::on_tbDeleteModul_clicked()
 void CreateDeviceWindow::on_tbSearchPlate_clicked()
 {
     QString s = ui->leSearchPlate->text();
-    ListPlate listPlate;
 
-    // Убрать уже добавленные платы
-    listPlate.FindItemsExclude(s, listAddingPlate);
 
-    if(listPlate.listItems.size() == 0)
-        return;
+    PlateListWindow *selPlate = new PlateListWindow(this);
+    selPlate->setSelect();
+    selPlate->setNotLinked();
+    selPlate->RemoveListPlate(listAddingPlate);
+    Plate plate = selPlate->SelectPlate(s);
 
-    int currentIndex = 0;
 
-    // if(listPlate.listItems.size() > 1)
-    // {
-        SelectPlateWindow win(listPlate.listItems, this);
-        if(win.exec() == QDialog::Accepted)
-            currentIndex = win.selectedIndex;
-        else
-            return;
-    // }
+    // ListPlate listPlate;
 
-    Plate plate = listPlate.listItems.at(currentIndex);
+    // // Убрать уже добавленные платы
+    // listPlate.FindItemsExclude(s, listAddingPlate);
 
-    AddPlateToScreen(plate);
+    // if(listPlate.listItems.size() == 0)
+    //     return;
+
+    // int currentIndex = 0;
+
+    //     SelectPlateWindow win(listPlate.listItems, this);
+    //     if(win.exec() == QDialog::Accepted)
+    //         currentIndex = win.selectedIndex;
+    //     else
+    //         return;
+
+    // Plate plate = listPlate.listItems.at(currentIndex);
+
+    if(plate.id > 0)
+        AddPlateToScreen(plate);
 
     // listAddingPlate.push_back(plate);
 

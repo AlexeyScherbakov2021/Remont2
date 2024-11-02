@@ -23,10 +23,11 @@ void ListPlate::LoadChild(Plate &/*plate*/)
 }
 
 
-Plate ListPlate::GetItem(int /*id*/)
+Plate ListPlate::GetItem(int id)
 {
-    Plate plate;
-    return plate;
+    // Plate plate;
+    auto plate_it = std::find_if(listItems.cbegin(), listItems.cend(), [id](const Plate &plate) { return plate.id == id;});
+    return *plate_it;
 }
 
 
