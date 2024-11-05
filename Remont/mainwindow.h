@@ -50,11 +50,8 @@ private slots:
     void on_aExchModul_triggered();
     void on_aScaner_triggered();
     void slotReadScan(QString s);
-
     void on_aListPlate_triggered();
-
     void on_aPlateVNFT_triggered();
-
     void on_aReplaceFW_triggered();
 
 private:

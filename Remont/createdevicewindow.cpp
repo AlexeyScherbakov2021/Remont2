@@ -66,40 +66,22 @@ void CreateDeviceWindow::on_tbSearchPlate_clicked()
 {
     QString s = ui->leSearchPlate->text();
 
-
     PlateListWindow *selPlate = new PlateListWindow(this);
     selPlate->setSelect();
     selPlate->setNotLinked();
     selPlate->RemoveListPlate(listAddingPlate);
-    Plate plate = selPlate->SelectPlate(s);
+    selPlate->SelectPlate(s);
 
+    for(auto &it : selPlate->selectedPlates)
+    {
+        AddPlateToScreen(it);
+    }
 
-    // ListPlate listPlate;
+    // Plate plate = selPlate->SelectPlate(s);
 
-    // // Убрать уже добавленные платы
-    // listPlate.FindItemsExclude(s, listAddingPlate);
+    // if(plate.id > 0)
+    //     AddPlateToScreen(plate);
 
-    // if(listPlate.listItems.size() == 0)
-    //     return;
-
-    // int currentIndex = 0;
-
-    //     SelectPlateWindow win(listPlate.listItems, this);
-    //     if(win.exec() == QDialog::Accepted)
-    //         currentIndex = win.selectedIndex;
-    //     else
-    //         return;
-
-    // Plate plate = listPlate.listItems.at(currentIndex);
-
-    if(plate.id > 0)
-        AddPlateToScreen(plate);
-
-    // listAddingPlate.push_back(plate);
-
-    // addLinePlate(&plate);
-    // ui->twPlates->resizeColumnsToContents();
-    // ui->twPlates->resizeRowsToContents();
 }
 
 

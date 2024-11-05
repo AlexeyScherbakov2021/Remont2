@@ -24,6 +24,8 @@ public:
     void setNotLinked();
     void RemoveListPlate(QList<Plate> &listExclude);
 
+    QList<Plate> selectedPlates;
+
 private slots:
     void on_tbSearch_clicked();
     void on_pbDelete_clicked();

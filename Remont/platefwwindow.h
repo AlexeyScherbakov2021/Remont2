@@ -19,16 +19,16 @@ public:
 
 private slots:
     void on_tbSearch_clicked();
-
     void on_pbApply_clicked();
-
     void on_pbOK_clicked();
-
     void on_tbDelete_clicked();
+    void slotReadScan(QString s);
 
 private:
     Ui::PlateFWWindow *ui;
     ListPlate listPlate;
+    QMetaObject::Connection conn;
+
 };
 
 #endif // PLATEFWWINDOW_H

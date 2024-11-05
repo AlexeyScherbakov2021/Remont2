@@ -34,7 +34,6 @@ Plate PlateListWindow::SelectPlate(QString number)
             on_rbNotLink_clicked();
         else
             on_rbAll_clicked();
-        // listPlate.FindItems(number);
     }
     else
         listPlate.FindItemsExclude(number, *listExcludePlate);
@@ -45,6 +44,10 @@ Plate PlateListWindow::SelectPlate(QString number)
     {
         return listPlate.listItems[0];
     }
+
+    if(isSelectPlate && !number.isEmpty())
+        return plate;
+
 
     UpdateForm();
 
@@ -134,8 +137,8 @@ void PlateListWindow::UpdateForm()
 
         ++row;
     }
-    // ui->twPlates->resizeColumnsToContents();
-    // ui->twPlates->resizeRowsToContents();
+    ui->twPlates->resizeColumnsToContents();
+    ui->twPlates->resizeRowsToContents();
 }
 
 
@@ -209,14 +212,36 @@ void PlateListWindow::on_rbAll_clicked()
 
 void PlateListWindow::on_pbSelect_clicked()
 {
-    int row = ui->twPlates->currentRow();
-    if(row >= 0)
+    QList<QTableWidgetSelectionRange> items = ui->twPlates->selectedRanges();
+
+    if(items.size() > 0)
     {
-        on_twPlates_itemDoubleClicked(ui->twPlates->item(row, 0));
-        // int id = ui->twPlates->item(row, 0)->data(Qt::UserRole).toInt();
-        // selectPlate = listPlate.GetItem(id);
-        // accept();
+
+        for(auto &it : items)
+        {
+            for(int row = it.topRow(); row <= it.bottomRow(); ++row)
+            {
+                int id = ui->twPlates->item(row, 0)->data(Qt::UserRole).toInt();
+                Plate plate = listPlate.GetItem(id);
+                selectedPlates.push_back(plate);
+                // qDebug() << plate.number;
+            }
+        }
+        int id = ui->twPlates->item(ui->twPlates->currentRow(), 0)->data(Qt::UserRole).toInt();
+        selectPlate = listPlate.GetItem(id);
+
+        accept();
+        // return;
     }
+    // else
+    // {
+    //     int row = ui->twPlates->currentRow();
+    //     if(row >= 0)
+    //     {
+    //         on_twPlates_itemDoubleClicked(ui->twPlates->item(row, 0));
+    //     }
+    // }
+
 }
 
 
@@ -226,6 +251,7 @@ void PlateListWindow::on_twPlates_itemDoubleClicked(QTableWidgetItem *item)
         return;
     int id = ui->twPlates->item(item->row(), 0)->data(Qt::UserRole).toInt();
     selectPlate = listPlate.GetItem(id);
+    selectedPlates.push_back(listPlate.GetItem(id));
     accept();
 
 }
