@@ -11,8 +11,16 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
     ui->setupUi(this);
 
     repo.LoadOrganization(listOrg);
+    int selectRow = -1;
     for(auto it = listOrg.begin(); it != listOrg.end(); ++it )
+    {
         ui->cbCusomer->addItem(*it, it.key());
+        if(it.key() == ship->idOrganization)
+            selectRow = ui->cbCusomer->count() -1;
+    }
+
+    ui->cbCusomer->setCurrentIndex(selectRow);
+
 
     if(ship->id != 0)
     {
@@ -22,7 +30,16 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
         ui->leNumUPD->setText(ship->numberUPD);
         ui->leObjectInstall->setText(ship->objectInstall);
         ui->leSchet->setText(ship->schet);
-        ui->deDateUPD->setDateTime(ship->dateUPD);
+        // ui->deDateUPD->setDateTime(ship->dateUPD);
+
+        // qDebug() << ship->dateRegister;
+        // if(!ship->dateRegister.isNull())
+        // {
+        ui->deDateOut->setDateTime(ship->dateRegister);
+        // ui->deDateOut->setDateTime(ship->dateRegister);
+        // }
+
+        ui->leTemp->setText(ship->customer); //=============================================================== УДАЛИТЬ!!!
 
         repo.LoadShipSetter(ship->listSetterOut, ship->id);
         for(auto &it : ship->listSetterOut)
@@ -52,6 +69,7 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
     connect(ui->leNumUPD, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
     connect(ui->leObjectInstall, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
     connect(ui->leSchet, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
+    connect(ui->cbCusomer, SIGNAL(currentIndexChanged(int)), SLOT(slotIsEditing()));
 }
 
 ShipWindow::~ShipWindow()
@@ -411,6 +429,11 @@ void ShipWindow::on_ShipWindow_finished(int /*result*/)
     ship->objectInstall = ui->leObjectInstall->text();
     ship->schet = ui->leSchet->text();
     ship->dateUPD = ui->deDateUPD->dateTime();
+    if(ui->cbCusomer->currentIndex() >= 0)
+    {
+        ship->idOrganization = ui->cbCusomer->currentData().toInt();
+        ship->customer = ui->cbCusomer->currentText();
+    }
     repo.UpdateItem(*ship);
 }
 

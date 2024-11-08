@@ -5,7 +5,7 @@
 
 #include <QMessageBox>
 
-ListShipWindow::ListShipWindow(QWidget *parent)
+ListShipWindow::ListShipWindow(QWidget *parent, bool isFree)
     : QDialog(parent)
     , ui(new Ui::ListShipWindow)
 {
@@ -13,9 +13,7 @@ ListShipWindow::ListShipWindow(QWidget *parent)
 
     QApplication::changeOverrideCursor(Qt::WaitCursor);
 
-    Ship.FindItems("");
-
-    // repo.LoadShipment(listShip);
+    Ship.FindItems("", 0, isFree);
 
     ui->tableWidget->setRowCount(Ship.listItems.size());
     ui->tableWidget->setColumnWidth(0, 200);

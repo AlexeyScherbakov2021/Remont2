@@ -31,6 +31,7 @@ public:
     Stat idStatus;
     QString nameStatus;
     QDateTime dateStatus;
+    int typeStatus;
     QString Comment;
 
     Status() : id(0), idDevice(0), idStatus(Status::NONE), dateStatus(QDateTime::currentDateTime()) {}
@@ -72,8 +73,10 @@ public:
         status.Comment = comment;
         RepoMSSQL repo;
         if(repo.AddStatus(device, status))
+        {
+            status.typeStatus = repo.GetTypeStatus(idStat);
             listStatus.push_back(status);
-
+        }
     }
 
 
@@ -92,9 +95,11 @@ public:
         bool res = false;
         if(listStatus.size() > 0)
         {
-            res = (listStatus.last().idStatus <= Status::FAULTY_ON_OBJECT
-                   || listStatus.last().idStatus >= Status::CORRECT_OSO);
-            qDebug() << res;
+            res = listStatus.last().typeStatus == 1;
+
+            // res = (listStatus.last().idStatus <= Status::FAULTY_ON_OBJECT
+            //        || listStatus.last().idStatus >= Status::CORRECT_OSO);
+            // qDebug() << res;
         //     return res;
         }
         // else

@@ -74,6 +74,7 @@ public:
 
     void LoadStatus(Product &prod);
     void LoadStatus(Modul &modul);
+    int GetTypeStatus(int idStatus);
 
     bool LinkPlate(int idPlate, int idModul);
     void LoadChildProduct(Product &prod);

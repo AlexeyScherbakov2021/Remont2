@@ -306,7 +306,7 @@ void MainWindow::on_aExchModul_triggered()
 void MainWindow::on_aScaner_triggered()
 {
     Scan *win = new Scan();
-    win->exec();
+    win->open();
 }
 
 
@@ -356,7 +356,7 @@ void MainWindow::on_aListPlate_triggered()
 void MainWindow::on_aPlateVNFT_triggered()
 {
     PlateVNFTWindow *win = new PlateVNFTWindow(this);
-    win->exec();
+    win->open();
 }
 
 
@@ -366,6 +366,16 @@ void MainWindow::on_aPlateVNFT_triggered()
 void MainWindow::on_aReplaceFW_triggered()
 {
     PlateFWWindow *win = new PlateFWWindow(this);
-    win->exec();
+    win->open();
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Отгруженная продукция
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aShipping_triggered()
+{
+    ListShipWindow *win = new ListShipWindow(this, false);
+    win->show();
 }
 

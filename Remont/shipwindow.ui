@@ -232,74 +232,150 @@ background-color: LightGray;
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QDateEdit" name="deDateOut">
-         <property name="calendarPopup">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
+       <item row="4" column="0">
         <widget class="QLabel" name="label_8">
          <property name="text">
           <string>Заказчик</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="4" column="1">
         <widget class="QComboBox" name="cbCusomer"/>
        </item>
-       <item row="3" column="0">
+       <item row="6" column="0">
         <widget class="QLabel" name="label_9">
          <property name="text">
           <string>Счет</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="6" column="1">
         <widget class="QLineEdit" name="leSchet"/>
        </item>
-       <item row="4" column="0">
+       <item row="7" column="0">
         <widget class="QLabel" name="label_10">
          <property name="text">
           <string>Карта заказа</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="7" column="1">
         <widget class="QLineEdit" name="leCardOrder"/>
        </item>
-       <item row="5" column="0">
+       <item row="8" column="0">
         <widget class="QLabel" name="label_11">
          <property name="text">
           <string>Покупатель</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item row="8" column="1">
         <widget class="QLineEdit" name="leBuyer"/>
        </item>
-       <item row="6" column="0">
+       <item row="10" column="0">
         <widget class="QLabel" name="label_12">
          <property name="text">
           <string>№ УПД</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item row="10" column="1">
         <widget class="QLineEdit" name="leNumUPD"/>
        </item>
-       <item row="7" column="0">
+       <item row="11" column="0">
         <widget class="QLabel" name="label_13">
          <property name="text">
           <string>Дата УПД</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
+       <item row="11" column="1">
         <widget class="QDateEdit" name="deDateUPD">
+         <property name="specialValueText">
+          <string>--</string>
+         </property>
+         <property name="showGroupSeparator" stdset="0">
+          <bool>false</bool>
+         </property>
+         <property name="dateTime">
+          <datetime>
+           <hour>0</hour>
+           <minute>0</minute>
+           <second>0</second>
+           <year>2000</year>
+           <month>1</month>
+           <day>1</day>
+          </datetime>
+         </property>
+         <property name="time">
+          <time>
+           <hour>0</hour>
+           <minute>0</minute>
+           <second>0</second>
+          </time>
+         </property>
+         <property name="minimumDate">
+          <date>
+           <year>2000</year>
+           <month>1</month>
+           <day>1</day>
+          </date>
+         </property>
+         <property name="minimumTime">
+          <time>
+           <hour>0</hour>
+           <minute>0</minute>
+           <second>0</second>
+          </time>
+         </property>
+         <property name="currentSection">
+          <enum>QDateTimeEdit::Section::DaySection</enum>
+         </property>
          <property name="calendarPopup">
           <bool>true</bool>
+         </property>
+         <property name="currentSectionIndex">
+          <number>0</number>
+         </property>
+         <property name="timeSpec">
+          <enum>Qt::TimeSpec::LocalTime</enum>
+         </property>
+         <property name="date">
+          <date>
+           <year>2000</year>
+           <month>1</month>
+           <day>1</day>
+          </date>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="leTemp"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QDateEdit" name="deDateOut">
+         <property name="specialValueText">
+          <string>--</string>
+         </property>
+         <property name="showGroupSeparator" stdset="0">
+          <bool>false</bool>
+         </property>
+         <property name="minimumDate">
+          <date>
+           <year>2000</year>
+           <month>1</month>
+           <day>1</day>
+          </date>
+         </property>
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+         <property name="date">
+          <date>
+           <year>2000</year>
+           <month>1</month>
+           <day>1</day>
+          </date>
          </property>
         </widget>
        </item>
@@ -375,7 +451,6 @@ background-color: LightGray;
  <tabstops>
   <tabstop>twTreeDevice</tabstop>
   <tabstop>leObjectInstall</tabstop>
-  <tabstop>deDateOut</tabstop>
   <tabstop>leSchet</tabstop>
   <tabstop>leCardOrder</tabstop>
   <tabstop>leBuyer</tabstop>

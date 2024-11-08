@@ -16,7 +16,7 @@ class ListShipWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit ListShipWindow(QWidget *parent = nullptr);
+    explicit ListShipWindow(QWidget *parent = nullptr, bool isFree = true);
     ~ListShipWindow();
 
 private slots:

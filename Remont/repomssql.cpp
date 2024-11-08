@@ -700,7 +700,7 @@ void RepoMSSQL::LoadStatus(Product &prod)
     prod.listStatus.clear();
 
     QSqlQuery query;
-    query.prepare("select ms.id,idProduct,idStatus,DateStatus,Comment,sd.nameStatus "
+    query.prepare("select ms.id,idProduct,idStatus,DateStatus,Comment,sd.nameStatus,sd.typeStatus "
                   "from ProductStatus ms "
                   "join StatusDevice sd on sd.id=ms.idStatus "
                   "where ms.idProduct=:id "
@@ -718,6 +718,7 @@ void RepoMSSQL::LoadStatus(Product &prod)
         stat.dateStatus = query.value(3).toDateTime();
         stat.Comment = query.value(4).toString();
         stat.nameStatus = query.value(5).toString();
+        stat.typeStatus = query.value(6).toInt();
         prod.listStatus.push_back(stat);
     }
 }
@@ -730,7 +731,7 @@ void RepoMSSQL::LoadStatus(Modul &mod)
     mod.listStatus.clear();
 
     QSqlQuery query;
-    query.prepare("select ms.id,idModul,idStatus,DateStatus,Comment,sd.nameStatus "
+    query.prepare("select ms.id,idModul,idStatus,DateStatus,Comment,sd.nameStatus,sd.typeStatus "
                   "from ModulStatus ms "
                   "join StatusDevice sd on sd.id=ms.idStatus "
                   "where ms.idModul=:id "
@@ -748,8 +749,23 @@ void RepoMSSQL::LoadStatus(Modul &mod)
         stat.dateStatus = query.value(3).toDateTime();
         stat.Comment = query.value(4).toString();
         stat.nameStatus = query.value(5).toString();
+        stat.typeStatus = query.value(6).toInt();
         mod.listStatus.push_back(stat);
     }
+}
+
+int RepoMSSQL::GetTypeStatus(int idStatus)
+{
+    int typeStat = 0;
+    QSqlQuery query;
+    query.prepare("select typeStatus from StatusDevice where id=:id");
+    query.bindValue(":id", idStatus);
+
+    query.exec();
+    if(query.next())
+        typeStat = query.value(0).toInt();
+
+    return typeStat;
 }
 
 //------------------------------------------------------------------------------------------------------
@@ -1084,22 +1100,22 @@ bool RepoMSSQL::AddItem(Shipment &ship)
     bool res;
     QSqlQuery query;
 
-    query.prepare("insert into Shipment (c_number,c_objectInstall,c_dateOut,c_customer,c_questList,c_schet,"
-                  "c_cardOrder,c_numberUPD,c_buyer,c_dateUPD) "
-                  "output inserted.id values(:c_number,:c_objectInstall,:c_dateOut,:c_customer,:c_questList,:c_schet,"
-                  ":c_cardOrder,:c_numberUPD,:c_buyer,:c_dateUPD)");
+    query.prepare("insert into Shipment (c_number,c_objectInstall,c_dateOut,c_questList,c_schet,"
+                  "c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,idOrganization) "
+                  "output inserted.id values(:c_number,:c_objectInstall,:c_dateOut,:c_questList,:c_schet,"
+                  ":c_cardOrder,:c_numberUPD,:c_buyer,:c_dateUPD,:idOrganization)");
 
     query.bindValue(":c_number", ship.number);
     query.bindValue(":c_objectInstall", ship.objectInstall);
     query.bindValue(":c_dateOut", ship.dateRegister);
-    query.bindValue(":c_customer", ship.customer);
+    // query.bindValue(":c_customer", ship.customer);
     query.bindValue(":c_questList", ship.questList);
     query.bindValue(":c_schet", ship.schet);
     query.bindValue(":c_cardOrder", ship.cardOrder);
     query.bindValue(":c_numberUPD", ship.numberUPD);
     query.bindValue(":c_buyer", ship.buyer);
     query.bindValue(":c_dateUPD", ship.dateUPD);
-
+    query.bindValue(":idOrganization", ship.idOrganization);
     res = query.exec();
     if(!res)
         qDebug() << "Ошибка при добавлении записи в Shipment";
@@ -1193,19 +1209,20 @@ bool RepoMSSQL::UpdateItem(Shipment &ship)
     QSqlQuery query;
 
     query.prepare("update Shipment set c_number=:c_number,c_objectInstall=:c_objectInstall,c_dateOut=:c_dateOut,"
-                  "c_customer=:c_customer,c_questList=:c_questList,c_schet=:c_schet,c_cardOrder=:c_cardOrder,"
-                  "c_numberUPD=:c_numberUPD,c_buyer=:c_buyer,c_dateUPD=:c_dateUPD where id=:id");
+                  "c_questList=:c_questList,c_schet=:c_schet,c_cardOrder=:c_cardOrder,"
+                  "c_numberUPD=:c_numberUPD,c_buyer=:c_buyer,c_dateUPD=:c_dateUPD,idOrganization=:idOrganization where id=:id");
 
     query.bindValue(":c_number", ship.number);
     query.bindValue(":c_objectInstall", ship.objectInstall);
     query.bindValue(":c_dateOut", ship.dateRegister);
-    query.bindValue(":c_customer", ship.customer);
+    // query.bindValue(":c_customer", ship.customer);
     query.bindValue(":c_questList", ship.questList);
     query.bindValue(":c_schet", ship.schet);
     query.bindValue(":c_cardOrder", ship.cardOrder);
     query.bindValue(":c_numberUPD", ship.numberUPD);
     query.bindValue(":c_buyer", ship.buyer);
     query.bindValue(":c_dateUPD", ship.dateUPD);
+    query.bindValue(":idOrganization", ship.idOrganization);
     query.bindValue(":id", ship.id);
 
     res = query.exec();
@@ -1272,8 +1289,8 @@ Shipment RepoMSSQL::GetShipment(int id)
     QSqlQuery query;
     Shipment ship;
 
-    query.prepare("select c_number,c_objectInstall,c_dateOut,c_customer,c_questList,"
-                  "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD "
+    query.prepare("select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
+                  "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,c_customer "
                   "from Shipment where id = :id");
 
     query.bindValue(":id", id);
@@ -1285,13 +1302,14 @@ Shipment RepoMSSQL::GetShipment(int id)
         ship.number = query.value(0).toString();
         ship.objectInstall = query.value(1).toString();
         ship.dateRegister = query.value(2).toDateTime();
-        ship.customer = query.value(3).toString();
+        ship.idOrganization = query.value(3).toInt();
         ship.questList = query.value(4).toString();
         ship.schet = query.value(5).toString();
         ship.cardOrder = query.value(6).toString();
         ship.numberUPD = query.value(7).toString();
         ship.buyer = query.value(8).toString();
         ship.dateUPD = query.value(9).toDateTime();
+        ship.customer = query.value(10).toString();
     }
     return ship;
 
@@ -1412,8 +1430,8 @@ void RepoMSSQL::LoadShipment(QList<Shipment> &listShip, bool /*isFinish*/)
     listShip.clear();
     QSqlQuery query;
 
-    query.prepare("select c_number,c_objectInstall,c_dateOut,c_customer,c_questList,"
-                  "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,id,idOrganization "
+    query.prepare("select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
+                  "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,id "
                   "from Shipment where c_dateOut is null");
 
     query.exec();
@@ -1423,7 +1441,7 @@ void RepoMSSQL::LoadShipment(QList<Shipment> &listShip, bool /*isFinish*/)
         ship.number = query.value(0).toString();
         ship.objectInstall = query.value(1).toString();
         ship.dateRegister = query.value(2).toDateTime();
-        ship.customer = query.value(3).toString();
+        ship.idOrganization = query.value(3).toInt();
         ship.questList = query.value(4).toString();
         ship.schet = query.value(5).toString();
         ship.cardOrder = query.value(6).toString();
@@ -1431,7 +1449,7 @@ void RepoMSSQL::LoadShipment(QList<Shipment> &listShip, bool /*isFinish*/)
         ship.buyer = query.value(8).toString();
         ship.dateUPD = query.value(9).toDateTime();
         ship.id = query.value(10).toInt();
-        ship.isOrganization = query.value(11).toInt();
+        // ship.customer = query.value(11).toString();
         listShip.push_back(ship);
     }
 
@@ -1581,14 +1599,19 @@ bool RepoMSSQL::DelLastStatus(Product &product)
 //------------------------------------------------------------------------------------------------------
 // Загрузка списка отгрузок
 //------------------------------------------------------------------------------------------------------
-void RepoMSSQL::FindItems(QList<Shipment> &listShip, int /*isFinish*/, bool )
+void RepoMSSQL::FindItems(QList<Shipment> &listShip, int /*isFinish*/, bool isFree)
 {
     listShip.clear();
     QSqlQuery query;
 
-    query.prepare("select c_number,c_objectInstall,c_dateOut,c_customer,c_questList,"
-                  "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,id,idOrganization "
+    if(isFree)
+        query.prepare("select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
+                  "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,id,c_customer "
                   "from Shipment where c_dateOut is null");
+    else
+        query.prepare("select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
+                      "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,id,c_customer "
+                      "from Shipment where c_dateOut is not null");
 
     query.exec();
     while(query.next())
@@ -1597,7 +1620,7 @@ void RepoMSSQL::FindItems(QList<Shipment> &listShip, int /*isFinish*/, bool )
         ship.number = query.value(0).toString();
         ship.objectInstall = query.value(1).toString();
         ship.dateRegister = query.value(2).toDateTime();
-        ship.customer = query.value(3).toString();
+        ship.idOrganization = query.value(3).toInt();
         ship.questList = query.value(4).toString();
         ship.schet = query.value(5).toString();
         ship.cardOrder = query.value(6).toString();
@@ -1605,7 +1628,7 @@ void RepoMSSQL::FindItems(QList<Shipment> &listShip, int /*isFinish*/, bool )
         ship.buyer = query.value(8).toString();
         ship.dateUPD = query.value(9).toDateTime();
         ship.id = query.value(10).toInt();
-        ship.idOrganization = query.value(11).toInt();
+        ship.customer = query.value(11).toString();
         listShip.push_back(ship);
     }
 }

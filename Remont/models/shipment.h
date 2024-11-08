@@ -9,7 +9,7 @@
 class Shipment : public IEntity
 {
 public:
-    int isOrganization;
+    // int isOrganization;
     QString objectInstall;
     QString schet;
     QString cardOrder;
