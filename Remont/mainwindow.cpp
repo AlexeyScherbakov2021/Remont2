@@ -16,6 +16,7 @@
 #include "platelistwindow.h"
 #include "platevnftwindow.h"
 #include "platefwwindow.h"
+#include "logwindow.h"
 
 #include <QSettings>
 
@@ -36,7 +37,6 @@ MainWindow::~MainWindow()
     disconnect(conn);
     delete ui;
 }
-
 
 
 //----------------------------------------------------------------------------------------------
@@ -306,6 +306,7 @@ void MainWindow::on_aExchModul_triggered()
 void MainWindow::on_aScaner_triggered()
 {
     Scan *win = new Scan();
+    win->setAttribute(Qt::WA_DeleteOnClose);
     win->open();
 }
 
@@ -377,5 +378,17 @@ void MainWindow::on_aShipping_triggered()
 {
     ListShipWindow *win = new ListShipWindow(this, false);
     win->show();
+}
+
+
+void MainWindow::on_aLog_triggered()
+{
+    LogWindow* log = LogWindow::getInstance();
+
+    if(ui->aLog->isChecked())
+        log->show();
+    else
+        log->hide();
+
 }
 

@@ -39,7 +39,7 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
         // ui->deDateOut->setDateTime(ship->dateRegister);
         // }
 
-        ui->leTemp->setText(ship->customer); //=============================================================== УДАЛИТЬ!!!
+        // ui->leTemp->setText(ship->customer); //=============================================================== УДАЛИТЬ!!!
 
         repo.LoadShipSetter(ship->listSetterOut, ship->id);
         for(auto &it : ship->listSetterOut)

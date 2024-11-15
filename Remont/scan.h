@@ -20,12 +20,13 @@ public:
     inline static Scaner scan;
 
 private slots:
-    void on_cbCOM_currentIndexChanged(int index);
+    void currentIndexChanged(int index);
 
 private:
     Ui::Scan *ui;
     void scanPort();
     QString oldPortName;
+    QMetaObject::Connection con;
 
 private slots:
     void slotReadScan(QString s);

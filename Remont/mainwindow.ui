@@ -251,6 +251,7 @@ background-color: LightGray;
      <string>Настройки</string>
     </property>
     <addaction name="aScaner"/>
+    <addaction name="aLog"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -401,6 +402,14 @@ background-color: LightGray;
   <action name="aReplaceFW">
    <property name="text">
     <string>Замена прошивки</string>
+   </property>
+  </action>
+  <action name="aLog">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Журнал сообщений</string>
    </property>
   </action>
  </widget>

@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-
 #include <QApplication>
 #include <QLibraryInfo>
 #include <QTranslator>
@@ -44,6 +43,7 @@ int main(int argc, char *argv[])
     bool res = qtTranslator.load("qt_" + locale, QLibraryInfo::path(QLibraryInfo::TranslationsPath));
     if(res)
         a.installTranslator(&qtTranslator);
+
 
     MainWindow w;
     w.show();

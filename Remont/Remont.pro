@@ -19,6 +19,7 @@ SOURCES += \
     infrastructure/scaner.cpp \
     infrastructure/trackrecord.cpp \
     listshipwindow.cpp \
+    logwindow.cpp \
     main.cpp \
     mainwindow.cpp \
     models/listclaim.cpp \
@@ -52,6 +53,7 @@ HEADERS += \
     infrastructure/scaner.h \
     infrastructure/trackrecord.h \
     listshipwindow.h \
+    logwindow.h \
     models/IDevice.h \
     models/claim.h \
     models/entity.h \
@@ -94,6 +96,7 @@ FORMS += \
     createdevicewindow.ui \
     endremontwindow.ui \
     listshipwindow.ui \
+    logwindow.ui \
     mainwindow.ui \
     otkcontrolwindow.ui \
     platefwwindow.ui \

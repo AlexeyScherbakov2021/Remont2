@@ -56,6 +56,8 @@ private slots:
 
     void on_aShipping_triggered();
 
+    void on_aLog_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
