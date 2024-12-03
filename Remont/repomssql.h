@@ -111,6 +111,10 @@ public:
     Remont GetCurrentRemont(int id, ev::DeviceKind kindDevice);
 
     void LoadTypePlate(QVector<PlateType> &listType);
+
+    int32_t GetNextNumber(uint year);
+    void CreateGenerator(uint year);
+    void RestartSerialNumber(uint year);
 };
 
 #endif

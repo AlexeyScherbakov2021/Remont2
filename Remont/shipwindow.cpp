@@ -30,7 +30,8 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
         ui->leNumUPD->setText(ship->numberUPD);
         ui->leObjectInstall->setText(ship->objectInstall);
         ui->leSchet->setText(ship->schet);
-        // ui->deDateUPD->setDateTime(ship->dateUPD);
+        ui->leCustomer->setText(ship->customer);
+        ui->deDateUPD->setDateTime(ship->dateUPD);
 
         // qDebug() << ship->dateRegister;
         // if(!ship->dateRegister.isNull())

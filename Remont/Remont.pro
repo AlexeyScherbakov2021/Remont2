@@ -1,6 +1,6 @@
-QT       += core gui sql serialport
+QT       += core gui sql serialport svg
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++17
 
@@ -34,6 +34,9 @@ SOURCES += \
     platelistwindow.cpp \
     platevnftwindow.cpp \
     platewindow.cpp \
+    qr/QrCodeGenerator.cpp \
+    qr/qrcodegen/qrcodegen.cpp \
+    qrwindow.cpp \
     remontwindow.cpp \
     repomssql.cpp \
     scan.cpp \
@@ -80,6 +83,9 @@ HEADERS += \
     platelistwindow.h \
     platevnftwindow.h \
     platewindow.h \
+    qr/QrCodeGenerator.h \
+    qr/qrcodegen/qrcodegen.h \
+    qrwindow.h \
     remontwindow.h \
     repomssql.h \
     scan.h \
@@ -103,6 +109,7 @@ FORMS += \
     platelistwindow.ui \
     platevnftwindow.ui \
     platewindow.ui \
+    qrwindow.ui \
     remontwindow.ui \
     scan.ui \
     selectdevicewindow.ui \
@@ -116,3 +123,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resource.qrc
+
+VERSION = 1.0.0.0
+QMAKE_TARGET_COMPANY = NGK
+QMAKE_TARGET_PRODUCT = Remont
+QMAKE_TARGET_DESCRIPTION = Programm Remont
+QMAKE_TARGET_COPYRIGHT = NPO NGK EHZ
+
+DISTFILES +=

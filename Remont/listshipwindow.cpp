@@ -19,7 +19,9 @@ ListShipWindow::ListShipWindow(QWidget *parent, bool isFree)
     ui->tableWidget->setColumnWidth(0, 200);
     ui->tableWidget->setColumnWidth(1, 200);
     ui->tableWidget->setColumnWidth(2, 80);
-    ui->tableWidget->setColumnWidth(3, 350);
+    ui->tableWidget->setColumnWidth(3, 250);
+    ui->tableWidget->setColumnWidth(4, 80);
+    ui->tableWidget->setColumnWidth(5, 70);
 
     int row = 0;
     for(auto &it : Ship.listItems)
@@ -65,10 +67,13 @@ void ListShipWindow::addRowWidget(Shipment &ship, int row)
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     ui->tableWidget->setItem(row, 3, item);
 
-    // item = new QTableWidgetItem(ship.objectInstall);
-    // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    // ui->tableWidget->setItem(row, 4, item);
+    item = new QTableWidgetItem(ship.numberUPD);
+    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    ui->tableWidget->setItem(row, 4, item);
 
+    item = new QTableWidgetItem(ship.dateUPD.toString("dd.MM.yyyy"));
+    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    ui->tableWidget->setItem(row, 5, item);
 }
 
 void ListShipWindow::setRowWidget(Shipment &ship, int row)

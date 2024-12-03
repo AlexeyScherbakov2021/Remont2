@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1051</width>
+    <width>1020</width>
     <height>557</height>
    </rect>
   </property>
@@ -51,168 +51,175 @@ background-color: LightGray;
 
 </string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_3">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Состав отгрузки</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="leNumModul"/>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Состав отгрузки</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="leNumModul"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Модуль</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QToolButton" name="tbAddSetterProd">
+            <property name="toolTip">
+             <string>Добавить изделие в выделенный набор</string>
+            </property>
+            <property name="text">
+             <string>в набор</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/image/Add2.png</normaloff>:/image/Add2.png</iconset>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="leNumProd">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QToolButton" name="tbNumProd">
+            <property name="toolTip">
+             <string>Добавить изделие</string>
+            </property>
+            <property name="text">
+             <string>+</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/image/Add2.png</normaloff>:/image/Add2.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Изделие</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QToolButton" name="tbNumModul">
+            <property name="toolTip">
+             <string>Добавить модуль</string>
+            </property>
+            <property name="text">
+             <string>+</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/image/Add2.png</normaloff>:/image/Add2.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="leSetterOut"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Набор</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QToolButton" name="tbAddSetter">
+            <property name="toolTip">
+             <string>Добавить набор</string>
+            </property>
+            <property name="text">
+             <string>+</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/image/Add2.png</normaloff>:/image/Add2.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QToolButton" name="tbAddSetProd">
+            <property name="toolTip">
+             <string>Добавить набор сразу с изделием</string>
+            </property>
+            <property name="text">
+             <string>с изделием</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/image/Add2.png</normaloff>:/image/Add2.png</iconset>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_5">
-          <property name="text">
-           <string>Модуль</string>
-          </property>
-         </widget>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pbDelete">
+            <property name="toolTip">
+             <string>Удалить выделенную строку</string>
+            </property>
+            <property name="text">
+             <string>Удалить</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/image/cancel2.png</normaloff>:/image/cancel2.png</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
-        <item row="0" column="3">
-         <widget class="QToolButton" name="tbAddSetterProd">
-          <property name="toolTip">
-           <string>Добавить изделие в выделенный набор</string>
-          </property>
-          <property name="text">
-           <string>в набор</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resource.qrc">
-            <normaloff>:/image/Add2.png</normaloff>:/image/Add2.png</iconset>
-          </property>
-          <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="leNumProd"/>
-        </item>
-        <item row="0" column="2">
-         <widget class="QToolButton" name="tbNumProd">
-          <property name="toolTip">
-           <string>Добавить изделие</string>
-          </property>
-          <property name="text">
-           <string>+</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resource.qrc">
-            <normaloff>:/image/Add2.png</normaloff>:/image/Add2.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Изделие</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QToolButton" name="tbNumModul">
-          <property name="toolTip">
-           <string>Добавить модуль</string>
-          </property>
-          <property name="text">
-           <string>+</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resource.qrc">
-            <normaloff>:/image/Add2.png</normaloff>:/image/Add2.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="leSetterOut"/>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Набор</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
-         <widget class="QToolButton" name="tbAddSetter">
-          <property name="toolTip">
-           <string>Добавить набор</string>
-          </property>
-          <property name="text">
-           <string>+</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resource.qrc">
-            <normaloff>:/image/Add2.png</normaloff>:/image/Add2.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="3">
-         <widget class="QToolButton" name="tbAddSetProd">
-          <property name="toolTip">
-           <string>Добавить набор сразу с изделием</string>
-          </property>
-          <property name="text">
-           <string>с изделием</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resource.qrc">
-            <normaloff>:/image/Add2.png</normaloff>:/image/Add2.png</iconset>
-          </property>
-          <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
-          </property>
+        <item>
+         <widget class="QTreeWidget" name="twTreeDevice">
+          <column>
+           <property name="text">
+            <string>Наименование</string>
+           </property>
+          </column>
          </widget>
         </item>
        </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pbDelete">
-          <property name="toolTip">
-           <string>Удалить выделенную строку</string>
-          </property>
-          <property name="text">
-           <string>Удалить</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resource.qrc">
-            <normaloff>:/image/cancel2.png</normaloff>:/image/cancel2.png</iconset>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QTreeWidget" name="twTreeDevice">
-        <column>
-         <property name="text">
-          <string>Наименование</string>
-         </property>
-        </column>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+      </widget>
+     </item>
      <item>
       <layout class="QFormLayout" name="formLayout">
        <item row="0" column="0">
@@ -223,7 +230,14 @@ background-color: LightGray;
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QLineEdit" name="leObjectInstall"/>
+        <widget class="QLineEdit" name="leObjectInstall">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_7">
@@ -234,6 +248,12 @@ background-color: LightGray;
        </item>
        <item row="1" column="1">
         <widget class="QDateEdit" name="deDateOut">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="specialValueText">
           <string>--</string>
          </property>
@@ -259,6 +279,23 @@ background-color: LightGray;
          </property>
         </widget>
        </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Заказчик xls</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="leCustomer">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
        <item row="3" column="0">
         <widget class="QLabel" name="label_8">
          <property name="text">
@@ -267,57 +304,107 @@ background-color: LightGray;
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QComboBox" name="cbCusomer"/>
+        <widget class="QComboBox" name="cbCusomer">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>500</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="modelColumn">
+          <number>0</number>
+         </property>
+        </widget>
        </item>
-       <item row="5" column="0">
+       <item row="4" column="0">
         <widget class="QLabel" name="label_9">
          <property name="text">
           <string>Счет</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
-        <widget class="QLineEdit" name="leSchet"/>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="leSchet">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
-       <item row="6" column="0">
+       <item row="5" column="0">
         <widget class="QLabel" name="label_10">
          <property name="text">
           <string>Карта заказа</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
-        <widget class="QLineEdit" name="leCardOrder"/>
+       <item row="5" column="1">
+        <widget class="QLineEdit" name="leCardOrder">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
-       <item row="7" column="0">
+       <item row="6" column="0">
         <widget class="QLabel" name="label_11">
          <property name="text">
           <string>Покупатель</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
-        <widget class="QLineEdit" name="leBuyer"/>
+       <item row="6" column="1">
+        <widget class="QLineEdit" name="leBuyer">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
-       <item row="9" column="0">
+       <item row="7" column="0">
         <widget class="QLabel" name="label_12">
          <property name="text">
-          <string>№ УПД</string>
+          <string>№ реализации</string>
          </property>
         </widget>
        </item>
-       <item row="9" column="1">
-        <widget class="QLineEdit" name="leNumUPD"/>
+       <item row="7" column="1">
+        <widget class="QLineEdit" name="leNumUPD">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
-       <item row="10" column="0">
+       <item row="8" column="0">
         <widget class="QLabel" name="label_13">
          <property name="text">
-          <string>Дата УПД</string>
+          <string>Дата реализации</string>
          </property>
         </widget>
        </item>
-       <item row="10" column="1">
+       <item row="8" column="1">
         <widget class="QDateEdit" name="deDateUPD">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="specialValueText">
           <string>--</string>
          </property>
@@ -326,7 +413,7 @@ background-color: LightGray;
          </property>
          <property name="dateTime">
           <datetime>
-           <hour>4</hour>
+           <hour>20</hour>
            <minute>0</minute>
            <second>0</second>
            <year>2000</year>
@@ -336,7 +423,7 @@ background-color: LightGray;
          </property>
          <property name="time">
           <time>
-           <hour>4</hour>
+           <hour>20</hour>
            <minute>0</minute>
            <second>0</second>
           </time>
@@ -350,7 +437,7 @@ background-color: LightGray;
          </property>
          <property name="minimumTime">
           <time>
-           <hour>4</hour>
+           <hour>20</hour>
            <minute>0</minute>
            <second>0</second>
           </time>
@@ -378,68 +465,81 @@ background-color: LightGray;
        </item>
       </layout>
      </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="rightMargin">
+      <number>20</number>
+     </property>
+     <property name="bottomMargin">
+      <number>20</number>
+     </property>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <property name="rightMargin">
-        <number>20</number>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
-       <property name="bottomMargin">
-        <number>20</number>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
        </property>
-       <item>
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item alignment="Qt::AlignmentFlag::AlignBottom">
-        <widget class="QPushButton" name="pbFinish">
-         <property name="text">
-          <string>Отгрузить</string>
-         </property>
-         <property name="icon">
-          <iconset resource="resource.qrc">
-           <normaloff>:/image/lorry.png</normaloff>:/image/lorry.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>24</width>
-           <height>24</height>
-          </size>
-         </property>
-         <property name="autoDefault">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item alignment="Qt::AlignmentFlag::AlignBottom">
-        <widget class="QPushButton" name="pbClose">
-         <property name="text">
-          <string>Закрыть</string>
-         </property>
-         <property name="icon">
-          <iconset resource="resource.qrc">
-           <normaloff>:/image/Exit.png</normaloff>:/image/Exit.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>24</width>
-           <height>24</height>
-          </size>
-         </property>
-         <property name="autoDefault">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      </spacer>
+     </item>
+     <item alignment="Qt::AlignmentFlag::AlignBottom">
+      <widget class="QPushButton" name="pbFinish">
+       <property name="text">
+        <string>Отгрузить</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/image/lorry.png</normaloff>:/image/lorry.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignmentFlag::AlignBottom">
+      <widget class="QPushButton" name="pbClose">
+       <property name="text">
+        <string>Закрыть</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/image/Exit.png</normaloff>:/image/Exit.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>
@@ -448,11 +548,6 @@ background-color: LightGray;
  <tabstops>
   <tabstop>twTreeDevice</tabstop>
   <tabstop>leObjectInstall</tabstop>
-  <tabstop>leSchet</tabstop>
-  <tabstop>leCardOrder</tabstop>
-  <tabstop>leBuyer</tabstop>
-  <tabstop>leNumUPD</tabstop>
-  <tabstop>deDateUPD</tabstop>
   <tabstop>leNumProd</tabstop>
   <tabstop>leNumModul</tabstop>
   <tabstop>pbFinish</tabstop>

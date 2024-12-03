@@ -58,6 +58,8 @@ private slots:
 
     void on_aLog_triggered();
 
+    void on_aGenQR_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;

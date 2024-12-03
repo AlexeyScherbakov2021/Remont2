@@ -119,6 +119,16 @@
        <string>Объект установки</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>№ реализ.</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Дата реализ.</string>
+      </property>
+     </column>
     </widget>
    </item>
    <item alignment="Qt::AlignmentFlag::AlignHCenter">

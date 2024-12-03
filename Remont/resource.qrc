@@ -29,5 +29,7 @@
         <file>image/claim_open.png</file>
         <file>image/barcode.png</file>
         <file>image/setter.png</file>
+        <file>image/print.png</file>
+        <file>image/text_list_numbers.png</file>
     </qresource>
 </RCC>

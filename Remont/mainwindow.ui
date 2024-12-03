@@ -252,6 +252,7 @@ background-color: LightGray;
     </property>
     <addaction name="aScaner"/>
     <addaction name="aLog"/>
+    <addaction name="aGenQR"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -410,6 +411,11 @@ background-color: LightGray;
    </property>
    <property name="text">
     <string>Журнал сообщений</string>
+   </property>
+  </action>
+  <action name="aGenQR">
+   <property name="text">
+    <string>Генерация QR кода</string>
    </property>
   </action>
  </widget>

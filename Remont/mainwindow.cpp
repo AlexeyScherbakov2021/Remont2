@@ -17,6 +17,7 @@
 #include "platevnftwindow.h"
 #include "platefwwindow.h"
 #include "logwindow.h"
+#include "qrwindow.h"
 
 #include <QSettings>
 
@@ -390,5 +391,15 @@ void MainWindow::on_aLog_triggered()
     else
         log->hide();
 
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Генерация QR
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aGenQR_triggered()
+{
+    QRWindow *win = new QRWindow(this);
+    win->exec();
 }
 

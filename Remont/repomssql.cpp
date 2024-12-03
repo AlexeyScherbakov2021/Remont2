@@ -33,20 +33,20 @@ RepoMSSQL::RepoMSSQL()
 bool RepoMSSQL::ConnectDb()
 {
 
-// #ifndef QT_DEBUG
-//     qDebug() << "Отладочная версия.";
-//     // db.setDatabaseName("DRIVER={SQL Server};SERVER=SCHERBAKOV-A\\SQLEXPRESS;DATABASE=FinGoods;Encrypt=yes;Trusted_Connection=yes");
-//     db.setDatabaseName("DRIVER={SQL Server};SERVER=SCHERBAKOV-A\\SQLEXPRESS;DATABASE=FinGoods;");
-//     db.setUserName("sa");
-//     db.setPassword("gonduras");
+#ifdef QT_DEBUG
+    qDebug() << "Отладочная версия.";
+    // db.setDatabaseName("DRIVER={SQL Server};SERVER=SCHERBAKOV-A\\SQLEXPRESS;DATABASE=FinGoods;Encrypt=yes;Trusted_Connection=yes");
+    db.setDatabaseName("DRIVER={SQL Server};SERVER=SCHERBAKOV-A\\SQLEXPRESS;DATABASE=FinGoods;");
+    db.setUserName("sa");
+    db.setPassword("gonduras");
 
-// #else
+#else
     qDebug() << "Рабочая версия.";
     db.setDatabaseName("DRIVER={SQL Server};SERVER=SFP\\FPSQLN;DATABASE=FinGoodsTest2;");
     db.setUserName("fpLoginName");
     db.setPassword("ctcnhjt,s");
 
-// #endif
+#endif
 
     if(!db.open())
     {
@@ -1641,12 +1641,19 @@ void RepoMSSQL::LoadOrganization(QMap<int, QString> &listOrg)
     QSqlQuery query;
     listOrg.clear();
 
-    query.prepare("select id,OrgName from Organization");
+    query.prepare("select id,OrgName,INN,KPP from Organization");
     query.exec();
     while(query.next())
     {
         int id = query.value(0).toInt();
         QString name = query.value(1).toString();
+        QString INN = query.value(2).toString();
+        QString KPP = query.value(3).toString();
+        if(!INN.isEmpty())
+        {
+            name += " (ИНН " + INN;
+            name += " КПП " + KPP + ")";
+        }
         listOrg.insert(id, name);
     }
 }
@@ -2326,5 +2333,28 @@ void RepoMSSQL::LoadTypePlate(QVector<PlateType> &listType)
         listType.push_back(pt);
     }
 
+}
+
+int32_t RepoMSSQL::GetNextNumber(uint year)
+{
+    int32_t res = -1;
+    QSqlQuery query;
+    query.exec(QString("select next value for GenSerial%1").arg(year));
+    if(query.next())
+        res = query.value(0).toInt();
+    return res;
+}
+
+void RepoMSSQL::CreateGenerator(uint year)
+{
+    QSqlQuery query;
+    bool res = query.exec(QString("CREATE SEQUENCE GenSerial%1 as numeric START WITH 1 INCREMENT BY 1").arg(year));
+
+}
+
+void RepoMSSQL::RestartSerialNumber(uint year)
+{
+    QSqlQuery query;
+    query.exec("ALTER SEQUENCE GenSerial restart");
 }
 

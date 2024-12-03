@@ -13,7 +13,7 @@ public:
     QString objectInstall;
     QString schet;
     QString cardOrder;
-    QString numUPD;
+    // QString numUPD;
     QDateTime dateUPD;
     QString buyer;
     int idOrganization;
