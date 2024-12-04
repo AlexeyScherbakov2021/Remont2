@@ -4,6 +4,8 @@
 
 #include <qmessagebox.h>
 
+#include <models/organization.h>
+
 ClaimDetail::ClaimDetail(Claim *cl, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::ClaimDetail), claim(cl)
@@ -47,6 +49,9 @@ void ClaimDetail::on_pbOK_clicked()
     claim->FromWho = ui->leFromWho->text();
     claim->ObjectInstall = ui->leObjectInst->text();
     claim->idTypeClaim = ui->cbTypeClaim->currentData(Qt::UserRole).toInt();
+    int orgIndex = ui->cbOrg->currentData().toInt();
+    claim->idOrg = orgIndex;
+    claim->nameOrganization = ui->cbOrg->currentText();
 
     if(claim->id == 0)
         repo.AddItem(*claim);
@@ -108,9 +113,21 @@ void ClaimDetail::ClaimToScreen(Claim *claim)
     ui->leNumber->setText(claim->number);
     ui->deDateClaim->setDateTime(claim->dateRegister);
     ui->leFromWho->setText(claim->FromWho);
-    // ui->leOrganiz->setText(claim->idOrg);
     ui->leObjectInst->setText(claim->ObjectInstall);
     ui->cbTypeClaim->setCurrentText(listTypeClaim[claim->idTypeClaim]);
+
+    QList<Organization> listOrg;
+    repo.LoadOrganization(listOrg);
+
+    int indexOrg = -1;
+    for(auto &it : listOrg)
+    {
+        if(it.id == claim->idOrg)
+            indexOrg = ui->cbOrg->count();
+        ui->cbOrg->addItem(it.getFullName(), it.id);
+    }
+
+    ui->cbOrg->setCurrentIndex(indexOrg);
 
     for(auto &it : claim->listModul)
         AddModulToTableScreen(it);

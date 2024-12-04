@@ -9,6 +9,7 @@
 #include <models/modultype.h>
 #include <models/remont.h>
 #include <models/platetype.h>
+#include <models/organization.h>
 #include <QMessageBox>
 #include <QSqlRecord>
 #include "repomssql.h"
@@ -1247,7 +1248,7 @@ bool RepoMSSQL::UpdateItem(Claim &claim)
                   "TypeComplectId=:TypeComplectId,VNFT=:VNFT,Quantity=:Quantity,TypeDeviceId=:TypeDeviceId,"
                   "NumberModul=:NumberModul,NumberNewModul=:NumberNewModul,NumberDevice=:NumberDevice,"
                   "DateOut=:DateOut,Guarantee=:Guarantee,Reason=:Reason,DateRepair=:DateRepair,DoRepair=:DoRepair,"
-                  "FileAnswer=:FileAnswer,TextResult=:TextResult "
+                  "FileAnswer=:FileAnswer,TextResult=:TextResult,idOrg=:idOrg "
                   "where id=:id");
 
     query.bindValue(":id", claim.id);
@@ -1255,7 +1256,8 @@ bool RepoMSSQL::UpdateItem(Claim &claim)
     query.bindValue(":DateClaim", claim.dateRegister);
     query.bindValue(":FromWho", claim.FromWho);
     query.bindValue(":TypeClaimId", claim.idTypeClaim);
-    // query.bindValue(":idOrg", claim.idOrg);
+    if(claim.idOrg > 0)
+        query.bindValue(":idOrg", claim.idOrg);
     query.bindValue(":ObjectInstall", claim.ObjectInstall);
     query.bindValue(":Descript", claim.Descript);
     query.bindValue(":TypeComplectId", claim.TypeComplectId);
@@ -1641,7 +1643,7 @@ void RepoMSSQL::LoadOrganization(QMap<int, QString> &listOrg)
     QSqlQuery query;
     listOrg.clear();
 
-    query.prepare("select id,OrgName,INN,KPP from Organization");
+    query.prepare("select id,OrgName,INN,KPP from Organization where INN is not null or KPP is not null order by OrgName");
     query.exec();
     while(query.next())
     {
@@ -1656,6 +1658,25 @@ void RepoMSSQL::LoadOrganization(QMap<int, QString> &listOrg)
         }
         listOrg.insert(id, name);
     }
+}
+
+void RepoMSSQL::LoadOrganization(QList<Organization> &listOrg)
+{
+    QSqlQuery query;
+    listOrg.clear();
+
+    query.prepare("select id,OrgName,INN,KPP from Organization where INN is not null or KPP is not null order by OrgName");
+    query.exec();
+    while(query.next())
+    {
+        Organization org;
+        org.id = query.value(0).toInt();
+        org.orgName = query.value(1).toString();
+        org.INN = query.value(2).toString();
+        org.KPP = query.value(3).toString();
+        listOrg.push_back(org);
+    }
+
 }
 
 //------------------------------------------------------------------------------------------------------
@@ -1775,9 +1796,10 @@ void RepoMSSQL::LoadClaim(QList<Claim> &listClaim)
     query.prepare("select c.id,Number,DateClaim,FromWho,TypeClaimId,idOrg,ObjectInstall,"
                   "Descript,TypeComplectId,VNFT,Quantity,TypeDeviceId,NumberModul,NumberNewModul,"
                   "NumberDevice,DateOut,Guarantee,Reason,DateRepair,DoRepair,FileAnswer,TextResult,"
-                  "ct.nameType "
+                  "ct.nameType,o.orgName "
                   "from Claim c "
-                  "join ClaimType ct on ct.id=c.TypeClaimId");
+                  "join ClaimType ct on ct.id=c.TypeClaimId "
+                  "left join Organization o on o.id=c.idOrg");
 
     query.exec();
     while(query.next())
@@ -1806,7 +1828,7 @@ void RepoMSSQL::LoadClaim(QList<Claim> &listClaim)
         claim.FileAnswer = query.value(20).toString();
         claim.TextResult = query.value(21).toString();
         claim.TypeClaimString = query.value(22).toString();
-        // claim.TypeComplectString = query.value(23).toString();
+        claim.nameOrganization = query.value(23).toString();
         // claim.TypeDeviceString = query.value(24).toString();
         listClaim.push_back(claim);
     }

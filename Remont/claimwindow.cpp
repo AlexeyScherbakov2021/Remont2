@@ -74,10 +74,10 @@ int ClaimWindow::AddLineScreen(const Claim *claim)
     item->setText(claim->TypeClaimString);
     ui->twClaim->setItem(row, 3, item);
 
-    // item = new QTableWidgetItem();
-    // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    // item->setText(claim->idOrg);
-    // ui->twClaim->setItem(row, 4, item);
+    item = new QTableWidgetItem();
+    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    item->setText(claim->nameOrganization);
+    ui->twClaim->setItem(row, 4, item);
 
     item = new QTableWidgetItem();
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
@@ -173,7 +173,7 @@ void ClaimWindow::on_pbEdit_clicked()
             item = ui->twClaim->item(row, 3);
             item->setText(claim->TypeClaimString);
             item = ui->twClaim->item(row, 4);
-            // item->setText(claim->idOrg);
+            item->setText(claim->nameOrganization);
             item = ui->twClaim->item(row, 5);
             item->setText(claim->ObjectInstall);
             item = ui->twClaim->item(row, 6);

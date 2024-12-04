@@ -71,6 +71,7 @@ HEADERS += \
     models/listshipment.h \
     models/modul.h \
     models/modultype.h \
+    models/organization.h \
     models/plate.h \
     models/platetype.h \
     models/prodtype.h \
@@ -124,7 +125,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     resource.qrc
 
-VERSION = 1.0.0.0
+VERSION = 1.0.0.2
 QMAKE_TARGET_COMPANY = NGK
 QMAKE_TARGET_PRODUCT = Remont
 QMAKE_TARGET_DESCRIPTION = Programm Remont

@@ -15,6 +15,7 @@ public:
 
     QString FromWho;
     int idOrg;
+    QString nameOrganization;
     QString ObjectInstall;
     QString Descript;
     int TypeComplectId;

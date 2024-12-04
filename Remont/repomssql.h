@@ -18,6 +18,7 @@ class ProductType;
 class ModulType;
 class Remont;
 class PlateType;
+class Organization;
 
 class RepoMSSQL
 {
@@ -90,6 +91,7 @@ public:
     bool DelLastStatus(Product &product);
 
     void LoadOrganization(QMap<int, QString> &listOrg);
+    void LoadOrganization(QList<Organization> &listOrg);
 
     void LoadClaim(QList<Claim> &listClaim);
     void LoadClaimType(QMap<int, QString> &listTypeClaim);
