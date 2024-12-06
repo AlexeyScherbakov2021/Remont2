@@ -1,6 +1,9 @@
 #include "platelistwindow.h"
+#include "scan.h"
 #include "ui_platelistwindow.h"
 
+#include <QInputDialog>
+#include <QMenu>
 #include <qmessagebox.h>
 
 PlateListWindow::PlateListWindow(QWidget *parent)
@@ -13,12 +16,13 @@ PlateListWindow::PlateListWindow(QWidget *parent)
     for(auto &it : listType)
         listPlateType.insert(it.id, it.VNFT);
 
-    // on_rbNotLink_clicked();
+    conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
 }
 
 PlateListWindow::~PlateListWindow()
 {
+    disconnect(conn);
     delete ui;
 }
 
@@ -100,7 +104,6 @@ void PlateListWindow::UpdateForm()
     ui->rbAll->setVisible(!isNotLinked);
     ui->rbNotLink->setVisible(!isNotLinked);
 
-
     ui->twPlates->setRowCount(listPlate.listItems.size());
     // ui->twPlates->setRowCount(10);
 
@@ -134,6 +137,14 @@ void PlateListWindow::UpdateForm()
         if(it.idParent > 0)
             item->setIcon(QIcon("://image/Apply24x24.png"));
         ui->twPlates->setItem(row, 5, item);
+
+        if(it.listStatus.size() > 0)
+        {
+            item = new QTableWidgetItem(it.listStatus.last().nameStatus);
+            item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+            item->setToolTip(it.listStatus.last().Comment);
+            ui->twPlates->setItem(row, 6, item);
+        }
 
         ++row;
     }
@@ -256,3 +267,38 @@ void PlateListWindow::on_twPlates_itemDoubleClicked(QTableWidgetItem *item)
 
 }
 
+void PlateListWindow::slotReadScan(QString s)
+{
+    ui->leSearch->setText(s);
+    on_tbSearch_clicked();
+}
+
+
+void PlateListWindow::on_actionBroken_triggered()
+{
+    int row = ui->twPlates->currentRow();
+    if(row < 0)
+        return;
+
+    int id = ui->twPlates->item(row, 0)->data(Qt::UserRole).toInt();
+    Plate plate = listPlate.GetItem(id);
+    if(plate.listStatus.size() > 0)
+        return;
+
+    QString comment = QInputDialog::getText(this, "Ввод текста", "Введите комментарий: ");
+    plate.AddStatus(plate, Status::FAULTY, QDateTime::currentDateTime(), comment);
+
+    QTableWidgetItem *item = new QTableWidgetItem(plate.listStatus.last().nameStatus);
+    qDebug() << plate.listStatus.last().nameStatus;
+    item->setToolTip(comment);
+    ui->twPlates->setItem(row, 6, item);
+}
+
+
+void PlateListWindow::on_twPlates_customContextMenuRequested(const QPoint &pos)
+{
+    QMenu menu(this);
+    menu.addAction("Удалить", this, SLOT(on_pbDelete_clicked()));
+    menu.addAction("Забраковать", this, SLOT(on_actionBroken_triggered()));
+    menu.exec(ui->twPlates->viewport()->mapToGlobal(pos));
+}

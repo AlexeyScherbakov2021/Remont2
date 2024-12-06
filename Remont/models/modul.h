@@ -21,13 +21,13 @@ public:
 
     bool operator==(const Modul &other) const { return this->id == other.id; }
 
-    QString numAndComment()
+    QString FullNameAndComment()
     {
-        QString res = number;
+        QString res = name + " №" + number;
         Status status = listStatus.last();
         if(listStatus.size() > 0 && !status.Comment.isEmpty())
         {
-            res = number + " (" + status.Comment + ")";
+            res = res + " (" + status.Comment + ")";
         }
         return res;
     }

@@ -33,6 +33,11 @@ private slots:
     void on_rbAll_clicked();
     void on_pbSelect_clicked();
     void on_twPlates_itemDoubleClicked(QTableWidgetItem *item);
+    void slotReadScan(QString s);
+
+    void on_actionBroken_triggered();
+
+    void on_twPlates_customContextMenuRequested(const QPoint &pos);
 
 private:
     Ui::PlateListWindow *ui;
@@ -43,6 +48,8 @@ private:
     QList<Plate> *listExcludePlate = nullptr;
     QMap<int, QString> listPlateType;
     Plate selectPlate;
+    QMetaObject::Connection conn;
+
 
     void UpdateForm();
     void LinkTypePlate();

@@ -75,7 +75,9 @@ public:
 
     void LoadStatus(Product &prod);
     void LoadStatus(Modul &modul);
+    void LoadStatus(Plate &plate);
     int GetTypeStatus(int idStatus);
+    const QString GetNameStatus(int id);
 
     bool LinkPlate(int idPlate, int idModul);
     void LoadChildProduct(Product &prod);
@@ -87,8 +89,10 @@ public:
 
     bool AddStatus(Modul &modul, Status &status);
     bool AddStatus(Product &product, Status &status);
+    bool AddStatus(Plate &plate, Status &status);
     bool DelLastStatus(Modul &modul);
     bool DelLastStatus(Product &product);
+    bool DelLastStatus(Plate &plate);
 
     void LoadOrganization(QMap<int, QString> &listOrg);
     void LoadOrganization(QList<Organization> &listOrg);
@@ -117,6 +121,7 @@ public:
     int32_t GetNextNumber(uint year);
     void CreateGenerator(uint year);
     void RestartSerialNumber(uint year);
+    int GetCurrentNumber(uint year);
 };
 
 #endif

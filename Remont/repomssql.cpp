@@ -755,6 +755,35 @@ void RepoMSSQL::LoadStatus(Modul &mod)
     }
 }
 
+void RepoMSSQL::LoadStatus(Plate &plate)
+{
+    plate.listStatus.clear();
+
+    QSqlQuery query;
+    query.prepare("select ps.id,idPlate,idStatus,DateStatus,Comment,sd.nameStatus,sd.typeStatus "
+                  "from PlateStatus ps "
+                  "join StatusDevice sd on sd.id=ps.idStatus "
+                  "where ps.idPlate=:id "
+                  "order by ps.DateStatus");
+
+    query.bindValue(":id", plate.id);
+
+    query.exec();
+    while(query.next())
+    {
+        Status stat;
+        stat.id = query.value(0).toInt();
+        stat.idDevice = query.value(1).toInt();
+        stat.idStatus = (Status::Stat)query.value(2).toInt();
+        stat.dateStatus = query.value(3).toDateTime();
+        stat.Comment = query.value(4).toString();
+        stat.nameStatus = query.value(5).toString();
+        stat.typeStatus = query.value(6).toInt();
+        plate.listStatus.push_back(stat);
+    }
+
+}
+
 int RepoMSSQL::GetTypeStatus(int idStatus)
 {
     int typeStat = 0;
@@ -767,6 +796,20 @@ int RepoMSSQL::GetTypeStatus(int idStatus)
         typeStat = query.value(0).toInt();
 
     return typeStat;
+}
+
+const QString RepoMSSQL::GetNameStatus(int idStatus)
+{
+    QString nameStatus = 0;
+    QSqlQuery query;
+    query.prepare("select NameStatus from StatusDevice where id=:id");
+    query.bindValue(":id", idStatus);
+
+    query.exec();
+    if(query.next())
+        nameStatus = query.value(0).toString();
+
+    return nameStatus;
 }
 
 //------------------------------------------------------------------------------------------------------
@@ -873,6 +916,7 @@ void RepoMSSQL::FindItems(const QString &number, QList<Plate> &listPlate, int /*
         // plate.VNFT = query.value(5).toString();
         plate.idParent = query.value(5).toInt();
         plate.idType = query.value(6).toInt();
+        LoadStatus(plate);
         listPlate.push_back(plate);
     }
 }
@@ -1551,7 +1595,7 @@ bool RepoMSSQL::AddStatus(Product &product, Status &status)
 
     res = query.exec();
     if(!res)
-        qDebug() << "Ошибка при добавлении записи в ModulStatus";
+        qDebug() << "Ошибка при добавлении записи в ProductStatus";
     else
     {
         if(query.next())
@@ -1561,6 +1605,32 @@ bool RepoMSSQL::AddStatus(Product &product, Status &status)
     return res;
 
 }
+
+bool RepoMSSQL::AddStatus(Plate &plate, Status &status)
+{
+    bool res;
+    QSqlQuery query;
+
+    query.prepare("insert into PlateStatus (idPlate,idStatus,DateStatus,Comment) "
+                  "output inserted.id values(:idPlate,:idStatus,:DateStatus,:Comment)");
+
+    query.bindValue(":idPlate", plate.id);
+    query.bindValue(":idStatus", status.idStatus);
+    query.bindValue(":DateStatus", status.dateStatus);
+    query.bindValue(":Comment", status.Comment);
+
+    res = query.exec();
+    if(!res)
+        qDebug() << "Ошибка при добавлении записи в PlateStatus";
+    else
+    {
+        if(query.next())
+            status.id = query.value(0).toInt();
+    }
+    return res;
+}
+
+
 
 bool RepoMSSQL::DelLastStatus(Modul &modul)
 {
@@ -1596,6 +1666,23 @@ bool RepoMSSQL::DelLastStatus(Product &product)
 
     return res;
 
+}
+
+bool RepoMSSQL::DelLastStatus(Plate &plate)
+{
+    bool res;
+    QSqlQuery query;
+
+    query.prepare("delete from PlateStatus where id = (select Top(1) id FROM PlateStatus where idPlate=:idPlate "
+                  "order by DateStatus desc)");
+
+    query.bindValue(":idPlate", plate.id);
+
+    res = query.exec();
+    if(!res)
+        qDebug() << "Ошибка при удалении записи в PlateStatus";
+
+    return res;
 }
 
 //------------------------------------------------------------------------------------------------------
@@ -2370,13 +2457,30 @@ int32_t RepoMSSQL::GetNextNumber(uint year)
 void RepoMSSQL::CreateGenerator(uint year)
 {
     QSqlQuery query;
-    bool res = query.exec(QString("CREATE SEQUENCE GenSerial%1 as numeric START WITH 1 INCREMENT BY 1").arg(year));
+    query.exec(QString("CREATE SEQUENCE GenSerial%1 as int START WITH 1 INCREMENT BY 1").arg(year));
 
 }
 
 void RepoMSSQL::RestartSerialNumber(uint year)
 {
     QSqlQuery query;
-    query.exec("ALTER SEQUENCE GenSerial restart");
+    query.exec(QString("ALTER SEQUENCE GenSerial%1 restart").arg(year));
+}
+
+int RepoMSSQL::GetCurrentNumber(uint year)
+{
+    int res = -1;
+    QSqlQuery query;
+    QString sql = QString("select current_value from sys.sequences where name = 'GenSerial%1'").arg(year);
+    query.exec(sql);
+    if(query.next())
+    {
+        QByteArray ba = query.value(0).toByteArray();
+        QDataStream ds(ba);
+        ds.setByteOrder(QDataStream::LittleEndian);
+        ds >> res;
+    }
+    return res;
+
 }
 

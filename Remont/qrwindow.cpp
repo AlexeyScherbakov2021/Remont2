@@ -14,6 +14,7 @@ QRWindow::QRWindow(QWidget *parent)
     , ui(new Ui::QRWindow)
 {
     ui->setupUi(this);
+    ShowCurrentNumber();
 }
 
 QRWindow::~QRWindow()
@@ -40,6 +41,7 @@ void QRWindow::on_pbGenerate_clicked()
     // QString sNum = QString("%1%2").arg(year - 2000).arg(num, 5, 10, QChar('0'));
     // QImage image = gen.generateQr(ui->leText->text(), 500, 1);
     // ui->lbImage->setPixmap(QPixmap::fromImage(image));
+    ShowCurrentNumber();
 }
 
 
@@ -78,7 +80,7 @@ void QRWindow::paintPages(QPrinter *printer)
     // auto pg = printer->pageRect(QPrinter::Millimeter);
     // painter.setWindow(pg.toRect());
 
-    int cntStick = 20;
+    // int cntStick = 20;
     QRect r(painter.viewport());
     // painter.setBrush(Qt::white);
     // painter.drawRect(r);
@@ -169,5 +171,21 @@ void QRWindow::paintStick(QPainter &painter, int x, int y, QString number)
     painter.drawText(r, Qt::AlignCenter, QString("№ %1").arg(number));
 }
 
+void QRWindow::ShowCurrentNumber()
+{
+    RepoMSSQL repo;
+    uint year = ui->cbYear->currentText().toUInt();
+    int currNumber = repo.GetCurrentNumber(year);
+    ui->lbCurrentNum->setText(QString::number(currNumber));
 
+
+}
+
+
+
+
+void QRWindow::on_cbYear_currentIndexChanged(int /*index*/)
+{
+    ShowCurrentNumber();
+}
 

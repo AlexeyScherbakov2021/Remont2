@@ -3,8 +3,9 @@
 
 #include "IDevice.h"
 #include <QDateTime>
+#include <infrastructure/IStatus.h>
 
-class Plate : public IDevice
+class Plate : public IDevice, public StatusList<Plate>
 {
 public:
     QString VNFT;

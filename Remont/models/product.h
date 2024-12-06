@@ -32,10 +32,10 @@ public:
 
     explicit Product() : idSetterOut(0) { typeDevice = ev::DeviceKind::PRODUCT;}
 
-    QString numAndComment()
+    QString FullNameAndComment()
     {
         QString comment = getLastComment().isEmpty() ? "" : " (" + getLastComment() + ")";
-        return number + comment;
+        return name + " №" + number + comment;
 
     }
 

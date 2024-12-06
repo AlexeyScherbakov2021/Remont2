@@ -21,6 +21,8 @@ private slots:
     void on_pbPrint_clicked();
     void paintPages(QPrinter *printer);
 
+    void on_cbYear_currentIndexChanged(int index);
+
 private:
     const int widthStick = 1020;
     const int heightStick = 350;
@@ -29,6 +31,7 @@ private:
     QStringList listNumbers;
     // void formatDocument(QTextDocument *doc);
     void paintStick(QPainter &painter, int x, int y, QString number);
+    void ShowCurrentNumber();
 };
 
 #endif // QRWINDOW_H

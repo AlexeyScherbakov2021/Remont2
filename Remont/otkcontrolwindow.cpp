@@ -35,7 +35,7 @@ void OTKControlWindow::loadCreatedDevice()
     for(auto &it : Modules.listItems)
     {
         QListWidgetItem *item = new QListWidgetItem();
-        item->setText(it.name + " №" + it.numAndComment());
+        item->setText(/*it.name + " №" + */it.FullNameAndComment());
         item->setData(Qt::UserRole, it.id);
         item->setData(Qt::UserRole + 1, it.number);
         ui->lwModul->addItem(item);
@@ -46,7 +46,7 @@ void OTKControlWindow::loadCreatedDevice()
     for(auto &it : Products.listItems)
     {
         QListWidgetItem *item = new QListWidgetItem();
-        item->setText(it.name + " №" + it.numAndComment());
+        item->setText(/*it.name + " №" + */it.FullNameAndComment());
         item->setData(Qt::UserRole, it.id);
         item->setData(Qt::UserRole + 1, it.number);
         ui->lwProduct->addItem(item);
@@ -65,8 +65,9 @@ void OTKControlWindow::loadBrockenDevice()
     for(auto &it : Modules.listItems)
     {
         QListWidgetItem *item = new QListWidgetItem();
-        item->setText(it.name + " №" + it.numAndComment());
+        item->setText(/*it.name + " №" + */it.FullNameAndComment());
         item->setData(Qt::UserRole, it.id);
+        item->setData(Qt::UserRole + 1, it.number);
         ui->lwModul->addItem(item);
     }
 
@@ -76,8 +77,9 @@ void OTKControlWindow::loadBrockenDevice()
     for(auto &it : Products.listItems)
     {
         QListWidgetItem *item = new QListWidgetItem();
-        item->setText(it.name + " №" + it.numAndComment());
+        item->setText(/*it.name + " №" + */it.FullNameAndComment());
         item->setData(Qt::UserRole, it.id);
+        item->setData(Qt::UserRole + 1, it.number);
         ui->lwProduct->addItem(item);
     }
 
@@ -135,7 +137,7 @@ void OTKControlWindow::on_tbDelBroken_clicked()
     QListWidgetItem *item2 = new QListWidgetItem(*item);
     auto modul = std::find_if(Modules.listItems.cbegin(), Modules.listItems.cend(), [&] (const Modul p) { return p.id == idModul;});
     Modul mod = *modul;
-    item2->setText(mod.numAndComment());
+    item2->setText(mod.FullNameAndComment());
     ui->lwModul->addItem(item2);
 
     listStatus.remove(idModul);
@@ -176,7 +178,7 @@ void OTKControlWindow::on_tbDelBrokenProd_clicked()
     QListWidgetItem *item2 = new QListWidgetItem(*item);
     auto prod = std::find_if(Products.listItems.cbegin(), Products.listItems.cend(), [&] (const Product p) { return p.id == idProd;});
     Product product = *prod;
-    item2->setText( product.numAndComment());
+    item2->setText( product.FullNameAndComment());
     ui->lwProduct->addItem(item2);
 
     listStatusProd.remove(idProd);
@@ -266,18 +268,20 @@ void OTKControlWindow::ItemCheckedControl(QListWidgetItem *item)
         status.idDevice = idProd;
         status.dateStatus = QDateTime::currentDateTime();
 
+        // контроль пройден
         if(ui->rbCheck->isChecked())
         {
             status.idStatus = Status::CORRECT;
             ui->lwCheckedProd->addItem(item2);
         }
+        // контроль не пройден
         else
         {
             QString comment = QInputDialog::getText(this, "Ввод текста", "Введите комментарий: ");
             status.Comment = comment;
             status.idStatus = Status::FAULTY;
 
-            item2->setText(product.numAndComment());
+            item2->setText(product.name + " " + product.number + " (" + comment + ")");
             ui->lwBrokenProd->addItem(item2);
         }
 
@@ -305,7 +309,7 @@ void OTKControlWindow::ItemCheckedControl(QListWidgetItem *item)
             QString comment = QInputDialog::getText(this, "Ввод текста", "Введите комментарий: ");
             status.idStatus = Status::FAULTY;
             status.Comment = comment;
-            item2->setText(mod.numAndComment());
+            item2->setText(mod.name + " " + mod.number + " (" + comment + ")");
             ui->lwBroken->addItem(item2);
         }
         listStatus[idModul] = status;;

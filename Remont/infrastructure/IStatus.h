@@ -66,19 +66,19 @@ public:
 
     void AddStatus(T &device, Status::Stat idStat, const QDateTime &dateRegister,  const QString &comment = "")
     {
+        RepoMSSQL repo;
         Status status;
         status.idStatus = idStat;
         status.idDevice = device.id;
         status.dateStatus = dateRegister;
         status.Comment = comment;
-        RepoMSSQL repo;
+        status.nameStatus = repo.GetNameStatus((int)idStat);
         if(repo.AddStatus(device, status))
         {
             status.typeStatus = repo.GetTypeStatus(idStat);
             listStatus.push_back(status);
         }
     }
-
 
     QString getNameLastStatus() const
     {
