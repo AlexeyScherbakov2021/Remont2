@@ -38,13 +38,6 @@ public:
     }
 
 
-    // void FindItems(int status = 0)
-    // {
-    //     repo.FindItems("", listItems, status);
-    // }
-    // virtual T GetItem(QString number) = 0;
-
-
     virtual T GetItem(int id)
     {
         T resT;

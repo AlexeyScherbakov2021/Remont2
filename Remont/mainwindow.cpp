@@ -18,6 +18,8 @@
 #include "platefwwindow.h"
 #include "logwindow.h"
 #include "qrwindow.h"
+#include "otkwindow.h"
+#include <models/listdevice.h>
 
 #include <QSettings>
 
@@ -92,7 +94,10 @@ void MainWindow::on_pbRegister_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbOTK_clicked()
 {
-    OTKControlWindow *win = new OTKControlWindow(this);
+    ListPlate *listPlate = new ListPlate();
+    OTKWindow *win = new OTKWindow(listPlate, this);
+
+    // OTKControlWindow *win = new OTKControlWindow(this);
     win->setAttribute(Qt::WA_DeleteOnClose);
     win->show();
 }
