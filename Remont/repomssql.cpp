@@ -2444,6 +2444,23 @@ void RepoMSSQL::LoadTypePlate(QVector<PlateType> &listType)
 
 }
 
+int RepoMSSQL::GetCountRegisterPlate(QString numDoc, int idType)
+{
+    QSqlQuery query;
+    int res = 0;
+
+    query.prepare("select count(*) from plate where NumberDoc=:NumberDoc and idPlateType=:idPlateType");
+    query.bindValue(":NumberDoc", numDoc);
+    query.bindValue(":idPlateType", idType);
+    query.exec();
+    if(query.next())
+    {
+        res = query.value(0).toInt();
+    }
+    return res;
+}
+
+
 int32_t RepoMSSQL::GetNextNumber(uint year)
 {
     int32_t res = -1;

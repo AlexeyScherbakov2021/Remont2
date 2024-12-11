@@ -274,7 +274,10 @@ background-color: LightGray;
   </action>
   <action name="aListPlate">
    <property name="text">
-    <string>Зарегестрированные платы</string>
+    <string>Зарегистрированные платы</string>
+   </property>
+   <property name="toolTip">
+    <string>Зарегистрированные платы</string>
    </property>
   </action>
   <action name="aRegDevice">

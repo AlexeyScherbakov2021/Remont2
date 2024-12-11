@@ -1,4 +1,5 @@
 #include "platewindow.h"
+#include "repofp.h"
 #include "scan.h"
 #include "ui_platewindow.h"
 
@@ -15,7 +16,7 @@ PlateWindow::PlateWindow(QWidget *parent)
 
     // model.setQuery("select pt_VNFT,pt_name from PlateType");
     // ui->cbVNFT->setModel(&model);
-    QVector<PlateType> listVNFT;
+    listVNFT;
 
     repo.LoadTypePlate(listVNFT);
 
@@ -59,7 +60,8 @@ void PlateWindow::on_pbAdd_clicked()
         item->setData(Qt::UserRole, plate.id);
         ui->listWidget->addItem(item);
         ui->leNumber->clear();
-
+        ++countUse;
+        UpdateUseCount();
     }
 
 }
@@ -77,7 +79,11 @@ void PlateWindow::on_tbDelete_clicked()
 
     // удаление платы из базы
     if(repo.DeletePlate(id))
+    {
         delete ui->listWidget->currentItem();
+        --countUse;
+        UpdateUseCount();
+    }
 }
 
 
@@ -92,6 +98,19 @@ void PlateWindow::on_listWidget_currentRowChanged(int currentRow)
     ui->tbDelete->setEnabled(currentRow >= 0);
 }
 
+void PlateWindow::UpdateUseCount()
+{
+    if(countFromDoc > 0)
+        ui->lbCount->setText(QString("%1 (рег. %2)").arg(countFromDoc).arg(countUse));
+    else
+        ui->lbCount->clear();
+
+    if(countUse > countFromDoc)
+        ui->lbCount->setStyleSheet("border: 2px solid #FF0000;");
+    else
+        ui->lbCount->setStyleSheet("border: 1px solid #000000;");
+}
+
 
 //-------------------------------------------------------------------------
 // строка от сканера
@@ -103,5 +122,50 @@ void PlateWindow::slotReadScan(QString s)
         ui->leNumber->setText(s);
         emit ui->pbAdd->click();
     }
+}
+
+
+void PlateWindow::on_tbDoc_clicked()
+{
+    RepoFP repoFP;
+    Nakl nakl;
+    int useCount;
+    QList<Nakl> listNakl;
+    repoFP.getDoc(ui->leNumberDoc->text(), listNakl);
+
+    size_t size = listNakl.size();
+
+    if(size == 0)
+    {
+        // накладная не найдена
+    }
+    else
+    {
+        if(size == 1)
+        {
+            int i = 0;
+            nakl = listNakl.first();
+            ui->cbVNFT->setCurrentIndex(-1);
+            for(auto &it : listVNFT)
+            {
+                if(it.VNFT == nakl.VNFT)
+                {
+                    ui->cbVNFT->setCurrentIndex(i);
+                    countUse = repo.GetCountRegisterPlate(ui->leNumberDoc->text(), it.id);
+                    countFromDoc = nakl.count;
+                    break;
+                }
+                ++i;
+            }
+        }
+        else
+        {
+            ui->cbVNFT->setCurrentIndex(-1);
+        }
+    }
+
+    ui->lbName->setText(nakl.name);
+    ui->lbPlan->setText(nakl.plan);
+    UpdateUseCount();
 }
 

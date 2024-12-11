@@ -3,6 +3,7 @@
 #include "shipwindow.h"
 #include "ui_listshipwindow.h"
 
+#include <QElapsedTimer>
 #include <QMessageBox>
 
 ListShipWindow::ListShipWindow(QWidget *parent, bool isFree)
@@ -13,7 +14,14 @@ ListShipWindow::ListShipWindow(QWidget *parent, bool isFree)
 
     QApplication::changeOverrideCursor(Qt::WaitCursor);
 
+    // QElapsedTimer t;
+    // t.start();
+    // qDebug() << t.elapsed() << "Start select";
+
     Ship.FindItems("", 0, isFree);
+
+    // qDebug() << t.elapsed() << "End select";
+    // t.restart();
 
     ui->tableWidget->setRowCount(Ship.listItems.size());
     ui->tableWidget->setColumnWidth(0, 200);
@@ -30,9 +38,17 @@ ListShipWindow::ListShipWindow(QWidget *parent, bool isFree)
         ++row;
     }
 
+    // qDebug() << t.elapsed() << "Added to Table";
+    // t.restart();
+
     // ui->tableWidget->resizeColumnsToContents();
     ui->tableWidget->resizeRowsToContents();
+
+    // qDebug() << t.elapsed() << "Resize Table";
+
     QApplication::restoreOverrideCursor();
+
+
 
 }
 

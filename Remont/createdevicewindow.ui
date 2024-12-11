@@ -183,7 +183,7 @@ border: 1px solid #999999;
             </size>
            </property>
            <property name="text">
-            <string>Зарегестрировать</string>
+            <string>Зарегистрировать</string>
            </property>
            <property name="icon">
             <iconset resource="resource.qrc">
@@ -270,7 +270,7 @@ border: 1px solid #999999;
            <item row="3" column="2">
             <widget class="QPushButton" name="pbRegModul">
              <property name="text">
-              <string>Зарегестрировать</string>
+              <string>Зарегистрировать</string>
              </property>
              <property name="icon">
               <iconset resource="resource.qrc">

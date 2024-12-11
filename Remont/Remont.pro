@@ -39,6 +39,7 @@ SOURCES += \
     qr/qrcodegen/qrcodegen.cpp \
     qrwindow.cpp \
     remontwindow.cpp \
+    repofp.cpp \
     repomssql.cpp \
     scan.cpp \
     selectdevicewindow.cpp \
@@ -90,6 +91,7 @@ HEADERS += \
     qr/qrcodegen/qrcodegen.h \
     qrwindow.h \
     remontwindow.h \
+    repofp.h \
     repomssql.h \
     scan.h \
     selectdevicewindow.h \

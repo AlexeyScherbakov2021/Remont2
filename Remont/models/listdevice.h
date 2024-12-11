@@ -2,12 +2,8 @@
 #define LISTDEVICE_H
 
 #include "entity.h"
-// #include "product.h"
-
 #include <QList>
 #include <repomssql.h>
-// #include "setterout.h"
-// #include "shipment.h"
 
 template <typename T>
 class ListDevice
