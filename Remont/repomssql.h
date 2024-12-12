@@ -68,10 +68,12 @@ public:
     void FindItems(const QString &number, QList<Shipment> &listShip, int status = 0, bool isFree = false);
 
     // void LoadProductType(QMap<int, QString> &listTypeProduct);
-    void LoadProductType(QMap<int, ProductType> &listTypeProduct);
+    // void LoadProductType(QMap<int, ProductType> &listTypeProduct);
+    void LoadProductType(QList<ProductType> &listTypeProduct);
 
     // void LoadModuleType(QMap<int, QString> &listTypeModule);
-    void LoadModuleType(QMap<int, ModulType> &listTypeModule);
+    // void LoadModuleType(QMap<int, ModulType> &listTypeModule);
+    void LoadModuleType(QList<ModulType> &listTypeModule);
 
     void LoadStatus(Product &prod);
     void LoadStatus(Modul &modul);
@@ -118,6 +120,8 @@ public:
 
     void LoadTypePlate(QVector<PlateType> &listType);
     int GetCountRegisterPlate(QString numDoc, int idType);
+    int GetCountRegisterModul(QString numDoc, int idType);
+    int GetCountRegisterProduct(QString numDoc, int idType);
 
     int32_t GetNextNumber(uint year);
     void CreateGenerator(uint year);

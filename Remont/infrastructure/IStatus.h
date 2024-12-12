@@ -87,7 +87,7 @@ public:
 
     QString getLastComment() const
     {
-        return listStatus.last().Comment;
+        return listStatus.size() > 0 ? listStatus.last().Comment : "";
     }
 
     bool getIsRepair() const

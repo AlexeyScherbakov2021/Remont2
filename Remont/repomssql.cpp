@@ -828,7 +828,26 @@ const QString RepoMSSQL::GetNameStatus(int idStatus)
 //     }
 // }
 
-void RepoMSSQL::LoadModuleType(QMap<int, ModulType> &listTypeModule)
+// void RepoMSSQL::LoadModuleType(QMap<int,ModulType> &listTypeModule)
+// {
+//     listTypeModule.clear();
+//     QSqlQuery query;
+//     query.prepare("select id,mt_name,mt_number,mt_garantMonth from ModuleType");
+
+//     query.exec();
+//     while(query.next())
+//     {
+//         ModulType mType;
+//         mType.id = query.value(0).toInt();
+//         mType.name = query.value(1).toString();
+//         mType.number = query.value(2).toString();
+//         mType.garantMonth = query.value(3).toInt();
+//         listTypeModule.insert(query.value(0).toInt(), mType);
+//     }
+
+// }
+
+void RepoMSSQL::LoadModuleType(QList<ModulType> &listTypeModule)
 {
     listTypeModule.clear();
     QSqlQuery query;
@@ -842,11 +861,10 @@ void RepoMSSQL::LoadModuleType(QMap<int, ModulType> &listTypeModule)
         mType.name = query.value(1).toString();
         mType.number = query.value(2).toString();
         mType.garantMonth = query.value(3).toInt();
-        listTypeModule.insert(query.value(0).toInt(), mType);
+        listTypeModule.push_back(mType);
     }
 
 }
-
 
 //------------------------------------------------------------------------------------------------------
 // Загрузка типов изделий
@@ -864,7 +882,26 @@ void RepoMSSQL::LoadModuleType(QMap<int, ModulType> &listTypeModule)
 //     }
 // }
 
-void RepoMSSQL::LoadProductType(QMap<int, ProductType> &listTypeProduct)
+// void RepoMSSQL::LoadProductType(QMap<int, ProductType> &listTypeProduct)
+// {
+//     listTypeProduct.clear();
+//     QSqlQuery query;
+//     query.prepare("select id,gt_name,gt_number,gt_garantMonth from ProductType");
+
+//     query.exec();
+//     while(query.next())
+//     {
+//         ProductType pType;
+//         pType.id = query.value(0).toInt();
+//         pType.name = query.value(1).toString();
+//         pType.number = query.value(2).toString();
+//         pType.garantMonth = query.value(3).toInt();
+//         listTypeProduct.insert(query.value(0).toInt(), pType);
+//     }
+
+// }
+
+void RepoMSSQL::LoadProductType(QList<ProductType> &listTypeProduct)
 {
     listTypeProduct.clear();
     QSqlQuery query;
@@ -878,7 +915,7 @@ void RepoMSSQL::LoadProductType(QMap<int, ProductType> &listTypeProduct)
         pType.name = query.value(1).toString();
         pType.number = query.value(2).toString();
         pType.garantMonth = query.value(3).toInt();
-        listTypeProduct.insert(query.value(0).toInt(), pType);
+        listTypeProduct.push_back(pType);
     }
 
 }
@@ -2458,6 +2495,40 @@ int RepoMSSQL::GetCountRegisterPlate(QString numDoc, int idType)
         res = query.value(0).toInt();
     }
     return res;
+}
+
+int RepoMSSQL::GetCountRegisterModul(QString numDoc, int idType)
+{
+    QSqlQuery query;
+    int res = 0;
+
+    query.prepare("select count(*) from modules where m_numberDoc=:NumberDoc and m_modTypeId=:m_modTypeId");
+    query.bindValue(":NumberDoc", numDoc);
+    query.bindValue(":m_modTypeId", idType);
+    query.exec();
+    if(query.next())
+    {
+        res = query.value(0).toInt();
+    }
+    return res;
+
+}
+
+int RepoMSSQL::GetCountRegisterProduct(QString numDoc, int idType)
+{
+    QSqlQuery query;
+    int res = 0;
+
+    query.prepare("select count(*) from product where g_numberDoc=:NumberDoc and g_productTypeId=:g_productTypeId");
+    query.bindValue(":NumberDoc", numDoc);
+    query.bindValue(":g_productTypeId", idType);
+    query.exec();
+    if(query.next())
+    {
+        res = query.value(0).toInt();
+    }
+    return res;
+
 }
 
 

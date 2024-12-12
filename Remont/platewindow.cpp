@@ -56,6 +56,7 @@ void PlateWindow::on_pbAdd_clicked()
     }
     else
     {
+        plate.AddStatus(plate, Status::CREATE);
         QListWidgetItem *item = new QListWidgetItem(plate.number + " (прош." + plate.number2 + ")");
         item->setData(Qt::UserRole, plate.id);
         ui->listWidget->addItem(item);

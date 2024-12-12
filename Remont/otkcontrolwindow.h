@@ -8,6 +8,7 @@
 #include <QQueue>
 
 #include <models/listmodul.h>
+#include <models/listplate.h>
 #include <models/listproduct.h>
 #include <models/modul.h>
 #include <models/product.h>
@@ -29,6 +30,9 @@ private slots:
     void on_tbDelBroken_clicked();
     void on_tbDelCheckProd_clicked();
     void on_tbDelBrokenProd_clicked();
+    void on_tbDelCheckPlate_clicked();
+    void on_tbDelBrokenPlate_clicked();
+
     void on_OTKControlWindow_accepted();
     void on_rbOldDevice_toggled(bool checked);
     void slotReadScan(QString s);
@@ -40,8 +44,10 @@ private:
     QMetaObject::Connection conn;
     ListModul Modules;
     ListProduct Products;
+    ListPlate Plates;
     QMap<int, Status> listStatus;
     QMap<int, Status> listStatusProd;
+    QMap<int, Status> listStatusPlate;
     void loadCreatedDevice();
     void loadBrockenDevice();
     QString scanNumber;

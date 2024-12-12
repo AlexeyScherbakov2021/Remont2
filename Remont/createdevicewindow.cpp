@@ -2,6 +2,7 @@
 #include "platelistwindow.h"
 #include "scan.h"
 // #include "selectplatewindow.h"
+#include "repofp.h"
 #include "ui_createdevicewindow.h"
 
 // #include <models/listmodul.h>
@@ -20,17 +21,27 @@ CreateDeviceWindow::CreateDeviceWindow(QWidget *parent)
 
     ui->setupUi(this);
 
+    ui->deCreateDate->setDateTime(QDateTime::currentDateTime());
+    ui->deCreateDateP->setDateTime(QDateTime::currentDateTime());
+
     repo.LoadModuleType(listTypeModule);
+    for(auto &it : listTypeModule)
+        ui->cbModul->addItem(it.name, it.id);
+
+
     repo.LoadProductType(listTypeProduct);
+    for(auto &it : listTypeModule)
+        ui->cbProduct->addItem(it.name, it.id);
 
-    for(auto it = listTypeModule.cbegin(); it != listTypeModule.cend(); ++it)
-        ui->cbModul->addItem((*it).name, it.key());
+    // for(auto it = listTypeModule.cbegin(); it != listTypeModule.cend(); ++it)
+    //     ui->cbModul->addItem((*it).name, it.key());
 
-    for(auto it = listTypeProduct.cbegin(); it != listTypeProduct.cend(); ++it)
-        ui->cbProduct->addItem((*it).name, it.key());
+    // for(auto it = listTypeProduct.cbegin(); it != listTypeProduct.cend(); ++it)
+    //     ui->cbProduct->addItem((*it).name, it.key());
 
     // ui->cbModul->setCurrentIndex(-1);
     // ui->cbProduct->setCurrentIndex(-1);
+
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
 }
@@ -94,6 +105,34 @@ void CreateDeviceWindow::AddPlateToScreen( Plate &plate)
         ui->twPlates->resizeColumnsToContents();
         ui->twPlates->resizeRowsToContents();
     }
+}
+
+void CreateDeviceWindow::UpdateUseCount()
+{
+    if(countFromDoc > 0)
+        ui->lbCount->setText(QString("%1 (рег. %2)").arg(countFromDoc).arg(countUse));
+    else
+        ui->lbCount->clear();
+
+    if(countUse > countFromDoc)
+        ui->lbCount->setStyleSheet("border: 2px solid #FF0000;");
+    else
+        ui->lbCount->setStyleSheet("border: 1px solid #000000;");
+
+}
+
+void CreateDeviceWindow::UpdateUseCountP()
+{
+    if(countFromDocP > 0)
+        ui->lbCountP->setText(QString("%1 (рег. %2)").arg(countFromDocP).arg(countUseP));
+    else
+        ui->lbCountP->clear();
+
+    if(countUseP > countFromDocP)
+        ui->lbCountP->setStyleSheet("border: 2px solid #FF0000;");
+    else
+        ui->lbCountP->setStyleSheet("border: 1px solid #000000;");
+
 }
 
 
@@ -312,5 +351,95 @@ void CreateDeviceWindow::slotReadScan(QString s)
             emit ui->pbRegModul->click();
         }
     }
+}
+
+
+void CreateDeviceWindow::on_tbDoc_clicked()
+{
+    RepoFP repoFP;
+    Nakl nakl;
+    QList<Nakl> listNakl;
+    repoFP.getDoc(ui->leNumberDoc->text(), listNakl);
+
+    size_t size = listNakl.size();
+
+    if(size == 0)
+    {
+        // накладная не найдена
+    }
+    else
+    {
+        if(size == 1)
+        {
+            int i = 0;
+            nakl = listNakl.first();
+            countFromDoc = nakl.count;
+            ui->cbModul->setCurrentIndex(-1);
+            for(auto &it : listTypeModule)
+            {
+                if(it.name == nakl.VNFT)
+                {
+                    ui->cbModul->setCurrentIndex(i);
+                    countUse = repo.GetCountRegisterModul(ui->leNumberDoc->text(), it.id);
+                    break;
+                }
+                ++i;
+            }
+        }
+        else
+        {
+            ui->cbModul->setCurrentIndex(-1);
+        }
+    }
+
+    ui->lbDocName->setText(nakl.name);
+    ui->lbPlan->setText(nakl.plan);
+    UpdateUseCount();
+
+}
+
+
+void CreateDeviceWindow::on_tbDocP_clicked()
+{
+    RepoFP repoFP;
+    Nakl nakl;
+    QList<Nakl> listNakl;
+    repoFP.getDoc(ui->leNumberDocP->text(), listNakl);
+
+    size_t size = listNakl.size();
+
+    if(size == 0)
+    {
+        // накладная не найдена
+    }
+    else
+    {
+        if(size == 1)
+        {
+            int i = 0;
+            nakl = listNakl.first();
+            countFromDocP = nakl.count;
+            ui->cbProduct->setCurrentIndex(-1);
+            for(auto &it : listTypeProduct)
+            {
+                if(it.name == nakl.VNFT)
+                {
+                    ui->cbProduct->setCurrentIndex(i);
+                    countUse = repo.GetCountRegisterProduct(ui->leNumberDocP->text(), it.id);
+                    break;
+                }
+                ++i;
+            }
+        }
+        else
+        {
+            ui->cbProduct->setCurrentIndex(-1);
+        }
+    }
+
+    ui->lbDocNameP->setText(nakl.name);
+    ui->lbPlanP->setText(nakl.plan);
+    UpdateUseCountP();
+
 }
 

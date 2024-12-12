@@ -51,6 +51,18 @@ void OTKControlWindow::loadCreatedDevice()
         item->setData(Qt::UserRole + 1, it.number);
         ui->lwProduct->addItem(item);
     }
+
+    Plates.FindItems("", Status::CREATE);
+    ui->lwPlate->clear();
+    for(auto &it : Plates.listItems)
+    {
+        QListWidgetItem *item = new QListWidgetItem();
+        item->setText(it.VNFT + " №" + it.number);
+        item->setData(Qt::UserRole, it.id);
+        item->setData(Qt::UserRole + 1, it.number);
+        ui->lwPlate->addItem(item);
+    }
+
 }
 
 
@@ -186,6 +198,41 @@ void OTKControlWindow::on_tbDelBrokenProd_clicked()
 
 }
 
+void OTKControlWindow::on_tbDelCheckPlate_clicked()
+{
+    QListWidgetItem *item = ui->lwCheckedPlate->currentItem();
+    if(item == nullptr)
+        return;
+
+    int id = item->data(Qt::UserRole).toInt();
+    QListWidgetItem *item2 = new QListWidgetItem(*item);
+    ui->lwPlate->addItem(item2);
+
+    listStatusPlate.remove(id);
+
+    delete item;
+
+}
+
+void OTKControlWindow::on_tbDelBrokenPlate_clicked()
+{
+    QListWidgetItem *item = ui->lwBrokenPlate->currentItem();
+    if(item == nullptr)
+        return;
+
+    int id = item->data(Qt::UserRole).toInt();
+    QListWidgetItem *item2 = new QListWidgetItem(*item);
+    Plate plate = Plates.GetItem(id);
+    // auto plate = std::find_if(Plates.listItems.cbegin(), Plates.listItems.cend(), [&] (const Plate p) { return p.id == id;});
+    // Plate plate2 = plate;
+    item2->setText( plate.FullNameAndComment());
+    ui->lwPlate->addItem(item2);
+
+    listStatusPlate.remove(id);
+    delete item;
+
+}
+
 
 //---------------------------------------------------------------------------------------
 // подтверждение записи в базу при закрытии окна
@@ -229,24 +276,46 @@ void OTKControlWindow::slotReadScan(QString s)
     status.idStatus = Status::CORRECT;
     status.dateStatus = QDateTime::currentDateTime();
 
-    if(ui->tabWidget->currentIndex() == 0)
+    int indexTab = ui->tabWidget->currentIndex();
+    QListWidgetItem *item;
+
+    switch(indexTab)
     {
+    case 0:
         for(int row = 0; row < ui->lwProduct->count(); ++row)
         {
-            QListWidgetItem *item = ui->lwProduct->item(row);
+            item = ui->lwProduct->item(row);
             if(item->data(Qt::UserRole + 1).toString() == s)
+            {
                 ItemCheckedControl(item);
+                break;
+            }
         }
-    }
-    else
-    {
+        break;
+    case 1:
         for(int row = 0; row < ui->lwModul->count(); ++row)
         {
-            QListWidgetItem *item = ui->lwModul->item(row);
+            item = ui->lwModul->item(row);
             if(item->data(Qt::UserRole + 1).toString() == s)
+            {
                 ItemCheckedControl(item);
+                break;
+            }
         }
+        break;
+    case 2:
+        for(int row = 0; row < ui->lwPlate->count(); ++row)
+        {
+            item = ui->lwPlate->item(row);
+            if(item->data(Qt::UserRole + 1).toString() == s)
+            {
+                ItemCheckedControl(item);
+                break;
+            }
+        }
+        break;
     }
+
 }
 
 
@@ -258,14 +327,21 @@ void OTKControlWindow::ItemCheckedControl(QListWidgetItem *item)
     if(item == nullptr)
         return;
 
-    if(ui->tabWidget->currentIndex() == 0)
-    {
-        QListWidgetItem *item2 = new QListWidgetItem(*item);
-        int idProd = item->data(Qt::UserRole).toInt();
-        Product product = Products.GetItem(idProd);
+    QListWidgetItem *item2;
+    Status status;
+    int id;
 
-        Status status;
-        status.idDevice = idProd;
+    int index = ui->tabWidget->currentIndex();
+
+    switch(index)
+    {
+    case 0:
+    {
+        item2 = new QListWidgetItem(*item);
+        id = item->data(Qt::UserRole).toInt();
+        Product prod = Products.GetItem(id);
+
+        status.idDevice = id;
         status.dateStatus = QDateTime::currentDateTime();
 
         // контроль пройден
@@ -281,22 +357,24 @@ void OTKControlWindow::ItemCheckedControl(QListWidgetItem *item)
             status.Comment = comment;
             status.idStatus = Status::FAULTY;
 
-            item2->setText(product.name + " " + product.number + " (" + comment + ")");
+            item2->setText(prod.name + " " + prod.number + " (" + comment + ")");
             ui->lwBrokenProd->addItem(item2);
         }
 
-        product.listStatus.push_back(status);
-        listStatusProd[idProd] = status;
+
+        prod.listStatus.push_back(status);
+        listStatusProd[id] = status;
         delete item;
     }
-    else
-    {
-        QListWidgetItem *item2 = new QListWidgetItem(*item);
-        int idModul = item->data(Qt::UserRole).toInt();
-        Modul mod = Modules.GetItem(idModul);
+        break;
 
-        Status status;
-        status.idDevice = idModul;
+    case 1:
+    {
+        item2 = new QListWidgetItem(*item);
+        id = item->data(Qt::UserRole).toInt();
+        Modul mod = Modules.GetItem(id);
+
+        status.idDevice = id;
         status.dateStatus = QDateTime::currentDateTime();
 
         if(ui->rbCheck->isChecked())
@@ -312,9 +390,39 @@ void OTKControlWindow::ItemCheckedControl(QListWidgetItem *item)
             item2->setText(mod.name + " " + mod.number + " (" + comment + ")");
             ui->lwBroken->addItem(item2);
         }
-        listStatus[idModul] = status;;
+        listStatus[id] = status;;
         mod.listStatus.push_back(status);
         delete item;
+    }
+        break;
+
+    case 2:
+    {
+        item2 = new QListWidgetItem(*item);
+        id = item->data(Qt::UserRole).toInt();
+        Plate plate = Plates.GetItem(id);
+
+        status.idDevice = id;
+        status.dateStatus = QDateTime::currentDateTime();
+
+        if(ui->rbCheck->isChecked())
+        {
+            status.idStatus = Status::CORRECT;
+            ui->lwCheckedPlate->addItem(item2);
+        }
+        else
+        {
+            QString comment = QInputDialog::getText(this, "Ввод текста", "Введите комментарий: ");
+            status.idStatus = Status::FAULTY;
+            status.Comment = comment;
+            item2->setText(plate.name + " " + plate.number + " (" + comment + ")");
+            ui->lwBrokenPlate->addItem(item2);
+        }
+        listStatus[id] = status;;
+        plate.listStatus.push_back(status);
+        delete item;
+    }
+        break;
     }
 }
 
@@ -325,15 +433,23 @@ void OTKControlWindow::ItemCheckedControl(QListWidgetItem *item)
 //---------------------------------------------------------------------------------------
 void OTKControlWindow::on_pbChecked_clicked()
 {
-    if(ui->tabWidget->currentIndex() == 0)
+    int tabIndex = ui->tabWidget->currentIndex();
+
+    QListWidgetItem *item;
+    switch(tabIndex)
     {
-        QListWidgetItem *item = ui->lwProduct->currentItem();
-        ItemCheckedControl(item);
+    case 0:
+        item = ui->lwProduct->currentItem();
+        break;
+    case 1:
+        item = ui->lwModul->currentItem();
+        break;
+    case 2:
+        item = ui->lwPlate->currentItem();
+        break;
     }
-    else
-    {
-        QListWidgetItem *item = ui->lwModul->currentItem();
-        ItemCheckedControl(item);
-    }
+
+    ItemCheckedControl(item);
+
 }
 

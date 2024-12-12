@@ -23,13 +23,18 @@ public:
 
     QString FullNameAndComment()
     {
-        QString res = name + " №" + number;
-        Status status = listStatus.last();
-        if(listStatus.size() > 0 && !status.Comment.isEmpty())
-        {
-            res = res + " (" + status.Comment + ")";
-        }
-        return res;
+        QString s = getLastComment();
+        if(!s.isEmpty())
+            s = "(" + s + ")";
+        return name + " №" + number + s;
+
+        // QString res = name + " №" + number;
+        // Status status = listStatus.last();
+        // if(listStatus.size() > 0 && !status.Comment.isEmpty())
+        // {
+        //     res = res + " (" + status.Comment + ")";
+        // }
+        // return res;
     }
 
     // void setKindDevice() override { typeDevice = ev::DeviceKind::MODUL; }
