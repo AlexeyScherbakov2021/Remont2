@@ -851,7 +851,7 @@ void RepoMSSQL::LoadModuleType(QList<ModulType> &listTypeModule)
 {
     listTypeModule.clear();
     QSqlQuery query;
-    query.prepare("select id,mt_name,mt_number,mt_garantMonth from ModuleType");
+    query.prepare("select id,mt_name,mt_number,mt_garantMonth,mt_VNFT from ModuleType");
 
     query.exec();
     while(query.next())
@@ -861,6 +861,7 @@ void RepoMSSQL::LoadModuleType(QList<ModulType> &listTypeModule)
         mType.name = query.value(1).toString();
         mType.number = query.value(2).toString();
         mType.garantMonth = query.value(3).toInt();
+        mType.VNFT = query.value(4).toString();
         listTypeModule.push_back(mType);
     }
 
@@ -905,7 +906,7 @@ void RepoMSSQL::LoadProductType(QList<ProductType> &listTypeProduct)
 {
     listTypeProduct.clear();
     QSqlQuery query;
-    query.prepare("select id,gt_name,gt_number,gt_garantMonth from ProductType");
+    query.prepare("select id,gt_name,gt_number,gt_garantMonth,gt_VNFT from ProductType");
 
     query.exec();
     while(query.next())
@@ -915,6 +916,7 @@ void RepoMSSQL::LoadProductType(QList<ProductType> &listTypeProduct)
         pType.name = query.value(1).toString();
         pType.number = query.value(2).toString();
         pType.garantMonth = query.value(3).toInt();
+        pType.VNFT = query.value(4).toString();
         listTypeProduct.push_back(pType);
     }
 

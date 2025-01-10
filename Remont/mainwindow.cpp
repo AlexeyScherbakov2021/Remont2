@@ -19,6 +19,8 @@
 #include "logwindow.h"
 #include "qrwindow.h"
 #include "otkwindow.h"
+#include "prodvnftwindow.h"
+#include "modvnftwindow.h"
 #include <models/listdevice.h>
 
 #include <QSettings>
@@ -406,5 +408,26 @@ void MainWindow::on_aGenQR_triggered()
 {
     QRWindow *win = new QRWindow(this);
     win->exec();
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Меню Справочник ВНФТ изделий
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aPRodVNFT_triggered()
+{
+    ProdVNFTWindow *win = new ProdVNFTWindow(this);
+    win->exec();
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Меню Справочник ВНФТ модулей
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aModVNFT_triggered()
+{
+    ModVNFTWindow *win = new ModVNFTWindow(this);
+    win->exec();
+
 }
 

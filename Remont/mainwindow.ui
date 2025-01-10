@@ -220,6 +220,9 @@ background-color: LightGray;
     <addaction name="aRegDevice"/>
     <addaction name="aInstallModul"/>
     <addaction name="aControlOTK"/>
+    <addaction name="separator"/>
+    <addaction name="aPRodVNFT"/>
+    <addaction name="aModVNFT"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
@@ -419,6 +422,16 @@ background-color: LightGray;
   <action name="aGenQR">
    <property name="text">
     <string>Генерация QR кода</string>
+   </property>
+  </action>
+  <action name="aPRodVNFT">
+   <property name="text">
+    <string>Справочник ВНФТ изделий</string>
+   </property>
+  </action>
+  <action name="aModVNFT">
+   <property name="text">
+    <string>Справочник ВНФТ модулей</string>
    </property>
   </action>
  </widget>

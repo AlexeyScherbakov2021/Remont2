@@ -29,12 +29,14 @@ SOURCES += \
     models/listproduct.cpp \
     models/listsetter.cpp \
     models/listshipment.cpp \
+    modvnftwindow.cpp \
     otkcontrolwindow.cpp \
     otkwindow.cpp \
     platefwwindow.cpp \
     platelistwindow.cpp \
     platevnftwindow.cpp \
     platewindow.cpp \
+    prodvnftwindow.cpp \
     qr/QrCodeGenerator.cpp \
     qr/qrcodegen/qrcodegen.cpp \
     qrwindow.cpp \
@@ -81,12 +83,14 @@ HEADERS += \
     models/remont.h \
     models/setterout.h \
     models/shipment.h \
+    modvnftwindow.h \
     otkcontrolwindow.h \
     otkwindow.h \
     platefwwindow.h \
     platelistwindow.h \
     platevnftwindow.h \
     platewindow.h \
+    prodvnftwindow.h \
     qr/QrCodeGenerator.h \
     qr/qrcodegen/qrcodegen.h \
     qrwindow.h \
@@ -109,12 +113,14 @@ FORMS += \
     listshipwindow.ui \
     logwindow.ui \
     mainwindow.ui \
+    modvnftwindow.ui \
     otkcontrolwindow.ui \
     otkwindow.ui \
     platefwwindow.ui \
     platelistwindow.ui \
     platevnftwindow.ui \
     platewindow.ui \
+    prodvnftwindow.ui \
     qrwindow.ui \
     remontwindow.ui \
     scan.ui \
@@ -130,7 +136,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     resource.qrc
 
-VERSION = 1.0.0.2
+VERSION = 1.0.0.4
 QMAKE_TARGET_COMPANY = NGK
 QMAKE_TARGET_PRODUCT = Remont
 QMAKE_TARGET_DESCRIPTION = Programm Remont

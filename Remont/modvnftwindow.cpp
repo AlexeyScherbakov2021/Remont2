@@ -1,47 +1,43 @@
-#include "platevnftwindow.h"
-#include "ui_platevnftwindow.h"
+#include "modvnftwindow.h"
+#include "ui_modvnftwindow.h"
 
-#include <models/platetype.h>
+#include <models/modultype.h>
 
 #include <qmessagebox.h>
 
-PlateVNFTWindow::PlateVNFTWindow(QWidget *parent)
+ModVNFTWindow::ModVNFTWindow(QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::PlateVNFTWindow)
+    , ui(new Ui::ModVNFTWindow)
 {
     ui->setupUi(this);
 
-    model2.setTable("PlateType");
+    model2.setTable("ModuleType");
     model2.select();
     model2.setEditStrategy(QSqlTableModel::OnManualSubmit);
-    model2.setHeaderData(1, Qt::Horizontal, "Наименование");
-    model2.setHeaderData(2, Qt::Horizontal, "Децимальный номер");
+    model2.setHeaderData(2, Qt::Horizontal, "Наименование");
+    model2.setHeaderData(4, Qt::Horizontal, "Срок гарантии (мес.)");
+    model2.setHeaderData(5, Qt::Horizontal, "Децимальный номер");
 
     ui->tableView->setModel(&model2);
     ui->tableView->hideColumn(0);
+    ui->tableView->hideColumn(1);
+    ui->tableView->hideColumn(3);
     ui->tableView->resizeColumnsToContents();
     ui->tableView->resizeRowsToContents();
+
     ui->tableView->setAlternatingRowColors(true);
 }
 
-PlateVNFTWindow::~PlateVNFTWindow()
+ModVNFTWindow::~ModVNFTWindow()
 {
     delete ui;
 }
-
-//------------------------------------------------------------------------------------------------
-// Изменение ячейки
-//------------------------------------------------------------------------------------------------
-// void PlateVNFTWindow::on_twVNFT_itemChanged(QTableWidgetItem *item)
-// {
-
-// }
 
 
 //------------------------------------------------------------------------------------------------
 // Добавление строки
 //------------------------------------------------------------------------------------------------
-void PlateVNFTWindow::on_tbAdd_clicked()
+void ModVNFTWindow::on_tbAdd_clicked()
 {
     int row = model2.rowCount();
     model2.insertRow(row);
@@ -54,13 +50,13 @@ void PlateVNFTWindow::on_tbAdd_clicked()
 //------------------------------------------------------------------------------------------------
 // Удаление строки
 //------------------------------------------------------------------------------------------------
-void PlateVNFTWindow::on_tbDelete_clicked()
+void ModVNFTWindow::on_tbDelete_clicked()
 {
     QModelIndex index = ui->tableView->currentIndex();
     model2.removeRow(index.row());
 }
 
-void PlateVNFTWindow::on_pbSave_clicked()
+void ModVNFTWindow::on_pbSave_clicked()
 {
     bool res = model2.submitAll();
     if(!res)
@@ -68,7 +64,7 @@ void PlateVNFTWindow::on_pbSave_clicked()
 }
 
 
-void PlateVNFTWindow::on_pbCancel_clicked()
+void ModVNFTWindow::on_pbCancel_clicked()
 {
     model2.revertAll();
 }

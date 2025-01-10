@@ -10,6 +10,7 @@ class ProductType : public IEntity
 public:
     QString name;
     int garantMonth;
+    QString VNFT;
 
     bool operator==(const ProductType &other) { return other.id == this->id;}
 };

@@ -186,12 +186,31 @@ border: 1px solid #999999;
            <item row="5" column="0">
             <widget class="QLabel" name="label_8">
              <property name="text">
-              <string>Тип изделия</string>
+              <string>Обозначение</string>
              </property>
             </widget>
            </item>
            <item row="5" column="1">
-            <widget class="QComboBox" name="cbProduct"/>
+            <widget class="QComboBox" name="cbProduct">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="minimumContentsLength">
+              <number>0</number>
+             </property>
+             <property name="modelColumn">
+              <number>0</number>
+             </property>
+            </widget>
            </item>
            <item row="6" column="0">
             <widget class="QLabel" name="label_4">
@@ -456,7 +475,7 @@ border: 1px solid #999999;
              <item row="5" column="0">
               <widget class="QLabel" name="label_9">
                <property name="text">
-                <string>Тип модуля</string>
+                <string>Обозначение</string>
                </property>
               </widget>
              </item>

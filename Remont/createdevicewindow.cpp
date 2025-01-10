@@ -26,12 +26,15 @@ CreateDeviceWindow::CreateDeviceWindow(QWidget *parent)
 
     repo.LoadModuleType(listTypeModule);
     for(auto &it : listTypeModule)
-        ui->cbModul->addItem(it.name, it.id);
+        ui->cbModul->addItem(it.VNFT + " " +  it.name, it.id);
 
+    // ui->cbModul->view()->setMaximumWidth(200);
 
     repo.LoadProductType(listTypeProduct);
-    for(auto &it : listTypeModule)
-        ui->cbProduct->addItem(it.name, it.id);
+    for(auto &it : listTypeProduct)
+        ui->cbProduct->addItem(it.VNFT + " " + it.name, it.id);
+
+    // ui->cbProduct->view()->setMaximumWidth(900);
 
     // for(auto it = listTypeModule.cbegin(); it != listTypeModule.cend(); ++it)
     //     ui->cbModul->addItem((*it).name, it.key());
@@ -377,7 +380,7 @@ void CreateDeviceWindow::on_tbDoc_clicked()
             ui->cbModul->setCurrentIndex(-1);
             for(auto &it : listTypeModule)
             {
-                if(it.name == nakl.VNFT)
+                if(it.VNFT == nakl.VNFT)
                 {
                     ui->cbModul->setCurrentIndex(i);
                     countUse = repo.GetCountRegisterModul(ui->leNumberDoc->text(), it.id);
@@ -420,9 +423,10 @@ void CreateDeviceWindow::on_tbDocP_clicked()
             nakl = listNakl.first();
             countFromDocP = nakl.count;
             ui->cbProduct->setCurrentIndex(-1);
+            qDebug() << nakl.VNFT << listTypeProduct.size();
             for(auto &it : listTypeProduct)
             {
-                if(it.name == nakl.VNFT)
+                if(it.VNFT == nakl.VNFT)
                 {
                     ui->cbProduct->setCurrentIndex(i);
                     countUse = repo.GetCountRegisterProduct(ui->leNumberDocP->text(), it.id);

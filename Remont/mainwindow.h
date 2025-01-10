@@ -60,6 +60,10 @@ private slots:
 
     void on_aGenQR_triggered();
 
+    void on_aPRodVNFT_triggered();
+
+    void on_aModVNFT_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;

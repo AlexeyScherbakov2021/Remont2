@@ -10,6 +10,7 @@ class ModulType : public IEntity
 public:
     QString name;
     int garantMonth;
+    QString VNFT;
 
     bool operator==(const ModulType &other) const { return this->id == other.id; }
 };
