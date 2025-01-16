@@ -18,6 +18,7 @@ public:
 
 private:
     QSerialPort conn;
+    QString readLine;
 
 private slots:
     void slotRead();

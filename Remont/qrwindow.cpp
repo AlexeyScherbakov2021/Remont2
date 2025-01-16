@@ -4,6 +4,7 @@
 
 #include <qr/QrCodeGenerator.h>
 
+#include <QDate>
 #include <QPainter>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
@@ -14,6 +15,7 @@ QRWindow::QRWindow(QWidget *parent)
     , ui(new Ui::QRWindow)
 {
     ui->setupUi(this);
+    ui->cbYear->setCurrentIndex(QDate::currentDate().year() - 2024);
     ShowCurrentNumber();
 }
 

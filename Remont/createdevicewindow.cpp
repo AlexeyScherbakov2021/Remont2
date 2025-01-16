@@ -229,14 +229,16 @@ void CreateDeviceWindow::on_pbRegProduct_clicked()
     prod.idType = ui->cbProduct->currentData(Qt::UserRole).toInt();
     prod.dateRegister = QDateTime::currentDateTime();
     prod.garantMonth = listTypeProduct[prod.idType].garantMonth;
+
+    if(prod.idType <= 0)
+    {
+        QMessageBox::critical(this, "Ошибка", "Нужно выбрать обозначение изделия (ВНФТ)", QMessageBox::Ok);
+        return;
+    }
+
     if(repo.AddItem(prod))
     {
-        // Status status;
-        // status.idDevice = prod.id;
-        // status.idStatus = Status::CREATE;
-        // status.dateStatus = QDateTime::currentDateTime();
         prod.AddStatus(prod, Status::CREATE);
-        // repo.AddStatusProduct(status);
 
         QString s = ui->cbProduct->currentText();
         QListWidgetItem *item = new QListWidgetItem(ui->leNumProduct->text() + " (" + s + ")");
@@ -265,10 +267,16 @@ void CreateDeviceWindow::on_pbRegModul_clicked()
     mod.number = ui->leNumModul->text();
     mod.name = ui->leModulName->text();
     mod.idType = ui->cbModul->currentData(Qt::UserRole).toInt();
-    // mod.numberFW = ui->lbNumberFWPlate->text();
     mod.dateRegister = QDateTime::currentDateTime();
     mod.listPlate = listAddingPlate;
     mod.garantMonth = listTypeModule[mod.idType].garantMonth;
+
+    if(mod.idType <= 0)
+    {
+        QMessageBox::critical(this, "Ошибка", "Нужно выбрать обозначение модуля (ВНФТ)", QMessageBox::Ok);
+        return;
+    }
+
     if(repo.AddItem(mod))
     {
         mod.AddStatus(mod, Status::CREATE);
@@ -430,6 +438,7 @@ void CreateDeviceWindow::on_tbDocP_clicked()
                 {
                     ui->cbProduct->setCurrentIndex(i);
                     countUse = repo.GetCountRegisterProduct(ui->leNumberDocP->text(), it.id);
+
                     break;
                 }
                 ++i;

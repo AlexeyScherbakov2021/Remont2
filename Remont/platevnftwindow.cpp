@@ -22,6 +22,8 @@ PlateVNFTWindow::PlateVNFTWindow(QWidget *parent)
     ui->tableView->resizeColumnsToContents();
     ui->tableView->resizeRowsToContents();
     ui->tableView->setAlternatingRowColors(true);
+
+    ui->tableView->selectRow(0);
 }
 
 PlateVNFTWindow::~PlateVNFTWindow()

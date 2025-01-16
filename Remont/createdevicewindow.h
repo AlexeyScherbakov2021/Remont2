@@ -34,9 +34,7 @@ private slots:
     void on_cbProduct_currentIndexChanged(int index);
     void on_cbModul_currentIndexChanged(int index);
     void slotReadScan(QString s);
-
     void on_tbDoc_clicked();
-
     void on_tbDocP_clicked();
 
 private:
@@ -48,7 +46,6 @@ private:
     int countUseP = 0;
     QVector<ModulType> listTypeModule;
 
-    // QMap<int, ModulType> listTypeModule;
     QVector<ProductType> listTypeProduct;
     void addLinePlate(Plate *plate);
     void addLineModul(Modul &mod);
@@ -56,7 +53,6 @@ private:
     void AddPlateToScreen( Plate &plate);
     void UpdateUseCount();
     void UpdateUseCountP();
-
 
     QList<Plate> listAddingPlate;
 };

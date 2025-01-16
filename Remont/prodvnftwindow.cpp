@@ -25,6 +25,9 @@ ProdVNFTWindow::ProdVNFTWindow(QWidget *parent)
     ui->tableView->resizeRowsToContents();
     ui->tableView->setAlternatingRowColors(true);
     ui->tableView->setColumnWidth(1, 400);
+
+    ui->tableView->selectRow(0);
+
 }
 
 ProdVNFTWindow::~ProdVNFTWindow()

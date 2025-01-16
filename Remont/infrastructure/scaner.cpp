@@ -52,18 +52,24 @@ QString Scaner::getPort()
 
 void Scaner::slotRead()
 {
+
     QByteArray bytes = conn.readAll();
 
     if(bytes.endsWith('\r'))
+    {
         bytes.removeLast();
 
-    LogWindow::AddLine(QString("Слот чтения. Получена строка %1.").arg(bytes));
-    QString s(bytes);
+        LogWindow::AddLine(QString("Слот чтения. Получена строка %1.").arg(bytes));
+        QString s(bytes);
+        s = readLine + s;
+        readLine.clear();
         // s = s.removeLast();
     // qDebug() << s;
 
-    emit sigRead(s);
-
+        emit sigRead(s);
+    }
+    else
+        readLine += QString(bytes);
 }
 
 void Scaner::handleError(QSerialPort::SerialPortError error)

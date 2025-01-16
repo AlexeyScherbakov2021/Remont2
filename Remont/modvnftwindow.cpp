@@ -24,8 +24,10 @@ ModVNFTWindow::ModVNFTWindow(QWidget *parent)
     ui->tableView->hideColumn(3);
     ui->tableView->resizeColumnsToContents();
     ui->tableView->resizeRowsToContents();
-
     ui->tableView->setAlternatingRowColors(true);
+
+    ui->tableView->selectRow(0);
+
 }
 
 ModVNFTWindow::~ModVNFTWindow()
@@ -42,7 +44,7 @@ void ModVNFTWindow::on_tbAdd_clicked()
     int row = model2.rowCount();
     model2.insertRow(row);
     ui->tableView->selectRow(row);
-    ui->tableView->edit(model2.index(row, 1));
+    ui->tableView->edit(model2.index(row, 2));
     ui->tableView->resizeRowToContents(row);
 }
 

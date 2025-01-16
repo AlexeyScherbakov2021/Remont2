@@ -95,7 +95,10 @@ bool RepoMSSQL::AddItem(Product &prod)
 
     res = query.exec();
     if(!res)
+    {
         qDebug() << "Ошибка при добавлении записи в Product";
+        qDebug() << db.lastError().text();
+    }
     else
     {
         if(query.next())
@@ -2559,6 +2562,8 @@ void RepoMSSQL::RestartSerialNumber(uint year)
 
 int RepoMSSQL::GetCurrentNumber(uint year)
 {
+    qDebug() << year;
+
     int res = -1;
     QSqlQuery query;
     QString sql = QString("select current_value from sys.sequences where name = 'GenSerial%1'").arg(year);
@@ -2569,6 +2574,7 @@ int RepoMSSQL::GetCurrentNumber(uint year)
         QDataStream ds(ba);
         ds.setByteOrder(QDataStream::LittleEndian);
         ds >> res;
+        qDebug() << ba << res;
     }
     return res;
 

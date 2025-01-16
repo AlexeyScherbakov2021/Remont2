@@ -265,6 +265,9 @@ border: 1px solid #999999;
            </item>
            <item row="8" column="2">
             <widget class="QPushButton" name="pbRegProduct">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="maximumSize">
               <size>
                <width>150</width>
@@ -523,6 +526,9 @@ border: 1px solid #999999;
              </item>
              <item row="8" column="2">
               <widget class="QPushButton" name="pbRegModul">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
                <property name="text">
                 <string>Зарегистрировать</string>
                </property>
