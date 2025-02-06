@@ -91,3 +91,36 @@ bool ListPlate::DeleteItem(int row)
     }
     return res;
 }
+
+
+void ListPlate::setData(int row, int col, const QVariant value, int role) const
+{
+    Items* item = const_cast<Items*>(&items[row]);
+
+    if(role == Qt::EditRole)
+    {
+        switch(col)
+        {
+        case 0:
+            item->number = value.toString();
+            break;
+        case 1:
+            item->number2 = value.toString();
+            break;
+        case 2:
+            item->VNFT = value.toString();
+            break;
+        case 3:
+            item->dateCreate = value.toDateTime();
+            break;
+        case 4:
+            item->numberDoc = value.toString();
+            break;
+
+        // case 6:
+        //     item.currStatus = value;
+        //     break;
+
+        }
+    }
+}

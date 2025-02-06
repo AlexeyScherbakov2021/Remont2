@@ -16,7 +16,7 @@ public:
 public:
     void LoadChild(Shipment &item);
     void Load() ;
-    QVariant getData(int row, int col) const ;
+    void getData(int row, int col) const ;
     Shipment GetItem(int id);
 
     bool DeleteItem(int id);

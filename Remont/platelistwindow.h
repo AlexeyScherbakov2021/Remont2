@@ -21,7 +21,7 @@ public:
     ~PlateListWindow();
 
     Items SelectPlate(QString number = "");
-    void setSelect();
+    void setSelectForm();
     void setNotLinked();
     void RemoveListPlate(QList<Items> &listExclude);
 

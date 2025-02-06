@@ -12,6 +12,11 @@ PlateModel::PlateModel(ItemType::IndexType type, QObject *parent)
     listDev->GetHeader(headers);
 }
 
+PlateModel::~PlateModel()
+{
+
+}
+
 QVariant PlateModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     QVariant var;
@@ -43,27 +48,34 @@ int PlateModel::columnCount(const QModelIndex &parent) const
     return headers.size();
 }
 
-bool PlateModel::hasChildren(const QModelIndex &parent) const
+bool PlateModel::hasChildren(const QModelIndex &/*parent*/) const
 {
     return false;
 }
 
-bool PlateModel::canFetchMore(const QModelIndex &parent) const
+bool PlateModel::canFetchMore(const QModelIndex &/*parent*/) const
 {
     return isFetch;
 }
 
-void PlateModel::fetchMore(const QModelIndex &parent)
+void PlateModel::fetchMore(const QModelIndex &/*parent*/)
 {
-    int resLoad = listDev->LoadPart(startLoad, cntLoad, number, status, isBusy, isParent);
+    // if(lp != nullptr)
+    // {
+    //     lp(listDev->items);
+    //     isFetch = false;
+    // }
+    if(!isBaseOff)
+    {
+        int resLoad = listDev->LoadPart(startLoad, cntLoad, number, status, isBusy, isParent);
 
-    beginInsertRows(QModelIndex(), startLoad, startLoad + resLoad - 1);
-    endInsertRows();
+        beginInsertRows(QModelIndex(), startLoad, startLoad + resLoad - 1);
+        endInsertRows();
 
-    startLoad += resLoad;
-    if(resLoad < cntLoad)
-        isFetch = false;
-
+        startLoad += resLoad;
+        if(resLoad < cntLoad)
+            isFetch = false;
+    }
 }
 
 QVariant PlateModel::data(const QModelIndex &index, int role) const
@@ -78,15 +90,17 @@ QVariant PlateModel::data(const QModelIndex &index, int role) const
     return var;
 }
 
-// bool PlateModel::setData(const QModelIndex &index, const QVariant &value, int role)
-// {
-//     if (data(index, role) != value) {
-//         // FIXME: Implement me!
-//         emit dataChanged(index, index, {role});
-//         return true;
-//     }
-//     return false;
-// }
+bool PlateModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (data(index, role) != value) {
+
+        listDev->setData(index.row(), index.column(), value, role);
+
+        emit dataChanged(index, index, {role});
+        return true;
+    }
+    return false;
+}
 
 // Qt::ItemFlags PlateModel::flags(const QModelIndex &index) const
 // {
@@ -132,10 +146,10 @@ void PlateModel::prepareLoad(const QString _number, int _status, bool _isBusy, b
 
 }
 
-Items *PlateModel::GetItem(int index)
+Items *PlateModel::GetItem(int row)
 {
-    if(index >= 0 && index < listDev->items.size())
-        return &listDev->items[index];
+    if(row >= 0 && row < listDev->items.size())
+        return &listDev->items[row];
     else
         return nullptr;
 }
@@ -165,11 +179,29 @@ void PlateModel::createList(ItemType::IndexType type)
     }
 }
 
-// bool PlateModel::removeColumns(int column, int count, const QModelIndex &parent)
+// void PlateModel::setFunction(pLoadItems p)
 // {
-//     beginRemoveColumns(parent, column, column + count - 1);
-//     // FIXME: Implement me!
-//     endRemoveColumns();
-//     return true;
+//     lp = p;
 // }
+
+void PlateModel::AddItem(Items *item)
+{
+    int row = listDev->items.size();
+    listDev->items.push_back(*item);
+    insertRows(row, 1);
+}
+
+void PlateModel::UpdateItem(int row)
+{
+    Items* item = GetItem(row);
+    if(item->id > 0)
+        listDev->UpdateItem(*item);
+}
+
+void PlateModel::setBaseOff()
+{
+    isBaseOff = true;
+}
+
+
 

@@ -2,7 +2,7 @@
 #define LISTDEVICE_H
 
 #include "Items.h"
-#include <QDebug>
+// #include <QDebug>
 #include <QList>
 #include <repomssql.h>
 
@@ -17,7 +17,7 @@ public:
     QList<Items> items;
 
     explicit ListDevice(ItemType::IndexType _typeDev) : typeDev(_typeDev) {}
-    ~ListDevice() { qDebug() << "destructor ListDevice"; }
+    ~ListDevice() { /*qDebug() << "destructor ListDevice";*/ }
 
     virtual void GetHeader(QStringList& headers) = 0;
 
@@ -66,8 +66,9 @@ public:
     virtual void Load() = 0;
 
     virtual QVariant getData(int row, int col, int role) const = 0;
+    virtual void setData(int row, int col, const QVariant value, int role) const = 0;
 
-    size_t LoadPart(size_t start, size_t count, const QString &number, int status = 0, bool isBusy = false, bool isParent = false)
+    size_t LoadPart(int start, int count, const QString &number, int status = 0, bool isBusy = false, bool isParent = false)
     {
         return repo.LoadPart(start, count, typeDev, number, items, status, isBusy, isParent);
     }

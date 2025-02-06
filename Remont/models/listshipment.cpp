@@ -11,9 +11,9 @@ void ListShipment::Load()
 {
 }
 
-QVariant ListShipment::getData(int /*row*/, int /*col*/) const
+void ListShipment::getData(int /*row*/, int /*col*/) const
 {
-    return QVariant();
+    return void();
 }
 
 

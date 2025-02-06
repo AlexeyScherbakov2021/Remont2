@@ -18,9 +18,9 @@ void ListClaim::Load()
     // repo.LoadClaim(listItems);
 }
 
-QVariant ListClaim::getData(int /*row*/, int /*col*/) const
+void ListClaim::getData(int /*row*/, int /*col*/) const
 {
-    return QVariant();
+    return void();
 }
 
 

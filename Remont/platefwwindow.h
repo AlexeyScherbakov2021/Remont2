@@ -4,6 +4,7 @@
 #include <QDialog>
 
 #include <models/listplate.h>
+#include <models/platemodel.h>
 
 namespace Ui {
 class PlateFWWindow;
@@ -17,6 +18,9 @@ public:
     explicit PlateFWWindow(QWidget *parent = nullptr);
     ~PlateFWWindow();
 
+    void LoadItems(QList<Items>& items);
+
+
 private slots:
     void on_tbSearch_clicked();
     void on_pbApply_clicked();
@@ -28,6 +32,8 @@ private:
     Ui::PlateFWWindow *ui;
     ListPlate listPlate;
     QMetaObject::Connection conn;
+    PlateModel *model;
+
 
 };
 

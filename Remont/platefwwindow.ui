@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>704</width>
-    <height>471</height>
+    <width>945</width>
+    <height>557</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -74,35 +74,13 @@
     </layout>
    </item>
    <item>
-    <widget class="QTableWidget" name="twListPlate">
+    <widget class="QTableView" name="tableView">
      <property name="alternatingRowColors">
       <bool>true</bool>
-     </property>
-     <property name="selectionMode">
-      <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
      </property>
      <property name="selectionBehavior">
       <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
      </property>
-     <attribute name="horizontalHeaderCascadingSectionResizes">
-      <bool>false</bool>
-     </attribute>
-     <attribute name="horizontalHeaderMinimumSectionSize">
-      <number>40</number>
-     </attribute>
-     <attribute name="horizontalHeaderDefaultSectionSize">
-      <number>150</number>
-     </attribute>
-     <column>
-      <property name="text">
-       <string>Серийный номер</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Номер прошивки</string>
-      </property>
-     </column>
     </widget>
    </item>
    <item>

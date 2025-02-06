@@ -17,7 +17,7 @@ public:
     SetterOut GetItem(int id) ;
     void LoadChild(SetterOut &item) ;
     void Load() ;
-    QVariant getData(int row, int col) const ;
+    void getData(int row, int col) const ;
 
 
     bool DeleteItem(int id) ;

@@ -17,9 +17,9 @@ void ListSetter::Load()
 {
 }
 
-QVariant ListSetter::getData(int /*row*/, int /*col*/) const
+void ListSetter::getData(int /*row*/, int /*col*/) const
 {
-    return QVariant();
+    return void();
 }
 
 

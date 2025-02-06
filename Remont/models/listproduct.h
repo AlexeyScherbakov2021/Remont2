@@ -23,6 +23,10 @@ public:
     // ListDevice interface
 public:
     void GetHeader(QStringList &headers) override;
+
+    // ListDevice interface
+public:
+    void setData(int row, int col, const QVariant value, int role) const override;
 };
 
 #endif // LISTPRODUCT_H

@@ -2041,7 +2041,7 @@ size_t RepoMSSQL::LoadPart(size_t start, size_t count, ItemType::IndexType iType
     sql.push_back(" where ");
     sql.push_back(slWhere.join(" and "));
 
-    sql.push_back(" order by nameItem  offset :start rows fetch next :count rows only");
+    sql.push_back(" order by nameItem offset :start rows fetch next :count rows only");
     QString sql2 = sql.join("");
     query.prepare(sql2);
     query.bindValue(":indexType", iType);

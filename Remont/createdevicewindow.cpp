@@ -81,7 +81,7 @@ void CreateDeviceWindow::on_tbSearchPlate_clicked()
     QString s = ui->leSearchPlate->text();
 
     PlateListWindow *selPlate = new PlateListWindow(this);
-    selPlate->setSelect();
+    selPlate->setSelectForm();
     selPlate->setNotLinked();
     selPlate->RemoveListPlate(listAddingPlate);
     // selPlate->SelectPlate(s);
@@ -148,7 +148,7 @@ void CreateDeviceWindow::on_tbDeleteProduct_clicked()
         return;
 
     // Product prod;
-    int id = ui->lwProduct->currentItem()->data(Qt::UserRole).toInt();
+    // int id = ui->lwProduct->currentItem()->data(Qt::UserRole).toInt();
     // if(repo.DeleteProduct(id) )
     //     delete ui->lwProduct->currentItem();
 }

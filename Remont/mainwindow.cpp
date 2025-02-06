@@ -64,7 +64,7 @@ void MainWindow::on_pbCard_clicked()
     Items *dev = win->SelectDevice(false, "", Status::NONE);
     if(dev != nullptr)
     {
-        CardProdWindow *winCard;
+        // CardProdWindow *winCard;
         // winCard = new CardProdWindow(dev, this);
         // winCard->show();
     }
@@ -278,7 +278,7 @@ void MainWindow::on_aCardDevice_triggered()
     Items *dev = win->SelectDevice(false, "", Status::NONE);
     if(dev != nullptr)
     {
-        CardProdWindow *winCard;
+        // CardProdWindow *winCard;
         // winCard = new CardProdWindow(dev, this);
         // winCard->show();
     }
@@ -296,8 +296,8 @@ void MainWindow::on_aExchModul_triggered()
     Items *dev = win->SelectDevice(false, "", Status::NONE );
     if(dev != nullptr)
     {
-        Items *mod = static_cast<Items*>(dev);
-        RepoMSSQL repo;
+        // Items *mod = static_cast<Items*>(dev);
+        // RepoMSSQL repo;
         // Items prod = repo.GetProduct(mod->idParent);
         // if(prod.id > 0)
         // {
@@ -323,12 +323,12 @@ void MainWindow::on_aScaner_triggered()
 //----------------------------------------------------------------------------------------------
 // Срабатывание сканера
 //----------------------------------------------------------------------------------------------
-void MainWindow::slotReadScan(QString s)
+void MainWindow::slotReadScan(QString /*s*/)
 {
     if(!isActiveWindow())
         return;
 
-    CardProdWindow *winCard;
+    // CardProdWindow *winCard;
     // RepoMSSQL repo;
     // Items *dev = nullptr;
     // Items prod = repo.GetProduct(s, 0, false);

@@ -79,9 +79,10 @@ Items PlateListWindow::SelectPlate(QString number)
     return plate;
 }
 
-void PlateListWindow::setSelect()
+void PlateListWindow::setSelectForm()
 {
     isSelectPlate = true;
+    UpdateForm();
 }
 
 void PlateListWindow::setNotLinked()
@@ -137,53 +138,6 @@ void PlateListWindow::UpdateForm()
     ui->pbDelete->setVisible(!isSelectPlate);
     ui->rbAll->setVisible(!isNotLinked);
     ui->rbNotLink->setVisible(!isNotLinked);
-
-    // ui->twPlates->setRowCount(listPlate.items.size());
-    // ui->twPlates->setRowCount(10);
-
-    // int row = 0;
-
-    // for(auto &it : listPlate.items)
-    // {
-    //     QTableWidgetItem *item = new QTableWidgetItem(it.number);
-    //     item->setData(Qt::UserRole, it.id);
-    //     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    //     ui->twPlates->setItem(row, 0, item);
-
-    //     item = new QTableWidgetItem(it.number2);
-    //     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    //     ui->twPlates->setItem(row, 1, item);
-
-    //     item = new QTableWidgetItem(it.VNFT);
-    //     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    //     ui->twPlates->setItem(row, 2, item);
-
-    //     item = new QTableWidgetItem(it.dateCreate.toString("dd.MM.yyyy"));
-    //     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    //     ui->twPlates->setItem(row, 3, item);
-
-    //     item = new QTableWidgetItem(it.numberDoc);
-    //     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    //     ui->twPlates->setItem(row, 4, item);
-
-    //     item = new QTableWidgetItem();
-    //     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    //     if(it.idParent > 0)
-    //         item->setIcon(QIcon("://image/Apply24x24.png"));
-    //     ui->twPlates->setItem(row, 5, item);
-
-    //     if(it.listStatus.size() > 0)
-    //     {
-    //         item = new QTableWidgetItem(it.listStatus.last().nameStatus);
-    //         item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    //         item->setToolTip(it.listStatus.last().Comment);
-    //         ui->twPlates->setItem(row, 6, item);
-    //     }
-
-        // ++row;
-    // }
-    // ui->twPlates->resizeColumnsToContents();
-    // ui->twPlates->resizeRowsToContents();
 }
 
 
@@ -210,15 +164,11 @@ void PlateListWindow::on_pbDelete_clicked()
 {
 
     int row = ui->tableView->currentIndex().row();
-    // qDebug() << "current row" << row;
 
     if(row < 0)
         return;
 
-
     Items* plate = model->GetItem(row);
-
-    // qDebug() << "parent" << par;
 
     if(plate->idParent > 0)
     {
@@ -231,12 +181,6 @@ void PlateListWindow::on_pbDelete_clicked()
     {
 
         model->DeleteItem(row);
-        // RepoMSSQL repo;
-        // if(repo.DeletePlate(listPlate.listItems[row].id))
-        // {
-        //     listPlate.listItems.removeAt(row);
-        //     ui->twPlates->removeRow(row);
-        // }
     }
 
 }
@@ -244,6 +188,24 @@ void PlateListWindow::on_pbDelete_clicked()
 
 void PlateListWindow::on_pbSelect_clicked()
 {
+    auto selected = ui->tableView->selectionModel()->selectedRows();
+
+    if(selected.size() == 0)
+        return;
+
+    for(auto item : selected)
+    {
+        // qDebug() << model->GetItem(item.row())->number;
+        Items *plate = model->GetItem(item.row());
+        selectedPlates.push_back(*plate);
+    }
+
+    int row = ui->tableView->selectionModel()->currentIndex().row();
+    selectPlate = *model->GetItem(row);
+    // qDebug() << selectPlate.number;
+
+    accept();
+
     // QList<QTableWidgetSelectionRange> items = ui->twPlates->selectedRanges();
 
     // if(items.size() > 0)

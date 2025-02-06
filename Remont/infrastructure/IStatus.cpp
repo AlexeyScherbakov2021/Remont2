@@ -29,6 +29,8 @@ void StatusList::AddStatus(Items &item, Status::Stat idStat, const QDateTime &da
     status.dateStatus = dateRegister;
     status.Comment = comment;
     status.nameStatus = repo.GetNameStatus((int)idStat);
+    item.currStatus = repo.GetNameStatus((int)idStat);
+    repo.AddStatus(item, status);
 }
 
 QString StatusList::getNameLastStatus() const

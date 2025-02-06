@@ -11,7 +11,7 @@ class PlateModel : public QAbstractTableModel
 
 public:
     explicit PlateModel(ItemType::IndexType type, QObject *parent = nullptr);
-    ~PlateModel() { /*qDebug() << "destruct PlateModel";*/  }
+    ~PlateModel();
 
     // Header:
     QVariant headerData(int section,
@@ -30,7 +30,7 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     // Editable:
-    // bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
     // Qt::ItemFlags flags(const QModelIndex &index) const override;
 
@@ -39,15 +39,22 @@ public:
 
 
     void prepareLoad(const QString _number, int _status, bool _isBusy, bool _isParent);
-    Items* GetItem(int index);
+    Items* GetItem(int row);
     bool DeleteItem(int row);
 
     void createList(ItemType::IndexType);
 
+    // typedef void (*pLoadItems)(QList<Items>& items);
+    // void setFunction(pLoadItems p);
+
+    void AddItem(Items* item);
+    void UpdateItem(int row);
+    void setBaseOff();
+
 private:
-    size_t startLoad = 0;
-    size_t cntLoad = 80;
-    bool isFetch = true;
+    int startLoad = 0;
+    int cntLoad = 80;
+    bool isFetch = false;
     QStringList headers;
 
     std::unique_ptr<ListDevice> listDev;
@@ -57,6 +64,11 @@ private:
     bool isBusy = false;
     bool isParent = false;
 
+    bool isBaseOff = false;
+    // pLoadItems lp = nullptr;
+
 };
+
+
 
 #endif // PLATEMODEL_H

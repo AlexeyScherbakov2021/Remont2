@@ -27,7 +27,7 @@ public:
     QDateTime dateOff;
     int garantMonth;
     QDateTime dateGarant;
-    bool isZip;
+    bool isZip = false;
 
     ItemType type;
     QList<Items> childItems;

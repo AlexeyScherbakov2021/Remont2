@@ -14,16 +14,13 @@ PlateWindow::PlateWindow(QWidget *parent)
     ui->setupUi(this);
     ui->deCreateDate->setDateTime(QDateTime::currentDateTime());
 
-    // model.setQuery("select pt_VNFT,pt_name from PlateType");
-    // ui->cbVNFT->setModel(&model);
-    // listVNFT;
-
     repo.LoadTypeItem(ItemType::Plate, listVNFT);
 
     for(auto const &it : listVNFT)
     {
         ui->cbVNFT->addItem(it.VNFT + " " + it.typeName, it.id);
     }
+    ui->cbVNFT->setCurrentIndex(-1);
 
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
@@ -37,6 +34,12 @@ PlateWindow::~PlateWindow()
 
 void PlateWindow::on_pbAdd_clicked()
 {
+    if(ui->cbVNFT->currentIndex() < 0)
+    {
+        QMessageBox::critical(this, "Ошибка", QString("Необходимо выбрать обозначение."));
+        return;
+    }
+
     ui->leNumber->setFocus();
 
     if(ui->leNumber->text().isEmpty())
@@ -48,6 +51,7 @@ void PlateWindow::on_pbAdd_clicked()
     plate.number2 = ui->leNumberFW->text();
     plate.numberDoc = ui->leNumberDoc->text();
     plate.idType = ui->cbVNFT->currentData().toInt();
+    plate.garantMonth = listVNFT[ui->cbVNFT->currentIndex()].garantMonth;
 
     if(!repo.AddItem(plate))
     {
@@ -79,12 +83,12 @@ void PlateWindow::on_tbDelete_clicked()
     int id = item->data(Qt::UserRole).toInt();
 
     // удаление платы из базы
-    // if(repo.DeletePlate(id))
-    // {
-    //     delete ui->listWidget->currentItem();
-    //     --countUse;
-    //     UpdateUseCount();
-    // }
+    if(repo.DeleteItem(id))
+    {
+        delete ui->listWidget->currentItem();
+        --countUse;
+        UpdateUseCount();
+    }
 }
 
 

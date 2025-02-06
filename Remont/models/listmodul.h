@@ -22,6 +22,10 @@ public:
     bool DeleteItem(int id) override;
 
     void GetHeader(QStringList &headers) override;
+
+    // ListDevice interface
+public:
+    void setData(int row, int col, const QVariant value, int role) const override;
 };
 
 #endif // LISTMODUL_H

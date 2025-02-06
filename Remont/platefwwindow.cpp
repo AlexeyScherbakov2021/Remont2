@@ -3,11 +3,27 @@
 #include "scan.h"
 #include "ui_platefwwindow.h"
 
+
+
 PlateFWWindow::PlateFWWindow(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::PlateFWWindow)
 {
     ui->setupUi(this);
+
+    model = new PlateModel(ItemType::Plate, this);
+    model->setBaseOff();
+    // model->setFunction((PlateModel::pLoadItems)&PlateFWWindow::LoadItems);
+    ui->tableView->setModel(model);
+
+    ui->tableView->setColumnWidth(0, 80);
+    ui->tableView->setColumnWidth(1, 200);
+    ui->tableView->setColumnWidth(2, 200);
+    ui->tableView->setColumnWidth(4, 80);
+    ui->tableView->setColumnWidth(5, 20);
+    ui->tableView->setColumnWidth(6, 150);
+
+
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 }
 
@@ -17,15 +33,23 @@ PlateFWWindow::~PlateFWWindow()
     delete ui;
 }
 
+// void PlateFWWindow::LoadItems(QList<Items> &items)
+// {
+
+// }
+
 void PlateFWWindow::on_tbSearch_clicked()
 {
-    // PlateListWindow *selPlate = new PlateListWindow(this);
-    // selPlate->RemoveListPlate(listPlate.listItems);
-    // selPlate->setSelect();
-    // selPlate->SelectPlate(ui->leSearch->text());
+    PlateListWindow *selPlate = new PlateListWindow(this);
+    // selPlate->RemoveListPlate(listPlate.items);
+    selPlate->setSelectForm();
+    selPlate->SelectPlate(ui->leSearch->text());
 
-    // for(auto &it : selPlate->selectedPlates)
-    // {
+    // selPlate->exec();
+
+    for(auto &it : selPlate->selectedPlates)
+    {
+        model->AddItem(&it);
     //     listPlate.listItems.push_back(it);
 
     //     int row = ui->twListPlate->rowCount();
@@ -42,7 +66,7 @@ void PlateFWWindow::on_tbSearch_clicked()
 
     //     ui->twListPlate->resizeColumnsToContents();
     //     ui->twListPlate->resizeRowsToContents();
-    // }
+    }
 }
 
 
@@ -52,18 +76,24 @@ void PlateFWWindow::on_pbApply_clicked()
     if(numberFW.isEmpty())
         return;
 
-    for(int i = 0; i < listPlate.items.size(); ++i)
+    for(size_t row = 0; row < model->rowCount(); ++row)
     {
-        listPlate.items[i].number2 = numberFW;
-        ui->twListPlate->item(i, 1)->setText(numberFW);
+        model->setData(model->index(row, 1), numberFW);
     }
+
 }
 
 
 void PlateFWWindow::on_pbOK_clicked()
 {
-    for(auto it : listPlate.items)
-        listPlate.UpdateItem(it);
+    for(size_t row = 0; row < model->rowCount(); ++row)
+    {
+        model->UpdateItem(row);
+    }
+
+
+    // for(auto it : listPlate.items)
+    //     listPlate.UpdateItem(it);
 
     accept();
 }
@@ -71,20 +101,20 @@ void PlateFWWindow::on_pbOK_clicked()
 
 void PlateFWWindow::on_tbDelete_clicked()
 {
-    auto ranges = ui->twListPlate->selectedRanges();
+    // auto ranges = ui->twListPlate->selectedRanges();
 
-    for(int i = ranges.size() - 1; i >= 0; --i)
-    {
-        for(int row = ranges[i].bottomRow(); row >= ranges[i].topRow(); row--)
-        {
-            int id = ui->twListPlate->item(row, 0)->data(Qt::UserRole).toInt();
-            listPlate.items.removeIf( [id] (const Items &plate) { return plate.id == id; } );
-            ui->twListPlate->removeRow(row);
-        }
-    }
+    // for(int i = ranges.size() - 1; i >= 0; --i)
+    // {
+    //     for(int row = ranges[i].bottomRow(); row >= ranges[i].topRow(); row--)
+    //     {
+    //         int id = ui->twListPlate->item(row, 0)->data(Qt::UserRole).toInt();
+    //         listPlate.items.removeIf( [id] (const Items &plate) { return plate.id == id; } );
+    //         ui->twListPlate->removeRow(row);
+    //     }
+    // }
 }
 
-void PlateFWWindow::slotReadScan(QString s)
+void PlateFWWindow::slotReadScan(QString /*s*/)
 {
     if(!isActiveWindow())
         return;
@@ -99,8 +129,8 @@ void PlateFWWindow::slotReadScan(QString s)
 
     // listPlate.listItems.push_back(plate);
 
-    int row = ui->twListPlate->rowCount();
-    ui->twListPlate->insertRow(row);
+    // int row = ui->twListPlate->rowCount();
+    // ui->twListPlate->insertRow(row);
 
     // QTableWidgetItem *item = new QTableWidgetItem(plate.number);
     // item->setData(Qt::UserRole, plate.id);
@@ -111,8 +141,8 @@ void PlateFWWindow::slotReadScan(QString s)
     // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     // ui->twListPlate->setItem(row, 1 , item);
 
-    ui->twListPlate->resizeColumnsToContents();
-    ui->twListPlate->resizeRowsToContents();
+    // ui->twListPlate->resizeColumnsToContents();
+    // ui->twListPlate->resizeRowsToContents();
 
 
 }
