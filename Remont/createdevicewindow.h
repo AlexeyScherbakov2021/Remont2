@@ -6,10 +6,11 @@
 #include <QDialog>
 #include <QTreeWidget>
 
+#include <models/ItemsType.h>
 // #include <models/modultype.h>
-#include <models/modultype.h>
-#include <models/plate.h>
-#include <models/prodtype.h>
+// #include <models/modultype.h>
+// #include <models/plate.h>
+// #include <models/prodtype.h>
 // #include <models/prodtype.h>
 
 namespace Ui {
@@ -44,17 +45,17 @@ private:
     int countUse = 0;
     int countFromDocP = 0;
     int countUseP = 0;
-    QVector<ModulType> listTypeModule;
+    QVector<ItemType> listTypeModule;
 
-    QVector<ProductType> listTypeProduct;
-    void addLinePlate(Plate *plate);
-    void addLineModul(Modul &mod);
+    QVector<ItemType> listTypeProduct;
+    void addLinePlate(Items *plate);
+    void addLineModul(Items &mod);
     QMetaObject::Connection conn;
-    void AddPlateToScreen( Plate &plate);
+    void AddPlateToScreen( Items &plate);
     void UpdateUseCount();
     void UpdateUseCountP();
 
-    QList<Plate> listAddingPlate;
+    QList<Items> listAddingPlate;
 };
 
 #endif // CREATEDEVICEWINDOW_H

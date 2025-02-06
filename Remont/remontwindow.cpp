@@ -31,7 +31,7 @@ void RemontWindow::on_pbOK_clicked()
 
     if(idProd != 0)
     {
-        Product prod;
+        Items prod;
         prod.id = idProd;
         prod.AddStatus(prod, Status::REMONT);
         remont.idParent = idProd;
@@ -40,7 +40,7 @@ void RemontWindow::on_pbOK_clicked()
 
     if(idMod != 0)
     {
-        Modul mod;
+        Items mod;
         mod.id = idMod;
         mod.AddStatus(mod, Status::REMONT);
         remont.idParent = idMod;
@@ -66,14 +66,14 @@ void RemontWindow::on_tbNumber_clicked()
     idMod = idProd = 0;
 
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    IDevice *dev = win->SelectDevice(true, ui->leNumber->text(),Status::FAULTY_ON_OSO);
+    Items *dev = win->SelectDevice(true, ui->leNumber->text(),Status::FAULTY_ON_OSO);
     if(dev != nullptr)
     {
-        if(dev->typeDevice == ev::MODUL)
+        if(dev->type.indexType == ItemType::Modul)
         {
-            Modul* modul = static_cast<Modul*>(dev);
-            if(repo.LoadClaimForModul(modul->id, claim))
-                ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
+            Items* modul = static_cast<Items*>(dev);
+            // if(repo.LoadClaimForModul(modul->id, claim))
+            //     ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
 
             ui->lbNumber->setText(modul->number);
             ui->lbName->setText(modul->name);
@@ -81,11 +81,11 @@ void RemontWindow::on_tbNumber_clicked()
             idMod = modul->id;
         }
 
-        if(dev->typeDevice == ev::PRODUCT)
+        if(dev->type.indexType == ItemType::Product)
         {
-            Product* prod = static_cast<Product*>(dev);
-            if(repo.LoadClaimForProduct(prod->id, claim))
-                ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
+            Items* prod = static_cast<Items*>(dev);
+            // if(repo.LoadClaimForProduct(prod->id, claim))
+            //     ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
 
             ui->lbNumber->setText(prod->number);
             ui->lbName->setText(prod->name);

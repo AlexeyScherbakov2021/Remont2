@@ -1,10 +1,8 @@
 #include "endremontwindow.h"
 #include "selectdevicewindow.h"
 #include "ui_endremontwindow.h"
-
 #include <models/claim.h>
 #include <models/remont.h>
-
 #include <QMessageBox>
 
 EndRemontWindow::EndRemontWindow(QWidget *parent)
@@ -43,16 +41,17 @@ void EndRemontWindow::on_tbNumber_clicked()
     // SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumber->text(),Status::REMONT);
     // if(win->exec() == QDialog::Accepted)
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    IDevice *dev = win->SelectDevice(true, ui->leNumber->text(),Status::REMONT);
+    Items *dev = win->SelectDevice(true, ui->leNumber->text(),Status::REMONT);
     if(dev != nullptr)
     {
         Claim claim;
-        if(dev->typeDevice == ev::MODUL)
+        // if(dev->typeDevice == ev::MODUL)
+        if(dev->type.indexType == ItemType::Modul)
         {
             // Modul* mod = static_cast<Modul*>(dev);
-            modul = *(static_cast<Modul*>(dev));
-            if(repo.LoadClaimForModul(modul.id, claim))
-                ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
+            modul = *(static_cast<Items*>(dev));
+            // if(repo.LoadClaimForModul(modul.id, claim))
+            //     ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
 
             ui->lbNumber->setText(modul.number);
             ui->lbName->setText(modul.name);
@@ -60,12 +59,14 @@ void EndRemontWindow::on_tbNumber_clicked()
             // idMod = modul->id;
         }
 
-        if(dev->typeDevice == ev::PRODUCT)
+        // if(dev->type.IndexType == ev::PRODUCT)
+        // if(dev->type.IndexType == ItemType::Product)
+        if(dev->type.indexType == ItemType::Product)
         {
             // Product* prod = static_cast<Product*>(dev);
-            product = *(static_cast<Product*>(dev));
-            if(repo.LoadClaimForProduct(product.id, claim))
-                ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
+            product = *(static_cast<Items*>(dev));
+            // if(repo.LoadClaimForProduct(product.id, claim))
+            //     ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
 
             ui->lbNumber->setText(product.number);
             ui->lbName->setText(product.name);
@@ -112,9 +113,9 @@ void EndRemontWindow::on_pbEndRemont_clicked()
         rem.idReason = ui->cbReason->currentData(Qt::UserRole).toInt();
         repo.UpdateRemont(rem, ev::MODUL);
 
-        if(modul.idProduct != 0)
+        if(modul.idParent != 0)
         {
-            product = repo.GetProduct(modul.idProduct);
+            // product = repo.GetProduct(modul.idParent);
             product.AddStatus(product, Status::WORK , ui->deDate->dateTime());
         }
 

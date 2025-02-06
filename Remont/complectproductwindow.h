@@ -6,7 +6,7 @@
 #include <QDialog>
 
 #include <models/listmodul.h>
-#include <models/product.h>
+// #include <models/product.h>
 #include <infrastructure/trackrecord.h>
 
 namespace Ui {
@@ -18,7 +18,7 @@ class ComplectProductWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit ComplectProductWindow(QWidget *parent = nullptr, Product *prod = nullptr);
+    explicit ComplectProductWindow(QWidget *parent = nullptr, Items *prod = nullptr);
     ~ComplectProductWindow();
 
 private slots:
@@ -32,16 +32,16 @@ private slots:
 private:
     Ui::ComplectProductWindow *ui;
     RepoMSSQL repo;
-    Product prod;
+    Items prod;
     // QList<Modul> listModul;
     ListModul Modules;
-    TrackRecord<Modul> trackModul;
+    TrackRecord<Items> trackModul;
     // QSet<Modul> addModul;
     // QSet<Modul> delModul;
     QMetaObject::Connection conn;
 
-    void LoadProductToScreen(Product &prod);
-    void addModulToScreen(Modul &mod);
+    void LoadProductToScreen(Items &prod);
+    void addModulToScreen(Items &mod);
 
 };
 

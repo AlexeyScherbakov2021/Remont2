@@ -9,8 +9,8 @@
 // #include <models/listplate.h>
 #include <models/listmodul.h>
 #include <models/listplate.h>
-#include <models/modul.h>
-#include <models/product.h>
+// #include <models/modul.h>
+// #include <models/product.h>
 
 #include <QMessageBox>
 
@@ -24,15 +24,15 @@ CreateDeviceWindow::CreateDeviceWindow(QWidget *parent)
     ui->deCreateDate->setDateTime(QDateTime::currentDateTime());
     ui->deCreateDateP->setDateTime(QDateTime::currentDateTime());
 
-    repo.LoadModuleType(listTypeModule);
-    for(auto &it : listTypeModule)
-        ui->cbModul->addItem(it.VNFT + " " +  it.name, it.id);
+    // repo.LoadModuleType(listTypeModule);
+    // for(auto &it : listTypeModule)
+    //     ui->cbModul->addItem(it.VNFT + " " +  it.name, it.id);
 
     // ui->cbModul->view()->setMaximumWidth(200);
 
-    repo.LoadProductType(listTypeProduct);
-    for(auto &it : listTypeProduct)
-        ui->cbProduct->addItem(it.VNFT + " " + it.name, it.id);
+    // repo.LoadProductType(listTypeProduct);
+    // for(auto &it : listTypeProduct)
+    //     ui->cbProduct->addItem(it.VNFT + " " + it.name, it.id);
 
     // ui->cbProduct->view()->setMaximumWidth(900);
 
@@ -68,8 +68,8 @@ void CreateDeviceWindow::on_tbDeleteModul_clicked()
 
     // Modul mod;
     int id = item->data(0, Qt::UserRole).toInt();
-    if(repo.DeleteModul(id))
-        delete item;
+    // if(repo.DeleteModul(id))
+    //     delete item;
 }
 
 
@@ -84,7 +84,7 @@ void CreateDeviceWindow::on_tbSearchPlate_clicked()
     selPlate->setSelect();
     selPlate->setNotLinked();
     selPlate->RemoveListPlate(listAddingPlate);
-    selPlate->SelectPlate(s);
+    // selPlate->SelectPlate(s);
 
     for(auto &it : selPlate->selectedPlates)
     {
@@ -99,9 +99,9 @@ void CreateDeviceWindow::on_tbSearchPlate_clicked()
 }
 
 
-void CreateDeviceWindow::AddPlateToScreen( Plate &plate)
+void CreateDeviceWindow::AddPlateToScreen( Items &plate)
 {
-    if( std::find_if(listAddingPlate.cbegin(), listAddingPlate.cend(), [&plate]( const Plate &p){ return plate.id == p.id; }) == listAddingPlate.cend())
+    if( std::find_if(listAddingPlate.cbegin(), listAddingPlate.cend(), [&plate]( const Items &p){ return plate.id == p.id; }) == listAddingPlate.cend())
     {
         listAddingPlate.push_back(plate);
         addLinePlate(&plate);
@@ -149,8 +149,8 @@ void CreateDeviceWindow::on_tbDeleteProduct_clicked()
 
     // Product prod;
     int id = ui->lwProduct->currentItem()->data(Qt::UserRole).toInt();
-    if(repo.DeleteProduct(id) )
-        delete ui->lwProduct->currentItem();
+    // if(repo.DeleteProduct(id) )
+    //     delete ui->lwProduct->currentItem();
 }
 
 
@@ -158,7 +158,7 @@ void CreateDeviceWindow::on_tbDeleteProduct_clicked()
 //---------------------------------------------------------------------------------
 // Добавление строки в список плат
 //---------------------------------------------------------------------------------
-void CreateDeviceWindow::addLinePlate(Plate *plate)
+void CreateDeviceWindow::addLinePlate(Items *plate)
 {
     int row = ui->twPlates->rowCount();
     ui->twPlates->insertRow(row);
@@ -185,7 +185,7 @@ void CreateDeviceWindow::addLinePlate(Plate *plate)
     ui->twPlates->setItem(row, 3, item);
 
     item = new QTableWidgetItem();
-    item->setText(plate->dateRegister.toString("dd.MM.yyyy"));
+    item->setText(plate->dateCreate.toString("dd.MM.yyyy"));
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     ui->twPlates->setItem(row, 4, item);
 
@@ -196,19 +196,19 @@ void CreateDeviceWindow::addLinePlate(Plate *plate)
 //---------------------------------------------------------------------------------
 // Добавление строки в список модулей
 //---------------------------------------------------------------------------------
-void CreateDeviceWindow::addLineModul(Modul &mod)
+void CreateDeviceWindow::addLineModul(Items &mod)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem();
     item->setText(0, mod.number);
     item->setData(0, Qt::UserRole, mod.id);
     ui->twModul->addTopLevelItem(item);
 
-    for(const auto &it : mod.listPlate)
-    {
-        QTreeWidgetItem *child = new QTreeWidgetItem();
-        child->setText(0, it.number + " (FW: " + it.number2 + ")");
-        item->addChild(child);
-    }
+    // for(const auto &it : mod.listPlate)
+    // {
+    //     QTreeWidgetItem *child = new QTreeWidgetItem();
+    //     child->setText(0, it.number + " (FW: " + it.number2 + ")");
+    //     item->addChild(child);
+    // }
     item->setExpanded(true);
 
 }
@@ -222,12 +222,12 @@ void CreateDeviceWindow::on_pbRegProduct_clicked()
     if(ui->leNumProduct->text().isEmpty())
         return;
 
-    Product prod;
+    Items prod;
     // Добавление изделия в  базу данных со статусом Создан
     prod.number = ui->leNumProduct->text();
     prod.name = ui->leNameProd->text();
     prod.idType = ui->cbProduct->currentData(Qt::UserRole).toInt();
-    prod.dateRegister = QDateTime::currentDateTime();
+    prod.dateCreate = QDateTime::currentDateTime();
     prod.garantMonth = listTypeProduct[prod.idType].garantMonth;
 
     if(prod.idType <= 0)
@@ -262,13 +262,13 @@ void CreateDeviceWindow::on_pbRegModul_clicked()
         return;
 
     ListModul lModul;
-    Modul mod;
+    Items mod;
     // добавить устройство в базу со статусом Создан
     mod.number = ui->leNumModul->text();
     mod.name = ui->leModulName->text();
     mod.idType = ui->cbModul->currentData(Qt::UserRole).toInt();
-    mod.dateRegister = QDateTime::currentDateTime();
-    mod.listPlate = listAddingPlate;
+    mod.dateCreate = QDateTime::currentDateTime();
+    // mod.listPlate = listAddingPlate;
     mod.garantMonth = listTypeModule[mod.idType].garantMonth;
 
     if(mod.idType <= 0)
@@ -280,8 +280,8 @@ void CreateDeviceWindow::on_pbRegModul_clicked()
     if(repo.AddItem(mod))
     {
         mod.AddStatus(mod, Status::CREATE);
-        for(auto &it : mod.listPlate)
-            lModul.LinkPlate(it.id, mod.id);
+        // for(auto &it : mod.listPlate)
+        //     lModul.LinkPlate(it.id, mod.id);
 
         addLineModul(mod);
         ui->leNumModul->clear();
@@ -352,7 +352,7 @@ void CreateDeviceWindow::slotReadScan(QString s)
         else
         {
             // выполнить поиск свободных плат
-            Plate plate = repo.GetPlate(s);
+            Items plate = repo.GetItem(s);
             if(plate.id > 0 )
             {
                 AddPlateToScreen(plate);
@@ -391,7 +391,7 @@ void CreateDeviceWindow::on_tbDoc_clicked()
                 if(it.VNFT == nakl.VNFT)
                 {
                     ui->cbModul->setCurrentIndex(i);
-                    countUse = repo.GetCountRegisterModul(ui->leNumberDoc->text(), it.id);
+                    // countUse = repo.GetCountRegisterModul(ui->leNumberDoc->text(), it.id);
                     break;
                 }
                 ++i;
@@ -437,7 +437,7 @@ void CreateDeviceWindow::on_tbDocP_clicked()
                 if(it.VNFT == nakl.VNFT)
                 {
                     ui->cbProduct->setCurrentIndex(i);
-                    countUse = repo.GetCountRegisterProduct(ui->leNumberDocP->text(), it.id);
+                    // countUse = repo.GetCountRegisterProduct(ui->leNumberDocP->text(), it.id);
 
                     break;
                 }

@@ -1,38 +1,93 @@
 #include "listplate.h"
+#include <QIcon>
 
-ListPlate::ListPlate() {}
+ListPlate::ListPlate() : ListDevice(ItemType::Plate) { /*qDebug() << "construct ListPlate";*/}
+
+void ListPlate::GetHeader(QStringList& headers)
+{
+    headers << "Номер" << "№ прошивки" << "Обозначение" << "Дата регистрации" << "Документ" << "В модуле" << "Статус";
+}
 
 
 void ListPlate::Load()
 {
 }
 
-QVariant ListPlate::getData(int /*row*/, int /*col*/) const
+QVariant ListPlate::getData(int row, int col, int role) const
 {
-    return QVariant();
+    QVariant var;
+
+    if(row > items.size())
+        return var;
+
+    auto item = items.at(row);
+
+    if(role == Qt::DisplayRole)
+    {
+        switch(col)
+        {
+        case 0:
+            var = item.number;
+            break;
+        case 1:
+            var = item.number2;
+            break;
+        case 2:
+            var = item.VNFT;
+            break;
+        case 3:
+            var = item.dateCreate.toString("dd.MM.yyyy");
+            break;
+        case 4:
+            var = item.numberDoc;
+            break;
+        case 6:
+            var = item.currStatus;
+            break;
+        }
+
+    }
+    else if(role == Qt::DecorationRole)
+    {
+        if(col == 5)
+        {
+            if(item.idParent > 0)
+                var = QIcon("://image/Apply24x24.png");
+        }
+    }
+
+    return var;
 }
 
-void ListPlate::FindSerialNumber(const QString &number, QList<Plate> &listItems)
+void ListPlate::FindSerialNumber(const QString &number, QList<Items> &listItems)
 {
-    repo.FindItems(number, listItems);
+    repo.FindItems(ItemType::Plate, number, listItems);
 }
 
 
-void ListPlate::LoadChild(Plate &/*plate*/)
+void ListPlate::LoadChild(Items &/*plate*/)
 {
 }
 
 
-Plate ListPlate::GetItem(int id)
+Items ListPlate::GetItem(int id)
 {
     // Plate plate;
-    auto plate_it = std::find_if(listItems.cbegin(), listItems.cend(), [id](const Plate &plate) { return plate.id == id;});
+    auto plate_it = std::find_if(items.cbegin(), items.cend(), [id](const Items &plate) { return plate.id == id;});
     return *plate_it;
 }
 
 
 
-bool ListPlate::DeleteItem(int id)
+bool ListPlate::DeleteItem(int row)
 {
-    return repo.DeletePlate(id);
+    bool res = false;
+    Items plate = items.at(row);
+    if(plate.id != 0)
+    {
+        res = repo.DeleteItem(plate.id);
+        if(res)
+            items.removeAt(row);
+    }
+    return res;
 }

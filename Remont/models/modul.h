@@ -9,13 +9,13 @@
 #include <QString>
 #include <infrastructure/IStatus.h>
 
-class Modul : public IDevice, public StatusList<Modul>
+class Modul : public IDevice, public StatusList2<Modul>
 {
 public:
     int idProduct;
 
     // QList<IDevice> listChild;
-    QList<Plate> listPlate;
+    QList<Items> listPlate;
 
     explicit Modul() : idProduct(0)  { typeDevice = ev::DeviceKind::MODUL; }
 

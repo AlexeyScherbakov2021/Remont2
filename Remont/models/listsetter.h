@@ -5,22 +5,25 @@
 #include "setterout.h"
 
 
-class ListSetter : public ListDevice<SetterOut>
+class ListSetter //: public ListDevice<SetterOut>
 {
 public:
     explicit ListSetter();
 
-
+    QList<SetterOut> listItems;
 
     // ListDevice interface
 public:
-    SetterOut GetItem(int id) override;
-    void LoadChild(SetterOut &item) override;
-    void Load() override;
-    QVariant getData(int row, int col) const override;
+    SetterOut GetItem(int id) ;
+    void LoadChild(SetterOut &item) ;
+    void Load() ;
+    QVariant getData(int row, int col) const ;
 
 
-    bool DeleteItem(int id) override;
+    bool DeleteItem(int id) ;
+private:
+    RepoMSSQL repo;
+
 };
 
 #endif // LISTSETTER_H

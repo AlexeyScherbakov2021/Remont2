@@ -22,14 +22,14 @@ public:
 
     SelectDeviceWindow(QWidget *parent = nullptr);
 
-    IDevice* SelectDevice(bool isNow, QString searchNum = "", QVector<Status::Stat> statusList = QVector<Status::Stat>());
-    IDevice* SelectDevice(bool isNow, QString searchNum = "", Status::Stat status = Status::Stat::NONE);
+    Items* SelectDevice(bool isNow, QString searchNum = "", QVector<Status::Stat> statusList = QVector<Status::Stat>());
+    Items* SelectDevice(bool isNow, QString searchNum = "", Status::Stat status = Status::Stat::NONE);
     void setTypeSearch(TypeDevice type);
     void setNotShipped();
     void setDisaleSearch();
 
     ~SelectDeviceWindow();
-    IDevice *device = nullptr;
+    Items *device = nullptr;
 
 private slots:
     void on_tbSearch_clicked();

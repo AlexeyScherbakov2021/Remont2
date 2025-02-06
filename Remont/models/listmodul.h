@@ -2,10 +2,10 @@
 #define LISTMODUL_H
 
 #include "listdevice.h"
-#include "modul.h"
+// #include "modul.h"
 
 
-class ListModul : public ListDevice<Modul>
+class ListModul : public ListDevice
 {
 public:
     explicit ListModul();
@@ -13,13 +13,15 @@ public:
     // ListDevice interface
 public:
     void Load() override;
-    QVariant getData(int row, int col) const override;
+    QVariant getData(int row, int col, int role) const override;
 
     bool LinkPlate(int idPlate, int idModul);
-    void LoadChild(Modul &modul) override;
+    void LoadChild(Items &modul) override;
     // Modul GetItem(int id) override;
 
     bool DeleteItem(int id) override;
+
+    void GetHeader(QStringList &headers) override;
 };
 
 #endif // LISTMODUL_H

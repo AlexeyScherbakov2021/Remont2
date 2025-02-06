@@ -2,9 +2,10 @@
 #define SHIPMENT_H
 
 #include "entity.h"
-#include "modul.h"
+// #include "modul.h"
 #include "setterout.h"
-#include "product.h"
+// #include "product.h"
+#include "Items.h"
 
 class Shipment : public IEntity
 {
@@ -22,9 +23,10 @@ public:
     QString questList;
     QString numberUPD;
 
-    QList<Product> listProduct;
+    // QList<Product> listProduct;
     QList<SetterOut> listSetterOut;
-    QList<Modul> listModules;
+    // QList<Modul> listModules;
+    QList<Items> listItems;
 
     explicit Shipment() {}
 

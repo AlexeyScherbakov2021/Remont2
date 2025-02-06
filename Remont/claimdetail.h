@@ -33,14 +33,14 @@ private:
     QMap<int, QString> listTypeProduct;
 
 
-    TrackRecord<Product> trackProduct;
-    TrackRecord<Modul> trackModul;
+    TrackRecord<Items> trackProduct;
+    TrackRecord<Items> trackModul;
 
     RepoMSSQL repo;
 
     void ClaimToScreen(Claim *claim);
-    void AddModulToTableScreen(const Modul &modul);
-    void AddProductToTableScreen(const Product &prod);
+    void AddModulToTableScreen(const Items &modul);
+    void AddProductToTableScreen(const Items &prod);
 
 };
 

@@ -1,20 +1,28 @@
 #ifndef LISTDEVICE_H
 #define LISTDEVICE_H
 
-#include "entity.h"
+#include "Items.h"
+#include <QDebug>
 #include <QList>
 #include <repomssql.h>
 
-template <typename T>
+
+
 class ListDevice
 {
+private:
+    ItemType::IndexType typeDev;
+
 public:
-    QList<T> listItems;
+    QList<Items> items;
 
-    explicit ListDevice() {}
+    explicit ListDevice(ItemType::IndexType _typeDev) : typeDev(_typeDev) {}
+    ~ListDevice() { qDebug() << "destructor ListDevice"; }
+
+    virtual void GetHeader(QStringList& headers) = 0;
 
 
-    virtual bool AddItem(T &item)
+    virtual bool AddItem(Items &item)
     {
         return repo.AddItem(item);
     }
@@ -22,49 +30,53 @@ public:
 
     virtual bool DeleteItem(int id) = 0;
 
-    virtual bool UpdateItem(T &item)
+    virtual bool UpdateItem(Items &item)
     {
         return repo.UpdateItem(item);
     }
 
-
     void FindItems(const QString &number, int status = 0, bool isFree = false)
     {
-        repo.FindItems(number, listItems, status, isFree);
+        repo.FindItems(typeDev, number, items, status, isFree);
     }
 
 
-    virtual T GetItem(int id)
+    virtual Items GetItem(int id)
     {
-        T resT;
-        auto res = std::find_if(listItems.cbegin(), listItems.cend(), [id] (auto it) { return it.id == id; });
-        if(res != listItems.cend())
+        Items resT;
+        auto res = std::find_if(items.cbegin(), items.cend(), [id] (auto it) { return it.id == id; });
+        if(res != items.cend())
             resT = *res;
         return resT;
     }
 
-    virtual T GetItem(QString number)
+    virtual Items GetItem(QString number)
     {
-        T resT;
-        auto res = std::find_if(listItems.cbegin(), listItems.cend(), [number] (auto it) { return it.number == number; });
-        if(res != listItems.cend())
+        Items resT;
+        auto res = std::find_if(items.cbegin(), items.cend(), [number] (auto it) { return it.number == number; });
+        if(res != items.cend())
             resT = *res;
         return resT;
     }
 
 
-    virtual void LoadChild(T &item) = 0;
+    virtual void LoadChild(Items &item) = 0;
 
 
     virtual void Load() = 0;
 
-    virtual QVariant getData(int row, int col) const = 0;
+    virtual QVariant getData(int row, int col, int role) const = 0;
+
+    size_t LoadPart(size_t start, size_t count, const QString &number, int status = 0, bool isBusy = false, bool isParent = false)
+    {
+        return repo.LoadPart(start, count, typeDev, number, items, status, isBusy, isParent);
+    }
+
+
 protected:
     RepoMSSQL repo;
 
 };
-
-
 
 
 #endif // LISTDEVICE_H

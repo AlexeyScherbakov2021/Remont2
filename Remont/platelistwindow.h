@@ -5,7 +5,8 @@
 #include <qtablewidget.h>
 
 #include <models/listplate.h>
-#include <models/platetype.h>
+#include <models/platemodel.h>
+// #include <models/platetype.h>
 
 namespace Ui {
 class PlateListWindow;
@@ -19,12 +20,12 @@ public:
     explicit PlateListWindow(QWidget *parent = nullptr);
     ~PlateListWindow();
 
-    Plate SelectPlate(QString number = "");
+    Items SelectPlate(QString number = "");
     void setSelect();
     void setNotLinked();
-    void RemoveListPlate(QList<Plate> &listExclude);
+    void RemoveListPlate(QList<Items> &listExclude);
 
-    QList<Plate> selectedPlates;
+    QList<Items> selectedPlates;
 
 private slots:
     void on_tbSearch_clicked();
@@ -32,28 +33,29 @@ private slots:
     void on_rbNotLink_clicked();
     void on_rbAll_clicked();
     void on_pbSelect_clicked();
-    void on_twPlates_itemDoubleClicked(QTableWidgetItem *item);
+    // void on_twPlates_itemDoubleClicked(QTableWidgetItem *item);
     void slotReadScan(QString s);
 
-    void on_actionBroken_triggered();
-
-    void on_twPlates_customContextMenuRequested(const QPoint &pos);
+    // void on_actionBroken_triggered();
+    // void on_twPlates_customContextMenuRequested(const QPoint &pos);
 
 private:
     Ui::PlateListWindow *ui;
     bool isSelectPlate = false;
     bool isNotLinked = false;
-    ListPlate listPlate;
-    QVector<PlateType> listType;
-    QList<Plate> *listExcludePlate = nullptr;
+    // ListPlate listPlate;
+    QVector<ItemType> listType;
+    QList<Items> *listExcludePlate = nullptr;
     QMap<int, QString> listPlateType;
-    Plate selectPlate;
+    Items selectPlate;
     QMetaObject::Connection conn;
 
+    void startLoad();
 
     void UpdateForm();
     void LinkTypePlate();
 
+    PlateModel *model;
 };
 
 #endif // PLATELISTWINDOW_H

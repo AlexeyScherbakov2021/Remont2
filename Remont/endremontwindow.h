@@ -5,8 +5,9 @@
 
 #include <QDialog>
 
-#include <models/product.h>
-#include <models/modul.h>
+// #include <models/product.h>
+// #include <models/modul.h>
+#include <models/Items.h>
 
 namespace Ui {
 class EndRemontWindow;
@@ -29,8 +30,8 @@ private:
     Ui::EndRemontWindow *ui;
     // int idProd = 0;
     // int idMod = 0;
-    Product product;
-    Modul modul;
+    Items product;
+    Items modul;
     RepoMSSQL repo;
 
 };

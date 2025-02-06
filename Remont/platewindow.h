@@ -32,7 +32,7 @@ private:
     RepoMSSQL repo;
     QMetaObject::Connection conn;
     // QSqlQueryModel model;
-    QVector<PlateType> listVNFT;
+    QVector<ItemType> listVNFT;
     int countFromDoc = 0;
     int countUse = 0;
     void UpdateUseCount();

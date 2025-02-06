@@ -1,5 +1,5 @@
-#ifndef PLATEVNFTWINDOW_H
-#define PLATEVNFTWINDOW_H
+#ifndef ITEMVNFTWINDOW_H
+#define ITEMVNFTWINDOW_H
 
 #include "repomssql.h"
 
@@ -7,18 +7,19 @@
 #include <QSqlQueryModel>
 #include <QSqlTableModel>
 #include <qtablewidget.h>
+#include <models/ItemsType.h>
 
 namespace Ui {
-class PlateVNFTWindow;
+class ItemVNFTWindow;
 }
 
-class PlateVNFTWindow : public QDialog
+class ItemVNFTWindow : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit PlateVNFTWindow(QWidget *parent = nullptr);
-    ~PlateVNFTWindow();
+    explicit ItemVNFTWindow(ItemType::IndexType t, QWidget *parent = nullptr);
+    ~ItemVNFTWindow();
 
 private slots:
     // void on_twVNFT_itemChanged(QTableWidgetItem *item);
@@ -28,9 +29,11 @@ private slots:
     void on_pbCancel_clicked();
 
 private:
-    Ui::PlateVNFTWindow *ui;
+    QStringList nameWindow {"изделий","модулей","плат"};
+    Ui::ItemVNFTWindow *ui;
     RepoMSSQL repo;
     QSqlTableModel model2;
+    ItemType::IndexType workType;
 };
 
-#endif // PLATEVNFTWINDOW_H
+#endif // ITEMVNFTWINDOW_H

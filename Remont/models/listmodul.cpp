@@ -1,17 +1,60 @@
 #include "listmodul.h"
-#include "modul.h"
 
-ListModul::ListModul() {}
+#include <QIcon>
+// #include "modul.h"
+
+ListModul::ListModul() : ListDevice(ItemType::Modul) {}
 
 
 void ListModul::Load()
 {
-    repo.FindItems("", listItems, 0);
+    repo.FindItems(ItemType::Product, "", items, 0);
 }
 
-QVariant ListModul::getData(int /*row*/, int /*col*/) const
+QVariant ListModul::getData(int row, int col, int role) const
 {
-    return QVariant();
+    QVariant var;
+
+    if(row > items.size())
+        return var;
+
+    auto item = items.at(row);
+
+    if(role == Qt::DisplayRole)
+    {
+        switch(col)
+        {
+        case 0:
+            var = item.number;
+            break;
+        case 1:
+            var = item.number2;
+            break;
+        case 2:
+            var = item.VNFT;
+            break;
+        case 3:
+            var = item.dateCreate.toString("dd.MM.yyyy");
+            break;
+        case 4:
+            var = item.numberDoc;
+            break;
+        case 6:
+            var = item.currStatus;
+            break;
+        }
+
+    }
+    else if(role == Qt::DecorationRole)
+    {
+        if(col == 5)
+        {
+            if(item.idParent > 0)
+                var = QIcon("://image/Apply24x24.png");
+        }
+    }
+
+    return var;
 }
 
 bool ListModul::LinkPlate(int idPlate, int idModul)
@@ -20,7 +63,7 @@ bool ListModul::LinkPlate(int idPlate, int idModul)
 }
 
 
-void ListModul::LoadChild(Modul &/*modul*/)
+void ListModul::LoadChild(Items &/*modul*/)
 {
 }
 
@@ -35,5 +78,11 @@ void ListModul::LoadChild(Modul &/*modul*/)
 
 bool ListModul::DeleteItem(int id)
 {
-    return repo.DeleteModul(id);
+    return repo.DeleteItem(id);
+}
+
+
+void ListModul::GetHeader(QStringList &headers)
+{
+    headers << "Номер" << "№ прошивки" << "Обозначение" << "Дата регистрации" << "Документ" << "В модуле" << "Статус";
 }

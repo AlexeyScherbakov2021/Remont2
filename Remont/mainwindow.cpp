@@ -14,7 +14,7 @@
 #include "endremontwindow.h"
 #include "scan.h"
 #include "platelistwindow.h"
-#include "platevnftwindow.h"
+#include "Itemvnftwindow.h"
 #include "platefwwindow.h"
 #include "logwindow.h"
 #include "qrwindow.h"
@@ -22,6 +22,7 @@
 #include "prodvnftwindow.h"
 #include "modvnftwindow.h"
 #include <models/listdevice.h>
+#include <models/ItemsType.h>
 
 #include <QSettings>
 
@@ -60,12 +61,12 @@ void MainWindow::on_pbClaim_clicked()
 void MainWindow::on_pbCard_clicked()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    IDevice *dev = win->SelectDevice(false, "", Status::NONE);
+    Items *dev = win->SelectDevice(false, "", Status::NONE);
     if(dev != nullptr)
     {
         CardProdWindow *winCard;
-        winCard = new CardProdWindow(dev, this);
-        winCard->show();
+        // winCard = new CardProdWindow(dev, this);
+        // winCard->show();
     }
 }
 
@@ -274,12 +275,12 @@ void MainWindow::on_aEndRepair_triggered()
 void MainWindow::on_aCardDevice_triggered()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    IDevice *dev = win->SelectDevice(false, "", Status::NONE);
+    Items *dev = win->SelectDevice(false, "", Status::NONE);
     if(dev != nullptr)
     {
         CardProdWindow *winCard;
-        winCard = new CardProdWindow(dev, this);
-        winCard->show();
+        // winCard = new CardProdWindow(dev, this);
+        // winCard->show();
     }
 
 }
@@ -292,17 +293,17 @@ void MainWindow::on_aExchModul_triggered()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
     // win->setTypeSearch(SelectDeviceWindow::MODU);
-    IDevice *dev = win->SelectDevice(false, "", Status::NONE );
+    Items *dev = win->SelectDevice(false, "", Status::NONE );
     if(dev != nullptr)
     {
-        Modul *mod = static_cast<Modul*>(dev);
+        Items *mod = static_cast<Items*>(dev);
         RepoMSSQL repo;
-        Product prod = repo.GetProduct(mod->idProduct);
-        if(prod.id > 0)
-        {
-            ComplectProductWindow *win = new ComplectProductWindow(this, &prod);
-            win->show();
-        }
+        // Items prod = repo.GetProduct(mod->idParent);
+        // if(prod.id > 0)
+        // {
+        //     ComplectProductWindow *win = new ComplectProductWindow(this, &prod);
+        //     win->show();
+        // }
     }
 
 }
@@ -328,21 +329,21 @@ void MainWindow::slotReadScan(QString s)
         return;
 
     CardProdWindow *winCard;
-    RepoMSSQL repo;
-    IDevice *dev = nullptr;
-    Product prod = repo.GetProduct(s, 0, false);
-    Modul mod = repo.GetModul(s, 0, false);
+    // RepoMSSQL repo;
+    // Items *dev = nullptr;
+    // Items prod = repo.GetProduct(s, 0, false);
+    // Items mod = repo.GetModul(s, 0, false);
 
-    if(prod.id > 0)
-        dev = &prod;
-    else if(mod.id > 0)
-        dev = &mod;
+    // if(prod.id > 0)
+    //     dev = &prod;
+    // else if(mod.id > 0)
+    //     dev = &mod;
 
-    if(dev != nullptr)
-    {
-        winCard = new CardProdWindow(dev, this);
-        winCard->show();
-    }
+    // if(dev != nullptr)
+    // {
+    //     winCard = new CardProdWindow(dev, this);
+    //     winCard->show();
+    // }
 
 }
 
@@ -353,8 +354,9 @@ void MainWindow::slotReadScan(QString s)
 void MainWindow::on_aListPlate_triggered()
 {
     PlateListWindow *win = new PlateListWindow(this);
-    win->SelectPlate();
-    // win->exec();
+    // win->SelectPlate();
+    win->setAttribute(Qt::WA_DeleteOnClose);
+    win->exec();
 
 }
 
@@ -364,7 +366,7 @@ void MainWindow::on_aListPlate_triggered()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_aPlateVNFT_triggered()
 {
-    PlateVNFTWindow *win = new PlateVNFTWindow(this);
+    ItemVNFTWindow *win = new ItemVNFTWindow(ItemType::Plate, this);
     win->open();
 }
 
@@ -416,7 +418,7 @@ void MainWindow::on_aGenQR_triggered()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_aPRodVNFT_triggered()
 {
-    ProdVNFTWindow *win = new ProdVNFTWindow(this);
+    ItemVNFTWindow *win = new ItemVNFTWindow(ItemType::Product, this);
     win->exec();
 }
 
@@ -426,7 +428,7 @@ void MainWindow::on_aPRodVNFT_triggered()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_aModVNFT_triggered()
 {
-    ModVNFTWindow *win = new ModVNFTWindow(this);
+    ItemVNFTWindow *win = new ItemVNFTWindow(ItemType::Modul, this);
     win->exec();
 
 }

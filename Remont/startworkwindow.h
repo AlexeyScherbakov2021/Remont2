@@ -5,7 +5,7 @@
 #include <QDialog>
 #include <models/listmodul.h>
 #include <models/listproduct.h>
-#include <models/product.h>
+// #include <models/product.h>
 
 namespace Ui {
 class StartWorkWindow;

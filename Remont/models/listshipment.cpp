@@ -20,11 +20,14 @@ QVariant ListShipment::getData(int /*row*/, int /*col*/) const
 Shipment ListShipment::GetItem(int id)
 {
     return repo.GetShipment(id);
+    // return false;
 }
 
 
 
 bool ListShipment::DeleteItem(int id)
 {
-    return repo.DeleteShipment(id);
+    // return repo.DeleteShipment(id);
+    return false;
+
 }

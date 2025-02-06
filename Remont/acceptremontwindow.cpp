@@ -2,7 +2,7 @@
 #include "complectproductwindow.h"
 #include "selectdevicewindow.h"
 #include "ui_acceptremontwindow.h"
-#include <models/product.h>
+// #include <models/product.h>
 
 
 #include <QMessageBox>
@@ -21,8 +21,8 @@ AcceptRemontWindow::AcceptRemontWindow(QWidget *parent)
 
     for(auto &it : claims.listItems)
     {
-        repo.LoadClaimProducts(it.id, it.listProduct);
-        repo.LoadClaimModules(it.id, it.listModul);
+        // repo.LoadClaimProducts(it.id, it.listProduct);
+        // repo.LoadClaimModules(it.id, it.listModul);
         // ui->cbClaim->addItem(it.Number, it.id);
     }
 
@@ -55,9 +55,9 @@ void AcceptRemontWindow::on_pbExchange_clicked()
         return;
     }
 
-    Product prod = repo.GetProduct(idParentProd);
-    ComplectProductWindow *win = new ComplectProductWindow(this, &prod);
-    win->exec();
+    // Items prod = repo.GetProduct(idParentProd);
+    // ComplectProductWindow *win = new ComplectProductWindow(this, &prod);
+    // win->exec();
 }
 
 
@@ -68,7 +68,7 @@ void AcceptRemontWindow::on_pbApply_clicked()
 {
     if(idProd != 0)
     {
-        Product prod;
+        Items prod;
         prod.id = idProd;
         // status.idDevice = idProd;
         prod.AddStatus(prod, Status::FAULTY_ON_OSO);
@@ -76,7 +76,7 @@ void AcceptRemontWindow::on_pbApply_clicked()
 
     if(idMod != 0)
     {
-        Modul mod;
+        Items mod;
         mod.id = idMod;
         // status.idDevice = idMod;
         mod.AddStatus(mod, Status::FAULTY_ON_OSO);;
@@ -122,32 +122,33 @@ void AcceptRemontWindow::on_tbNumber_clicked()
 
     // SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumber->text(),Status::FAULTY_ON_OBJECT);
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    IDevice *dev = win->SelectDevice(true, ui->leNumber->text(), Status::FAULTY_ON_OBJECT);
+    Items *dev = win->SelectDevice(true, ui->leNumber->text(), Status::FAULTY_ON_OBJECT);
 
     if(dev != nullptr)
     {
         Claim claim;
         // modul = dynamic_cast<Modul*> (dev);
-        if(dev->typeDevice == ev::MODUL)
+        // if(dev->typeDevice == ev::MODUL)
+        if(dev->type.indexType == ItemType::Modul)
         // if(win->modul->id != 0)
         {
-            Modul *modul = static_cast<Modul*> (dev);
-            if(repo.LoadClaimForModul(modul->id, claim))
-                ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
+            Items *modul = static_cast<Items*> (dev);
+            // if(repo.LoadClaimForModul(modul->id, claim))
+            //     ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
 
             ui->lbNumber->setText(modul->number);
             ui->lbName->setText(modul->name);
             ui->lbDevice->setText("Модуль");
             idMod = modul->id;
-            idParentProd = modul->idProduct;
+            idParentProd = modul->idParent;
         }
 
         // prod = dynamic_cast<Product*> (dev);
-        if(dev->typeDevice == ev::PRODUCT )
+        if(dev->type.indexType == ItemType::Product )
         {
-            Product *prod = static_cast<Product*> (dev);
-            if(repo.LoadClaimForProduct(prod->id, claim))
-                ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
+            Items *prod = static_cast<Items*> (dev);
+            // if(repo.LoadClaimForProduct(prod->id, claim))
+            //     ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
 
             ui->lbNumber->setText(prod->number);
             ui->lbName->setText(prod->name);

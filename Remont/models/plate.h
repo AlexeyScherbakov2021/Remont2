@@ -6,7 +6,7 @@
 #include <QDateTime>
 #include <infrastructure/IStatus.h>
 
-class Plate : public IDevice, public StatusList<Plate>
+class Plate : public IDevice, public StatusList2<Plate>
 {
 public:
     QString VNFT;

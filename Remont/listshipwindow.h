@@ -2,9 +2,7 @@
 #define LISTSHIPWINDOW_H
 
 #include "repomssql.h"
-
 #include <QDialog>
-
 #include <models/listshipment.h>
 
 namespace Ui {

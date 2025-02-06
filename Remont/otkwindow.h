@@ -2,7 +2,6 @@
 #define OTKWINDOW_H
 
 #include <QMainWindow>
-
 #include <models/listdevice.h>
 
 namespace Ui {
@@ -15,11 +14,11 @@ class OTKWindow : public QMainWindow
 
 public:
     explicit OTKWindow(QWidget *parent = nullptr);
-    explicit OTKWindow(ListDevice<Product> *dev, QWidget *parent = nullptr);
-    explicit OTKWindow(ListDevice<Modul> *dev, QWidget *parent = nullptr);
+    explicit OTKWindow(ListDevice *dev, QWidget *parent = nullptr);
+    // explicit OTKWindow(ListDevice<Modul> *dev, QWidget *parent = nullptr);
 
     // template <typename T>
-    explicit OTKWindow(ListDevice<Plate> *dev, QWidget *parent = nullptr);
+    // explicit OTKWindow(ListDevice<Plate> *dev, QWidget *parent = nullptr);
     ~OTKWindow();
 
 private:

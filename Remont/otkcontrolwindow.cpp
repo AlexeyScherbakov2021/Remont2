@@ -32,7 +32,7 @@ void OTKControlWindow::loadCreatedDevice()
     Modules.FindItems("", Status::CREATE);
 
     ui->lwModul->clear();
-    for(auto &it : Modules.listItems)
+    for(auto &it : Modules.items)
     {
         QListWidgetItem *item = new QListWidgetItem();
         item->setText(/*it.name + " №" + */it.FullNameAndComment());
@@ -43,7 +43,7 @@ void OTKControlWindow::loadCreatedDevice()
 
     Products.FindItems("", Status::CREATE);
     ui->lwProduct->clear();
-    for(auto &it : Products.listItems)
+    for(auto &it : Products.items)
     {
         QListWidgetItem *item = new QListWidgetItem();
         item->setText(/*it.name + " №" + */it.FullNameAndComment());
@@ -54,14 +54,14 @@ void OTKControlWindow::loadCreatedDevice()
 
     Plates.FindItems("", Status::CREATE);
     ui->lwPlate->clear();
-    for(auto &it : Plates.listItems)
-    {
-        QListWidgetItem *item = new QListWidgetItem();
-        item->setText(it.VNFT + " №" + it.number);
-        item->setData(Qt::UserRole, it.id);
-        item->setData(Qt::UserRole + 1, it.number);
-        ui->lwPlate->addItem(item);
-    }
+    // for(auto &it : Plates.listItems)
+    // {
+    //     QListWidgetItem *item = new QListWidgetItem();
+    //     item->setText(it.VNFT + " №" + it.number);
+    //     item->setData(Qt::UserRole, it.id);
+    //     item->setData(Qt::UserRole + 1, it.number);
+    //     ui->lwPlate->addItem(item);
+    // }
 
 }
 
@@ -74,7 +74,7 @@ void OTKControlWindow::loadBrockenDevice()
     Modules.FindItems("", Status::FAULTY);
 
     ui->lwModul->clear();
-    for(auto &it : Modules.listItems)
+    for(auto &it : Modules.items)
     {
         QListWidgetItem *item = new QListWidgetItem();
         item->setText(/*it.name + " №" + */it.FullNameAndComment());
@@ -86,7 +86,7 @@ void OTKControlWindow::loadBrockenDevice()
     Products.FindItems("", Status::FAULTY);
     // repo.LoadProducts(listProduct, Status::FAULTY);
     ui->lwProduct->clear();
-    for(auto &it : Products.listItems)
+    for(auto &it : Products.items)
     {
         QListWidgetItem *item = new QListWidgetItem();
         item->setText(/*it.name + " №" + */it.FullNameAndComment());
@@ -147,8 +147,8 @@ void OTKControlWindow::on_tbDelBroken_clicked()
 
     int idModul = item->data(Qt::UserRole).toInt();
     QListWidgetItem *item2 = new QListWidgetItem(*item);
-    auto modul = std::find_if(Modules.listItems.cbegin(), Modules.listItems.cend(), [&] (const Modul p) { return p.id == idModul;});
-    Modul mod = *modul;
+    auto modul = std::find_if(Modules.items.cbegin(), Modules.items.cend(), [&] (const Items p) { return p.id == idModul;});
+    Items mod = *modul;
     item2->setText(mod.FullNameAndComment());
     ui->lwModul->addItem(item2);
 
@@ -188,8 +188,8 @@ void OTKControlWindow::on_tbDelBrokenProd_clicked()
 
     int idProd = item->data(Qt::UserRole).toInt();
     QListWidgetItem *item2 = new QListWidgetItem(*item);
-    auto prod = std::find_if(Products.listItems.cbegin(), Products.listItems.cend(), [&] (const Product p) { return p.id == idProd;});
-    Product product = *prod;
+    auto prod = std::find_if(Products.items.cbegin(), Products.items.cend(), [&] (const Items p) { return p.id == idProd;});
+    Items product = *prod;
     item2->setText( product.FullNameAndComment());
     ui->lwProduct->addItem(item2);
 
@@ -222,10 +222,8 @@ void OTKControlWindow::on_tbDelBrokenPlate_clicked()
 
     int id = item->data(Qt::UserRole).toInt();
     QListWidgetItem *item2 = new QListWidgetItem(*item);
-    Plate plate = Plates.GetItem(id);
-    // auto plate = std::find_if(Plates.listItems.cbegin(), Plates.listItems.cend(), [&] (const Plate p) { return p.id == id;});
-    // Plate plate2 = plate;
-    item2->setText( plate.FullNameAndComment());
+    // Plate plate = Plates.GetItem(id);
+    // item2->setText( plate.FullNameAndComment());
     ui->lwPlate->addItem(item2);
 
     listStatusPlate.remove(id);
@@ -241,14 +239,14 @@ void OTKControlWindow::on_OTKControlWindow_accepted()
 {
     for(auto &it : listStatus)
     {
-        Modul mod;
+        Items mod;
         mod.id = it.idDevice;
         mod.AddStatus(mod, it.idStatus, it.Comment);
     }
 
     for(auto &it : listStatusProd)
     {
-        Product prod;
+        Items prod;
         prod.id = it.idDevice;
         prod.AddStatus(prod, it.idStatus, it.Comment);
     }
@@ -339,7 +337,7 @@ void OTKControlWindow::ItemCheckedControl(QListWidgetItem *item)
     {
         item2 = new QListWidgetItem(*item);
         id = item->data(Qt::UserRole).toInt();
-        Product prod = Products.GetItem(id);
+        Items prod = Products.GetItem(id);
 
         status.idDevice = id;
         status.dateStatus = QDateTime::currentDateTime();
@@ -372,7 +370,7 @@ void OTKControlWindow::ItemCheckedControl(QListWidgetItem *item)
     {
         item2 = new QListWidgetItem(*item);
         id = item->data(Qt::UserRole).toInt();
-        Modul mod = Modules.GetItem(id);
+        Items mod = Modules.GetItem(id);
 
         status.idDevice = id;
         status.dateStatus = QDateTime::currentDateTime();
@@ -400,7 +398,7 @@ void OTKControlWindow::ItemCheckedControl(QListWidgetItem *item)
     {
         item2 = new QListWidgetItem(*item);
         id = item->data(Qt::UserRole).toInt();
-        Plate plate = Plates.GetItem(id);
+        // Plate plate = Plates.GetItem(id);
 
         status.idDevice = id;
         status.dateStatus = QDateTime::currentDateTime();
@@ -415,11 +413,11 @@ void OTKControlWindow::ItemCheckedControl(QListWidgetItem *item)
             QString comment = QInputDialog::getText(this, "Ввод текста", "Введите комментарий: ");
             status.idStatus = Status::FAULTY;
             status.Comment = comment;
-            item2->setText(plate.name + " " + plate.number + " (" + comment + ")");
+            // item2->setText(plate.name + " " + plate.number + " (" + comment + ")");
             ui->lwBrokenPlate->addItem(item2);
         }
         listStatus[id] = status;;
-        plate.listStatus.push_back(status);
+        // plate.listStatus.push_back(status);
         delete item;
     }
         break;

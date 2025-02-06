@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include <QTreeWidgetItem>
-#include <models/product.h>
+// #include <models/product.h>
 #include <models/shipment.h>
 
 namespace Ui {
@@ -42,10 +42,10 @@ private:
     QHash<int, int> listID;
     QMap<int, QString> listOrg;
 
-    QTreeWidgetItem* AddItemProd(Product &prod, QTreeWidgetItem *parent = nullptr);
+    QTreeWidgetItem* AddItemProd(Items &prod, QTreeWidgetItem *parent = nullptr);
     QTreeWidgetItem* AddItemTree(QString text, int id, TypeItemTree type, QTreeWidgetItem *parent = nullptr);
-    void SetStatusProduct(QList<Product> &listProduct);
-    void SetStatusModules(QList<Modul> &listModules);
+    void SetStatusProduct(QList<Items> &listProduct);
+    void SetStatusModules(QList<Items> &listModules);
 };
 
 #endif // SHIPWINDOW_H

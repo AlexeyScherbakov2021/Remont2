@@ -1,33 +1,39 @@
 #ifndef LISTPLATE_H
 #define LISTPLATE_H
 
+#include "Items.h"
 #include "listdevice.h"
-#include "plate.h"
+// #include <QDebug>
 
-class ListPlate : public ListDevice<Plate>
+class ListPlate : public ListDevice
 {
 public:
 
     explicit ListPlate();
 
+    ~ListPlate() { /*qDebug() << "destructor ListPlate";*/}
+
     // ListDevice interface
 public:
+    void GetHeader(QStringList& headers) override;
     void Load() override;
-    QVariant getData(int row, int col) const override;
-    void FindSerialNumber(const QString &number, QList<Plate> &listItems);
+    QVariant getData(int row, int col, int role) const override;
+    bool DeleteItem(int row) override;
+
+
 public:
-    void LoadChild(Plate &plate) override;
-    Plate GetItem(int id) override;
+    void FindSerialNumber(const QString &number, QList<Items> &listItems);
+    void LoadChild(Items &plate) override;
+    Items GetItem(int id) override;
 
-    bool DeleteItem(int id) override;
 
-    void FindItemsExclude(const QString &number, QList<Plate> &listExclude, int status = 0)
+    void FindItemsExclude(const QString &number, QList<Items> &listExclude, int status = 0)
     {
         ListDevice::FindItems(number, status, true);
 
         for(auto it : listExclude)
         {
-            listItems.removeIf([it](const Plate p) { return p.id == it.id;});
+            items.removeIf([it](const Items p) { return p.id == it.id;});
         }
     }
 

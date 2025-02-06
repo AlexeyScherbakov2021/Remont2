@@ -2,10 +2,10 @@
 #define LISTPRODUCT_H
 
 #include "listdevice.h"
-#include "product.h"
+// #include "product.h"
 
 
-class ListProduct : public ListDevice<Product>
+class ListProduct : public ListDevice
 {
 
         // ListDevice interface
@@ -14,11 +14,15 @@ public:
     explicit ListProduct();
 
     void Load() override;
-    QVariant getData(int row, int col) const override;
-    void LoadChild(Product &prod) override;
+    QVariant getData(int row, int col, int role) const override;
+    void LoadChild(Items &prod) override;
     // Product GetItem(int id) override;
 
     bool DeleteItem(int id) override;
+
+    // ListDevice interface
+public:
+    void GetHeader(QStringList &headers) override;
 };
 
 #endif // LISTPRODUCT_H

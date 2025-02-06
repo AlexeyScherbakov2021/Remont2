@@ -15,7 +15,7 @@ void ListClaim::LoadChild(Claim &/*item*/)
 
 void ListClaim::Load()
 {
-    repo.LoadClaim(listItems);
+    // repo.LoadClaim(listItems);
 }
 
 QVariant ListClaim::getData(int /*row*/, int /*col*/) const
@@ -26,5 +26,6 @@ QVariant ListClaim::getData(int /*row*/, int /*col*/) const
 
 bool ListClaim::DeleteItem(int id)
 {
-    return repo.DeleteClaim(id);
+    return false;
+    // return repo.DeleteClaim(id);
 }

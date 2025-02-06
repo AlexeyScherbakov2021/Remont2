@@ -11,7 +11,7 @@ StartWorkWindow::StartWorkWindow(QWidget *parent)
 
     products.FindItems("", Status::SHIPPED);
 
-    for(auto &it : products.listItems)
+    for(auto &it : products.items)
     {
         QListWidgetItem *item = new QListWidgetItem();
         item->setText(it.name + " (" + it.number + ")");
@@ -44,21 +44,21 @@ void StartWorkWindow::on_pbProdToWork_clicked()
 
 
     int id = item->data(Qt::UserRole).toInt();
-    Product prod = products.GetItem(id);
+    Items prod = products.GetItem(id);
     // qDebug() << ui->deDate->dateTime() << prod.garantMonth;
     prod.dateOn = ui->deDate->dateTime();
-    prod.EndGarant = prod.dateOn.addMonths(prod.garantMonth);
+    prod.dateGarant = prod.dateOn.addMonths(prod.garantMonth);
     // qDebug() << prod.EndGarant;
-    repo.LoadChildProduct(prod);
+    // repo.LoadChildProduct(prod);
     prod.AddStatus(prod, Status::WORK, ui->deDate->dateTime(), ui->leDoc->text());
 
-    for(auto &it : prod.listModules)
-    {
-        it.dateOn = ui->deDate->dateTime();
-        it.EndGarant = it.dateOn.addMonths(it.garantMonth);
-        repo.UpdateItem(it);
-        it.AddStatus(it,Status::WORK, ui->deDate->dateTime(), ui->leDoc->text());
-    }
+    // for(auto &it : prod.listModules)
+    // {
+    //     it.dateOn = ui->deDate->dateTime();
+    //     it.EndGarant = it.dateOn.addMonths(it.garantMonth);
+    //     repo.UpdateItem(it);
+    //     it.AddStatus(it,Status::WORK, ui->deDate->dateTime(), ui->leDoc->text());
+    // }
 
     repo.UpdateItem(prod);
 

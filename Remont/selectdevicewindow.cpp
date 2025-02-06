@@ -18,7 +18,7 @@ SelectDeviceWindow::~SelectDeviceWindow()
 //--------------------------------------------------------------------------------------------------
 // Поиск устройства по списку статусов
 //--------------------------------------------------------------------------------------------------
-IDevice* SelectDeviceWindow::SelectDevice(bool isNow, QString searchNum, QVector<Status::Stat> statusList)
+Items* SelectDeviceWindow::SelectDevice(bool isNow, QString searchNum, QVector<Status::Stat> statusList)
 {
     listStatus = statusList;
     ui->leSearch->setText(searchNum);
@@ -27,20 +27,20 @@ IDevice* SelectDeviceWindow::SelectDevice(bool isNow, QString searchNum, QVector
     if(isNow)
     {
         Search(searchNum);
-        if(listProduct.listItems.size() + listModul.listItems.size() == 1 && !searchNum.isEmpty())
+        if(listProduct.items.size() + listModul.items.size() == 1 && !searchNum.isEmpty())
         {
             // если найден единственный экземпляр, то выходим
-            if(listProduct.listItems.size() == 1)
+            if(listProduct.items.size() == 1)
             {
-                Product* prod = new Product;
-                *prod = listProduct.listItems.first();
+                Items* prod = new Items;
+                *prod = listProduct.items.first();
                 device = prod;
                 // return listProduct.listItems.first();
             }
             else
             {
-                Modul* mod = new Modul;
-                *mod = listModul.listItems.first();
+                Items* mod = new Items;
+                *mod = listModul.items.first();
                 device = mod;
                 // return listModul.listItems.first();
             }
@@ -63,7 +63,7 @@ IDevice* SelectDeviceWindow::SelectDevice(bool isNow, QString searchNum, QVector
 //--------------------------------------------------------------------------------------------------
 // Поиск устройства по статусу
 //--------------------------------------------------------------------------------------------------
-IDevice* SelectDeviceWindow::SelectDevice(bool isNow, QString searchNum, Status::Stat status)
+Items* SelectDeviceWindow::SelectDevice(bool isNow, QString searchNum, Status::Stat status)
 {
     QVector<Status::Stat> statusList = {status};
     return SelectDevice(isNow, searchNum, statusList);
@@ -106,22 +106,22 @@ void SelectDeviceWindow::Search(QString number)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    listProduct.listItems.clear();
-    listModul.listItems.clear();
+    listProduct.items.clear();
+    listModul.items.clear();
     for(auto &it : listStatus)
     {
         if(typeDevice != TypeDevice::TypeModul)
         {
-            QList<Product> products;
-            repo.FindItems(number, products, it, isNotShipped);
-            listProduct.listItems += products;
+            QList<Items> products;
+            repo.FindItems(ItemType::Modul, number, products, it, isNotShipped);
+            listProduct.items += products;
         }
 
         if(typeDevice != TypeDevice::TypeProduct)
         {
-            QList<Modul> moduls;
-            repo.FindItems(number, moduls, it, isNotShipped);
-            listModul.listItems += moduls;
+            QList<Items> moduls;
+            repo.FindItems(ItemType::Product, number, moduls, it, isNotShipped);
+            listModul.items += moduls;
         }
     }
 
@@ -137,9 +137,9 @@ void SelectDeviceWindow::listToScreen()
 {
     int row = 0;
 
-    ui->twProduct->setRowCount(listProduct.listItems.size());
+    ui->twProduct->setRowCount(listProduct.items.size());
 
-    for(auto const &it : listProduct.listItems)
+    for(auto const &it : listProduct.items)
     {
         // ui->twProduct->insertRow(row);
         QTableWidgetItem *item = new QTableWidgetItem();
@@ -169,8 +169,8 @@ void SelectDeviceWindow::listToScreen()
     ui->twProduct->resizeRowsToContents();
 
     row = 0;
-    ui->twModul->setRowCount(listModul.listItems.size());
-    for(auto const &it : listModul.listItems)
+    ui->twModul->setRowCount(listModul.items.size());
+    for(auto const &it : listModul.items)
     {
         // ui->twModul->insertRow(row);
         QTableWidgetItem *item = new QTableWidgetItem();
@@ -251,15 +251,15 @@ void SelectDeviceWindow::on_pbSelect_clicked()
 
     if(ui->tabWidget->currentIndex() == 0 && ui->twProduct->currentRow() >= 0)
     {
-        Product *prod = new Product;
-        *prod = listProduct.listItems[ui->twProduct->currentRow()];
+        Items *prod = new Items;
+        *prod = listProduct.items[ui->twProduct->currentRow()];
         device = prod;
     }
 
     if(ui->tabWidget->currentIndex() == 1 && ui->twModul->currentRow() >= 0)
     {
-        Modul *mod = new Modul;
-        *mod = listModul.listItems[ui->twModul->currentRow()];
+        Items *mod = new Items;
+        *mod = listModul.items[ui->twModul->currentRow()];
         device = mod;
     }
 

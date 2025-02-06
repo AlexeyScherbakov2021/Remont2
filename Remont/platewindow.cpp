@@ -5,7 +5,7 @@
 
 #include <QMessageBox>
 
-#include <models/platetype.h>
+// #include <models/platetype.h>
 
 PlateWindow::PlateWindow(QWidget *parent)
     : QDialog(parent)
@@ -16,13 +16,13 @@ PlateWindow::PlateWindow(QWidget *parent)
 
     // model.setQuery("select pt_VNFT,pt_name from PlateType");
     // ui->cbVNFT->setModel(&model);
-    listVNFT;
+    // listVNFT;
 
-    repo.LoadTypePlate(listVNFT);
+    repo.LoadTypeItem(ItemType::Plate, listVNFT);
 
     for(auto const &it : listVNFT)
     {
-        ui->cbVNFT->addItem(it.VNFT + " " + it.name, it.id);
+        ui->cbVNFT->addItem(it.VNFT + " " + it.typeName, it.id);
     }
 
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
@@ -42,8 +42,8 @@ void PlateWindow::on_pbAdd_clicked()
     if(ui->leNumber->text().isEmpty())
         return;
 
-    Plate plate;
-    plate.dateRegister = ui->deCreateDate->dateTime();
+    Items plate;
+    plate.dateCreate = ui->deCreateDate->dateTime();
     plate.number = ui->leNumber->text();
     plate.number2 = ui->leNumberFW->text();
     plate.numberDoc = ui->leNumberDoc->text();
@@ -79,12 +79,12 @@ void PlateWindow::on_tbDelete_clicked()
     int id = item->data(Qt::UserRole).toInt();
 
     // удаление платы из базы
-    if(repo.DeletePlate(id))
-    {
-        delete ui->listWidget->currentItem();
-        --countUse;
-        UpdateUseCount();
-    }
+    // if(repo.DeletePlate(id))
+    // {
+    //     delete ui->listWidget->currentItem();
+    //     --countUse;
+    //     UpdateUseCount();
+    // }
 }
 
 
@@ -130,7 +130,7 @@ void PlateWindow::on_tbDoc_clicked()
 {
     RepoFP repoFP;
     Nakl nakl;
-    int useCount;
+    // int useCount;
     QList<Nakl> listNakl;
     repoFP.getDoc(ui->leNumberDoc->text(), listNakl);
 
@@ -152,7 +152,7 @@ void PlateWindow::on_tbDoc_clicked()
                 if(it.VNFT == nakl.VNFT)
                 {
                     ui->cbVNFT->setCurrentIndex(i);
-                    countUse = repo.GetCountRegisterPlate(ui->leNumberDoc->text(), it.id);
+                    // countUse = repo.GetCountRegisterPlate(ui->leNumberDoc->text(), it.id);
                     countFromDoc = nakl.count;
                     break;
                 }

@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include <models/modul.h>
+// #include <models/modul.h>
 #include <models/claim.h>
 #include <models/remontm.h>
 

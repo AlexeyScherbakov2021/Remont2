@@ -3,8 +3,8 @@
 
 #include "repomssql.h"
 #include <QDialog>
-#include <models/modul.h>
-#include <models/product.h>
+// #include <models/modul.h>
+// #include <models/product.h>
 #include <models/setterout.h>
 #include <models/shipment.h>
 
@@ -19,7 +19,7 @@ class CardProdWindow : public QDialog
 public:
     // explicit CardProdWindow(Modul &modul, QWidget *parent = nullptr);
     // explicit CardProdWindow(Product &prod, QWidget *parent = nullptr);
-    CardProdWindow(IDevice *device, QWidget *parent = nullptr);
+    CardProdWindow(Items *device, QWidget *parent = nullptr);
     ~CardProdWindow();
 
 private:
@@ -30,8 +30,8 @@ private:
 
     // RemontEntity *remontEntity;
 
-    void loadShipmentToForm(const Product *prod);
-    void loadInclude(const Product *prod);
+    void loadShipmentToForm(const Items *prod);
+    void loadInclude(const Items *prod);
     // void AddRowRemont(RemontM &rem);
     void LoadHistoryToForm(QList<Status> &listStatus);
     void LoadRemontToForm(QList<Remont> &listRemmont);

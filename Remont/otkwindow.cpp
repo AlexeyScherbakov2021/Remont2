@@ -9,18 +9,18 @@ OTKWindow::OTKWindow(QWidget *parent)
 }
 
 
-OTKWindow::OTKWindow(ListDevice<Product> *dev, QWidget *parent) : OTKWindow(parent)
+OTKWindow::OTKWindow(ListDevice *dev, QWidget *parent) : OTKWindow(parent)
 {
 }
 
-OTKWindow::OTKWindow(ListDevice<Modul> *dev, QWidget *parent) : OTKWindow(parent)
-{
-}
+// OTKWindow::OTKWindow(ListDevice<Modul> *dev, QWidget *parent) : OTKWindow(parent)
+// {
+// }
 
-// template <typename T>
-OTKWindow::OTKWindow(ListDevice<Plate> *dev, QWidget *parent) : OTKWindow(parent)
-{
-}
+// // template <typename T>
+// OTKWindow::OTKWindow(ListDevice<Plate> *dev, QWidget *parent) : OTKWindow(parent)
+// {
+// }
 
 OTKWindow::~OTKWindow()
 {

@@ -8,7 +8,7 @@
 
 #define ColumnProduct 13
 
-class Product : public IDevice, public StatusList<Product>
+class Product : public IDevice, public StatusList2<Product>
 {
 public:
     // int idSetter;

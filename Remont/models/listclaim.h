@@ -5,19 +5,24 @@
 #include "listdevice.h"
 
 
-class ListClaim : public ListDevice<Claim>
+class ListClaim //: public ListDevice<Claim>
 {
 public:
     ListClaim();
 
+    QList<Claim> listItems;
     // ListDevice interface
 public:
-    Claim GetItem(int id) override;
-    void LoadChild(Claim &item) override;
-    void Load() override;
-    QVariant getData(int row, int col) const override;
+    Claim GetItem(int id) ;
+    void LoadChild(Claim &item) ;
+    void Load() ;
+    QVariant getData(int row, int col) const ;
 
-    bool DeleteItem(int id) override;
+    bool DeleteItem(int id) ;
+
+private:
+    RepoMSSQL repo;
+
 };
 
 #endif // LISTCLAIM_H

@@ -2,9 +2,9 @@
 #define CLAIM_H
 
 #include "entity.h"
-#include "modul.h"
-#include "product.h"
-
+// #include "modul.h"
+// #include "product.h"
+#include "Items.h"
 
 class Claim : public IEntity
 {
@@ -38,8 +38,8 @@ public:
     QDateTime dateRegister;
 
 
-    QList<Modul> listModul;
-    QList<Product> listProduct;
+    QList<Items> listModul;
+    QList<Items> listProduct;
 
     Claim() {}
 

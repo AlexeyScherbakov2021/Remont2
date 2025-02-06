@@ -1,24 +1,28 @@
-#include "platevnftwindow.h"
-#include "ui_platevnftwindow.h"
-
-#include <models/platetype.h>
-
+#include "Itemvnftwindow.h"
+#include "ui_Itemvnftwindow.h"
+// #include <models/platetype.h>
 #include <qmessagebox.h>
 
-PlateVNFTWindow::PlateVNFTWindow(QWidget *parent)
+ItemVNFTWindow::ItemVNFTWindow(ItemType::IndexType t, QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::PlateVNFTWindow)
+    , ui(new Ui::ItemVNFTWindow), workType(t)
 {
     ui->setupUi(this);
 
-    model2.setTable("PlateType");
+    setWindowTitle("Справочник обозначений для " + nameWindow[workType]);
+
+    model2.setTable("ItemType");
+    model2.setFilter(QString("indexType=%1").arg(workType));
     model2.select();
+
     model2.setEditStrategy(QSqlTableModel::OnManualSubmit);
-    model2.setHeaderData(1, Qt::Horizontal, "Наименование");
-    model2.setHeaderData(2, Qt::Horizontal, "Децимальный номер");
+    model2.setHeaderData(2, Qt::Horizontal, "Наименование");
+    model2.setHeaderData(3, Qt::Horizontal, "Гарантия(мес.)");
+    model2.setHeaderData(4, Qt::Horizontal, "Децимальный номер");
 
     ui->tableView->setModel(&model2);
     ui->tableView->hideColumn(0);
+    ui->tableView->hideColumn(1);
     ui->tableView->resizeColumnsToContents();
     ui->tableView->resizeRowsToContents();
     ui->tableView->setAlternatingRowColors(true);
@@ -26,7 +30,7 @@ PlateVNFTWindow::PlateVNFTWindow(QWidget *parent)
     ui->tableView->selectRow(0);
 }
 
-PlateVNFTWindow::~PlateVNFTWindow()
+ItemVNFTWindow::~ItemVNFTWindow()
 {
     delete ui;
 }
@@ -43,34 +47,39 @@ PlateVNFTWindow::~PlateVNFTWindow()
 //------------------------------------------------------------------------------------------------
 // Добавление строки
 //------------------------------------------------------------------------------------------------
-void PlateVNFTWindow::on_tbAdd_clicked()
+void ItemVNFTWindow::on_tbAdd_clicked()
 {
     int row = model2.rowCount();
     model2.insertRow(row);
     ui->tableView->selectRow(row);
-    ui->tableView->edit(model2.index(row, 1));
+    ui->tableView->edit(model2.index(row, 2));
     ui->tableView->resizeRowToContents(row);
+
+    // QModelIndex index = ui->tableView->currentIndex();
+    QModelIndex index = model2.index(row, 1);
+    model2.setData(index, workType);
 }
 
 
 //------------------------------------------------------------------------------------------------
 // Удаление строки
 //------------------------------------------------------------------------------------------------
-void PlateVNFTWindow::on_tbDelete_clicked()
+void ItemVNFTWindow::on_tbDelete_clicked()
 {
     QModelIndex index = ui->tableView->currentIndex();
     model2.removeRow(index.row());
 }
 
-void PlateVNFTWindow::on_pbSave_clicked()
+void ItemVNFTWindow::on_pbSave_clicked()
 {
+
     bool res = model2.submitAll();
     if(!res)
         QMessageBox::critical(this, "Ошибка", "Произошла ошибка при сохранении базы данных.");
 }
 
 
-void PlateVNFTWindow::on_pbCancel_clicked()
+void ItemVNFTWindow::on_pbCancel_clicked()
 {
     model2.revertAll();
 }

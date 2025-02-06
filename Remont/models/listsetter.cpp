@@ -26,4 +26,6 @@ QVariant ListSetter::getData(int /*row*/, int /*col*/) const
 bool ListSetter::DeleteItem(int id)
 {
     return repo.DeleteSetter(id);
+    // return repo.DeleteSetter(id);
+    // return false;
 }

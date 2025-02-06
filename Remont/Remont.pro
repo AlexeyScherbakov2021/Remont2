@@ -9,6 +9,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Itemvnftwindow.cpp \
     acceptremontwindow.cpp \
     cardprodwindow.cpp \
     claimdetail.cpp \
@@ -16,6 +17,7 @@ SOURCES += \
     complectproductwindow.cpp \
     createdevicewindow.cpp \
     endremontwindow.cpp \
+    infrastructure/IStatus.cpp \
     infrastructure/scaner.cpp \
     infrastructure/trackrecord.cpp \
     listshipwindow.cpp \
@@ -29,14 +31,12 @@ SOURCES += \
     models/listproduct.cpp \
     models/listsetter.cpp \
     models/listshipment.cpp \
-    modvnftwindow.cpp \
+    models/platemodel.cpp \
     otkcontrolwindow.cpp \
     otkwindow.cpp \
     platefwwindow.cpp \
     platelistwindow.cpp \
-    platevnftwindow.cpp \
     platewindow.cpp \
-    prodvnftwindow.cpp \
     qr/QrCodeGenerator.cpp \
     qr/qrcodegen/qrcodegen.cpp \
     qrwindow.cpp \
@@ -49,6 +49,7 @@ SOURCES += \
     startworkwindow.cpp
 
 HEADERS += \
+    Itemvnftwindow.h \
     acceptremontwindow.h \
     cardprodwindow.h \
     claimdetail.h \
@@ -62,6 +63,8 @@ HEADERS += \
     listshipwindow.h \
     logwindow.h \
     models/IDevice.h \
+    models/Items.h \
+    models/ItemsType.h \
     models/claim.h \
     models/entity.h \
     mainwindow.h \
@@ -73,24 +76,16 @@ HEADERS += \
     models/listproduct.h \
     models/listsetter.h \
     models/listshipment.h \
-    models/modul.h \
-    models/modultype.h \
     models/organization.h \
-    models/plate.h \
-    models/platetype.h \
-    models/prodtype.h \
-    models/product.h \
+    models/platemodel.h \
     models/remont.h \
     models/setterout.h \
     models/shipment.h \
-    modvnftwindow.h \
     otkcontrolwindow.h \
     otkwindow.h \
     platefwwindow.h \
     platelistwindow.h \
-    platevnftwindow.h \
     platewindow.h \
-    prodvnftwindow.h \
     qr/QrCodeGenerator.h \
     qr/qrcodegen/qrcodegen.h \
     qrwindow.h \
@@ -103,6 +98,7 @@ HEADERS += \
     startworkwindow.h
 
 FORMS += \
+    Itemvnftwindow.ui \
     acceptremontwindow.ui \
     cardprodwindow.ui \
     claimdetail.ui \
@@ -113,14 +109,11 @@ FORMS += \
     listshipwindow.ui \
     logwindow.ui \
     mainwindow.ui \
-    modvnftwindow.ui \
     otkcontrolwindow.ui \
     otkwindow.ui \
     platefwwindow.ui \
     platelistwindow.ui \
-    platevnftwindow.ui \
     platewindow.ui \
-    prodvnftwindow.ui \
     qrwindow.ui \
     remontwindow.ui \
     scan.ui \

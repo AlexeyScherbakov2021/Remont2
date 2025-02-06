@@ -47,17 +47,17 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
         {
             QTreeWidgetItem *itemSet = AddItemTree(it.name, it.id, TypeItemTree::SET);
             repo.LoadChildSetter(it);
-            for(auto &itProd : it.listProduct)
-                AddItemProd(itProd, itemSet);
+            // for(auto &itProd : it.listItems)
+            //     AddItemProd(itProd, itemSet);
         }
 
-        repo.LoadShipProduct(ship->listProduct, ship->id);
-        for(auto &it : ship->listProduct)
-            AddItemProd(it);
+        // repo.LoadShipProduct(ship->listItems, ship->id);
+        // for(auto &it : ship->listItems)
+        //     AddItemProd(it);
 
-        repo.LoadShipModule(ship->listModules, ship->id);
-        for(auto &it : ship->listModules)
-            AddItemTree(it.name + " (" + it.number + ")", it.id, TypeItemTree::MODUL);
+        // repo.LoadShipModule(ship->listItems, ship->id);
+        // for(auto &it : ship->listItems)
+        //     AddItemTree(it.name + " (" + it.number + ")", it.id, TypeItemTree::MODUL);
     }
     else
     {
@@ -87,17 +87,17 @@ void ShipWindow::on_tbNumProd_clicked()
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
     win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeProduct);
     win->setNotShipped();
-    IDevice *dev = win->SelectDevice(true, ui->leNumProd->text(),Status::CORRECT);
+    Items *dev = win->SelectDevice(true, ui->leNumProd->text(),Status::CORRECT);
     if(dev != nullptr)
     {
         if(ship->id == 0)
             repo.AddItem(*ship);
 
-        Product* prod = static_cast<Product*>(dev);
-        prod->idShipment = ship->id;
-        ship->listProduct.push_back(*prod);
-        if(repo.UpdateItem(*prod))
-            AddItemProd(*prod);
+        Items* prod = static_cast<Items*>(dev);
+        prod->idShip = ship->id;
+        ship->listItems.push_back(*prod);
+        // if(repo.UpdateItem(*prod))
+        //     AddItemProd(*prod);
     }
 }
 
@@ -121,14 +121,14 @@ void ShipWindow::on_tbAddSetterProd_clicked()
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
     win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeProduct);
     win->setNotShipped();
-    IDevice *dev = win->SelectDevice(true, ui->leNumProd->text(), Status::CORRECT);
+    Items *dev = win->SelectDevice(true, ui->leNumProd->text(), Status::CORRECT);
 
     if(dev != nullptr)
     {
         if(ship->id == 0)
             repo.AddItem(*ship);
 
-        Product* prod = static_cast<Product*>(dev);
+        // Items* prod = static_cast<Items*>(dev);
 
         // if(item == nullptr)
         // {
@@ -144,15 +144,15 @@ void ShipWindow::on_tbAddSetterProd_clicked()
         // }
         // else
         // {
-        prod->idSetterOut = item->data(0, Qt::UserRole).toInt();
-        auto setter_it = std::find_if(ship->listSetterOut.begin(), ship->listSetterOut.end(), [prod](const SetterOut s) { return s.id == prod->idSetterOut; });
-        if(setter_it != ship->listSetterOut.end())
-            (*setter_it).listProduct.push_back(*prod);
+        // prod->idSet = item->data(0, Qt::UserRole).toInt();
+        // auto setter_it = std::find_if(ship->listSetterOut.begin(), ship->listSetterOut.end(), [prod](const SetterOut s) { return s.id == prod->idSetterOut; });
+        // if(setter_it != ship->listSetterOut.end())
+        //     (*setter_it).listItems.push_back(*prod);
         // qDebug() << "Добавлено изделие в набор id=" << prod->idSetterOut;
         // }
 
-        if(repo.UpdateItem(*prod))
-            AddItemProd(*prod, item);
+        // if(repo.UpdateItem(*prod))
+        //     AddItemProd(*prod, item);
         // Добавление изделия в класс Shipment
     }
 
@@ -161,16 +161,16 @@ void ShipWindow::on_tbAddSetterProd_clicked()
 //-----------------------------------------------------------------------------------
 // добавления в дерево экранной формы изделия
 //-----------------------------------------------------------------------------------
-QTreeWidgetItem* ShipWindow::AddItemProd(Product &prod, QTreeWidgetItem *parent)
+QTreeWidgetItem* ShipWindow::AddItemProd(Items &prod, QTreeWidgetItem *parent)
 {
     QTreeWidgetItem *itemProd = AddItemTree(prod.name + " (" + prod.number + ")", prod.id, TypeItemTree::PRODUCT, parent);
 
     if(itemProd != nullptr)
     {
         // Включение изделия в класс Shipment
-        repo.LoadChildProduct(prod);
-        for(auto &it : prod.listModules)
-            AddItemTree(it.name + " (" + it.number + ")", it.id, TypeItemTree::MODUL, itemProd);
+        // repo.LoadChildProduct(prod);
+        // for(auto &it : prod.listModules)
+        //     AddItemTree(it.name + " (" + it.number + ")", it.id, TypeItemTree::MODUL, itemProd);
     }
 
     return itemProd;
@@ -186,18 +186,18 @@ void ShipWindow::on_tbNumModul_clicked()
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
     win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeModul);
     win->setNotShipped();
-    IDevice *dev = win->SelectDevice(true, ui->leNumModul->text(), Status::CORRECT);
+    Items *dev = win->SelectDevice(true, ui->leNumModul->text(), Status::CORRECT);
     if(dev != nullptr)
     {
-        Modul* mod = static_cast<Modul*>(dev);
+        Items* mod = static_cast<Items*>(dev);
         AddItemTree(mod->name + " (" + mod->number + ")", mod->id, TypeItemTree::MODUL);
         // Добавление модуля в класс Shipment
-        ship->listModules.push_back(*mod);
+        ship->listItems.push_back(*mod);
 
         if(ship->id == 0)
             repo.AddItem(*ship);
 
-        mod->idShipment = ship->id;
+        mod->idShip = ship->id;
         repo.UpdateItem(*mod);
     }
 }
@@ -294,17 +294,17 @@ void ShipWindow::on_pbDelete_clicked()
     {
         case TypeItemTree::PRODUCT:
             {
-                Product prod;
+                Items prod;
                 if(item->parent() == nullptr)
                 {
                     // изделие находится в отгрузке
-                    auto prod_it = std::find_if(ship->listProduct.cbegin(), ship->listProduct.cend(),
-                                            [id](const Product &p) { return p.id == id; });
-                    if(prod_it != ship->listProduct.cend())
-                    {
-                        prod = *prod_it;
-                        ship->listProduct.removeIf([prod] (auto p) { return prod.id == p.id; });
-                    }
+                    // auto prod_it = std::find_if(ship->listItems.cbegin(), ship->listProduct.cend(),
+                    //                         [id](const Items &p) { return p.id == id; });
+                    // if(prod_it != ship->listItems.cend())
+                    // {
+                    //     prod = *prod_it;
+                    //     ship->listItems.removeIf([prod] (auto p) { return prod.id == p.id; });
+                    // }
                 }
                 else
                 {
@@ -315,21 +315,21 @@ void ShipWindow::on_pbDelete_clicked()
 
                     if(set_it != ship->listSetterOut.end())
                     {
-                        auto prod_it = std::find_if((*set_it).listProduct.cbegin(), (*set_it).listProduct.cend(),
-                                           [&](const Product &p) { return p.id == id; });
-                        if(prod_it != (*set_it).listProduct.cend())
-                        {
-                            prod = *prod_it;
-                            // SetterOut setter = *set_it;
-                            (*set_it).listProduct.removeIf( [prod](const Product p) { return prod.id == p.id; } );
-                        }
+                        // auto prod_it = std::find_if((*set_it).listProduct.cbegin(), (*set_it).listProduct.cend(),
+                        //                    [&](const Product &p) { return p.id == id; });
+                        // if(prod_it != (*set_it).listItems.cend())
+                        // {
+                        //     prod = *prod_it;
+                        //     // SetterOut setter = *set_it;
+                        //     (*set_it).listProduct.removeIf( [prod](const Items p) { return prod.id == p.id; } );
+                        // }
                     }
                 }
 
                 if(prod.id != 0)
                 {
-                    prod.idShipment = 0;
-                    prod.idSetterOut = 0;
+                    prod.idShip = 0;
+                    prod.idSet = 0;
                     res = repo.UpdateItem(prod);
                 }
             }
@@ -337,15 +337,15 @@ void ShipWindow::on_pbDelete_clicked()
 
         case TypeItemTree::MODUL:
             {
-                auto mod_it = std::find_if(ship->listModules.cbegin(), ship->listModules.cend(),
-                                           [&](const Modul &m) { return m.id == id; });
-                if(mod_it != ship->listModules.cend())
-                {
-                    Modul modul = *mod_it;
-                    modul.idShipment = 0;
-                    res = repo.UpdateItem(modul);
-                    ship->listModules.removeIf([modul] (auto m) { return modul.id == m.id;});
-                }
+                // auto mod_it = std::find_if(ship->listModules.cbegin(), ship->listModules.cend(),
+                //                            [&](const Items &m) { return m.id == id; });
+                // if(mod_it != ship->listModules.cend())
+                // {
+                //     Modul modul = *mod_it;
+                //     modul.idShipment = 0;
+                //     res = repo.UpdateItem(modul);
+                //     ship->listModules.removeIf([modul] (auto m) { return modul.id == m.id;});
+                // }
             }
             break;
         case TypeItemTree::SET:
@@ -369,10 +369,10 @@ void ShipWindow::on_pbFinish_clicked()
     int countProd = 0;
 
     for(auto &it : ship->listSetterOut)
-        countProd += it.listProduct.size();
+        countProd += it.listItems.size();
 
-    if(ship->listModules.size() == 0
-        && ship->listProduct.size() == 0
+    if(ship->listItems.size() == 0
+        && ship->listItems.size() == 0
         && countProd == 0)
     {
         QMessageBox::warning(this, "Предупреждение", "Не сформирован состав отгрузки.");
@@ -387,31 +387,31 @@ void ShipWindow::on_pbFinish_clicked()
 
     ship->dateRegister = QDateTime::currentDateTime();
 
-    for(auto &it : ship->listSetterOut)
-    {
-        SetStatusProduct(it.listProduct);
-    }
-    SetStatusProduct(ship->listProduct);
-    SetStatusModules(ship->listModules);
+    // for(auto &it : ship->listSetterOut)
+    // {
+    //     SetStatusProduct(it.listItems);
+    // }
+    // SetStatusProduct(ship->listItems);
+    // SetStatusModules(ship->listItems);
     accept();
 }
 
 //-----------------------------------------------------------------------------------
 // Добавление нового статуса для изделия и его модулей
 //-----------------------------------------------------------------------------------
-void ShipWindow::SetStatusProduct(QList<Product> &listProduct)
+void ShipWindow::SetStatusProduct(QList<Items> &listProduct)
 {
     for(auto &itProd : listProduct)
     {
         itProd.AddStatus(itProd, Status::SHIPPED);
-        SetStatusModules(itProd.listModules);
+        // SetStatusModules(itProd.listModules);
     }
 }
 
 //-----------------------------------------------------------------------------------
 // Добавление нового статуса для модулей
 //-----------------------------------------------------------------------------------
-void ShipWindow::SetStatusModules(QList<Modul> &listModules)
+void ShipWindow::SetStatusModules(QList<Items> &listModules)
 {
     for(auto &itMod : listModules)
         itMod.AddStatus(itMod, Status::SHIPPED);
@@ -487,7 +487,7 @@ void ShipWindow::on_tbAddSetProd_clicked()
     SelectDeviceWindow *win = new SelectDeviceWindow(this);
     win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeProduct);
     win->setNotShipped();
-    IDevice *dev = win->SelectDevice(true, ui->leNumProd->text(), Status::CORRECT);
+    Items *dev = win->SelectDevice(true, ui->leNumProd->text(), Status::CORRECT);
 
     if(dev != nullptr)
     {
@@ -495,20 +495,20 @@ void ShipWindow::on_tbAddSetProd_clicked()
         if(ship->id == 0)
             repo.AddItem(*ship);
 
-        Product* prod = static_cast<Product*>(dev);
+        Items* prod = static_cast<Items*>(dev);
 
         // Добавление набора в класс Shipment
         SetterOut setter;
         setter.name = "_" + prod->name;
         setter.idShipment = ship->id;
-        setter.listProduct.push_back(*prod);
+        setter.listItems.push_back(*prod);
         if(repo.AddItem(setter))
             item = AddItemTree(setter.name, setter.id, TypeItemTree::SET);
-        prod->idSetterOut = setter.id;
+        prod->idSet = setter.id;
         ship->listSetterOut.push_back(setter);
 
-        if(repo.UpdateItem(*prod))
-            AddItemProd(*prod, item);
+        // if(repo.UpdateItem(*prod))
+        //     AddItemProd(*prod, item);
     }
 
 }

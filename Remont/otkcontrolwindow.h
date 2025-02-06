@@ -10,8 +10,8 @@
 #include <models/listmodul.h>
 #include <models/listplate.h>
 #include <models/listproduct.h>
-#include <models/modul.h>
-#include <models/product.h>
+// #include <models/modul.h>
+// #include <models/product.h>
 
 namespace Ui {
 class OTKControlWindow;

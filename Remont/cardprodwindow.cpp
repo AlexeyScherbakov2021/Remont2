@@ -20,25 +20,25 @@ CardProdWindow::CardProdWindow(const QString &name, QWidget *parent)
 }
 
 
-CardProdWindow::CardProdWindow(IDevice *device, QWidget *parent) : CardProdWindow(device->name, parent)
+CardProdWindow::CardProdWindow(Items *device, QWidget *parent) : CardProdWindow(device->name, parent)
 {
-    Product *prod;
-    Product product;
+    Items *prod;
+    Items product;
     QList<Remont> listRemont;
 
-    if(device->typeDevice == ev::MODUL)
+    if(device->type.indexType == ItemType::Modul)
     {
-        Modul *mod = static_cast<Modul*>(device);
-        product = repo.GetProduct(mod->idProduct);
+        Items *mod = static_cast<Items*>(device);
+        // product = repo.GetItem(mod->idProduct);
         prod = &product;
         mod->LoadStatus(*mod);
         LoadHistoryToForm(mod->listStatus);
         repo.LoadRemont(listRemont, mod->id, ev::MODUL);
     }
-    if(device->typeDevice == ev::PRODUCT)
+    if(device->type.indexType == ItemType::Product)
     {
-        prod = static_cast<Product*>(device);
-        repo.LoadChildProduct(*prod);
+        prod = static_cast<Items*>(device);
+        // repo.LoadChildProduct(*prod);
         prod->LoadStatus(*prod);
         loadInclude(prod);
         LoadHistoryToForm(prod->listStatus);
@@ -46,8 +46,8 @@ CardProdWindow::CardProdWindow(IDevice *device, QWidget *parent) : CardProdWindo
     }
     LoadRemontToForm(listRemont);
 
-    ui->lbGarant->setText(device->EndGarant.toString("dd.MM.yyyy"));
-    ui->lbDateCreate->setText(device->dateRegister.toString("dd.MM.yyyy"));
+    ui->lbGarant->setText(device->dateGarant.toString("dd.MM.yyyy"));
+    ui->lbDateCreate->setText(device->dateCreate.toString("dd.MM.yyyy"));
     ui->lbNumber->setText(device->number);
     ui->lbDateOn->setText(device->dateOn.toString("dd.MM.yyyy"));
     // qDebug() << device->dateRegister << device->EndGarant;
@@ -141,19 +141,19 @@ void CardProdWindow::LoadRemontToForm(QList<Remont> &listRemont)
 //-------------------------------------------------------------------------------------------------------
 // Загрузка набора для выбраннного изделия или модуля
 //-------------------------------------------------------------------------------------------------------
-void CardProdWindow::loadShipmentToForm(const Product *prod)
+void CardProdWindow::loadShipmentToForm(const Items *prod)
 {
-    SetterOut setter = repo.GetSetter(prod->idSetterOut);
+    SetterOut setter ;//= repo.GetSetter(prod->idSetterOut);
     Shipment ship = repo.GetShipment(setter.idShipment);
 
     if(setter.id <= 0)
         return;
 
     repo.LoadChildSetter(setter);
-    for(auto &it: setter.listProduct)
-    {
-        repo.LoadChildProduct(it);
-    }
+    // for(auto &it: setter.listItems)
+    // {
+    //     repo.LoadChildProduct(it);
+    // }
 
     ui->lbContract->setText(ship.schet);
     ui->lbCardOrder->setText(ship.cardOrder);
@@ -167,7 +167,7 @@ void CardProdWindow::loadShipmentToForm(const Product *prod)
     top->setIcon(0, QIcon("://image/setter.png"));
     ui->treeWidget->addTopLevelItem(top);
     top->setExpanded(true);
-    for(auto const &it : setter.listProduct)
+    for(auto const &it : setter.listItems)
     {
         QTreeWidgetItem *child = new QTreeWidgetItem();
         child->setIcon(0, QIcon("://image/product.png"));
@@ -183,38 +183,38 @@ void CardProdWindow::loadShipmentToForm(const Product *prod)
         }
         top->addChild(child);
         child->setExpanded(true);
-        for(auto mod : it.listModules)
-        {
-            // Modul modul = mod;
-            mod.LoadStatus(mod);
-            QTreeWidgetItem *modItem = new QTreeWidgetItem();
-            modItem->setIcon(0, QIcon("://image/modul.png"));
-            s = mod.name + "(" + mod.number + ")";
-            if(mod.getIsRepair())
-                s += " неисправен";
-            modItem->setText(0, s);
-            if(mod.number == number)
-            {
-                QFont font;
-                font.setBold(true);
-                modItem->setFont(0, font);
-            }
-            child->addChild(modItem);
-        }
+        // for(auto mod : it.listModules)
+        // {
+        //     // Modul modul = mod;
+        //     mod.LoadStatus(mod);
+        //     QTreeWidgetItem *modItem = new QTreeWidgetItem();
+        //     modItem->setIcon(0, QIcon("://image/modul.png"));
+        //     s = mod.name + "(" + mod.number + ")";
+        //     if(mod.getIsRepair())
+        //         s += " неисправен";
+        //     modItem->setText(0, s);
+        //     if(mod.number == number)
+        //     {
+        //         QFont font;
+        //         font.setBold(true);
+        //         modItem->setFont(0, font);
+        //     }
+        //     child->addChild(modItem);
+        // }
     }
 }
 
 //-------------------------------------------------------------------------------------------------------
 // Загрузка состава изделия
 //-------------------------------------------------------------------------------------------------------
-void CardProdWindow::loadInclude(const Product *prod)
+void CardProdWindow::loadInclude(const Items *prod)
 {
-    for(auto const &mod : prod->listModules)
-    {
-        QListWidgetItem *modItem = new QListWidgetItem();
-        modItem->setText(mod.name + "(" + mod.number + ")");
-        ui->lwInclude->addItem(modItem);
-    }
+    // for(auto const &mod : prod->listModules)
+    // {
+    //     QListWidgetItem *modItem = new QListWidgetItem();
+    //     modItem->setText(mod.name + "(" + mod.number + ")");
+    //     ui->lwInclude->addItem(modItem);
+    // }
 }
 
 
