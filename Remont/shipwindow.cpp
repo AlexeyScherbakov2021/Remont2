@@ -84,21 +84,21 @@ ShipWindow::~ShipWindow()
 //-----------------------------------------------------------------------------------
 void ShipWindow::on_tbNumProd_clicked()
 {
-    SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeProduct);
-    win->setNotShipped();
-    Items *dev = win->SelectDevice(true, ui->leNumProd->text(),Status::CORRECT);
-    if(dev != nullptr)
-    {
-        if(ship->id == 0)
-            repo.AddItem(*ship);
+    // SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    // win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeProduct);
+    // win->setNotShipped();
+    // Items *dev = win->SelectDevice(true, ui->leNumProd->text(),Status::CORRECT);
+    // if(dev != nullptr)
+    // {
+    //     if(ship->id == 0)
+    //         repo.AddItem(*ship);
 
-        Items* prod = static_cast<Items*>(dev);
-        prod->idShip = ship->id;
-        ship->listItems.push_back(*prod);
-        // if(repo.UpdateItem(*prod))
-        //     AddItemProd(*prod);
-    }
+    //     Items* prod = static_cast<Items*>(dev);
+    //     prod->idShip = ship->id;
+    //     ship->listItems.push_back(*prod);
+    //     // if(repo.UpdateItem(*prod))
+    //     //     AddItemProd(*prod);
+    // }
 }
 
 //-----------------------------------------------------------------------------------
@@ -118,43 +118,43 @@ void ShipWindow::on_tbAddSetterProd_clicked()
             return;
     // }
 
-    SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeProduct);
-    win->setNotShipped();
-    Items *dev = win->SelectDevice(true, ui->leNumProd->text(), Status::CORRECT);
+    // SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    // win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeProduct);
+    // win->setNotShipped();
+    // Items *dev = win->SelectDevice(true, ui->leNumProd->text(), Status::CORRECT);
 
-    if(dev != nullptr)
-    {
-        if(ship->id == 0)
-            repo.AddItem(*ship);
+    // if(dev != nullptr)
+    // {
+    //     if(ship->id == 0)
+    //         repo.AddItem(*ship);
 
-        // Items* prod = static_cast<Items*>(dev);
+    //     // Items* prod = static_cast<Items*>(dev);
 
-        // if(item == nullptr)
-        // {
-        //     // Добавление набора в класс Shipment
-        //     SetterOut setter;
-        //     setter.name = "_" + prod->name;
-        //     setter.idShipment = ship->id;
-        //     setter.listProduct.push_back(*prod);
-        //     if(repo.AddItem(setter))
-        //         item = AddItemTree(setter.name, setter.id, TypeItemTree::SET);
-        //     prod->idSetterOut = setter.id;
-        //     ship->listSetterOut.push_back(setter);
-        // }
-        // else
-        // {
-        // prod->idSet = item->data(0, Qt::UserRole).toInt();
-        // auto setter_it = std::find_if(ship->listSetterOut.begin(), ship->listSetterOut.end(), [prod](const SetterOut s) { return s.id == prod->idSetterOut; });
-        // if(setter_it != ship->listSetterOut.end())
-        //     (*setter_it).listItems.push_back(*prod);
-        // qDebug() << "Добавлено изделие в набор id=" << prod->idSetterOut;
-        // }
+    //     // if(item == nullptr)
+    //     // {
+    //     //     // Добавление набора в класс Shipment
+    //     //     SetterOut setter;
+    //     //     setter.name = "_" + prod->name;
+    //     //     setter.idShipment = ship->id;
+    //     //     setter.listProduct.push_back(*prod);
+    //     //     if(repo.AddItem(setter))
+    //     //         item = AddItemTree(setter.name, setter.id, TypeItemTree::SET);
+    //     //     prod->idSetterOut = setter.id;
+    //     //     ship->listSetterOut.push_back(setter);
+    //     // }
+    //     // else
+    //     // {
+    //     // prod->idSet = item->data(0, Qt::UserRole).toInt();
+    //     // auto setter_it = std::find_if(ship->listSetterOut.begin(), ship->listSetterOut.end(), [prod](const SetterOut s) { return s.id == prod->idSetterOut; });
+    //     // if(setter_it != ship->listSetterOut.end())
+    //     //     (*setter_it).listItems.push_back(*prod);
+    //     // qDebug() << "Добавлено изделие в набор id=" << prod->idSetterOut;
+    //     // }
 
-        // if(repo.UpdateItem(*prod))
-        //     AddItemProd(*prod, item);
-        // Добавление изделия в класс Shipment
-    }
+    //     // if(repo.UpdateItem(*prod))
+    //     //     AddItemProd(*prod, item);
+    //     // Добавление изделия в класс Shipment
+    // }
 
 }
 
@@ -183,23 +183,23 @@ QTreeWidgetItem* ShipWindow::AddItemProd(Items &prod, QTreeWidgetItem *parent)
 //-----------------------------------------------------------------------------------
 void ShipWindow::on_tbNumModul_clicked()
 {
-    SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeModul);
-    win->setNotShipped();
-    Items *dev = win->SelectDevice(true, ui->leNumModul->text(), Status::CORRECT);
-    if(dev != nullptr)
-    {
-        Items* mod = static_cast<Items*>(dev);
-        AddItemTree(mod->name + " (" + mod->number + ")", mod->id, TypeItemTree::MODUL);
-        // Добавление модуля в класс Shipment
-        ship->listItems.push_back(*mod);
+    // SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    // win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeModul);
+    // win->setNotShipped();
+    // Items *dev = win->SelectDevice(true, ui->leNumModul->text(), Status::CORRECT);
+    // if(dev != nullptr)
+    // {
+    //     Items* mod = static_cast<Items*>(dev);
+    //     AddItemTree(mod->name + " (" + mod->number + ")", mod->id, TypeItemTree::MODUL);
+    //     // Добавление модуля в класс Shipment
+    //     ship->listItems.push_back(*mod);
 
-        if(ship->id == 0)
-            repo.AddItem(*ship);
+    //     if(ship->id == 0)
+    //         repo.AddItem(*ship);
 
-        mod->idShip = ship->id;
-        repo.UpdateItem(*mod);
-    }
+    //     mod->idShip = ship->id;
+    //     repo.UpdateItem(*mod);
+    // }
 }
 
 //-----------------------------------------------------------------------------------
@@ -484,32 +484,32 @@ void ShipWindow::on_tbAddSetter_clicked()
 
 void ShipWindow::on_tbAddSetProd_clicked()
 {
-    SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeProduct);
-    win->setNotShipped();
-    Items *dev = win->SelectDevice(true, ui->leNumProd->text(), Status::CORRECT);
+    // SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    // win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeProduct);
+    // win->setNotShipped();
+    // Items *dev = win->SelectDevice(true, ui->leNumProd->text(), Status::CORRECT);
 
-    if(dev != nullptr)
-    {
-        QTreeWidgetItem *item = nullptr;
-        if(ship->id == 0)
-            repo.AddItem(*ship);
+    // if(dev != nullptr)
+    // {
+    //     QTreeWidgetItem *item = nullptr;
+    //     if(ship->id == 0)
+    //         repo.AddItem(*ship);
 
-        Items* prod = static_cast<Items*>(dev);
+    //     Items* prod = static_cast<Items*>(dev);
 
-        // Добавление набора в класс Shipment
-        SetterOut setter;
-        setter.name = "_" + prod->name;
-        setter.idShipment = ship->id;
-        setter.listItems.push_back(*prod);
-        if(repo.AddItem(setter))
-            item = AddItemTree(setter.name, setter.id, TypeItemTree::SET);
-        prod->idSet = setter.id;
-        ship->listSetterOut.push_back(setter);
+    //     // Добавление набора в класс Shipment
+    //     SetterOut setter;
+    //     setter.name = "_" + prod->name;
+    //     setter.idShipment = ship->id;
+    //     setter.listItems.push_back(*prod);
+    //     if(repo.AddItem(setter))
+    //         item = AddItemTree(setter.name, setter.id, TypeItemTree::SET);
+    //     prod->idSet = setter.id;
+    //     ship->listSetterOut.push_back(setter);
 
-        // if(repo.UpdateItem(*prod))
-        //     AddItemProd(*prod, item);
-    }
+    //     // if(repo.UpdateItem(*prod))
+    //     //     AddItemProd(*prod, item);
+    // }
 
 }
 

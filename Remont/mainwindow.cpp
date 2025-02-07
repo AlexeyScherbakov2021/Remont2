@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include "cardprodwindow.h"
 #include "selectdevicewindow.h"
-#include "createdevicewindow.h"
+#include "createprodwindow.h"
 #include "platewindow.h"
 #include "complectproductwindow.h"
 #include "otkcontrolwindow.h"
@@ -21,6 +21,7 @@
 #include "otkwindow.h"
 #include "prodvnftwindow.h"
 #include "modvnftwindow.h"
+#include "createmodwindow.h"
 #include <models/listdevice.h>
 #include <models/ItemsType.h>
 
@@ -60,14 +61,14 @@ void MainWindow::on_pbClaim_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbCard_clicked()
 {
-    SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    Items *dev = win->SelectDevice(false, "", Status::NONE);
-    if(dev != nullptr)
-    {
-        // CardProdWindow *winCard;
-        // winCard = new CardProdWindow(dev, this);
-        // winCard->show();
-    }
+    // SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    // Items *dev = win->SelectDevice(false, "", Status::NONE);
+    // if(dev != nullptr)
+    // {
+    //     // CardProdWindow *winCard;
+    //     // winCard = new CardProdWindow(dev, this);
+    //     // winCard->show();
+    // }
 }
 
 
@@ -86,7 +87,7 @@ void MainWindow::on_pbApplyRemont_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbRegister_clicked()
 {
-    CreateDeviceWindow *win = new CreateDeviceWindow(this);
+    CreateProductWindow *win = new CreateProductWindow(this);
     win->setAttribute(Qt::WA_DeleteOnClose);
     win->show();
 }
@@ -180,9 +181,9 @@ void MainWindow::on_aRegPlate_triggered()
 //----------------------------------------------------------------------------------------------
 // Регистрация устройства
 //----------------------------------------------------------------------------------------------
-void MainWindow::on_aRegDevice_triggered()
+void MainWindow::on_aRegProduct_triggered()
 {
-    CreateDeviceWindow *win = new CreateDeviceWindow(this);
+    CreateProductWindow *win = new CreateProductWindow(this);
     win->setAttribute(Qt::WA_DeleteOnClose);
     win->show();
 }
@@ -274,14 +275,14 @@ void MainWindow::on_aEndRepair_triggered()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_aCardDevice_triggered()
 {
-    SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    Items *dev = win->SelectDevice(false, "", Status::NONE);
-    if(dev != nullptr)
-    {
-        // CardProdWindow *winCard;
-        // winCard = new CardProdWindow(dev, this);
-        // winCard->show();
-    }
+    // SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    // Items *dev = win->SelectDevice(false, "", Status::NONE);
+    // if(dev != nullptr)
+    // {
+    //     // CardProdWindow *winCard;
+    //     // winCard = new CardProdWindow(dev, this);
+    //     // winCard->show();
+    // }
 
 }
 
@@ -291,20 +292,20 @@ void MainWindow::on_aCardDevice_triggered()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_aExchModul_triggered()
 {
-    SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    // win->setTypeSearch(SelectDeviceWindow::MODU);
-    Items *dev = win->SelectDevice(false, "", Status::NONE );
-    if(dev != nullptr)
-    {
-        // Items *mod = static_cast<Items*>(dev);
-        // RepoMSSQL repo;
-        // Items prod = repo.GetProduct(mod->idParent);
-        // if(prod.id > 0)
-        // {
-        //     ComplectProductWindow *win = new ComplectProductWindow(this, &prod);
-        //     win->show();
-        // }
-    }
+    // SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    // // win->setTypeSearch(SelectDeviceWindow::MODU);
+    // Items *dev = win->SelectDevice(false, "", Status::NONE );
+    // if(dev != nullptr)
+    // {
+    //     // Items *mod = static_cast<Items*>(dev);
+    //     // RepoMSSQL repo;
+    //     // Items prod = repo.GetProduct(mod->idParent);
+    //     // if(prod.id > 0)
+    //     // {
+    //     //     ComplectProductWindow *win = new ComplectProductWindow(this, &prod);
+    //     //     win->show();
+    //     // }
+    // }
 
 }
 
@@ -430,6 +431,15 @@ void MainWindow::on_aModVNFT_triggered()
 {
     ItemVNFTWindow *win = new ItemVNFTWindow(ItemType::Modul, this);
     win->exec();
+
+}
+
+
+void MainWindow::on_aRegModul_triggered()
+{
+    CreateModulWindow *win = new CreateModulWindow(this);
+    win->setAttribute(Qt::WA_DeleteOnClose);
+    win->show();
 
 }
 

@@ -15,7 +15,8 @@ SOURCES += \
     claimdetail.cpp \
     claimwindow.cpp \
     complectproductwindow.cpp \
-    createdevicewindow.cpp \
+    createmodwindow.cpp \
+    createprodwindow.cpp \
     endremontwindow.cpp \
     infrastructure/IStatus.cpp \
     infrastructure/scaner.cpp \
@@ -55,7 +56,8 @@ HEADERS += \
     claimdetail.h \
     claimwindow.h \
     complectproductwindow.h \
-    createdevicewindow.h \
+    createmodwindow.h \
+    createprodwindow.h \
     endremontwindow.h \
     infrastructure/IStatus.h \
     infrastructure/scaner.h \
@@ -104,7 +106,8 @@ FORMS += \
     claimdetail.ui \
     claimwindow.ui \
     complectproductwindow.ui \
-    createdevicewindow.ui \
+    createmodwindow.ui \
+    createprodwindow.ui \
     endremontwindow.ui \
     listshipwindow.ui \
     logwindow.ui \

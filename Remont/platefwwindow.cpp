@@ -76,7 +76,7 @@ void PlateFWWindow::on_pbApply_clicked()
     if(numberFW.isEmpty())
         return;
 
-    for(size_t row = 0; row < model->rowCount(); ++row)
+    for(int row = 0; row < model->rowCount(); ++row)
     {
         model->setData(model->index(row, 1), numberFW);
     }
@@ -86,7 +86,7 @@ void PlateFWWindow::on_pbApply_clicked()
 
 void PlateFWWindow::on_pbOK_clicked()
 {
-    for(size_t row = 0; row < model->rowCount(); ++row)
+    for(int row = 0; row < model->rowCount(); ++row)
     {
         model->UpdateItem(row);
     }

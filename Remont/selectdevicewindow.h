@@ -8,6 +8,7 @@
 #include <infrastructure/IStatus.h>
 #include <models/shipment.h>
 #include <models/setterout.h>
+#include <models/platemodel.h>
 
 namespace Ui {
 class SelectDeviceWindow;
@@ -21,21 +22,27 @@ public:
     enum TypeDevice {TypeAll, TypeProduct, TypeModul};
 
     SelectDeviceWindow(QWidget *parent = nullptr);
+    SelectDeviceWindow(ItemType::IndexType _type, QVector<int>& _status, bool _isBusy = false, bool isParent = false, QWidget *parent = nullptr);
 
-    Items* SelectDevice(bool isNow, QString searchNum = "", QVector<Status::Stat> statusList = QVector<Status::Stat>());
-    Items* SelectDevice(bool isNow, QString searchNum = "", Status::Stat status = Status::Stat::NONE);
-    void setTypeSearch(TypeDevice type);
-    void setNotShipped();
-    void setDisaleSearch();
+    // Items* SelectDevice(bool isNow, QString searchNum = "", QVector<Status::Stat> statusList = QVector<Status::Stat>());
+    // Items* SelectDevice(bool isNow, QString searchNum = "", Status::Stat status = Status::Stat::NONE);
+    Items* SelectDevice(bool isNow, ItemType::IndexType _type, QVector<int>& statusList, QString searchNum = "",  bool _isBusy = false, bool isParent = false);
+    // void setTypeSearch(TypeDevice type);
+    // void setParamSearch(ItemType::IndexType _type, QVector<int>& _status, bool _isBusy = false, bool isParent = false);
+    // void setNotShipped();
+    void setDisableSearch();
 
     ~SelectDeviceWindow();
     Items *device = nullptr;
+    Items device2;
 
 private slots:
     void on_tbSearch_clicked();
     void on_pbSelect_clicked();
-    void on_twModul_cellDoubleClicked(int row, int column);
-    void on_twProduct_cellDoubleClicked(int row, int column);
+    // void on_twModul_cellDoubleClicked(int row, int column);
+    // void on_twProduct_cellDoubleClicked(int row, int column);
+
+    void on_tableView_doubleClicked(const QModelIndex &index);
 
 private:
     Ui::SelectDeviceWindow *ui;
@@ -50,7 +57,15 @@ private:
     // int SearchModul(QString number, int status);
     // int SearchProduct(QString number, int status);
     void Search(QString searchNum);
-    void listToScreen();
+    // void listToScreen();
+
+    PlateModel *model;
+    void startLoad();
+
+    ItemType::IndexType type;
+    QVector<int> vStatus;
+    bool isBusy = false;
+    bool isParent = false;
 
 protected:
     // void timerEvent(QTimerEvent *event) override;

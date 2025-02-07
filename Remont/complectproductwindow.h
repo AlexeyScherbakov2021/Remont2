@@ -32,7 +32,7 @@ private slots:
 private:
     Ui::ComplectProductWindow *ui;
     RepoMSSQL repo;
-    Items prod;
+    Items item;
     // QList<Modul> listModul;
     ListModul Modules;
     TrackRecord<Items> trackModul;

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>721</width>
-    <height>449</height>
+    <width>788</width>
+    <height>590</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -60,88 +60,16 @@
     </layout>
    </item>
    <item>
-    <widget class="QTabWidget" name="tabWidget">
-     <property name="currentIndex">
-      <number>0</number>
+    <widget class="QTableView" name="tableView">
+     <property name="alternatingRowColors">
+      <bool>true</bool>
      </property>
-     <property name="iconSize">
-      <size>
-       <width>24</width>
-       <height>24</height>
-      </size>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
      </property>
-     <widget class="QWidget" name="tabProduct">
-      <attribute name="icon">
-       <iconset resource="resource.qrc">
-        <normaloff>:/image/product.png</normaloff>:/image/product.png</iconset>
-      </attribute>
-      <attribute name="title">
-       <string>Изделия</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QTableWidget" name="twProduct">
-         <property name="selectionMode">
-          <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
-         </property>
-         <property name="selectionBehavior">
-          <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
-         </property>
-         <column>
-          <property name="text">
-           <string>Заводской №</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Наименование</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Статус</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tabModul">
-      <attribute name="icon">
-       <iconset resource="resource.qrc">
-        <normaloff>:/image/modul.png</normaloff>:/image/modul.png</iconset>
-      </attribute>
-      <attribute name="title">
-       <string>Модули</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="QTableWidget" name="twModul">
-         <property name="selectionMode">
-          <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
-         </property>
-         <property name="selectionBehavior">
-          <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
-         </property>
-         <column>
-          <property name="text">
-           <string>Заводской №</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Наименование</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Статус</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-      </layout>
-     </widget>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+     </property>
     </widget>
    </item>
    <item>

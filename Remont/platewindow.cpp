@@ -32,6 +32,10 @@ PlateWindow::~PlateWindow()
     delete ui;
 }
 
+
+//-----------------------------------------------------------------------------------------------------
+// Кнопка регистрации платы
+//-----------------------------------------------------------------------------------------------------
 void PlateWindow::on_pbAdd_clicked()
 {
     if(ui->cbVNFT->currentIndex() < 0)
@@ -72,6 +76,9 @@ void PlateWindow::on_pbAdd_clicked()
 }
 
 
+//-----------------------------------------------------------------------------------------------------
+// Кнопка удаления платы
+//-----------------------------------------------------------------------------------------------------
 void PlateWindow::on_tbDelete_clicked()
 {
     QListWidgetItem *item = ui->listWidget->currentItem();
@@ -79,10 +86,8 @@ void PlateWindow::on_tbDelete_clicked()
     if(item == nullptr)
         return;
 
-    // Plate plate;
     int id = item->data(Qt::UserRole).toInt();
 
-    // удаление платы из базы
     if(repo.DeleteItem(id))
     {
         delete ui->listWidget->currentItem();
@@ -92,17 +97,26 @@ void PlateWindow::on_tbDelete_clicked()
 }
 
 
+//-----------------------------------------------------------------------------------------------------
+// Событие изменения номера
+//-----------------------------------------------------------------------------------------------------
 void PlateWindow::on_leNumber_textChanged(const QString &arg1)
 {
     ui->pbAdd->setEnabled(!arg1.isEmpty());
 }
 
 
-void PlateWindow::on_listWidget_currentRowChanged(int currentRow)
-{
-    ui->tbDelete->setEnabled(currentRow >= 0);
-}
+//-----------------------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------------------
+// void PlateWindow::on_listWidget_currentRowChanged(int currentRow)
+// {
+//     ui->tbDelete->setEnabled(currentRow >= 0);
+// }
 
+//-----------------------------------------------------------------------------------------------------
+// Обновление количества введенных плат
+//-----------------------------------------------------------------------------------------------------
 void PlateWindow::UpdateUseCount()
 {
     if(countFromDoc > 0)
@@ -130,6 +144,9 @@ void PlateWindow::slotReadScan(QString s)
 }
 
 
+//-----------------------------------------------------------------------------------------------------
+// Кнопка найти наклкдную
+//-----------------------------------------------------------------------------------------------------
 void PlateWindow::on_tbDoc_clicked()
 {
     RepoFP repoFP;
@@ -156,7 +173,7 @@ void PlateWindow::on_tbDoc_clicked()
                 if(it.VNFT == nakl.VNFT)
                 {
                     ui->cbVNFT->setCurrentIndex(i);
-                    // countUse = repo.GetCountRegisterPlate(ui->leNumberDoc->text(), it.id);
+                    countUse = repo.GetCountRegisterPlate(ui->leNumberDoc->text(), it.id);
                     countFromDoc = nakl.count;
                     break;
                 }

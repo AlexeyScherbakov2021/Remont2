@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>865</width>
-    <height>555</height>
+    <width>576</width>
+    <height>575</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Установка оборудования</string>
+   <string>Комплектование устройств</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QGroupBox {
@@ -51,207 +51,133 @@ background-color: LightGray;
 
 </string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_5">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_5">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="font">
-        <font>
-         <pointsize>-1</pointsize>
-         <fontweight>ExtraBold</fontweight>
-        </font>
+      <widget class="QLabel" name="labelSearchProd">
+       <property name="text">
+        <string>Поиск по №</string>
        </property>
-       <property name="title">
-        <string>Изделие</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="QLabel" name="labelSearchProd">
-          <property name="text">
-           <string>Поиск по серийному №</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLineEdit" name="leNumProdSearch"/>
-          </item>
-          <item>
-           <widget class="QToolButton" name="tbProdSearch">
-            <property name="text">
-             <string>...</string>
-            </property>
-            <property name="icon">
-             <iconset resource="resource.qrc">
-              <normaloff>:/image/search.png</normaloff>:/image/search.png</iconset>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QFormLayout" name="formLayout">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_14">
-            <property name="text">
-             <string>Серийный №</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="lbNumProd">
-            <property name="font">
-             <font>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>Наименование</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="lbNameProd">
-            <property name="font">
-             <font>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Модули в составе</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QListWidget" name="lwInnerModule"/>
-          </item>
-         </layout>
-        </item>
-       </layout>
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <property name="sizeConstraint">
-        <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>0</number>
        </property>
        <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
+        <widget class="QLineEdit" name="leNumProdSearch"/>
        </item>
        <item>
-        <widget class="QPushButton" name="pbAddModul">
+        <widget class="QToolButton" name="tbProdSearch">
          <property name="text">
-          <string/>
+          <string>...</string>
          </property>
          <property name="icon">
           <iconset resource="resource.qrc">
-           <normaloff>:/image/ArrowLeft.png</normaloff>:/image/ArrowLeft.png</iconset>
+           <normaloff>:/image/search.png</normaloff>:/image/search.png</iconset>
          </property>
         </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pbDeleteModul">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="resource.qrc">
-           <normaloff>:/image/ArrowRight.png</normaloff>:/image/ArrowRight.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox">
-       <property name="title">
-        <string>Свободные модули</string>
+    </layout>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,1" columnminimumwidth="0,0,0">
+     <item row="1" column="1">
+      <widget class="QLabel" name="label_14">
+       <property name="text">
+        <string>Серийный №</string>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Наименование</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="lbNumProd">
+       <property name="font">
+        <font>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Обозначение</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="lbNameProd">
+       <property name="font">
+        <font>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="lbVNFT">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" rowspan="3">
+      <widget class="QLabel" name="imageDev">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="resource.qrc">:/image/product.png</pixmap>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="">
+     <property name="title">
+      <string>Вложенные устройства</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <property name="spacing">
+         <number>8</number>
+        </property>
+        <property name="topMargin">
+         <number>2</number>
+        </property>
+        <property name="bottomMargin">
+         <number>2</number>
+        </property>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QRadioButton" name="rbNewModule">
-            <property name="text">
-             <string>Новые</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="rbOldModule">
-            <property name="text">
-             <string>Отремонтировнные</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_9">
+         <widget class="QToolButton" name="toolButton">
           <property name="text">
-           <string>поиск по серийному №</string>
+           <string>Удалить</string>
+          </property>
+          <property name="icon">
+           <iconset resource="resource.qrc">
+            <normaloff>:/image/cancel2.png</normaloff>:/image/cancel2.png</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
           </property>
          </widget>
         </item>
@@ -261,28 +187,31 @@ background-color: LightGray;
            <number>0</number>
           </property>
           <item>
-           <widget class="QLineEdit" name="leNumModSearch"/>
-          </item>
-          <item>
            <widget class="QToolButton" name="tbSearchModul">
             <property name="text">
-             <string>...</string>
+             <string>Добавить</string>
             </property>
             <property name="icon">
              <iconset resource="resource.qrc">
-              <normaloff>:/image/search.png</normaloff>:/image/search.png</iconset>
+              <normaloff>:/image/Add2.png</normaloff>:/image/Add2.png</iconset>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QLineEdit" name="leNumModSearch"/>
+          </item>
          </layout>
         </item>
-        <item>
-         <widget class="QListWidget" name="lwOuterModule"/>
-        </item>
        </layout>
-      </widget>
-     </item>
-    </layout>
+      </item>
+      <item>
+       <widget class="QListWidget" name="lwInnerModule"/>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -352,14 +281,8 @@ background-color: LightGray;
  </widget>
  <tabstops>
   <tabstop>leNumProdSearch</tabstop>
-  <tabstop>leNumModSearch</tabstop>
-  <tabstop>rbNewModule</tabstop>
-  <tabstop>rbOldModule</tabstop>
-  <tabstop>pbAddModul</tabstop>
-  <tabstop>pbDeleteModul</tabstop>
   <tabstop>pbOK</tabstop>
   <tabstop>pbCancel</tabstop>
-  <tabstop>lwOuterModule</tabstop>
   <tabstop>lwInnerModule</tabstop>
   <tabstop>tbSearchModul</tabstop>
   <tabstop>tbProdSearch</tabstop>

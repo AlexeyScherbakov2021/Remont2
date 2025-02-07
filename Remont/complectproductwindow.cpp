@@ -3,24 +3,26 @@
 #include "selectdevicewindow.h"
 #include "ui_complectproductwindow.h"
 
+#include <QPointer>
+
 // #include <models/modul.h>
 
-ComplectProductWindow::ComplectProductWindow(QWidget *parent, Items *product)
+ComplectProductWindow::ComplectProductWindow(QWidget *parent, Items *_item)
     : QDialog(parent)
     , ui(new Ui::ComplectProductWindow)
 {
     ui->setupUi(this);
 
-    if(product != nullptr)
+    if(_item != nullptr)
     {
-        prod = *product;
+        item = *_item;
         ui->leNumProdSearch->setVisible(false);
         ui->tbProdSearch->setVisible(false);
         ui->labelSearchProd->setVisible(false);
         // LoadProductToScreen(prod);
     }
 
-    connect(ui->lwOuterModule, SIGNAL(doubleClicked(QModelIndex)), SLOT(on_pbAddModul_clicked()));
+    // connect(ui->lwOuterModule, SIGNAL(doubleClicked(QModelIndex)), SLOT(on_pbAddModul_clicked()));
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
 }
@@ -39,23 +41,23 @@ void ComplectProductWindow::on_tbSearchModul_clicked()
 {
     // поиск модулей со статусом Исправен на производстве для изделия со статусом Создан
 
-    ui->lwOuterModule->clear();
+    // ui->lwOuterModule->clear();
     Modules.items.clear();
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    int status = ui->rbNewModule->isChecked() ? Status::CREATE : Status::FAULTY;
+    // int status = ui->rbNewModule->isChecked() ? Status::CREATE : Status::FAULTY;
 
-    Modules.FindItems(ui->leNumModSearch->text(), status);
+    // Modules.FindItems(ui->leNumModSearch->text(), status);
 
-    for(const auto &it : Modules.items)
-    {
-        QListWidgetItem *item = new QListWidgetItem;
-        item->setText(it.number + " (" + it.name + ")");
-        QVariant var;
-        var.setValue(it);
-        item->setData(Qt::UserRole, var);
-        ui->lwOuterModule->addItem(item);
-    }
+    // for(const auto &it : Modules.items)
+    // {
+    //     QListWidgetItem *item = new QListWidgetItem;
+    //     item->setText(it.number + " (" + it.name + ")");
+    //     QVariant var;
+    //     var.setValue(it);
+    //     item->setData(Qt::UserRole, var);
+    //     ui->lwOuterModule->addItem(item);
+    // }
 
     QApplication::restoreOverrideCursor();
 }
@@ -66,27 +68,29 @@ void ComplectProductWindow::on_tbSearchModul_clicked()
 //----------------------------------------------------------------------------------------------
 void ComplectProductWindow::on_tbProdSearch_clicked()
 {
-    QVector<Status::Stat> stat {Status::CREATE};
-    SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    win->setTypeSearch(SelectDeviceWindow::TypeProduct);
-    Items *dev = win->SelectDevice(true, ui->leNumProdSearch->text(), stat);
-    if(dev != nullptr)
+    QVector<int> stat {Status::CREATE, Status::CORRECT, Status::CORRECT_OSO};
+    QPointer<SelectDeviceWindow> win = new SelectDeviceWindow(this);
+    // SelectDeviceWindow *win = new SelectDeviceWindow(ItemType::Product, stat, false, false);
+    // if(win->exec() == QDialog::Accepted)
+    // win->setTypeSearch(SelectDeviceWindow::TypeProduct);
+    item = *win->SelectDevice(true, ItemType::Product, stat, ui->leNumProdSearch->text(), false, false);
+    if(/*item.id != 0*/ win->result() == QDialog::Accepted)
     {
-        prod = *(static_cast<Items*>(dev));
-        // if(prod.id > 0)
-        //     LoadProductToScreen(prod);
+        LoadProductToScreen(item);
     }
+
 }
 
 
 //----------------------------------------------------------------------------------------------
 // Вывод данных продукта на экран
 //----------------------------------------------------------------------------------------------
-void ComplectProductWindow::LoadProductToScreen(Items &prod)
+void ComplectProductWindow::LoadProductToScreen(Items &item)
 {
     // repo.LoadChildProduct(prod);
-    ui->lbNameProd->setText(prod.name);
-    ui->lbNumProd->setText(prod.number);
+    ui->lbNameProd->setText(item.name);
+    ui->lbNumProd->setText(item.number);
+    ui->lbVNFT->setText(item.VNFT);
 
     ui->lwInnerModule->clear();
     // for(auto &it : prod.listModules)
@@ -117,17 +121,17 @@ void ComplectProductWindow::addModulToScreen(Items &mod)
         ui->lwInnerModule->addItem(item);
 
         // удаление из списка модулей
-        for(int row = 0; row < ui->lwOuterModule->count(); ++row)
-        {
-            auto item = ui->lwOuterModule->item(row);
-            QVariant var = item->data(Qt::UserRole);
-            Items mod2 = var.value<Items>();
-            if(mod2.id == mod.id)
-            {
-                delete item;
-                break;
-            }
-        }
+        // for(int row = 0; row < ui->lwOuterModule->count(); ++row)
+        // {
+        //     auto item = ui->lwOuterModule->item(row);
+        //     QVariant var = item->data(Qt::UserRole);
+        //     Items mod2 = var.value<Items>();
+        //     if(mod2.id == mod.id)
+        //     {
+        //         delete item;
+        //         break;
+        //     }
+        // }
     }
 }
 
@@ -137,13 +141,13 @@ void ComplectProductWindow::addModulToScreen(Items &mod)
 //----------------------------------------------------------------------------------------------
 void ComplectProductWindow::on_pbAddModul_clicked()
 {
-    if(prod.id == 0 || ui->lwOuterModule->currentRow() < 0)
-        return;
+    // if(item.id == 0 || ui->lwOuterModule->currentRow() < 0)
+    //     return;
 
-    QVariant var = ui->lwOuterModule->item(ui->lwOuterModule->currentRow())->data(Qt::UserRole);
-    Items mod = var.value<Items>();
+    // QVariant var = ui->lwOuterModule->item(ui->lwOuterModule->currentRow())->data(Qt::UserRole);
+    // Items mod = var.value<Items>();
 
-    addModulToScreen(mod);
+    // addModulToScreen(mod);
 
     // trackModul.AddRecord(mod.id, mod);
 
@@ -179,7 +183,7 @@ void ComplectProductWindow::on_pbDeleteModul_clicked()
     item->setText(mod.number + " (" + mod.name + ")");
     var.setValue(mod);
     item->setData(Qt::UserRole, var);
-    ui->lwOuterModule->addItem(item);
+    // ui->lwOuterModule->addItem(item);
 
     delete ui->lwInnerModule->item(ui->lwInnerModule->currentRow());
 
@@ -210,7 +214,7 @@ void ComplectProductWindow::on_pbOK_clicked()
         // status.idStatus = Status::INSTALL;
         // status.idDevice = mod.id;
         // mod.listStatus.push_back(status);
-        mod.idParent = prod.id;
+        mod.idParent = item.id;
         // записать в базу новый статус и id изделия для модуля
         if(repo.UpdateItem(mod))
             mod.AddStatus(mod, Status::INSTALL);

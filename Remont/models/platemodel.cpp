@@ -67,13 +67,17 @@ void PlateModel::fetchMore(const QModelIndex &/*parent*/)
     // }
     if(!isBaseOff)
     {
-        int resLoad = listDev->LoadPart(startLoad, cntLoad, number, status, isBusy, isParent);
+        // int resLoad = listDev->LoadPart(startLoad, cntLoad, number, status, isBusy, isParent);
+        int resLoad = listDev->LoadPart2(startLoad, cntLoad, number, vStatus, isBusy, isParent);
 
-        beginInsertRows(QModelIndex(), startLoad, startLoad + resLoad - 1);
-        endInsertRows();
+        if(resLoad > 0)
+        {
+            beginInsertRows(QModelIndex(), startLoad, startLoad + resLoad - 1);
+            endInsertRows();
+        }
 
         startLoad += resLoad;
-        if(resLoad < cntLoad)
+        if(resLoad < cntLoad || resLoad == 0)
             isFetch = false;
     }
 }
@@ -145,6 +149,23 @@ void PlateModel::prepareLoad(const QString _number, int _status, bool _isBusy, b
     endResetModel();
 
 }
+
+void PlateModel::prepareLoad2(const QString _number, QVector<int>& _status, bool _isBusy, bool _isParent)
+{
+    Q_ASSERT_X(listDev != nullptr, "", "not calling createList()");
+
+    beginResetModel();
+    startLoad = 0;
+    listDev->items.clear();
+    vStatus = _status;
+    isBusy = _isBusy;
+    isParent = _isParent;
+    number = _number;
+    isFetch = true;
+    endResetModel();
+
+}
+
 
 Items *PlateModel::GetItem(int row)
 {

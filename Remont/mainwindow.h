@@ -37,7 +37,7 @@ private slots:
     void on_pbStartWork_clicked();
     void on_pbEndRemont_clicked();
     void on_aRegPlate_triggered();
-    void on_aRegDevice_triggered();
+    void on_aRegProduct_triggered();
     void on_aInstallModul_triggered();
     void on_aControlOTK_triggered();
     void on_aShipBefore_triggered();
@@ -53,16 +53,12 @@ private slots:
     void on_aListPlate_triggered();
     void on_aPlateVNFT_triggered();
     void on_aReplaceFW_triggered();
-
     void on_aShipping_triggered();
-
     void on_aLog_triggered();
-
     void on_aGenQR_triggered();
-
     void on_aPRodVNFT_triggered();
-
     void on_aModVNFT_triggered();
+    void on_aRegModul_triggered();
 
 private:
     Ui::MainWindow *ui;

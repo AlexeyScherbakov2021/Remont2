@@ -126,7 +126,7 @@ background-color: LightGray;
      </rect>
     </property>
     <property name="text">
-     <string>Регистрация устройств</string>
+     <string>Регистрация изделий</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pbOTK">
@@ -217,7 +217,8 @@ background-color: LightGray;
     <property name="title">
      <string>Производство</string>
     </property>
-    <addaction name="aRegDevice"/>
+    <addaction name="aRegProduct"/>
+    <addaction name="aRegModul"/>
     <addaction name="aInstallModul"/>
     <addaction name="aControlOTK"/>
     <addaction name="separator"/>
@@ -283,13 +284,13 @@ background-color: LightGray;
     <string>Зарегистрированные платы</string>
    </property>
   </action>
-  <action name="aRegDevice">
+  <action name="aRegProduct">
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/image/product_add.png</normaloff>:/image/product_add.png</iconset>
    </property>
    <property name="text">
-    <string>Регистрация устройств</string>
+    <string>Регистрация изделий</string>
    </property>
   </action>
   <action name="aInstallModul">
@@ -432,6 +433,11 @@ background-color: LightGray;
   <action name="aModVNFT">
    <property name="text">
     <string>Справочник ВНФТ модулей</string>
+   </property>
+  </action>
+  <action name="aRegModul">
+   <property name="text">
+    <string>Регистрация модулей</string>
    </property>
   </action>
  </widget>

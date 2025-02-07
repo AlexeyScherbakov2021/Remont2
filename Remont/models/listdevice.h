@@ -68,11 +68,15 @@ public:
     virtual QVariant getData(int row, int col, int role) const = 0;
     virtual void setData(int row, int col, const QVariant value, int role) const = 0;
 
-    size_t LoadPart(int start, int count, const QString &number, int status = 0, bool isBusy = false, bool isParent = false)
-    {
-        return repo.LoadPart(start, count, typeDev, number, items, status, isBusy, isParent);
-    }
+    // size_t LoadPart(int start, int count, const QString &number, int status = 0, bool isBusy = false, bool isParent = false)
+    // {
+    //     return repo.LoadPart2(start, count, typeDev, number, items, status, isBusy, isParent);
+    // }
 
+    size_t LoadPart2(int start, int count, const QString &number, QVector<int> vStatus, bool isBusy = false, bool isParent = false)
+    {
+        return repo.LoadPart2(start, count, typeDev, number, items, vStatus, isBusy, isParent);
+    }
 
 protected:
     RepoMSSQL repo;

@@ -121,41 +121,41 @@ void AcceptRemontWindow::on_tbNumber_clicked()
     idMod =idProd = 0;
 
     // SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumber->text(),Status::FAULTY_ON_OBJECT);
-    SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    Items *dev = win->SelectDevice(true, ui->leNumber->text(), Status::FAULTY_ON_OBJECT);
+    // SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    // Items *dev = win->SelectDevice(true, ui->leNumber->text(), Status::FAULTY_ON_OBJECT);
 
-    if(dev != nullptr)
-    {
-        Claim claim;
-        // modul = dynamic_cast<Modul*> (dev);
-        // if(dev->typeDevice == ev::MODUL)
-        if(dev->type.indexType == ItemType::Modul)
-        // if(win->modul->id != 0)
-        {
-            Items *modul = static_cast<Items*> (dev);
-            // if(repo.LoadClaimForModul(modul->id, claim))
-            //     ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
+    // if(dev != nullptr)
+    // {
+    //     Claim claim;
+    //     // modul = dynamic_cast<Modul*> (dev);
+    //     // if(dev->typeDevice == ev::MODUL)
+    //     if(dev->type.indexType == ItemType::Modul)
+    //     // if(win->modul->id != 0)
+    //     {
+    //         Items *modul = static_cast<Items*> (dev);
+    //         // if(repo.LoadClaimForModul(modul->id, claim))
+    //         //     ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
 
-            ui->lbNumber->setText(modul->number);
-            ui->lbName->setText(modul->name);
-            ui->lbDevice->setText("Модуль");
-            idMod = modul->id;
-            idParentProd = modul->idParent;
-        }
+    //         ui->lbNumber->setText(modul->number);
+    //         ui->lbName->setText(modul->name);
+    //         ui->lbDevice->setText("Модуль");
+    //         idMod = modul->id;
+    //         idParentProd = modul->idParent;
+    //     }
 
-        // prod = dynamic_cast<Product*> (dev);
-        if(dev->type.indexType == ItemType::Product )
-        {
-            Items *prod = static_cast<Items*> (dev);
-            // if(repo.LoadClaimForProduct(prod->id, claim))
-            //     ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
+    //     // prod = dynamic_cast<Product*> (dev);
+    //     if(dev->type.indexType == ItemType::Product )
+    //     {
+    //         Items *prod = static_cast<Items*> (dev);
+    //         // if(repo.LoadClaimForProduct(prod->id, claim))
+    //         //     ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
 
-            ui->lbNumber->setText(prod->number);
-            ui->lbName->setText(prod->name);
-            ui->lbDevice->setText("Изделие");
-            idProd = prod->id;
-        }
-        ui->leNumber->clear();
-    }
+    //         ui->lbNumber->setText(prod->number);
+    //         ui->lbName->setText(prod->name);
+    //         ui->lbDevice->setText("Изделие");
+    //         idProd = prod->id;
+    //     }
+    //     ui->leNumber->clear();
+    // }
 }
 

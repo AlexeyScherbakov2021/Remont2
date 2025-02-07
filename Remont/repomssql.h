@@ -35,12 +35,11 @@ private:
     void FindItems(ItemType::IndexType iType, QList<Items> &listItems, int status = 0, bool isFree = false);
 
 public:
-    // bool LoadPart(size_t start, size_t count, ItemType::IndexType iType, QList<Items> &listItems,
-    //               int status = 0, bool isBusy = false, isParent = false);
+    // size_t LoadPart(size_t start, size_t count, ItemType::IndexType iType, const QString &number,
+    //             QList<Items> &listItems, int status = 0, bool isBusy = false, bool isParent = false);
 
-    size_t LoadPart(size_t start, size_t count, ItemType::IndexType iType, const QString &number,
-                QList<Items> &listItems, int status = 0, bool isBusy = false, bool isParent = false);
-
+    size_t LoadPart2(size_t start, size_t count, ItemType::IndexType iType, const QString &number,
+                    QList<Items> &listItems, QVector<int>& listStatus, bool isBusy = false, bool isParent = false);
 
     bool AddItem(Items &item);
     void FindItems(ItemType::IndexType iType, const QString &number, QList<Items> &listItems, int status = 0, bool isFree = false);
@@ -62,51 +61,29 @@ public:
     RepoMSSQL();
     bool ConnectDb();
 
-    // bool AddItem(Product &prod);            //=============
-    // bool AddItem(Modul &mod);               //=============
-    // bool AddItem(Plate &plate);             //=============
     bool AddItem(Shipment &ship);
     bool AddItem(SetterOut &setter);
     bool AddItem(Claim &claim);
 
-    // bool UpdateItem(Product &prod);         //=============
-    // bool UpdateItem(Modul &mod);            //=============
-    // bool UpdateItem(Plate &plate);          //=============
     bool UpdateItem(Shipment &ship);
     bool UpdateItem(SetterOut &setter);
     bool UpdateItem(Claim &claim);
 
-    // bool DeleteProduct(int id);             //=============
-    // bool DeleteModul(int id);               //=============
-    // bool DeletePlate(int id);               //=============
     bool DeleteShipment(int id);
     bool DeleteSetter(int id);
     bool DeleteClaim(int id);
 
-    // Product GetProduct(int id);             //=============
-    // Product GetProduct(QString number, int status = 0, bool isFree = false);    //=============
     Shipment GetShipment(int id);
-    // Modul GetModul(int id);                 //=============
-    // Modul GetModul(QString number, int status = 0, bool isFree = false);    //=============
-    // Plate GetPlate(QString number);         //=============
     SetterOut GetSetter(int id);
 
-    // void FindItems(const QString &number, QList<Product> &listProduct, int status = 0, bool isFree = false);    //=============
-    // void FindItems(const QString &number, QList<Modul> &listModul, int status = 0, bool isFree = false);        //=============
-    // void FindItems(const QString &number, QList<Plate> &listPlate, int status = 0, bool isFree = false);        //=============
     void FindItems(const QString &number, QList<Shipment> &listShip, int status = 0, bool isFree = false);
 
     // void LoadProductType(QMap<int, QString> &listTypeProduct);
     // void LoadProductType(QMap<int, ProductType> &listTypeProduct);
-    // void LoadProductType(QList<ProductType> &listTypeProduct);          //=============
 
     // void LoadModuleType(QMap<int, QString> &listTypeModule);
     // void LoadModuleType(QMap<int, ModulType> &listTypeModule);
-    // void LoadModuleType(QList<ModulType> &listTypeModule);              //=============
 
-    // void LoadStatus(Product &prod);         //=============
-    // void LoadStatus(Modul &modul);          //=============
-    // void LoadStatus(Plate &plate);          //=============
     int GetTypeStatus(int idStatus);
     const QString GetNameStatus(int id);
 
@@ -118,12 +95,6 @@ public:
     // void LoadShipModule(QList<Modul> &listModul, int idShip);
     // void LoadShipProduct(QList<Product> &listProduct, int idShip);
 
-    // bool AddStatus(Modul &modul, Status &status);           //=============
-    // bool AddStatus(Product &product, Status &status);       //=============
-    // bool AddStatus(Plate &plate, Status &status);           //=============
-    // bool DelLastStatus(Modul &modul);                       //=============
-    // bool DelLastStatus(Product &product);                   //=============
-    // bool DelLastStatus(Plate &plate);                       //=============
 
     void LoadOrganization(QMap<int, QString> &listOrg);
     void LoadOrganization(QList<Organization> &listOrg);
@@ -148,7 +119,7 @@ public:
     Remont GetCurrentRemont(int id, ev::DeviceKind kindDevice);
 
     // void LoadTypePlate(QVector<PlateType> &listType);       //=============
-    // int GetCountRegisterPlate(QString numDoc, int idType);
+    int GetCountRegisterPlate(QString numDoc, int idType);
     // int GetCountRegisterModul(QString numDoc, int idType);
     // int GetCountRegisterProduct(QString numDoc, int idType);
 

@@ -2004,28 +2004,35 @@ void RepoMSSQL::FindItems(ItemType::IndexType iType, QList<Items> &listItems, in
 
 }
 
-size_t RepoMSSQL::LoadPart(size_t start, size_t count, ItemType::IndexType iType,
-                         const QString &number, QList<Items> &listItems,
-                         int status, bool isBusy, bool isParent)
+
+size_t RepoMSSQL::LoadPart2(size_t start, size_t count, ItemType::IndexType iType,
+                           const QString &number, QList<Items> &listItems,
+                           QVector<int>& listStatus, bool isBusy, bool isParent)
 {
     size_t res = 0;
+    QStringList slStatus;
     QSqlQuery query;
 
     QString sqlNumber = " number like :number";
     QString sqlBusy = " idShip is null and idSet is null";
     QString sqlParent = " idParent is null";
+    QString sqlStatus = "max(idStatus)=:idStatus%1 ";
 
     QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
                        "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus "
                        "from Items i join ItemType it on it.id=i.idType and it.indexType=:indexType "
                        "join (select idItem, max(DateStatus) dateStatus, max(idStatus) as idStatus "
                        "from ItemStatus group by idItem ",
-                       "having max(idStatus)=:idStatus",
+                       "",
                        ") ms on ms.idItem=i.id join StatusDevice sd on sd.id=ms.idStatus"};
 
-    if(status == Status::NONE)
-        sql.removeAt(1);
-        // sql.push_back(sqlStatus);
+    if(listStatus.size() > 0)
+    {
+        for(int i = 0; i < listStatus.size(); ++i)
+            slStatus.push_back(sqlStatus.arg(i));
+
+        sql[1] = "having " + slStatus.join("or ");
+    }
 
     QStringList slWhere;
 
@@ -2048,10 +2055,13 @@ size_t RepoMSSQL::LoadPart(size_t start, size_t count, ItemType::IndexType iType
     query.bindValue(":start", start);
     query.bindValue(":count", count);
     // if(!number.isEmpty())
-        query.bindValue(":number", QString("%%1%").arg(number));
+    query.bindValue(":number", QString("%%1%").arg(number));
 
     // if(status != Status::NONE)
-        query.bindValue(":idStatus", status);
+    for(int i = 0; i < listStatus.size(); ++i)
+    {
+        query.bindValue(QString(":idStatus%1").arg(i), listStatus[i]);
+    }
 
     query.exec();
     while(query.next())
@@ -2082,6 +2092,88 @@ size_t RepoMSSQL::LoadPart(size_t start, size_t count, ItemType::IndexType iType
 
     return res;
 }
+
+
+
+
+// size_t RepoMSSQL::LoadPart(size_t start, size_t count, ItemType::IndexType iType,
+//                          const QString &number, QList<Items> &listItems,
+//                          int status, bool isBusy, bool isParent)
+// {
+//     size_t res = 0;
+//     QSqlQuery query;
+
+//     QString sqlNumber = " number like :number";
+//     QString sqlBusy = " idShip is null and idSet is null";
+//     QString sqlParent = " idParent is null";
+
+//     QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
+//                        "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus "
+//                        "from Items i join ItemType it on it.id=i.idType and it.indexType=:indexType "
+//                        "join (select idItem, max(DateStatus) dateStatus, max(idStatus) as idStatus "
+//                        "from ItemStatus group by idItem ",
+//                        "having max(idStatus)=:idStatus",
+//                        ") ms on ms.idItem=i.id join StatusDevice sd on sd.id=ms.idStatus"};
+
+//     if(status == Status::NONE)
+//         sql.removeAt(1);
+//         // sql.push_back(sqlStatus);
+
+//     QStringList slWhere;
+
+//     if(!number.isEmpty())
+//         slWhere.push_back(sqlNumber);
+
+//     if(!isBusy)
+//         slWhere.push_back(sqlBusy);
+
+//     if(!isParent)
+//         slWhere.push_back(sqlParent);
+
+//     sql.push_back(" where ");
+//     sql.push_back(slWhere.join(" and "));
+
+//     sql.push_back(" order by nameItem offset :start rows fetch next :count rows only");
+//     QString sql2 = sql.join("");
+//     query.prepare(sql2);
+//     query.bindValue(":indexType", iType);
+//     query.bindValue(":start", start);
+//     query.bindValue(":count", count);
+//     // if(!number.isEmpty())
+//         query.bindValue(":number", QString("%%1%").arg(number));
+
+//     // if(status != Status::NONE)
+//         query.bindValue(":idStatus", status);
+
+//     query.exec();
+//     while(query.next())
+//     {
+//         Items item;
+
+//         item.id = query.value(0).toInt();
+//         item.idParent = query.value(1).toInt();
+//         item.idShip = query.value(2).toInt();
+//         item.idSet = query.value(3).toInt();
+//         item.idType = query.value(4).toInt();
+//         item.number = query.value(5).toString();
+//         item.number2 = query.value(6).toString();
+//         item.numberDoc = query.value(7).toString();
+//         item.name = query.value(8).toString();
+//         item.dateCreate = query.value(9).toDateTime();
+//         item.dateOn = query.value(10).toDateTime();
+//         item.dateOff = query.value(11).toDateTime();
+//         item.garantMonth = query.value(12).toInt();
+//         item.dateGarant = query.value(13).toDateTime();
+//         item.isZip = query.value(14).toBool();
+//         item.VNFT = query.value(15).toString();
+//         item.currStatus = query.value(16).toString();
+//         // item.LoadStatus(item);
+//         listItems.push_back(item);
+//         ++res;
+//     }
+
+//     return res;
+// }
 
 
 bool RepoMSSQL::AddItem(Items &item)
@@ -2144,6 +2236,7 @@ void RepoMSSQL::FindItems(ItemType::IndexType iType, const QString &number, QLis
     }
     else
     {
+        // запрос с учетом статуса
         if(!isFree)
             query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
                           "dateOff,i.garantMonth,dateGarant,isZip "
@@ -2991,78 +3084,21 @@ Remont RepoMSSQL::GetCurrentRemont(int idParent, ev::DeviceKind kindDevice)
 }
 
 
+int RepoMSSQL::GetCountRegisterPlate(QString numDoc, int idType)
+{
+    QSqlQuery query;
+    int res = 0;
 
-//------------------------------------------------------------------------------------------------------
-// Загрузка типа плат
-//------------------------------------------------------------------------------------------------------
-// void RepoMSSQL::LoadTypePlate(QVector<PlateType> &listType)
-// {
-//     listType.clear();
-
-//     QSqlQuery query;
-//     query.prepare("select id,pt_name,pt_vnft from PlateType");
-
-//     query.exec();
-//     while(query.next())
-//     {
-//         PlateType pt;
-//         pt.id =query.value(0).toInt();
-//         pt.name = query.value(1).toString();
-//         pt.VNFT = query.value(2).toString();
-//         listType.push_back(pt);
-//     }
-
-// }
-
-// int RepoMSSQL::GetCountRegisterPlate(QString numDoc, int idType)
-// {
-//     QSqlQuery query;
-//     int res = 0;
-
-//     query.prepare("select count(*) from plate where NumberDoc=:NumberDoc and idPlateType=:idPlateType");
-//     query.bindValue(":NumberDoc", numDoc);
-//     query.bindValue(":idPlateType", idType);
-//     query.exec();
-//     if(query.next())
-//     {
-//         res = query.value(0).toInt();
-//     }
-//     return res;
-// }
-
-// int RepoMSSQL::GetCountRegisterModul(QString numDoc, int idType)
-// {
-//     QSqlQuery query;
-//     int res = 0;
-
-//     query.prepare("select count(*) from modules where m_numberDoc=:NumberDoc and m_modTypeId=:m_modTypeId");
-//     query.bindValue(":NumberDoc", numDoc);
-//     query.bindValue(":m_modTypeId", idType);
-//     query.exec();
-//     if(query.next())
-//     {
-//         res = query.value(0).toInt();
-//     }
-//     return res;
-
-// }
-
-// int RepoMSSQL::GetCountRegisterProduct(QString numDoc, int idType)
-// {
-//     QSqlQuery query;
-//     int res = 0;
-
-//     query.prepare("select count(*) from product where g_numberDoc=:NumberDoc and g_productTypeId=:g_productTypeId");
-//     query.bindValue(":NumberDoc", numDoc);
-//     query.bindValue(":g_productTypeId", idType);
-//     query.exec();
-//     if(query.next())
-//     {
-//         res = query.value(0).toInt();
-//     }
-//     return res;
-
-// }
+    query.prepare("select count(*) from Items where NumberDoc=:NumberDoc and idType=:idType");
+    query.bindValue(":NumberDoc", numDoc);
+    query.bindValue(":idType", idType);
+    query.exec();
+    if(query.next())
+    {
+        res = query.value(0).toInt();
+    }
+    return res;
+}
 
 
 int32_t RepoMSSQL::GetNextNumber(uint year)

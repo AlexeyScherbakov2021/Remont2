@@ -34,47 +34,47 @@ EndRemontWindow::~EndRemontWindow()
 //---------------------------------------------------------------------------------------
 void EndRemontWindow::on_tbNumber_clicked()
 {
-    product.id = 0;
-    modul.id = 0;
-    // idMod =idProd = 0;
+    // product.id = 0;
+    // modul.id = 0;
+    // // idMod =idProd = 0;
 
-    // SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumber->text(),Status::REMONT);
-    // if(win->exec() == QDialog::Accepted)
-    SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    Items *dev = win->SelectDevice(true, ui->leNumber->text(),Status::REMONT);
-    if(dev != nullptr)
-    {
-        Claim claim;
-        // if(dev->typeDevice == ev::MODUL)
-        if(dev->type.indexType == ItemType::Modul)
-        {
-            // Modul* mod = static_cast<Modul*>(dev);
-            modul = *(static_cast<Items*>(dev));
-            // if(repo.LoadClaimForModul(modul.id, claim))
-            //     ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
+    // // SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumber->text(),Status::REMONT);
+    // // if(win->exec() == QDialog::Accepted)
+    // SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    // Items *dev = win->SelectDevice(true, ui->leNumber->text(),Status::REMONT);
+    // if(dev != nullptr)
+    // {
+    //     Claim claim;
+    //     // if(dev->typeDevice == ev::MODUL)
+    //     if(dev->type.indexType == ItemType::Modul)
+    //     {
+    //         // Modul* mod = static_cast<Modul*>(dev);
+    //         modul = *(static_cast<Items*>(dev));
+    //         // if(repo.LoadClaimForModul(modul.id, claim))
+    //         //     ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
 
-            ui->lbNumber->setText(modul.number);
-            ui->lbName->setText(modul.name);
-            ui->lbDevice->setText("Модуль");
-            // idMod = modul->id;
-        }
+    //         ui->lbNumber->setText(modul.number);
+    //         ui->lbName->setText(modul.name);
+    //         ui->lbDevice->setText("Модуль");
+    //         // idMod = modul->id;
+    //     }
 
-        // if(dev->type.IndexType == ev::PRODUCT)
-        // if(dev->type.IndexType == ItemType::Product)
-        if(dev->type.indexType == ItemType::Product)
-        {
-            // Product* prod = static_cast<Product*>(dev);
-            product = *(static_cast<Items*>(dev));
-            // if(repo.LoadClaimForProduct(product.id, claim))
-            //     ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
+    //     // if(dev->type.IndexType == ev::PRODUCT)
+    //     // if(dev->type.IndexType == ItemType::Product)
+    //     if(dev->type.indexType == ItemType::Product)
+    //     {
+    //         // Product* prod = static_cast<Product*>(dev);
+    //         product = *(static_cast<Items*>(dev));
+    //         // if(repo.LoadClaimForProduct(product.id, claim))
+    //         //     ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
 
-            ui->lbNumber->setText(product.number);
-            ui->lbName->setText(product.name);
-            ui->lbDevice->setText("Изделие");
-            // idProd = prod->id;
-        }
-        ui->leNumber->clear();
-    }
+    //         ui->lbNumber->setText(product.number);
+    //         ui->lbName->setText(product.name);
+    //         ui->lbDevice->setText("Изделие");
+    //         // idProd = prod->id;
+    //     }
+    //     ui->leNumber->clear();
+    // }
 
 }
 

@@ -203,46 +203,46 @@ void ClaimDetail::AddProductToTableScreen(const Items &prod)
 //-----------------------------------------------------------------------------------------
 void ClaimDetail::on_tbAddDevice_clicked()
 {
-    SelectDeviceWindow *win = new SelectDeviceWindow(this);
+    // SelectDeviceWindow *win = new SelectDeviceWindow(this);
 
-    QVector<Status::Stat> listStatus = {Status::WORK, Status::SHIPPED};
-    Items *dev = win->SelectDevice(false, "", listStatus);
-    if(dev != nullptr)
-    {
-        if(dev->type.indexType == ItemType::Product)
-        {
-            Items* prod = static_cast<Items*>(dev);
-            // if(trackProduct.AddRecord(prod->id, *prod))
-            //     AddProductToTableScreen(*prod);
-            // listAddProduct.insert(prod->id, *prod);
-        }
-        else if(dev->type.indexType == ItemType::Modul)
-        {
-            Items *modul = static_cast<Items*>(dev);
-            // if(trackModul.AddRecord(modul->id, *modul))
-            // {
-            //     AddModulToTableScreen(*modul);
-            //     if(modul->idParent > 0)
-            //     {
-            //         Items prod = repo.GetProduct(modul->idParent);
-            //         if(!trackProduct.listAdd.contains(prod.id))
-            //         {
-            //             if( QMessageBox::question(this, "Запрос",
-            //                                       QString("Добавить в ремонт изделие \"%1 (%2)\", в составе которого есть модуль?").arg(prod.number).arg(prod.nameItem),
-            //                                       QMessageBox::Yes | QMessageBox::No, QMessageBox::No) ==  QMessageBox::Yes)
-            //             {
-            //                 // установить статус изделия, если модуль входит в его состав
-            //                 if(trackProduct.AddRecord(prod.id, prod))
-            //                     AddProductToTableScreen(prod);
-            //             }
-            //         }
-            //     }
-            // }
-        }
+    // QVector<Status::Stat> listStatus = {Status::WORK, Status::SHIPPED};
+    // Items *dev = win->SelectDevice(false, "", listStatus);
+    // if(dev != nullptr)
+    // {
+    //     if(dev->type.indexType == ItemType::Product)
+    //     {
+    //         Items* prod = static_cast<Items*>(dev);
+    //         // if(trackProduct.AddRecord(prod->id, *prod))
+    //         //     AddProductToTableScreen(*prod);
+    //         // listAddProduct.insert(prod->id, *prod);
+    //     }
+    //     else if(dev->type.indexType == ItemType::Modul)
+    //     {
+    //         Items *modul = static_cast<Items*>(dev);
+    //         // if(trackModul.AddRecord(modul->id, *modul))
+    //         // {
+    //         //     AddModulToTableScreen(*modul);
+    //         //     if(modul->idParent > 0)
+    //         //     {
+    //         //         Items prod = repo.GetProduct(modul->idParent);
+    //         //         if(!trackProduct.listAdd.contains(prod.id))
+    //         //         {
+    //         //             if( QMessageBox::question(this, "Запрос",
+    //         //                                       QString("Добавить в ремонт изделие \"%1 (%2)\", в составе которого есть модуль?").arg(prod.number).arg(prod.nameItem),
+    //         //                                       QMessageBox::Yes | QMessageBox::No, QMessageBox::No) ==  QMessageBox::Yes)
+    //         //             {
+    //         //                 // установить статус изделия, если модуль входит в его состав
+    //         //                 if(trackProduct.AddRecord(prod.id, prod))
+    //         //                     AddProductToTableScreen(prod);
+    //         //             }
+    //         //         }
+    //         //     }
+    //         // }
+    //     }
 
-        ui->tableWidget->resizeColumnsToContents();
-        ui->tableWidget->resizeRowsToContents();
-    }
+    //     ui->tableWidget->resizeColumnsToContents();
+    //     ui->tableWidget->resizeRowsToContents();
+    // }
 }
 
 
