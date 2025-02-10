@@ -152,6 +152,8 @@ void PlateModel::prepareLoad(const QString _number, int _status, bool _isBusy, b
 
 void PlateModel::prepareLoad2(const QString _number, QVector<int>& _status, bool _isBusy, bool _isParent)
 {
+    // qDebug() << "prepareLoad2" ;
+
     Q_ASSERT_X(listDev != nullptr, "", "not calling createList()");
 
     beginResetModel();
@@ -223,6 +225,8 @@ void PlateModel::setBaseOff()
 {
     isBaseOff = true;
 }
+
+
 
 
 

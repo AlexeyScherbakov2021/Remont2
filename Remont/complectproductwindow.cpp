@@ -15,7 +15,7 @@ ComplectProductWindow::ComplectProductWindow(QWidget *parent, Items *_item)
 
     if(_item != nullptr)
     {
-        item = *_item;
+        dev = *_item;
         ui->leNumProdSearch->setVisible(false);
         ui->tbProdSearch->setVisible(false);
         ui->labelSearchProd->setVisible(false);
@@ -41,25 +41,27 @@ void ComplectProductWindow::on_tbSearchModul_clicked()
 {
     // поиск модулей со статусом Исправен на производстве для изделия со статусом Создан
 
-    // ui->lwOuterModule->clear();
-    Modules.items.clear();
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    if(dev.id == 0)
+        return;
 
-    // int status = ui->rbNewModule->isChecked() ? Status::CREATE : Status::FAULTY;
+    QVector<int> stat {Status::CREATE, Status::CORRECT, Status::CORRECT_OSO};
+    QPointer<SelectDeviceWindow> win;
 
-    // Modules.FindItems(ui->leNumModSearch->text(), status);
+    if(dev.type.indexType == ItemType::Product)
+    {
+        win = new SelectDeviceWindow(ItemType::Modul, this);
+        win->AddSelectedType(ItemType::Plate);
+    }
+    else
+    {
+        win = new SelectDeviceWindow(ItemType::Plate, this);
+    }
 
-    // for(const auto &it : Modules.items)
-    // {
-    //     QListWidgetItem *item = new QListWidgetItem;
-    //     item->setText(it.number + " (" + it.name + ")");
-    //     QVariant var;
-    //     var.setValue(it);
-    //     item->setData(Qt::UserRole, var);
-    //     ui->lwOuterModule->addItem(item);
-    // }
-
-    QApplication::restoreOverrideCursor();
+    Items child = *win->SelectDevice(true, stat, ui->leNumModSearch->text(), false, false);
+    if(win->result() == QDialog::Accepted)
+    {
+        addModulToScreen(child);
+    }
 }
 
 
@@ -69,14 +71,13 @@ void ComplectProductWindow::on_tbSearchModul_clicked()
 void ComplectProductWindow::on_tbProdSearch_clicked()
 {
     QVector<int> stat {Status::CREATE, Status::CORRECT, Status::CORRECT_OSO};
-    QPointer<SelectDeviceWindow> win = new SelectDeviceWindow(this);
-    // SelectDeviceWindow *win = new SelectDeviceWindow(ItemType::Product, stat, false, false);
-    // if(win->exec() == QDialog::Accepted)
-    // win->setTypeSearch(SelectDeviceWindow::TypeProduct);
-    item = *win->SelectDevice(true, ItemType::Product, stat, ui->leNumProdSearch->text(), false, false);
-    if(/*item.id != 0*/ win->result() == QDialog::Accepted)
+    QPointer<SelectDeviceWindow> win = new SelectDeviceWindow(ItemType::Product, this);
+    win->AddSelectedType(ItemType::Modul);
+    dev = *win->SelectDevice(true, stat, ui->leNumProdSearch->text(), false, false);
+    if(win->result() == QDialog::Accepted)
     {
-        LoadProductToScreen(item);
+        repo.LoadChildItems(dev.id, dev.childItems);
+        LoadProductToScreen(dev);
     }
 
 }
@@ -85,24 +86,29 @@ void ComplectProductWindow::on_tbProdSearch_clicked()
 //----------------------------------------------------------------------------------------------
 // Вывод данных продукта на экран
 //----------------------------------------------------------------------------------------------
-void ComplectProductWindow::LoadProductToScreen(Items &item)
+void ComplectProductWindow::LoadProductToScreen(Items &dev)
 {
-    // repo.LoadChildProduct(prod);
-    ui->lbNameProd->setText(item.name);
-    ui->lbNumProd->setText(item.number);
-    ui->lbVNFT->setText(item.VNFT);
+    ui->lbNameProd->setText(dev.name);
+    ui->lbNumProd->setText(dev.number);
+    ui->lbVNFT->setText(dev.VNFT);
+
+    QString nameType;
+    QString nameIcon;
+    dev.GetInfo(nameType, nameIcon);
+    ui->imageDev->setPixmap(QPixmap(nameIcon));
+    ui->imageDev->setToolTip(nameType);
 
     ui->lwInnerModule->clear();
-    // for(auto &it : prod.listModules)
-    // {
-    //     repo.LoadStatus(it);
-    //     QListWidgetItem *item = new QListWidgetItem;
-    //     item->setText(it.number + " (" + it.name + ")");
-    //     QVariant var;
-    //     var.setValue(it);
-    //     item->setData(Qt::UserRole, var);
-    //     ui->lwInnerModule->addItem(item);
-    // }
+    for(auto &it : dev.childItems)
+    {
+        ShowLineChild(it);
+        // QListWidgetItem *item = new QListWidgetItem;
+        // item->setText(it.number + " (" + it.name + ")");
+        // QVariant var;
+        // var.setValue(it);
+        // item->setData(Qt::UserRole, var);
+        // ui->lwInnerModule->addItem(item);
+    }
 }
 
 //----------------------------------------------------------------------------------------------
@@ -112,35 +118,43 @@ void ComplectProductWindow::addModulToScreen(Items &mod)
 {
     if(trackModul.AddRecord(mod.id, mod))
     {
+        ShowLineChild(mod);
         // добавление в список экрана изделия
-        QListWidgetItem *item = new QListWidgetItem;
-        item->setText(mod.number + " (" + mod.name + ")");
-        QVariant var;
-        var.setValue(mod);
-        item->setData(Qt::UserRole, var);
-        ui->lwInnerModule->addItem(item);
+        // QListWidgetItem *item = new QListWidgetItem;
+        // item->setText(mod.number + " (" + mod.name + ")");
+        // QVariant var;
+        // var.setValue(mod);
+        // item->setData(Qt::UserRole, var);
+        // ui->lwInnerModule->addItem(item);
 
-        // удаление из списка модулей
-        // for(int row = 0; row < ui->lwOuterModule->count(); ++row)
-        // {
-        //     auto item = ui->lwOuterModule->item(row);
-        //     QVariant var = item->data(Qt::UserRole);
-        //     Items mod2 = var.value<Items>();
-        //     if(mod2.id == mod.id)
-        //     {
-        //         delete item;
-        //         break;
-        //     }
-        // }
     }
+}
+
+//----------------------------------------------------------------------------------------------
+// Отображение строки вложенного устройства
+//----------------------------------------------------------------------------------------------
+void ComplectProductWindow::ShowLineChild(Items& child)
+{
+    QString nameType;
+    QString iconName;
+    QListWidgetItem *item = new QListWidgetItem;
+
+    child.GetInfo(nameType, iconName);
+    item->setText(child.number + " (" + child.type.typeName + " " + child.VNFT + ")");
+    item->setIcon(QIcon(iconName));
+    QVariant var;
+    var.setValue(child);
+    item->setData(Qt::UserRole, var);
+    ui->lwInnerModule->addItem(item);
+
 }
 
 
 //----------------------------------------------------------------------------------------------
 // Добавление модуля в изделие
 //----------------------------------------------------------------------------------------------
-void ComplectProductWindow::on_pbAddModul_clicked()
-{
+// void ComplectProductWindow::on_pbAddModul_clicked()
+// {
     // if(item.id == 0 || ui->lwOuterModule->currentRow() < 0)
     //     return;
 
@@ -159,7 +173,7 @@ void ComplectProductWindow::on_pbAddModul_clicked()
 
     // удаление из списка модулей
     // delete ui->lwOuterModule->item(ui->lwOuterModule->currentRow());
-}
+// }
 
 
 //----------------------------------------------------------------------------------------------
@@ -214,7 +228,7 @@ void ComplectProductWindow::on_pbOK_clicked()
         // status.idStatus = Status::INSTALL;
         // status.idDevice = mod.id;
         // mod.listStatus.push_back(status);
-        mod.idParent = item.id;
+        mod.idParent = dev.id;
         // записать в базу новый статус и id изделия для модуля
         if(repo.UpdateItem(mod))
             mod.AddStatus(mod, Status::INSTALL);

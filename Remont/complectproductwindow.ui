@@ -143,15 +143,12 @@ background-color: LightGray;
        <property name="text">
         <string/>
        </property>
-       <property name="pixmap">
-        <pixmap resource="resource.qrc">:/image/product.png</pixmap>
-       </property>
       </widget>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="">
+    <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Вложенные устройства</string>
      </property>
@@ -168,7 +165,7 @@ background-color: LightGray;
          <number>2</number>
         </property>
         <item>
-         <widget class="QToolButton" name="toolButton">
+         <widget class="QToolButton" name="pbDeleteModul">
           <property name="text">
            <string>Удалить</string>
           </property>
@@ -208,7 +205,14 @@ background-color: LightGray;
        </layout>
       </item>
       <item>
-       <widget class="QListWidget" name="lwInnerModule"/>
+       <widget class="QListWidget" name="lwInnerModule">
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

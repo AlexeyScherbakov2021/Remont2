@@ -3,19 +3,20 @@
 
 
 
-SelectDeviceWindow::SelectDeviceWindow(QWidget *parent)
-    : QDialog(parent), ui(new Ui::SelectDeviceWindow)
+SelectDeviceWindow::SelectDeviceWindow(ItemType::IndexType _type, QWidget *parent)
+    : QDialog(parent), ui(new Ui::SelectDeviceWindow), type(_type)
 {
     ui->setupUi(this);
 
-    model = new PlateModel(ItemType::Product, this);
-    ui->tableView->setModel(model);
+    model = new PlateModel(type, this);
+
+    AddSelectedType(type);
+    ui->cbType->setModel(&typeModel);
 
     ui->tableView->setModel(model);
     ui->tableView->setColumnWidth(0, 80);
     ui->tableView->setColumnWidth(1, 200);
     ui->tableView->setColumnWidth(2, 200);
-    // ui->tableView->setColumnWidth(3, 200);
     ui->tableView->setColumnWidth(4, 80);
     ui->tableView->setColumnWidth(5, 20);
     ui->tableView->setColumnWidth(6, 150);
@@ -28,9 +29,6 @@ SelectDeviceWindow::SelectDeviceWindow(ItemType::IndexType _type, QVector<int>& 
     ui->setupUi(this);
 
     model = new PlateModel(type, this);
-    // startLoad();
-    ui->tableView->setModel(model);
-
     ui->tableView->setModel(model);
     ui->tableView->setColumnWidth(0, 80);
     ui->tableView->setColumnWidth(1, 200);
@@ -49,6 +47,40 @@ SelectDeviceWindow::~SelectDeviceWindow()
 }
 
 //---------------------------------------------------------------------------------------
+// Добавление нового типа для поиска
+//---------------------------------------------------------------------------------------
+void SelectDeviceWindow::AddSelectedType(ItemType::IndexType _type)
+{
+    int row = typeModel.rowCount();
+    typeModel.insertRow(row);
+
+    QString name;
+    QString sIcon;
+
+    // model->GetInfoDevice(name, sIcon);
+
+    switch(_type)
+    {
+    case ItemType::Product:
+        name = "Изделия";
+        sIcon = ":/image/product.png";
+        break;
+    case ItemType::Modul:
+        name = "Модули";
+        sIcon = "://image/modul.png";
+        break;
+    case ItemType::Plate:
+        name = "Платы";
+        sIcon = "://image/network_adapter.png";
+        break;
+    }
+
+    QStandardItem *item = new QStandardItem(QIcon(sIcon), name);
+    item->setData(_type, Qt::UserRole);
+    typeModel.setItem(row, 0, item);
+}
+
+//---------------------------------------------------------------------------------------
 // Начало нового запроса
 //---------------------------------------------------------------------------------------
 void SelectDeviceWindow::startLoad()
@@ -61,32 +93,31 @@ void SelectDeviceWindow::startLoad()
 //--------------------------------------------------------------------------------------------------
 // Поиск устройства по списку статусов
 //--------------------------------------------------------------------------------------------------
-Items *SelectDeviceWindow::SelectDevice(bool isNow, ItemType::IndexType _type, QVector<int> &statusList, QString searchNum, bool _isBusy, bool _isParent)
+Items *SelectDeviceWindow::SelectDevice(bool isNow, QVector<int> &statusList, QString searchNum, bool _isBusy, bool _isParent)
 {
     vStatus = statusList;
     isBusy = _isBusy;
     isParent = _isParent;
-    type = _type;
+    // type = _type;
 
     ui->leSearch->setText(searchNum);
 
     QList<Items> listTemp;
-
-    repo.LoadPart2(0, 4, type, searchNum, listTemp, statusList, isBusy, isParent);
+    repo.LoadPart(0, 4, type, searchNum, listTemp, statusList, isBusy, isParent);
 
     // qDebug() << "Row find" << listTemp.size();
 
-
     if(isNow && !searchNum.isEmpty())
     {
-        if(listTemp.size() == 1 )
+        if(listTemp.size() == 1 && searchNum == listTemp.first().number)
         {
             device2 = listTemp.first();
+            accept();
             return &device2;
         }
     }
 
-    startLoad();
+    // startLoad();
     exec();
 
     return &device2;
@@ -476,5 +507,16 @@ void SelectDeviceWindow::on_pbSelect_clicked()
 void SelectDeviceWindow::on_tableView_doubleClicked(const QModelIndex &index)
 {
     on_pbSelect_clicked();
+}
+
+
+void SelectDeviceWindow::on_cbType_currentIndexChanged(int row)
+{
+    QModelIndex index = typeModel.index(row, 0);
+    ItemType::IndexType type = (ItemType::IndexType)typeModel.data(index, Qt::UserRole).toInt();
+    delete model;
+    model = new PlateModel(type, this);
+    startLoad();
+    ui->tableView->setModel(model);
 }
 

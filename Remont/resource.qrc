@@ -31,5 +31,6 @@
         <file>image/setter.png</file>
         <file>image/print.png</file>
         <file>image/text_list_numbers.png</file>
+        <file>image/network_adapter.png</file>
     </qresource>
 </RCC>

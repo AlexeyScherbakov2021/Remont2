@@ -253,7 +253,7 @@ bool RepoMSSQL::UpdateItem(Items &item)
     return res;
 }
 
-bool RepoMSSQL::DeleteItem(int id)
+bool RepoMSSQL::DeleteItem(int id) const
 {
     bool res;
     QSqlQuery query;
@@ -269,7 +269,7 @@ bool RepoMSSQL::DeleteItem(int id)
 }
 
 
-Items RepoMSSQL::GetItem(int id)
+Items RepoMSSQL::GetItem(int id) const
 {
     Items item;
     QSqlQuery query;
@@ -302,7 +302,7 @@ Items RepoMSSQL::GetItem(int id)
     return item;
 }
 
-Items RepoMSSQL::GetItem( QString number, int status, bool isFree)
+Items RepoMSSQL::GetItem( QString number, int status, bool isFree) const
 {
     Items item;
     QSqlQuery query;
@@ -374,7 +374,7 @@ Items RepoMSSQL::GetItem( QString number, int status, bool isFree)
     return item;
 }
 
-void RepoMSSQL::LoadItemsType(QList<ItemType> &listType, ItemType::IndexType indexType)
+void RepoMSSQL::LoadItemsType(QList<ItemType> &listType, ItemType::IndexType indexType) const
 {
     listType.clear();
     QSqlQuery query;
@@ -2004,10 +2004,61 @@ void RepoMSSQL::FindItems(ItemType::IndexType iType, QList<Items> &listItems, in
 
 }
 
+bool RepoMSSQL::LoadChildItems(int idParent, QList<Items> &listItems) const
+{
+    bool res;
+    listItems.clear();
+    QSqlQuery query;
+    query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
+                    "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus,it.indexType,it.VNFT "
+                    "from Items i join ItemType it on it.id=i.idType "
+                    "join (select idItem, max(DateStatus) dateStatus, max(idStatus) as idStatus "
+                    "from ItemStatus group by idItem "
+                    ") ms on ms.idItem=i.id join StatusDevice sd on sd.id=ms.idStatus "
+                    "where i.idParent=:idParent order by i.nameItem");
 
-size_t RepoMSSQL::LoadPart2(size_t start, size_t count, ItemType::IndexType iType,
+    query.bindValue(":idParent", idParent);
+
+    res = query.exec();
+    while(query.next())
+    {
+        Items item;
+
+        item.id = query.value(0).toInt();
+        item.idParent = query.value(1).toInt();
+        item.idShip = query.value(2).toInt();
+        item.idSet = query.value(3).toInt();
+        item.idType = query.value(4).toInt();
+        item.number = query.value(5).toString();
+        item.number2 = query.value(6).toString();
+        item.numberDoc = query.value(7).toString();
+        item.name = query.value(8).toString();
+        item.dateCreate = query.value(9).toDateTime();
+        item.dateOn = query.value(10).toDateTime();
+        item.dateOff = query.value(11).toDateTime();
+        item.garantMonth = query.value(12).toInt();
+        item.dateGarant = query.value(13).toDateTime();
+        item.isZip = query.value(14).toBool();
+        item.VNFT = query.value(15).toString();
+        item.currStatus = query.value(16).toString();
+
+        item.type.indexType = (ItemType::IndexType)query.value(17).toInt();
+        item.type.typeName = query.value(15).toString();
+        item.type.VNFT = query.value(18).toString();
+
+        item.VNFT = item.type.VNFT;
+
+        LoadChildItems(item.id, item.childItems);
+        listItems.push_back(item);
+    }
+
+    return res;
+}
+
+
+size_t RepoMSSQL::LoadPart(size_t start, size_t count, ItemType::IndexType iType,
                            const QString &number, QList<Items> &listItems,
-                           QVector<int>& listStatus, bool isBusy, bool isParent)
+                           QVector<int>& listStatus, bool isBusy, bool isParent) const
 {
     size_t res = 0;
     QStringList slStatus;
@@ -2019,7 +2070,7 @@ size_t RepoMSSQL::LoadPart2(size_t start, size_t count, ItemType::IndexType iTyp
     QString sqlStatus = "max(idStatus)=:idStatus%1 ";
 
     QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-                       "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus "
+                       "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus,it.indexType,it.VNFT "
                        "from Items i join ItemType it on it.id=i.idType and it.indexType=:indexType "
                        "join (select idItem, max(DateStatus) dateStatus, max(idStatus) as idStatus "
                        "from ItemStatus group by idItem ",
@@ -2083,9 +2134,13 @@ size_t RepoMSSQL::LoadPart2(size_t start, size_t count, ItemType::IndexType iTyp
         item.garantMonth = query.value(12).toInt();
         item.dateGarant = query.value(13).toDateTime();
         item.isZip = query.value(14).toBool();
-        item.VNFT = query.value(15).toString();
         item.currStatus = query.value(16).toString();
-        // item.LoadStatus(item);
+
+        item.type.indexType = (ItemType::IndexType)query.value(17).toInt();
+        item.type.typeName = query.value(15).toString();
+        item.type.VNFT = query.value(18).toString();
+        item.VNFT = item.type.VNFT;
+
         listItems.push_back(item);
         ++res;
     }
@@ -2176,7 +2231,7 @@ size_t RepoMSSQL::LoadPart2(size_t start, size_t count, ItemType::IndexType iTyp
 // }
 
 
-bool RepoMSSQL::AddItem(Items &item)
+bool RepoMSSQL::AddItem(Items &item) const
 {
     bool res;
     QSqlQuery query;
@@ -2293,7 +2348,7 @@ void RepoMSSQL::FindItems(ItemType::IndexType iType, const QString &number, QLis
 
 }
 
-void RepoMSSQL::LoadStatus(Items& item)
+void RepoMSSQL::LoadStatus(Items& item) const
 {
     item.listStatus.clear();
 
@@ -2322,7 +2377,7 @@ void RepoMSSQL::LoadStatus(Items& item)
 
 }
 
-bool RepoMSSQL::AddStatus(Items &item, Status &status)
+bool RepoMSSQL::AddStatus(Items &item, Status &status) const
 {
     bool res;
     QSqlQuery query;
@@ -2347,7 +2402,7 @@ bool RepoMSSQL::AddStatus(Items &item, Status &status)
     return res;
 }
 
-bool RepoMSSQL::DelLastStatus(Items &item)
+bool RepoMSSQL::DelLastStatus(Items &item) const
 {
     bool res;
     QSqlQuery query;
@@ -2364,7 +2419,7 @@ bool RepoMSSQL::DelLastStatus(Items &item)
     return res;
 }
 
-void RepoMSSQL::LoadTypeItem(ItemType::IndexType indexType, QVector<ItemType> &listType)
+void RepoMSSQL::LoadTypeItem(ItemType::IndexType indexType, QVector<ItemType> &listType) const
 {
     listType.clear();
     QSqlQuery query;

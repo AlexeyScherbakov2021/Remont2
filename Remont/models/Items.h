@@ -6,17 +6,15 @@
 #include <QString>
 #include <infrastructure/IStatus.h>
 
-// class StatusList;
-
 
 class Items : public StatusList
 {
 public:
-    int id;
-    int idParent;
-    int idShip;
-    int idSet;
-    int idType;
+    int id = 0;
+    int idParent = 0;
+    int idShip = 0;
+    int idSet = 0;
+    int idType = 0;
 
     QString number;
     QString number2;
@@ -25,7 +23,7 @@ public:
     QDateTime dateCreate;
     QDateTime dateOn;
     QDateTime dateOff;
-    int garantMonth;
+    int garantMonth = 0;
     QDateTime dateGarant;
     bool isZip = false;
 
@@ -43,6 +41,7 @@ public:
         return name + " №" + number + s;
     }
 
+    void GetInfo(QString& nameType, QString& nameIcon);
 
     // bool operator==(const Items &other) const { return this->id == other.id; }
 
@@ -50,6 +49,57 @@ public:
     //     return qHash(key.id);
     // StatusList listStatus;
 };
+
+
+inline void Items::GetInfo(QString &nameType, QString &nameIcon)
+{
+    switch(type.indexType)
+    {
+    case ItemType::Product:
+        nameType = "Изделие";
+        nameIcon = ":/image/product.png";
+        break;
+    case ItemType::Modul:
+        nameType = "Модуль";
+        nameIcon = ":/image/modul.png";
+        break;
+    case ItemType::Plate:
+        nameType = "Плата";
+        nameIcon = ":/image/network_adapter.png";
+        break;
+    }
+}
+
+
+// class ItemsProduct : public Items
+// {
+// public:
+//     void GetInfo(QString &nameType, QString &nameIcon) override
+//     {
+//         nameType = "Изделие";
+//         nameIcon = ":/image/product.png";
+//     }
+// };
+
+// class ItemsModul : public Items
+// {
+// public:
+//     void GetInfo(QString &nameType, QString &nameIcon) override
+//     {
+//         nameType = "Модуль";
+//         nameIcon = "://image/modul.png";
+//     }
+// };
+
+// class ItemsPlate : public Items
+// {
+// public:
+//     void GetInfo(QString &nameType, QString &nameIcon) override
+//     {
+//         nameType = "Плата";
+//         nameIcon = "://image/network_adapter.png";
+//     }
+// };
 
 
 #endif // ITEMS_H

@@ -38,6 +38,7 @@ public:
     }
 
     void setData(int row, int col, const QVariant value, int role) const override;
+
 };
 
 #endif // LISTPLATE_H

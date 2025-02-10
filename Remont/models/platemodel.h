@@ -55,7 +55,7 @@ public:
 
 private:
     int startLoad = 0;
-    int cntLoad = 80;
+    int cntLoad = 60;
     bool isFetch = false;
     QStringList headers;
 
@@ -66,7 +66,6 @@ private:
     QVector<int> vStatus;
     bool isBusy = false;
     bool isParent = false;
-
     bool isBaseOff = false;
     // pLoadItems lp = nullptr;
 

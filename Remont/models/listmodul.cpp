@@ -91,3 +91,5 @@ void ListModul::GetHeader(QStringList &headers)
 void ListModul::setData(int row, int col, const QVariant value, int role) const
 {
 }
+
+

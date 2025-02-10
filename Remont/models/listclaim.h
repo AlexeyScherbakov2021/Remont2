@@ -11,14 +11,11 @@ public:
     ListClaim();
 
     QList<Claim> listItems;
-    // ListDevice interface
-public:
     Claim GetItem(int id) ;
     void LoadChild(Claim &item) ;
     void Load() ;
     void getData(int row, int col) const ;
-
-    bool DeleteItem(int id) ;
+    bool DeleteItem(int id);
 
 private:
     RepoMSSQL repo;

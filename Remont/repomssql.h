@@ -38,23 +38,26 @@ public:
     // size_t LoadPart(size_t start, size_t count, ItemType::IndexType iType, const QString &number,
     //             QList<Items> &listItems, int status = 0, bool isBusy = false, bool isParent = false);
 
-    size_t LoadPart2(size_t start, size_t count, ItemType::IndexType iType, const QString &number,
-                    QList<Items> &listItems, QVector<int>& listStatus, bool isBusy = false, bool isParent = false);
+    bool LoadChildItems(int idParent, QList<Items> &listItems) const;
 
-    bool AddItem(Items &item);
+
+    size_t LoadPart(size_t start, size_t count, ItemType::IndexType iType, const QString &number,
+                    QList<Items> &listItems, QVector<int>& listStatus, bool isBusy = false, bool isParent = false) const;
+
+    bool AddItem(Items &item) const;
     void FindItems(ItemType::IndexType iType, const QString &number, QList<Items> &listItems, int status = 0, bool isFree = false);
     bool UpdateItem(Items &item);
-    bool DeleteItem(int id);
-    Items GetItem(int id);
-    Items GetItem(QString number, int status = 0, bool isFree = false);
+    bool DeleteItem(int id) const;
+    Items GetItem(int id) const;
+    Items GetItem(QString number, int status = 0, bool isFree = false) const;
 
-    void LoadItemsType(QList<ItemType> &listType, ItemType::IndexType indexType);
+    void LoadItemsType(QList<ItemType> &listType, ItemType::IndexType indexType) const;
 
-    void LoadStatus(Items& item);
-    bool AddStatus(Items &item, Status &status);
-    bool DelLastStatus(Items &item);
+    void LoadStatus(Items& item) const;
+    bool AddStatus(Items &item, Status &status) const;
+    bool DelLastStatus(Items &item) const;
 
-    void LoadTypeItem(ItemType::IndexType indexType, QVector<ItemType> &listType);       //=============
+    void LoadTypeItem(ItemType::IndexType indexType, QVector<ItemType> &listType) const;       //=============
 
 
 public:

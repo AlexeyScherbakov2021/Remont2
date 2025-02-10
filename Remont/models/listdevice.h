@@ -27,7 +27,6 @@ public:
         return repo.AddItem(item);
     }
 
-
     virtual bool DeleteItem(int id) = 0;
 
     virtual bool UpdateItem(Items &item)
@@ -70,12 +69,12 @@ public:
 
     // size_t LoadPart(int start, int count, const QString &number, int status = 0, bool isBusy = false, bool isParent = false)
     // {
-    //     return repo.LoadPart2(start, count, typeDev, number, items, status, isBusy, isParent);
+    //     return repo.LoadPart(start, count, typeDev, number, items, status, isBusy, isParent);
     // }
 
     size_t LoadPart2(int start, int count, const QString &number, QVector<int> vStatus, bool isBusy = false, bool isParent = false)
     {
-        return repo.LoadPart2(start, count, typeDev, number, items, vStatus, isBusy, isParent);
+        return repo.LoadPart(start, count, typeDev, number, items, vStatus, isBusy, isParent);
     }
 
 protected:

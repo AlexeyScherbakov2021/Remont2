@@ -84,3 +84,5 @@ void ListProduct::GetHeader(QStringList &headers)
 void ListProduct::setData(int row, int col, const QVariant value, int role) const
 {
 }
+
+

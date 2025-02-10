@@ -124,3 +124,4 @@ void ListPlate::setData(int row, int col, const QVariant value, int role) const
         }
     }
 }
+

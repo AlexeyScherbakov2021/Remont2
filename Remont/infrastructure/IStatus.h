@@ -10,7 +10,6 @@ class Items;
 class Status
 {
 public:
-public:
     enum Stat {
         NONE,               // нет статуса
         CREATE,             // создан
@@ -41,10 +40,8 @@ public:
 class StatusList
 {
 private:
-    // Items *item;
 
 public:
-    // StatusList(Items* _item) : item(_item) {}
 
     QVector<Status> listStatus;
     void LoadStatus(Items& item);
