@@ -29,6 +29,8 @@ private slots:
     void on_pbOK_clicked();
     void slotReadScan(QString s);
 
+    void on_tbClear_clicked();
+
 private:
     Ui::ComplectProductWindow *ui;
     RepoMSSQL repo;

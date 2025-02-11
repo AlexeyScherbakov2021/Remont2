@@ -71,12 +71,29 @@ background-color: LightGray;
        </item>
        <item>
         <widget class="QToolButton" name="tbProdSearch">
+         <property name="toolTip">
+          <string>Поиск по номеру</string>
+         </property>
          <property name="text">
           <string>...</string>
          </property>
          <property name="icon">
           <iconset resource="resource.qrc">
            <normaloff>:/image/search.png</normaloff>:/image/search.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="tbClear">
+         <property name="toolTip">
+          <string>Очистить все</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resource.qrc">
+           <normaloff>:/image/cancel2.png</normaloff>:/image/cancel2.png</iconset>
          </property>
         </widget>
        </item>
@@ -166,6 +183,9 @@ background-color: LightGray;
         </property>
         <item>
          <widget class="QToolButton" name="pbDeleteModul">
+          <property name="toolTip">
+           <string>Удалить выбранную строку</string>
+          </property>
           <property name="text">
            <string>Удалить</string>
           </property>
@@ -185,6 +205,9 @@ background-color: LightGray;
           </property>
           <item>
            <widget class="QToolButton" name="tbSearchModul">
+            <property name="toolTip">
+             <string>Добавить по указанному номеру</string>
+            </property>
             <property name="text">
              <string>Добавить</string>
             </property>

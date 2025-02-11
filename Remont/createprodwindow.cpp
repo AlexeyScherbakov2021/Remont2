@@ -2,6 +2,7 @@
 #include "platelistwindow.h"
 #include "scan.h"
 // #include "selectplatewindow.h"
+#include "complectproductwindow.h"
 #include "repofp.h"
 #include "ui_createprodwindow.h"
 
@@ -25,7 +26,11 @@ CreateProductWindow::CreateProductWindow(QWidget *parent)
 
     repo.LoadTypeItem(ItemType::Product, listTypeProduct);
     for(auto &it : listTypeProduct)
-        ui->cbProduct->addItem(it.VNFT + " " + it.typeName, it.id);
+    {
+        QVariant var;
+        var.setValue(&it);
+        ui->cbProduct->addItem(it.VNFT + " " + it.typeName, var);
+    }
 
     ui->cbProduct->view()->setMaximumWidth(900);
     ui->cbProduct->setCurrentIndex(-1);
@@ -49,10 +54,20 @@ void CreateProductWindow::UpdateUseCount()
     else
         ui->lbCountP->clear();
 
-    if(countUse > countFromDoc)
+    if(countUse > countFromDoc && countFromDoc > 0)
         ui->lbCountP->setStyleSheet("border: 2px solid #FF0000;");
     else
         ui->lbCountP->setStyleSheet("border: 1px solid #000000;");
+
+}
+
+void CreateProductWindow::addLineContent(Items &prod)
+{
+    QTreeWidgetItem *item = new QTreeWidgetItem();
+    item->setText(0, prod.number);
+    item->setData(0, Qt::UserRole, prod.id);
+    ui->twProduct->addTopLevelItem(item);
+    item->setExpanded(true);
 
 }
 
@@ -62,16 +77,20 @@ void CreateProductWindow::UpdateUseCount()
 //---------------------------------------------------------------------------------
 void CreateProductWindow::on_tbDeleteProduct_clicked()
 {
-    QListWidgetItem *item = ui->lwProduct->currentItem();
+    QTreeWidgetItem *item = ui->twProduct->currentItem();
 
     if(item == nullptr)
         return;
 
-    int id = item->data(Qt::UserRole).toInt();
+    if(item->parent() != nullptr)
+        item = item->parent();
+
+
+    int id = item->data(0, Qt::UserRole).toInt();
 
     if(repo.DeleteItem(id))
     {
-        delete ui->lwProduct->currentItem();
+        delete ui->twProduct->currentItem();
         --countUse;
         UpdateUseCount();
     }
@@ -87,28 +106,34 @@ void CreateProductWindow::on_pbRegProduct_clicked()
         return;
 
     Items prod;
-    // Добавление изделия в  базу данных со статусом Создан
-    prod.number = ui->leNumProduct->text();
-    prod.name = ui->leNameProd->text();
-    prod.idType = ui->cbProduct->currentData(Qt::UserRole).toInt();
-    prod.dateCreate = QDateTime::currentDateTime();
-    prod.garantMonth = listTypeProduct[ui->cbProduct->currentIndex()].garantMonth;
-    prod.numberDoc = ui->leNumberDocP->text();
 
-    if(prod.idType <= 0)
+    QVariant var = ui->cbProduct->currentData();
+    if(!var.isValid())
     {
         QMessageBox::critical(this, "Ошибка", "Нужно выбрать обозначение изделия (ВНФТ)", QMessageBox::Ok);
         return;
     }
 
+    // Добавление изделия в  базу данных со статусом Создан
+    prod.type = *var.value<ItemType*>();
+    prod.number = ui->leNumProduct->text();
+    prod.name = ui->leNameProd->text();
+    prod.idType = prod.type.id;
+    prod.dateCreate = QDateTime::currentDateTime();
+    prod.garantMonth = listTypeProduct[ui->cbProduct->currentIndex()].garantMonth;
+    prod.numberDoc = ui->leNumberDocP->text();
+
     if(repo.AddItem(prod))
     {
         prod.AddStatus(prod, Status::CREATE);
 
-        QString s = ui->cbProduct->currentText();
-        QListWidgetItem *item = new QListWidgetItem(ui->leNumProduct->text() + " (" + s + ")");
-        item->setData(Qt::UserRole, prod.id);
-        ui->lwProduct->addItem(item);
+        addLineContent(prod);
+
+        // QString s = ui->cbProduct->currentText();
+        // QListWidgetItem *item = new QListWidgetItem(ui->leNumProduct->text() + " (" + s + ")");
+        // item->setData(Qt::UserRole, prod.id);
+        // ui->lwProduct->addItem(item);
+
         ui->leNumProduct->clear();
         ui->leNumProduct->setFocus();
         ++countUse;
@@ -116,7 +141,10 @@ void CreateProductWindow::on_pbRegProduct_clicked()
 
         if(ui->chComplectation->isChecked())
         {
-            qDebug() << "This make complectation window.";
+            // qDebug() << "This make complectation window.";
+            ComplectProductWindow *win = new ComplectProductWindow(this, &prod);
+            win->exec();
+
         }
 
     }
@@ -134,9 +162,13 @@ void CreateProductWindow::on_cbProduct_currentIndexChanged(int index)
     if(index < 0)
         return;
 
+    QVariant var = ui->cbProduct->currentData();
+    ItemType *tp = var.value<ItemType*>();
+    ui->lbGarantProd->setText(QString::number(tp->garantMonth));
+
     // int key = ui->cbProduct->currentData().toInt();
-    int row = ui->cbProduct->currentIndex();
-    ui->lbGarantProd->setText(QString::number(listTypeProduct[row].garantMonth));
+    // int row = ui->cbProduct->currentIndex();
+    // ui->lbGarantProd->setText(QString::number(listTypeProduct[row].garantMonth));
 }
 
 

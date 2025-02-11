@@ -2,53 +2,23 @@
 #define TRACKRECORD_H
 
 #include <QMap>
-// #include <QSet>
-
 
 template <typename T>
 class TrackRecord
 {
 public:
 
-    // void AddRecord(T &item);
-    // void DelRecord(T &item);
-    // QSet<T>& getListAdd() { return listAdd; }
-    // QSet<T>& getListDel() { return listDel; }
-
     bool AddRecord(int key, const T &item);
     void DelRecord(int key, const T &item);
 
     void getListAdd(QList<T> &list);
     void getListDel(QList<T> &list);
+    void clear();
 
-// private:
-
-    // QSet<T> listAdd;
-    // QSet<T> listDel;
     QMap<int, T> listAdd;
     QMap<int, T> listDel;
 };
 
-
-
-
-// template<typename T>
-// inline void TrackRecord<T>::AddRecord(T &item)
-// {
-//     if(listDel.contains(item))
-//         listDel.remove(item);
-//     else
-//         listAdd.insert(item);
-// }
-
-// template<typename T>
-// inline void TrackRecord<T>::DelRecord(T &item)
-// {
-//     if(listAdd.contains(item))
-//         listAdd.remove(item);
-//     else
-//         listDel.insert(item);
-// }
 
 template<typename T>
 inline bool TrackRecord<T>::AddRecord(int key, const T &item)
@@ -95,6 +65,13 @@ inline void TrackRecord<T>::getListDel(QList<T> &list)
     for(auto &it : listDel)
         list.push_back(it);
 
+}
+
+template<typename T>
+inline void TrackRecord<T>::clear()
+{
+    listAdd.clear();
+    listDel.clear();
 }
 
 

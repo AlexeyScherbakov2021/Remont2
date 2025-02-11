@@ -49,7 +49,8 @@ public:
     bool UpdateItem(Items &item);
     bool DeleteItem(int id) const;
     Items GetItem(int id) const;
-    Items GetItem(QString number, int status = 0, bool isFree = false) const;
+    Items GetItem(QString number, int status = 0, bool isBusy = false) const;
+    Items GetItem2(QString number, QVector<int>& listStatus, bool isBusy = false, bool isParent = false) const;
 
     void LoadItemsType(QList<ItemType> &listType, ItemType::IndexType indexType) const;
 

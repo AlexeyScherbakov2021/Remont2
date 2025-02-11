@@ -1,16 +1,11 @@
 #include "createmodwindow.h"
 #include "platelistwindow.h"
 #include "scan.h"
-// #include "selectplatewindow.h"
+#include "complectproductwindow.h"
 #include "repofp.h"
 #include "ui_createmodwindow.h"
-
-// #include <models/listmodul.h>
-// #include <models/listplate.h>
 #include <models/listmodul.h>
 #include <models/listplate.h>
-// #include <models/modul.h>
-// #include <models/product.h>
 
 #include <QMessageBox>
 
@@ -25,12 +20,15 @@ CreateModulWindow::CreateModulWindow(QWidget *parent)
 
     repo.LoadTypeItem(ItemType::Modul, listTypeModule);
 
-    for(const auto &it : listTypeModule)
-        ui->cbModul->addItem(it.VNFT + " " + it.typeName, it.id);
+    for(auto &it : listTypeModule)
+    {
+        QVariant var;
+        var.setValue(&it);
+        ui->cbModul->addItem(it.VNFT + " " + it.typeName, var);
+    }
 
     ui->cbModul->view()->setMaximumWidth(900);
     ui->cbModul->setCurrentIndex(-1);
-
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
 }
@@ -49,10 +47,14 @@ CreateModulWindow::~CreateModulWindow()
 void CreateModulWindow::on_tbDeleteModul_clicked()
 {
     QTreeWidgetItem *item = ui->twModul->currentItem();
+
+    if(item == nullptr)
+        return;
+
     if(item->parent() != nullptr)
         item = item->parent();
 
-    // Modul mod;
+
     int id = item->data(0, Qt::UserRole).toInt();
 
     if(repo.DeleteItem(id))
@@ -74,7 +76,9 @@ void CreateModulWindow::UpdateUseCount()
     else
         ui->lbCount->clear();
 
-    if(countUse > countFromDoc)
+    qDebug() << "countUse:" << countUse << "countFromDoc:" << countFromDoc;
+
+    if(countUse > countFromDoc && countFromDoc > 0)
         ui->lbCount->setStyleSheet("border: 2px solid #FF0000;");
     else
         ui->lbCount->setStyleSheet("border: 1px solid #000000;");
@@ -103,21 +107,23 @@ void CreateModulWindow::on_pbRegModul_clicked()
     if(ui->leNumModul->text().isEmpty())
         return;
 
-    ListModul lModul;
+    // ListModul lModul;
     Items mod;
     // добавить устройство в базу со статусом Создан
-    mod.number = ui->leNumModul->text();
-    mod.name = ui->leModulName->text();
-    mod.idType = ui->cbModul->currentData(Qt::UserRole).toInt();
-    mod.dateCreate = QDateTime::currentDateTime();
-    mod.garantMonth = listTypeModule[ui->cbModul->currentIndex()].garantMonth;
-    mod.numberDoc = ui->leNumberDoc->text();
-
-    if(mod.idType <= 0)
+    QVariant var = ui->cbModul->currentData();
+    if(!var.isValid())
     {
         QMessageBox::critical(this, "Ошибка", "Нужно выбрать обозначение модуля (ВНФТ)", QMessageBox::Ok);
         return;
     }
+
+    mod.type = *var.value<ItemType*>();
+    mod.number = ui->leNumModul->text();
+    mod.name = ui->leModulName->text();
+    mod.idType = mod.type.id;
+    mod.dateCreate = QDateTime::currentDateTime();
+    mod.garantMonth = listTypeModule[ui->cbModul->currentIndex()].garantMonth;
+    mod.numberDoc = ui->leNumberDoc->text();
 
     if(repo.AddItem(mod))
     {
@@ -133,7 +139,9 @@ void CreateModulWindow::on_pbRegModul_clicked()
 
         if(ui->chComplectation->isChecked())
         {
-            qDebug() << "This make complectation window.";
+            // qDebug() << "This make complectation window.";
+            ComplectProductWindow *win = new ComplectProductWindow(this, &mod);
+            win->exec();
         }
 
     }
@@ -150,10 +158,12 @@ void CreateModulWindow::on_cbModul_currentIndexChanged(int index)
     if(index < 0)
         return;
 
-    // int key = ui->cbModul->currentData().toInt();
+    QVariant var = ui->cbModul->currentData();
+    ItemType *tp = var.value<ItemType*>();
+    ui->lbGarantMod->setText(QString::number(tp->garantMonth));
 
-    int row = ui->cbModul->currentIndex();
-    ui->lbGarantMod->setText(QString::number(listTypeModule[row].garantMonth));
+    // int row = ui->cbModul->currentIndex();
+    // ui->lbGarantMod->setText(QString::number(listTypeModule[row].garantMonth));
 }
 
 //---------------------------------------------------------------------------------

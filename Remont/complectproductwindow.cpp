@@ -19,10 +19,11 @@ ComplectProductWindow::ComplectProductWindow(QWidget *parent, Items *_item)
         ui->leNumProdSearch->setVisible(false);
         ui->tbProdSearch->setVisible(false);
         ui->labelSearchProd->setVisible(false);
-        // LoadProductToScreen(prod);
+        ui->tbClear->setVisible(false);
+        LoadProductToScreen(dev);
+
     }
 
-    // connect(ui->lwOuterModule, SIGNAL(doubleClicked(QModelIndex)), SLOT(on_pbAddModul_clicked()));
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
 }
@@ -88,6 +89,8 @@ void ComplectProductWindow::on_tbProdSearch_clicked()
 //----------------------------------------------------------------------------------------------
 void ComplectProductWindow::LoadProductToScreen(Items &dev)
 {
+    trackModul.clear();
+
     ui->lbNameProd->setText(dev.name);
     ui->lbNumProd->setText(dev.number);
     ui->lbVNFT->setText(dev.VNFT);
@@ -102,12 +105,6 @@ void ComplectProductWindow::LoadProductToScreen(Items &dev)
     for(auto &it : dev.childItems)
     {
         ShowLineChild(it);
-        // QListWidgetItem *item = new QListWidgetItem;
-        // item->setText(it.number + " (" + it.name + ")");
-        // QVariant var;
-        // var.setValue(it);
-        // item->setData(Qt::UserRole, var);
-        // ui->lwInnerModule->addItem(item);
     }
 }
 
@@ -119,14 +116,6 @@ void ComplectProductWindow::addModulToScreen(Items &mod)
     if(trackModul.AddRecord(mod.id, mod))
     {
         ShowLineChild(mod);
-        // добавление в список экрана изделия
-        // QListWidgetItem *item = new QListWidgetItem;
-        // item->setText(mod.number + " (" + mod.name + ")");
-        // QVariant var;
-        // var.setValue(mod);
-        // item->setData(Qt::UserRole, var);
-        // ui->lwInnerModule->addItem(item);
-
     }
 }
 
@@ -149,33 +138,6 @@ void ComplectProductWindow::ShowLineChild(Items& child)
 
 }
 
-
-//----------------------------------------------------------------------------------------------
-// Добавление модуля в изделие
-//----------------------------------------------------------------------------------------------
-// void ComplectProductWindow::on_pbAddModul_clicked()
-// {
-    // if(item.id == 0 || ui->lwOuterModule->currentRow() < 0)
-    //     return;
-
-    // QVariant var = ui->lwOuterModule->item(ui->lwOuterModule->currentRow())->data(Qt::UserRole);
-    // Items mod = var.value<Items>();
-
-    // addModulToScreen(mod);
-
-    // trackModul.AddRecord(mod.id, mod);
-
-    // QListWidgetItem *item = new QListWidgetItem;
-    // item->setText(mod.number + " (" + mod.name + ")");
-    // var.setValue(mod);
-    // item->setData(Qt::UserRole, var);
-    // ui->lwInnerModule->addItem(item);
-
-    // удаление из списка модулей
-    // delete ui->lwOuterModule->item(ui->lwOuterModule->currentRow());
-// }
-
-
 //----------------------------------------------------------------------------------------------
 // Удаление модуля из изделие
 //----------------------------------------------------------------------------------------------
@@ -188,16 +150,11 @@ void ComplectProductWindow::on_pbDeleteModul_clicked()
     Items mod = var.value<Items>();
 
     trackModul.DelRecord(mod.id, mod);
-    // if(addModul.contains(mod))
-    //     addModul.remove(mod);
-    // else
-    //     delModul.insert(mod);
 
     QListWidgetItem *item = new QListWidgetItem;
     item->setText(mod.number + " (" + mod.name + ")");
     var.setValue(mod);
     item->setData(Qt::UserRole, var);
-    // ui->lwOuterModule->addItem(item);
 
     delete ui->lwInnerModule->item(ui->lwInnerModule->currentRow());
 
@@ -209,13 +166,6 @@ void ComplectProductWindow::on_pbDeleteModul_clicked()
 //----------------------------------------------------------------------------------------------
 void ComplectProductWindow::on_pbOK_clicked()
 {
-    // QSet<Modul> res = addModul;
-    // res.intersect(delModul);
-    // addModul.subtract(res);
-    // delModul.subtract(res);
-
-    // trackModul.setResult();
-
     QList<Items> addModul;
     trackModul.getListAdd(addModul);
     // Добавление модулей в изделие и изменение статуса на  Установлен в оборудование
@@ -223,11 +173,6 @@ void ComplectProductWindow::on_pbOK_clicked()
     for(auto &it : addModul)
     {
         Items mod = it;
-        // Status status;
-        // status.dateStatus = QDateTime::currentDateTime();
-        // status.idStatus = Status::INSTALL;
-        // status.idDevice = mod.id;
-        // mod.listStatus.push_back(status);
         mod.idParent = dev.id;
         // записать в базу новый статус и id изделия для модуля
         if(repo.UpdateItem(mod))
@@ -252,28 +197,44 @@ void ComplectProductWindow::on_pbOK_clicked()
 }
 
 
-
+//----------------------------------------------------------------------------------------------
+// Событие чтения сканера
+//----------------------------------------------------------------------------------------------
 void ComplectProductWindow::slotReadScan(QString s)
 {
-    // if(isActiveWindow())
-    // {
-    //     ui->leNumProdSearch->setText(s);
-    //     Items prod2 = repo.GetProduct(s, Status::CREATE);
-    //     if(prod2.id > 0)
-    //     {
-    //         prod = prod2;
-    //         LoadProductToScreen(prod);
-    //         return;
-    //     }
+    if(isActiveWindow())
+    {
+        QVector<int> stat = {Status::CREATE};
+        Items item = repo.GetItem2(s, stat);
 
-    //     if(prod.id > 0)
-    //     {
-    //         Items mod = repo.GetModul(s, Status::CREATE);
-    //         if(mod.id > 0)
-    //             addModulToScreen(mod);
-    //     }
-    // }
+        if(item.id > 0)
+        {
+            // добавление в изделия
+            if(dev.id == 0 && item.type.indexType != ItemType::Plate
+                    || dev.type.indexType == item.type.indexType)
+            {
+                ui->leNumProdSearch->setText(s);
+                dev = item;
+                repo.LoadChildItems(dev.id, dev.childItems);
+                LoadProductToScreen(dev);
+            }
+            // добавление во вложения
+            else if(dev.type.indexType < item.type.indexType)
+            {
+                ui->leNumModSearch->setText(s);
+                addModulToScreen(item);
+            }
+        }
+    }
 }
 
 
+//----------------------------------------------------------------------------------------------
+// Кнопка Очистить
+//----------------------------------------------------------------------------------------------
+void ComplectProductWindow::on_tbClear_clicked()
+{
+    Items item;
+    LoadProductToScreen(item);
+}
 

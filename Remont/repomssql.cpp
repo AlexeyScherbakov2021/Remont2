@@ -370,6 +370,87 @@ Items RepoMSSQL::GetItem( QString number, int status, bool isFree) const
         item.isZip = query.value(14).toBool();
         item.LoadStatus(item);
     }
+    return item;
+}
+
+
+Items RepoMSSQL::GetItem2( QString number, QVector<int>& listStatus, bool isBusy, bool isParent) const
+{
+    Items item;
+
+    size_t res = 0;
+    QStringList slStatus;
+    QSqlQuery query;
+
+    QString sqlNumber = " number like :number";
+    QString sqlBusy = " idShip is null and idSet is null";
+    QString sqlParent = " idParent is null";
+    QString sqlStatus = "max(idStatus)=:idStatus%1 ";
+
+    QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
+                       "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus,it.indexType,it.VNFT "
+                       "from Items i join ItemType it on it.id=i.idType "
+                       "join (select idItem, max(DateStatus) dateStatus, max(idStatus) as idStatus "
+                       "from ItemStatus group by idItem ",
+                       "",
+                       ") ms on ms.idItem=i.id join StatusDevice sd on sd.id=ms.idStatus"};
+
+    if(listStatus.size() > 0)
+    {
+        for(int i = 0; i < listStatus.size(); ++i)
+            slStatus.push_back(sqlStatus.arg(i));
+
+        sql[1] = "having " + slStatus.join("or ");
+    }
+
+    QStringList slWhere;
+
+    if(!number.isEmpty())
+        slWhere.push_back(sqlNumber);
+
+    if(!isBusy)
+        slWhere.push_back(sqlBusy);
+
+    if(!isParent)
+        slWhere.push_back(sqlParent);
+
+    sql.push_back(" where ");
+    sql.push_back(slWhere.join(" and "));
+
+    QString sql2 = sql.join("");
+    query.prepare(sql2);
+    query.bindValue(":number", QString("%%1%").arg(number));
+
+    for(int i = 0; i < listStatus.size(); ++i)
+    {
+        query.bindValue(QString(":idStatus%1").arg(i), listStatus[i]);
+    }
+
+    query.exec();
+    if(query.next())
+    {
+        item.id = query.value(0).toInt();
+        item.idParent = query.value(1).toInt();
+        item.idShip = query.value(2).toInt();
+        item.idSet = query.value(3).toInt();
+        item.idType = query.value(4).toInt();
+        item.number = query.value(5).toString();
+        item.number2 = query.value(6).toString();
+        item.numberDoc = query.value(7).toString();
+        item.name = query.value(8).toString();
+        item.dateCreate = query.value(9).toDateTime();
+        item.dateOn = query.value(10).toDateTime();
+        item.dateOff = query.value(11).toDateTime();
+        item.garantMonth = query.value(12).toInt();
+        item.dateGarant = query.value(13).toDateTime();
+        item.isZip = query.value(14).toBool();
+        item.currStatus = query.value(16).toString();
+
+        item.type.indexType = (ItemType::IndexType)query.value(17).toInt();
+        item.type.typeName = query.value(15).toString();
+        item.type.VNFT = query.value(18).toString();
+        item.VNFT = item.type.VNFT;
+    }
 
     return item;
 }
@@ -2434,10 +2515,9 @@ void RepoMSSQL::LoadTypeItem(ItemType::IndexType indexType, QVector<ItemType> &l
         mType.typeName = query.value(1).toString();
         mType.garantMonth = query.value(2).toInt();
         mType.VNFT = query.value(3).toString();
+        mType.indexType = indexType;
         listType.push_back(mType);
     }
-
-
 }
 
 //------------------------------------------------------------------------------------------------------

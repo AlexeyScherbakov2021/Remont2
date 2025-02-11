@@ -109,10 +109,10 @@ void PlateWindow::on_leNumber_textChanged(const QString &arg1)
 //-----------------------------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------------------------
-// void PlateWindow::on_listWidget_currentRowChanged(int currentRow)
-// {
-//     ui->tbDelete->setEnabled(currentRow >= 0);
-// }
+void PlateWindow::on_listWidget_currentRowChanged(int currentRow)
+{
+    ui->tbDelete->setEnabled(currentRow >= 0);
+}
 
 //-----------------------------------------------------------------------------------------------------
 // Обновление количества введенных плат
