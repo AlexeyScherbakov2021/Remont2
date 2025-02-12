@@ -24,7 +24,7 @@ void ListClaim::getData(int /*row*/, int /*col*/) const
 }
 
 
-bool ListClaim::DeleteItem(int id)
+bool ListClaim::DeleteItem(int /*id*/)
 {
     return false;
     // return repo.DeleteClaim(id);

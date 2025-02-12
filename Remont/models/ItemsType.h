@@ -8,7 +8,7 @@ class ItemType
 {
 
 public:
-    enum IndexType { Product, Modul, Plate };
+    enum IndexType : int { Product, Modul, Plate, All = 100 };
 
     int id;
     IndexType indexType;

@@ -4,10 +4,10 @@
 
 ListProduct::ListProduct() : ListDevice(ItemType::Product) {}
 
-void ListProduct::Load()
-{
-    repo.FindItems(ItemType::Product, "", items, 0);
-}
+// void ListProduct::Load()
+// {
+//     repo.FindItems(ItemType::Product, "", items, 0);
+// }
 
 QVariant ListProduct::getData(int row, int col, int role) const
 {
@@ -55,10 +55,10 @@ QVariant ListProduct::getData(int row, int col, int role) const
     return var;
 }
 
-void ListProduct::LoadChild(Items &prod)
-{
-    // repo.LoadChildProduct(prod);
-}
+// void ListProduct::LoadChild(Items &prod)
+// {
+//     // repo.LoadChildProduct(prod);
+// }
 
 
 // Product ListProduct::GetItem(int /*id*/)
@@ -69,10 +69,10 @@ void ListProduct::LoadChild(Items &prod)
 
 
 
-bool ListProduct::DeleteItem(int id)
-{
-    return repo.DeleteItem(id);
-}
+// bool ListProduct::DeleteItem(int id)
+// {
+//     return repo.DeleteItem(id);
+// }
 
 
 void ListProduct::GetHeader(QStringList &headers)
@@ -81,7 +81,7 @@ void ListProduct::GetHeader(QStringList &headers)
 }
 
 
-void ListProduct::setData(int row, int col, const QVariant value, int role) const
+void ListProduct::setData(int /*row*/, int /*col*/, const QVariant /*value*/, int /*role*/) const
 {
 }
 

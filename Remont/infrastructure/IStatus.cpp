@@ -7,21 +7,23 @@ void StatusList::LoadStatus(Items& item)
     repo.LoadStatus(item);
 }
 
-void StatusList::AddStatus(Items &item, Status::Stat idStat, const QString &comment)
+bool StatusList::AddStatus(Items &item, Status::Stat idStat, const QString &comment)
 {
-    AddStatus(item, idStat, QDateTime::currentDateTime(), comment );
+    return AddStatus(item, idStat, QDateTime::currentDateTime(), comment );
 }
 
 void StatusList::DeleteLastStatus(Items &item)
 {
     // Q_UNUSED(item);
     RepoMSSQL repo;
-    repo.DelLastStatus(item);
+    if(repo.DelLastStatus(item))
+        item.listStatus.removeLast();
 }
 
 
-void StatusList::AddStatus(Items &item, Status::Stat idStat, const QDateTime &dateRegister,  const QString &comment)
+bool StatusList::AddStatus(Items &item, Status::Stat idStat, const QDateTime &dateRegister,  const QString &comment)
 {
+    bool res;
     RepoMSSQL repo;
     Status status;
     status.idStatus = idStat;
@@ -29,13 +31,21 @@ void StatusList::AddStatus(Items &item, Status::Stat idStat, const QDateTime &da
     status.dateStatus = dateRegister;
     status.Comment = comment;
     status.nameStatus = repo.GetNameStatus((int)idStat);
-    item.currStatus = repo.GetNameStatus((int)idStat);
-    repo.AddStatus(item, status);
+    if(res = repo.AddStatus(item, status))
+    {
+        item.listStatus.push_back(status);
+        item.currStatus = status.nameStatus;
+    }
+
+    return res;
 }
 
 QString StatusList::getNameLastStatus() const
 {
-    return listStatus.last().nameStatus;
+    QString stat;
+    if (listStatus.size() > 0)
+        stat = listStatus.last().nameStatus;
+    return stat;
 }
 
 QString StatusList::getLastComment() const

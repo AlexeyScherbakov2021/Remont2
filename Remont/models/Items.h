@@ -32,6 +32,12 @@ public:
 
     QString VNFT;
     QString currStatus;
+    QString commentStatus;
+
+    QString GetDefaultName()
+    {
+        return number + " (" + type.typeName + " " + type.VNFT + ")";
+    }
 
     QString FullNameAndComment()
     {
@@ -66,6 +72,10 @@ inline void Items::GetInfo(QString &nameType, QString &nameIcon)
     case ItemType::Plate:
         nameType = "Плата";
         nameIcon = ":/image/network_adapter.png";
+        break;
+    case ItemType::All:
+        nameType = "Любой";
+        // nameIcon = ":/image/network_adapter.png";
         break;
     }
 }

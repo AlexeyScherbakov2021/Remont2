@@ -41,7 +41,10 @@ public:
     bool LoadChildItems(int idParent, QList<Items> &listItems) const;
 
 
-    size_t LoadPart(size_t start, size_t count, ItemType::IndexType iType, const QString &number,
+    int LoadPart(size_t start, size_t count, ItemType::IndexType iType, const QString &number,
+                    QList<Items> &listItems, QVector<int>& listStatus, bool isBusy = false, bool isParent = false) const;
+
+    int LoadPartAll(size_t start, size_t count, const QString &number,
                     QList<Items> &listItems, QVector<int>& listStatus, bool isBusy = false, bool isParent = false) const;
 
     bool AddItem(Items &item) const;
@@ -49,7 +52,7 @@ public:
     bool UpdateItem(Items &item);
     bool DeleteItem(int id) const;
     Items GetItem(int id) const;
-    Items GetItem(QString number, int status = 0, bool isBusy = false) const;
+    // Items GetItem(QString number, int status = 0, bool isBusy = false) const;
     Items GetItem2(QString number, QVector<int>& listStatus, bool isBusy = false, bool isParent = false) const;
 
     void LoadItemsType(QList<ItemType> &listType, ItemType::IndexType indexType) const;

@@ -16,14 +16,14 @@ public:
     // ListDevice interface
 public:
     void GetHeader(QStringList& headers) override;
-    void Load() override;
+    // void Load() override;
     QVariant getData(int row, int col, int role) const override;
-    bool DeleteItem(int row) override;
+    // bool DeleteItem(int row) override;
 
 
 public:
     void FindSerialNumber(const QString &number, QList<Items> &listItems);
-    void LoadChild(Items &plate) override;
+    // void LoadChild(Items &plate) override;
     Items GetItem(int id) override;
 
 

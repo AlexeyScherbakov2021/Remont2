@@ -33,6 +33,7 @@ SOURCES += \
     models/listsetter.cpp \
     models/listshipment.cpp \
     models/platemodel.cpp \
+    otkactiondlg.cpp \
     otkcontrolwindow.cpp \
     otkwindow.cpp \
     platefwwindow.cpp \
@@ -83,6 +84,7 @@ HEADERS += \
     models/remont.h \
     models/setterout.h \
     models/shipment.h \
+    otkactiondlg.h \
     otkcontrolwindow.h \
     otkwindow.h \
     platefwwindow.h \
@@ -112,6 +114,7 @@ FORMS += \
     listshipwindow.ui \
     logwindow.ui \
     mainwindow.ui \
+    otkactiondlg.ui \
     otkcontrolwindow.ui \
     otkwindow.ui \
     platefwwindow.ui \

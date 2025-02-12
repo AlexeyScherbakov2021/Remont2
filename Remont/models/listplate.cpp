@@ -9,9 +9,9 @@ void ListPlate::GetHeader(QStringList& headers)
 }
 
 
-void ListPlate::Load()
-{
-}
+// void ListPlate::Load()
+// {
+// }
 
 QVariant ListPlate::getData(int row, int col, int role) const
 {
@@ -65,9 +65,9 @@ void ListPlate::FindSerialNumber(const QString &number, QList<Items> &listItems)
 }
 
 
-void ListPlate::LoadChild(Items &/*plate*/)
-{
-}
+// void ListPlate::LoadChild(Items &/*plate*/)
+// {
+// }
 
 
 Items ListPlate::GetItem(int id)
@@ -79,18 +79,18 @@ Items ListPlate::GetItem(int id)
 
 
 
-bool ListPlate::DeleteItem(int row)
-{
-    bool res = false;
-    Items plate = items.at(row);
-    if(plate.id != 0)
-    {
-        res = repo.DeleteItem(plate.id);
-        if(res)
-            items.removeAt(row);
-    }
-    return res;
-}
+// bool ListPlate::DeleteItem(int row)
+// {
+//     bool res = false;
+//     Items plate = items.at(row);
+//     if(plate.id != 0)
+//     {
+//         res = repo.DeleteItem(plate.id);
+//         if(res)
+//             items.removeAt(row);
+//     }
+//     return res;
+// }
 
 
 void ListPlate::setData(int row, int col, const QVariant value, int role) const

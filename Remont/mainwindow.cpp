@@ -98,10 +98,9 @@ void MainWindow::on_pbRegister_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbOTK_clicked()
 {
-    // ListPlate *listPlate = new ListPlate();
-    OTKControlWindow *win = new OTKControlWindow(this);
-
     // OTKControlWindow *win = new OTKControlWindow(this);
+
+    OTKWindow *win = new OTKWindow(this);
     win->setAttribute(Qt::WA_DeleteOnClose);
     win->show();
 }

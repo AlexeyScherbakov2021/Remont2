@@ -60,14 +60,9 @@ bool PlateModel::canFetchMore(const QModelIndex &/*parent*/) const
 
 void PlateModel::fetchMore(const QModelIndex &/*parent*/)
 {
-    // if(lp != nullptr)
-    // {
-    //     lp(listDev->items);
-    //     isFetch = false;
-    // }
+
     if(!isBaseOff)
     {
-        // int resLoad = listDev->LoadPart(startLoad, cntLoad, number, status, isBusy, isParent);
         int resLoad = listDev->LoadPart2(startLoad, cntLoad, number, vStatus, isBusy, isParent);
 
         if(resLoad > 0)
@@ -183,6 +178,13 @@ bool PlateModel::DeleteItem(int row)
     return true;
 }
 
+void PlateModel::DeleteItemFromList(int row)
+{
+    beginRemoveRows(QModelIndex(), row, row);
+    listDev->DeleteItemFromList(row);
+    endRemoveRows();
+}
+
 
 void PlateModel::createList(ItemType::IndexType type)
 {
@@ -196,6 +198,9 @@ void PlateModel::createList(ItemType::IndexType type)
         break;
     case ItemType::Plate:
         listDev = std::make_unique<ListPlate>();
+        break;
+    case ItemType::All:
+        listDev = std::make_unique<ListDevice>(ItemType::All);
         break;
     default:
         Q_ASSERT(false);

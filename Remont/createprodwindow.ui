@@ -125,7 +125,7 @@ border: 1px solid #999999;
               <string>Добавить модули и платы сейчас</string>
              </property>
              <property name="checked">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
             </widget>
            </item>

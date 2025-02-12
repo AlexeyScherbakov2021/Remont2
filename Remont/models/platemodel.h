@@ -43,6 +43,7 @@ public:
     void prepareLoad2(const QString _number, QVector<int>& _status, bool _isBusy, bool _isParent);
     Items* GetItem(int row);
     bool DeleteItem(int row);
+    void DeleteItemFromList(int row) ;
 
     void createList(ItemType::IndexType);
 

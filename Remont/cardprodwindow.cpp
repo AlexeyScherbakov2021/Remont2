@@ -207,7 +207,7 @@ void CardProdWindow::loadShipmentToForm(const Items *prod)
 //-------------------------------------------------------------------------------------------------------
 // Загрузка состава изделия
 //-------------------------------------------------------------------------------------------------------
-void CardProdWindow::loadInclude(const Items *prod)
+void CardProdWindow::loadInclude(const Items */*prod*/)
 {
     // for(auto const &mod : prod->listModules)
     // {

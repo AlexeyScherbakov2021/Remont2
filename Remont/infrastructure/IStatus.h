@@ -31,7 +31,7 @@ public:
     Stat idStatus = Status::NONE;
     QString nameStatus;
     QDateTime dateStatus = QDateTime::currentDateTime();
-    int typeStatus;
+    int typeStatus = 0;
     QString Comment;
 
 };
@@ -45,9 +45,9 @@ public:
 
     QVector<Status> listStatus;
     void LoadStatus(Items& item);
-    void AddStatus(Items &item, Status::Stat idStat, const QString &comment = "");
+    bool AddStatus(Items &item, Status::Stat idStat, const QString &comment = "");
     void DeleteLastStatus(Items &device);
-    void AddStatus(Items &item, Status::Stat idStat, const QDateTime &dateRegister,  const QString &comment = "");
+    bool AddStatus(Items &item, Status::Stat idStat, const QDateTime &dateRegister,  const QString &comment = "");
     QString getNameLastStatus() const;
     QString getLastComment() const;
     bool getIsRepair() const;

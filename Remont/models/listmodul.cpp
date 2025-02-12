@@ -6,10 +6,10 @@
 ListModul::ListModul() : ListDevice(ItemType::Modul) {}
 
 
-void ListModul::Load()
-{
-    repo.FindItems(ItemType::Product, "", items, 0);
-}
+// void ListModul::Load()
+// {
+//     repo.FindItems(ItemType::Product, "", items, 0);
+// }
 
 QVariant ListModul::getData(int row, int col, int role) const
 {
@@ -57,15 +57,15 @@ QVariant ListModul::getData(int row, int col, int role) const
     return var;
 }
 
-bool ListModul::LinkPlate(int idPlate, int idModul)
-{
-    return repo.LinkPlate(idPlate, idModul);
-}
+// bool ListModul::LinkPlate(int idPlate, int idModul)
+// {
+//     return repo.LinkPlate(idPlate, idModul);
+// }
 
 
-void ListModul::LoadChild(Items &/*modul*/)
-{
-}
+// void ListModul::LoadChild(Items &/*modul*/)
+// {
+// }
 
 
 // Modul ListModul::GetItem(int /*id*/)
@@ -76,10 +76,10 @@ void ListModul::LoadChild(Items &/*modul*/)
 
 
 
-bool ListModul::DeleteItem(int id)
-{
-    return repo.DeleteItem(id);
-}
+// bool ListModul::DeleteItem(int id)
+// {
+//     return repo.DeleteItem(id);
+// }
 
 
 void ListModul::GetHeader(QStringList &headers)
@@ -88,7 +88,7 @@ void ListModul::GetHeader(QStringList &headers)
 }
 
 
-void ListModul::setData(int row, int col, const QVariant value, int role) const
+void ListModul::setData(int /*row*/, int /*col*/, const QVariant /*value*/, int /*role*/) const
 {
 }
 

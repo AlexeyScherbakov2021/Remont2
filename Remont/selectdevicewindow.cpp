@@ -219,7 +219,7 @@ void SelectDeviceWindow::setDisableSearch()
 //--------------------------------------------------------------------------------------------------
 // Искать по номеру и установленным параметрам
 //--------------------------------------------------------------------------------------------------
-void SelectDeviceWindow::Search(QString number)
+void SelectDeviceWindow::Search(QString /*number*/)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -504,7 +504,7 @@ void SelectDeviceWindow::on_pbSelect_clicked()
 // }
 
 
-void SelectDeviceWindow::on_tableView_doubleClicked(const QModelIndex &index)
+void SelectDeviceWindow::on_tableView_doubleClicked(const QModelIndex &/*index*/)
 {
     on_pbSelect_clicked();
 }

@@ -10,13 +10,13 @@ class ListModul : public ListDevice
 public:
     explicit ListModul();
 
-    void Load() override;
+    // void Load() override;
     QVariant getData(int row, int col, int role) const override;
 
-    bool LinkPlate(int idPlate, int idModul);
-    void LoadChild(Items &modul) override;
+    // bool LinkPlate(int idPlate, int idModul);
+    // void LoadChild(Items &modul) override;
 
-    bool DeleteItem(int id) override;
+    // bool DeleteItem(int id) override;
 
     void GetHeader(QStringList &headers) override;
 
