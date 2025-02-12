@@ -23,6 +23,7 @@ private slots:
     void on_tableView_doubleClicked(const QModelIndex &index);
     void on_tbDelCheckProd_clicked();
     void on_tbDelBrokenProd_clicked();
+    void slotReadScan(QString s);
 
 private:
     Ui::OTKWindow *ui;
@@ -31,6 +32,7 @@ private:
     QVector<int> stat = { Status::CREATE, Status::FAULTY};
 
     void RestartLoad();
+    void StartControlWindow(Items* item);
 
 };
 

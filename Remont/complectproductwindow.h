@@ -35,12 +35,8 @@ private:
     Ui::ComplectProductWindow *ui;
     RepoMSSQL repo;
     Items dev;
-    // Items child;
-    // QList<Modul> listModul;
     ListModul Modules;
     TrackRecord<Items> trackModul;
-    // QSet<Modul> addModul;
-    // QSet<Modul> delModul;
     QMetaObject::Connection conn;
 
     void LoadProductToScreen(Items &prod);

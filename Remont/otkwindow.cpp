@@ -1,4 +1,5 @@
 #include "otkwindow.h"
+#include "scan.h"
 #include "ui_otkwindow.h"
 
 #include <OTKActionDlg.h>
@@ -8,8 +9,8 @@ OTKWindow::OTKWindow(QWidget *parent)
     , ui(new Ui::OTKWindow)
 {
     ui->setupUi(this);
-
     RestartLoad();
+    connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 }
 
 
@@ -38,26 +39,11 @@ void OTKWindow::RestartLoad()
     ui->tableView->setModel(model);
 }
 
-
 //------------------------------------------------------------------------------------------------
-// Кнопка выбрать для контроля
+// Запуск окна с проверкой
 //------------------------------------------------------------------------------------------------
-void OTKWindow::on_pbSelect_clicked()
+void OTKWindow::StartControlWindow(Items *item)
 {
-    on_tableView_doubleClicked(ui->tableView->currentIndex());
-}
-
-
-//------------------------------------------------------------------------------------------------
-// Двойной щелчок выбрать для контроля
-//------------------------------------------------------------------------------------------------
-void OTKWindow::on_tableView_doubleClicked(const QModelIndex &index)
-{
-    if(index == QModelIndex())
-        return;
-
-    Items *item = model->GetItem(index.row());
-
     OtkActionDlg *win = new OtkActionDlg( item, this);
     if(win->exec() == QDialog::Accepted)
     {
@@ -78,9 +64,32 @@ void OTKWindow::on_tableView_doubleClicked(const QModelIndex &index)
             listItem->setData(Qt::UserRole, item->id);
             ui->lwBrokenProd->insertItem(ui->lwBrokenProd->count(), listItem);
         }
+
         // удалить из общего списка
-        model->DeleteItemFromList(index.row());
+        model->DeleteItemFromListId(item->id);
     }
+}
+
+
+//------------------------------------------------------------------------------------------------
+// Кнопка выбрать для контроля
+//------------------------------------------------------------------------------------------------
+void OTKWindow::on_pbSelect_clicked()
+{
+    on_tableView_doubleClicked(ui->tableView->currentIndex());
+}
+
+
+//------------------------------------------------------------------------------------------------
+// Двойной щелчок выбрать для контроля
+//------------------------------------------------------------------------------------------------
+void OTKWindow::on_tableView_doubleClicked(const QModelIndex &index)
+{
+    if(index == QModelIndex())
+        return;
+
+    Items *item = model->GetItem(index.row());
+    StartControlWindow(item);
 }
 
 
@@ -123,6 +132,21 @@ void OTKWindow::on_tbDelBrokenProd_clicked()
         delete ui->lwBrokenProd->currentItem();
         model->AddItem(&dev);
     }
+}
 
+//------------------------------------------------------------------------------------------------
+// Событие сканера
+//------------------------------------------------------------------------------------------------
+void OTKWindow::slotReadScan(QString s)
+{
+    if(isActiveWindow())
+    {
+        RepoMSSQL repo;
+
+        Items item = repo.GetItem2(s, stat);
+
+        if(item.id != 0)
+            StartControlWindow(&item);
+    }
 }
 

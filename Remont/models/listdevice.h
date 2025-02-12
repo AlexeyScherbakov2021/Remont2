@@ -26,7 +26,18 @@ public:
     }
 
 
-    virtual bool DeleteItemId(int id)
+    int GetRowFromId(int id)
+    {
+        for(int row = 0; row < items.size(); ++row)
+        {
+            if(items[row].id == id)
+                return row;
+        }
+
+        return -1;
+    }
+
+    bool DeleteItemId(int id)
     {
         return repo.DeleteItem(id);
     }
@@ -61,7 +72,7 @@ public:
     }
 
 
-    virtual Items GetItem(int id)
+    Items GetItem(int id)
     {
         Items resT;
         auto res = std::find_if(items.cbegin(), items.cend(), [id] (auto it) { return it.id == id; });
@@ -70,12 +81,12 @@ public:
         return resT;
     }
 
-    virtual Items GetItem(QString number)
+    Items* GetItem(QString number)
     {
-        Items resT;
-        auto res = std::find_if(items.cbegin(), items.cend(), [number] (auto it) { return it.number == number; });
+        Items* resT = nullptr;
+        auto res = std::find_if(items.begin(), items.end(), [number] (auto it) { return it.number == number; });
         if(res != items.cend())
-            resT = *res;
+            resT = (Items*)res;
         return resT;
     }
 

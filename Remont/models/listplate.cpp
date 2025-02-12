@@ -70,12 +70,12 @@ void ListPlate::FindSerialNumber(const QString &number, QList<Items> &listItems)
 // }
 
 
-Items ListPlate::GetItem(int id)
-{
-    // Plate plate;
-    auto plate_it = std::find_if(items.cbegin(), items.cend(), [id](const Items &plate) { return plate.id == id;});
-    return *plate_it;
-}
+// Items ListPlate::GetItem(int id)
+// {
+//     // Plate plate;
+//     auto plate_it = std::find_if(items.cbegin(), items.cend(), [id](const Items &plate) { return plate.id == id;});
+//     return *plate_it;
+// }
 
 
 

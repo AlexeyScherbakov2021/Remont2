@@ -21,11 +21,9 @@ ComplectProductWindow::ComplectProductWindow(QWidget *parent, Items *_item)
         ui->labelSearchProd->setVisible(false);
         ui->tbClear->setVisible(false);
         LoadProductToScreen(dev);
-
     }
 
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
-
 }
 
 ComplectProductWindow::~ComplectProductWindow()

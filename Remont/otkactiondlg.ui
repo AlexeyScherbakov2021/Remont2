@@ -159,7 +159,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="groupBox2">
        <property name="title">
         <string>Комплектация</string>
        </property>

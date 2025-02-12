@@ -178,6 +178,13 @@ bool PlateModel::DeleteItem(int row)
     return true;
 }
 
+void PlateModel::DeleteItemFromListId(int id)
+{
+    int row = listDev->GetRowFromId(id);
+    if(row >= 0)
+        DeleteItemFromList(row);
+}
+
 void PlateModel::DeleteItemFromList(int row)
 {
     beginRemoveRows(QModelIndex(), row, row);
@@ -229,6 +236,11 @@ void PlateModel::UpdateItem(int row)
 void PlateModel::setBaseOff()
 {
     isBaseOff = true;
+}
+
+Items* PlateModel::GetItem(QString number)
+{
+    return listDev->GetItem(number);
 }
 
 

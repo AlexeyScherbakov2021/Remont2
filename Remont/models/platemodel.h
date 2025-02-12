@@ -43,16 +43,15 @@ public:
     void prepareLoad2(const QString _number, QVector<int>& _status, bool _isBusy, bool _isParent);
     Items* GetItem(int row);
     bool DeleteItem(int row);
+    void DeleteItemFromListId(int id) ;
     void DeleteItemFromList(int row) ;
 
     void createList(ItemType::IndexType);
 
-    // typedef void (*pLoadItems)(QList<Items>& items);
-    // void setFunction(pLoadItems p);
-
     void AddItem(Items* item);
     void UpdateItem(int row);
     void setBaseOff();
+    Items* GetItem(QString number);
 
 private:
     int startLoad = 0;
