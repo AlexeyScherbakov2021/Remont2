@@ -10,7 +10,7 @@
 #include <infrastructure/IStatus.h>
 #include <models/shipment.h>
 #include <models/setterout.h>
-#include <models/platemodel.h>
+#include <models/devicemodel.h>
 
 namespace Ui {
 class SelectDeviceWindow;
@@ -46,7 +46,7 @@ private:
 
     void Search(QString searchNum);
 
-    PlateModel *model = nullptr;
+    DeviceModel *model = nullptr;
     void startLoad();
 
     ItemType::IndexType type;

@@ -1,23 +1,23 @@
-#include "platemodel.h"
+#include "devicemodel.h"
 
 #include "listmodul.h"
 #include "listproduct.h"
 
 #include <QIcon>
 
-PlateModel::PlateModel(ItemType::IndexType type, QObject *parent)
+DeviceModel::DeviceModel(ItemType::IndexType type, QObject *parent)
     : QAbstractTableModel(parent)
 {
     createList(type);
     listDev->GetHeader(headers);
 }
 
-PlateModel::~PlateModel()
+DeviceModel::~DeviceModel()
 {
 
 }
 
-QVariant PlateModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant DeviceModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     QVariant var;
     if(role == Qt::DisplayRole)
@@ -32,7 +32,7 @@ QVariant PlateModel::headerData(int section, Qt::Orientation orientation, int ro
 }
 
 
-int PlateModel::rowCount(const QModelIndex &parent) const
+int DeviceModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
         return 0;
@@ -40,7 +40,7 @@ int PlateModel::rowCount(const QModelIndex &parent) const
     return listDev->items.size();
 }
 
-int PlateModel::columnCount(const QModelIndex &parent) const
+int DeviceModel::columnCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
         return 0;
@@ -48,17 +48,17 @@ int PlateModel::columnCount(const QModelIndex &parent) const
     return headers.size();
 }
 
-bool PlateModel::hasChildren(const QModelIndex &/*parent*/) const
+bool DeviceModel::hasChildren(const QModelIndex &/*parent*/) const
 {
     return false;
 }
 
-bool PlateModel::canFetchMore(const QModelIndex &/*parent*/) const
+bool DeviceModel::canFetchMore(const QModelIndex &/*parent*/) const
 {
     return isFetch;
 }
 
-void PlateModel::fetchMore(const QModelIndex &/*parent*/)
+void DeviceModel::fetchMore(const QModelIndex &/*parent*/)
 {
 
     if(!isBaseOff)
@@ -77,7 +77,7 @@ void PlateModel::fetchMore(const QModelIndex &/*parent*/)
     }
 }
 
-QVariant PlateModel::data(const QModelIndex &index, int role) const
+QVariant DeviceModel::data(const QModelIndex &index, int role) const
 {
     QVariant var;
 
@@ -89,7 +89,7 @@ QVariant PlateModel::data(const QModelIndex &index, int role) const
     return var;
 }
 
-bool PlateModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool DeviceModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (data(index, role) != value) {
 
@@ -109,7 +109,7 @@ bool PlateModel::setData(const QModelIndex &index, const QVariant &value, int ro
 //     return QAbstractItemModel::flags(index) | Qt::ItemIsEditable; // FIXME: Implement me!
 // }
 
-bool PlateModel::insertRows(int row, int count, const QModelIndex &parent)
+bool DeviceModel::insertRows(int row, int count, const QModelIndex &parent)
 {
     beginInsertRows(parent, row, row + count - 1);
     // FIXME: Implement me!
@@ -117,7 +117,7 @@ bool PlateModel::insertRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
-bool PlateModel::removeRows(int row, int count, const QModelIndex &parent)
+bool DeviceModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     if(count <= 0)
         return false;
@@ -129,7 +129,7 @@ bool PlateModel::removeRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
-void PlateModel::prepareLoad(const QString _number, int _status, bool _isBusy, bool _isParent)
+void DeviceModel::prepareLoad(const QString _number, int _status, bool _isBusy, bool _isParent)
 {
     Q_ASSERT_X(listDev != nullptr, "", "not calling createList()");
 
@@ -145,7 +145,7 @@ void PlateModel::prepareLoad(const QString _number, int _status, bool _isBusy, b
 
 }
 
-void PlateModel::prepareLoad2(const QString _number, QVector<int>& _status, bool _isBusy, bool _isParent)
+void DeviceModel::prepareLoad2(const QString _number, QVector<int>& _status, bool _isBusy, bool _isParent)
 {
     // qDebug() << "prepareLoad2" ;
 
@@ -164,7 +164,7 @@ void PlateModel::prepareLoad2(const QString _number, QVector<int>& _status, bool
 }
 
 
-Items *PlateModel::GetItem(int row)
+Items *DeviceModel::GetItem(int row)
 {
     if(row >= 0 && row < listDev->items.size())
         return &listDev->items[row];
@@ -172,20 +172,20 @@ Items *PlateModel::GetItem(int row)
         return nullptr;
 }
 
-bool PlateModel::DeleteItem(int row)
+bool DeviceModel::DeleteItem(int row)
 {
     removeRows(row, 1);
     return true;
 }
 
-void PlateModel::DeleteItemFromListId(int id)
+void DeviceModel::DeleteItemFromListId(int id)
 {
     int row = listDev->GetRowFromId(id);
     if(row >= 0)
         DeleteItemFromList(row);
 }
 
-void PlateModel::DeleteItemFromList(int row)
+void DeviceModel::DeleteItemFromList(int row)
 {
     beginRemoveRows(QModelIndex(), row, row);
     listDev->DeleteItemFromList(row);
@@ -193,7 +193,7 @@ void PlateModel::DeleteItemFromList(int row)
 }
 
 
-void PlateModel::createList(ItemType::IndexType type)
+void DeviceModel::createList(ItemType::IndexType type)
 {
     switch(type)
     {
@@ -214,34 +214,34 @@ void PlateModel::createList(ItemType::IndexType type)
     }
 }
 
-// void PlateModel::setFunction(pLoadItems p)
+// void DeviceModel::setFunction(pLoadItems p)
 // {
 //     lp = p;
 // }
 
-void PlateModel::AddItem(Items *item)
+void DeviceModel::AddItem(Items *item)
 {
     int row = listDev->items.size();
     listDev->items.push_back(*item);
     insertRows(row, 1);
 }
 
-void PlateModel::UpdateItem(int row)
+void DeviceModel::UpdateItem(int row)
 {
     Items* item = GetItem(row);
     if(item->id > 0)
         listDev->UpdateItem(*item);
 }
 
-void PlateModel::setBaseOff()
+void DeviceModel::setBaseOff()
 {
     isBaseOff = true;
 }
 
-Items* PlateModel::GetItem(QString number)
-{
-    return listDev->GetItem(number);
-}
+// Items* DeviceModel::GetItem(QString number)
+// {
+//     return listDev->GetItem(number);
+// }
 
 
 

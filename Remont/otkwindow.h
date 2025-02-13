@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <models/listdevice.h>
-#include <models/platemodel.h>
+#include <models/devicemodel.h>
 
 namespace Ui {
 class OTKWindow;
@@ -28,7 +28,7 @@ private slots:
 private:
     Ui::OTKWindow *ui;
 
-    PlateModel *model = nullptr;
+    DeviceModel *model = nullptr;
     QVector<int> stat = { Status::CREATE, Status::FAULTY};
 
     void RestartLoad();

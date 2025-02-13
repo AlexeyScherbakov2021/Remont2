@@ -15,7 +15,7 @@ PlateListWindow::PlateListWindow(QWidget *parent)
     ui->setupUi(this);
     ui->pbSelect->setVisible(isSelectPlate);
 
-    model = new PlateModel(ItemType::Plate, this);
+    model = new DeviceModel(ItemType::Plate, this);
     startLoad();
     ui->tableView->setModel(model);
     ui->tableView->setColumnWidth(0, 80);

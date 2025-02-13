@@ -10,18 +10,13 @@
 //-------------------------------------------------------------------------------------------------------
 // Конструктор
 //-------------------------------------------------------------------------------------------------------
-CardProdWindow::CardProdWindow(const QString &name, QWidget *parent)
+CardProdWindow::CardProdWindow(Items *device, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::CardProdWindow)
 {
     ui->setupUi(this);
-    setWindowTitle("Карточка \"" + name + "\"");
+    setWindowTitle("Карточка \"" + device->GetDefaultName() + "\"");
 
-}
-
-
-CardProdWindow::CardProdWindow(Items *device, QWidget *parent) : CardProdWindow(device->name, parent)
-{
     Items *prod;
     Items product;
     QList<Remont> listRemont;
@@ -54,6 +49,7 @@ CardProdWindow::CardProdWindow(Items *device, QWidget *parent) : CardProdWindow(
 
     number = device->number;
     loadShipmentToForm(prod);
+
 
 }
 

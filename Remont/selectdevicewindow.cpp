@@ -9,7 +9,7 @@ SelectDeviceWindow::SelectDeviceWindow(ItemType::IndexType _type, QWidget *paren
 {
     ui->setupUi(this);
 
-    model = new PlateModel(type, this);
+    model = new DeviceModel(type, this);
 
     AddSelectedType(type);
     ui->cbType->setModel(&typeModel);
@@ -57,6 +57,8 @@ void SelectDeviceWindow::AddSelectedType(ItemType::IndexType _type)
     case ItemType::Plate:
         name = "Платы";
         sIcon = "://image/network_adapter.png";
+        break;
+    case ItemType::All:
         break;
     }
 
@@ -168,7 +170,7 @@ void SelectDeviceWindow::slotTypeChanged(int row)
     QModelIndex index = typeModel.index(row, 0);
     ItemType::IndexType type = (ItemType::IndexType)typeModel.data(index, Qt::UserRole).toInt();
     delete model;
-    model = new PlateModel(type, this);
+    model = new DeviceModel(type, this);
     startLoad();
     ui->tableView->setModel(model);
 

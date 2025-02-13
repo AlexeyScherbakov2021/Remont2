@@ -4,7 +4,7 @@
 #include <QDialog>
 
 #include <models/listplate.h>
-#include <models/platemodel.h>
+#include <models/devicemodel.h>
 
 namespace Ui {
 class PlateFWWindow;
@@ -32,7 +32,7 @@ private:
     Ui::PlateFWWindow *ui;
     ListPlate listPlate;
     QMetaObject::Connection conn;
-    PlateModel *model;
+    DeviceModel *model;
 
 
 };

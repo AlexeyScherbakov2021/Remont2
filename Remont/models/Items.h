@@ -39,6 +39,16 @@ public:
         return number + " (" + type.typeName + " " + type.VNFT + ")";
     }
 
+    void SetLastStatus()
+    {
+        if(listStatus.size() > 0)
+        {
+            currStatus = listStatus.last().nameStatus;
+            commentStatus = listStatus.last().Comment;
+        }
+    }
+
+
     QString FullNameAndComment()
     {
         QString s = getLastComment();

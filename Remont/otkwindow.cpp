@@ -9,6 +9,7 @@ OTKWindow::OTKWindow(QWidget *parent)
     , ui(new Ui::OTKWindow)
 {
     ui->setupUi(this);
+
     RestartLoad();
     connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 }
@@ -34,9 +35,18 @@ void OTKWindow::on_toolButton_clicked()
 void OTKWindow::RestartLoad()
 {
     delete model;
-    model = new PlateModel(ItemType::All, this);
+    model = new DeviceModel(ItemType::All, this);
     model->prepareLoad2(ui->leSearch->text(), stat, false, false);
     ui->tableView->setModel(model);
+
+    ui->tableView->setColumnWidth(0, 24);
+    ui->tableView->setColumnWidth(1, 100);
+    ui->tableView->setColumnWidth(2, 150);
+    ui->tableView->setColumnWidth(3, 150);
+    ui->tableView->setColumnWidth(4, 80);
+    ui->tableView->setColumnWidth(5, 80);
+    ui->tableView->setColumnWidth(6, 100);
+
 }
 
 //------------------------------------------------------------------------------------------------
@@ -108,6 +118,7 @@ void OTKWindow::on_tbDelCheckProd_clicked()
         Q_ASSERT(dev.listStatus.size() != 0 || dev.listStatus.last().idStatus != Status::CORRECT);
         dev.DeleteLastStatus(dev);
         delete ui->lwCheckedProd->currentItem();
+        repo.LoadStatus(dev);
         model->AddItem(&dev);
 
     }
@@ -130,6 +141,7 @@ void OTKWindow::on_tbDelBrokenProd_clicked()
 
         dev.DeleteLastStatus(dev);
         delete ui->lwBrokenProd->currentItem();
+        repo.LoadStatus(dev);
         model->AddItem(&dev);
     }
 }

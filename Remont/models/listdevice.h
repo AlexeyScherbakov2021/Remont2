@@ -81,14 +81,14 @@ public:
         return resT;
     }
 
-    Items* GetItem(QString number)
-    {
-        Items* resT = nullptr;
-        auto res = std::find_if(items.begin(), items.end(), [number] (auto it) { return it.number == number; });
-        if(res != items.cend())
-            resT = (Items*)res;
-        return resT;
-    }
+    // Items* GetItem(QString number)
+    // {
+    //     Items* resT = nullptr;
+    //     auto res = std::find_if(items.begin(), items.end(), [number] (auto it) { return it.number == number; });
+    //     if(res != items.end())
+    //         resT = static_cast<Items*>(res);
+    //     return resT;
+    // }
 
 
     virtual bool LoadChild(Items &item)

@@ -1,18 +1,18 @@
-#ifndef PLATEMODEL_H
-#define PLATEMODEL_H
+#ifndef DEVICEMODEL_H
+#define DEVICEMODEL_H
 
 #include "listplate.h"
 // #include <QDebug>
 #include <QAbstractTableModel>
 #include <infrastructure/IStatus.h>
 
-class PlateModel : public QAbstractTableModel
+class DeviceModel : public QAbstractTableModel
 {
     Q_OBJECT
 
 public:
-    explicit PlateModel(ItemType::IndexType type, QObject *parent = nullptr);
-    ~PlateModel();
+    explicit DeviceModel(ItemType::IndexType type, QObject *parent = nullptr);
+    ~DeviceModel();
 
     // Header:
     QVariant headerData(int section,
@@ -73,4 +73,4 @@ private:
 
 
 
-#endif // PLATEMODEL_H
+#endif // DEVICEMODEL_H

@@ -426,14 +426,21 @@ Items RepoMSSQL::GetItem2( QString number, QVector<int>& listStatus, bool isBusy
     QString sqlParent = " idParent is null";
     QString sqlStatus = "ist.idStatus=:idStatus%1 ";
 
+    // QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
+    //                    "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus,it.indexType,it.VNFT,it.garantMonth,"
+    //                    "ist.dateStatus,ist.idStatus,ist.comment "
+    //                    "from Items i join ItemType it on it.id=i.idType "
+    //                    "join (select idItem, max(DateStatus) dateStatus from ItemStatus group by idItem "
+    //                    ") ms on ms.idItem=i.id "
+    //                    "join ItemStatus ist on ist.idItem=ms.idItem and ist.dateStatus=ms.dateStatus "
+    //                    "join StatusDevice sd on sd.id=ist.idStatus"};
+
     QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-                       "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus,it.indexType,it.VNFT,it.garantMonth,"
-                       "ist.dateStatus,ist.idStatus,ist.comment "
+                       "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,it.indexType,it.VNFT,it.garantMonth "
                        "from Items i join ItemType it on it.id=i.idType "
                        "join (select idItem, max(DateStatus) dateStatus from ItemStatus group by idItem "
                        ") ms on ms.idItem=i.id "
-                       "join ItemStatus ist on ist.idItem=ms.idItem and ist.dateStatus=ms.dateStatus "
-                       "join StatusDevice sd on sd.id=ist.idStatus"};
+                       "join ItemStatus ist on ist.idItem=ms.idItem and ist.dateStatus=ms.dateStatus "};
 
     if(!number.isEmpty())
         slWhere.push_back(sqlNumber);
@@ -444,8 +451,11 @@ Items RepoMSSQL::GetItem2( QString number, QVector<int>& listStatus, bool isBusy
     if(!isParent)
         slWhere.push_back(sqlParent);
 
-    sql.push_back(" where ");
-    sql.push_back(slWhere.join(" and "));
+    if(slWhere.size() > 0)
+    {
+        sql.push_back(" where ");
+        sql.push_back(slWhere.join(" and "));
+    }
 
     if(listStatus.size() > 0)
     {
@@ -481,22 +491,22 @@ Items RepoMSSQL::GetItem2( QString number, QVector<int>& listStatus, bool isBusy
         item.garantMonth = query.value(12).toInt();
         item.dateGarant = query.value(13).toDateTime();
         item.isZip = query.value(14).toBool();
-        item.currStatus = query.value(16).toString();
-
-        item.type.indexType = (ItemType::IndexType)query.value(17).toInt();
         item.type.typeName = query.value(15).toString();
-        item.type.VNFT = query.value(18).toString();
-        item.type.garantMonth = query.value(19).toInt();
-        // item.commentStatus = query.value(20).toString();
+        item.type.indexType = (ItemType::IndexType)query.value(16).toInt();
+        item.type.VNFT = query.value(17).toString();
+        item.type.garantMonth = query.value(18).toInt();
         item.type.id = item.idType;
         item.VNFT = item.type.VNFT;
-        Status status;
-        status.idItem = item.id;
-        status.dateStatus = query.value(20).toDateTime();
-        status.idStatus = (Status::Stat)query.value(21).toInt();
-        status.Comment = query.value(22).toString();
-        status.nameStatus = item.currStatus;
-        item.listStatus.push_back(status);
+
+        item.LoadStatus(item);
+        item.SetLastStatus();
+        // Status status;
+        // status.idItem = item.id;
+        // status.dateStatus = query.value(20).toDateTime();
+        // status.idStatus = (Status::Stat)query.value(21).toInt();
+        // status.Comment = query.value(22).toString();
+        // status.nameStatus = item.currStatus;
+        // item.listStatus.push_back(status);
 
     }
 
@@ -2229,9 +2239,11 @@ int RepoMSSQL::LoadPart(size_t start, size_t count, ItemType::IndexType iType,
     if(!isParent)
         slWhere.push_back(sqlParent);
 
-    sql.push_back(" where ");
-
-    sql.push_back(slWhere.join(" and "));
+    if(slWhere.size() > 0)
+    {
+        sql.push_back(" where ");
+        sql.push_back(slWhere.join(" and "));
+    }
 
     if(listStatus.size() > 0)
     {
@@ -2253,6 +2265,8 @@ int RepoMSSQL::LoadPart(size_t start, size_t count, ItemType::IndexType iType,
     {
         query.bindValue(QString(":idStatus%1").arg(i), listStatus[i]);
     }
+
+    // qDebug() << sql2;
 
     query.exec();
     while(query.next())
@@ -2329,8 +2343,11 @@ int RepoMSSQL::LoadPartAll(size_t start, size_t count, const QString &number, QL
     if(!isParent)
         slWhere.push_back(sqlParent);
 
-    sql.push_back(" where ");
-    sql.push_back(slWhere.join(" and "));
+    if(slWhere.size() > 0)
+    {
+        sql.push_back(" where ");
+        sql.push_back(slWhere.join(" and "));
+    }
 
     if(listStatus.size() > 0)
     {
@@ -2621,6 +2638,7 @@ void RepoMSSQL::LoadStatus(Items& item) const
         stat.nameStatus = query.value(5).toString();
         stat.typeStatus = query.value(6).toInt();
         item.listStatus.push_back(stat);
+        item.SetLastStatus();
     }
 
 }

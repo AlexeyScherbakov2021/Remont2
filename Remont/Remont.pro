@@ -25,6 +25,7 @@ SOURCES += \
     logwindow.cpp \
     main.cpp \
     mainwindow.cpp \
+    models/devicemodel.cpp \
     models/listclaim.cpp \
     models/listdevice.cpp \
     models/listmodul.cpp \
@@ -32,9 +33,7 @@ SOURCES += \
     models/listproduct.cpp \
     models/listsetter.cpp \
     models/listshipment.cpp \
-    models/platemodel.cpp \
     otkactiondlg.cpp \
-    otkcontrolwindow.cpp \
     otkwindow.cpp \
     platefwwindow.cpp \
     platelistwindow.cpp \
@@ -69,6 +68,7 @@ HEADERS += \
     models/Items.h \
     models/ItemsType.h \
     models/claim.h \
+    models/devicemodel.h \
     models/entity.h \
     mainwindow.h \
     models/enumvariable.h \
@@ -80,12 +80,10 @@ HEADERS += \
     models/listsetter.h \
     models/listshipment.h \
     models/organization.h \
-    models/platemodel.h \
     models/remont.h \
     models/setterout.h \
     models/shipment.h \
     otkactiondlg.h \
-    otkcontrolwindow.h \
     otkwindow.h \
     platefwwindow.h \
     platelistwindow.h \
@@ -115,7 +113,6 @@ FORMS += \
     logwindow.ui \
     mainwindow.ui \
     otkactiondlg.ui \
-    otkcontrolwindow.ui \
     otkwindow.ui \
     platefwwindow.ui \
     platelistwindow.ui \

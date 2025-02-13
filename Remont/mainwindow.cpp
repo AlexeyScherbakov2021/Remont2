@@ -61,14 +61,16 @@ void MainWindow::on_pbClaim_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbCard_clicked()
 {
-    // SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    // Items *dev = win->SelectDevice(false, "", Status::NONE);
-    // if(dev != nullptr)
-    // {
-    //     // CardProdWindow *winCard;
-    //     // winCard = new CardProdWindow(dev, this);
-    //     // winCard->show();
-    // }
+    SelectDeviceWindow *win = new SelectDeviceWindow(ItemType::Product, this);
+    win->AddSelectedType(ItemType::Modul);
+    win->AddSelectedType(ItemType::Plate);
+    QVector<int> stat;
+    Items *dev = win->SelectDevice(false, stat, "", true, true);
+    if(dev != nullptr)
+    {
+        CardProdWindow *winCard = new CardProdWindow(dev, this);
+        winCard->show();
+    }
 }
 
 
@@ -98,8 +100,6 @@ void MainWindow::on_pbRegister_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbOTK_clicked()
 {
-    // OTKControlWindow *win = new OTKControlWindow(this);
-
     OTKWindow *win = new OTKWindow(this);
     win->setAttribute(Qt::WA_DeleteOnClose);
     win->show();
@@ -203,7 +203,7 @@ void MainWindow::on_aInstallModul_triggered()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_aControlOTK_triggered()
 {
-    OTKControlWindow *win = new OTKControlWindow(this);
+    OTKWindow *win = new OTKWindow(this);
     win->setAttribute(Qt::WA_DeleteOnClose);
     win->show();
 }
@@ -274,14 +274,17 @@ void MainWindow::on_aEndRepair_triggered()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_aCardDevice_triggered()
 {
-    // SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    // Items *dev = win->SelectDevice(false, "", Status::NONE);
-    // if(dev != nullptr)
-    // {
-    //     // CardProdWindow *winCard;
-    //     // winCard = new CardProdWindow(dev, this);
-    //     // winCard->show();
-    // }
+    SelectDeviceWindow *win = new SelectDeviceWindow(ItemType::Product, this);
+    win->AddSelectedType(ItemType::Modul);
+    win->AddSelectedType(ItemType::Plate);
+    QVector<int> stat;
+    Items *dev = win->SelectDevice(false, stat, "", true, true);
+    if(dev != nullptr)
+    {
+        CardProdWindow *winCard = new CardProdWindow(dev, this);
+        winCard->setAttribute(Qt::WA_DeleteOnClose);
+        winCard->show();
+    }
 
 }
 
@@ -323,27 +326,23 @@ void MainWindow::on_aScaner_triggered()
 //----------------------------------------------------------------------------------------------
 // Срабатывание сканера
 //----------------------------------------------------------------------------------------------
-void MainWindow::slotReadScan(QString /*s*/)
+void MainWindow::slotReadScan(QString s)
 {
     if(!isActiveWindow())
         return;
 
     // CardProdWindow *winCard;
-    // RepoMSSQL repo;
-    // Items *dev = nullptr;
-    // Items prod = repo.GetProduct(s, 0, false);
-    // Items mod = repo.GetModul(s, 0, false);
+    RepoMSSQL repo;
 
-    // if(prod.id > 0)
-    //     dev = &prod;
-    // else if(mod.id > 0)
-    //     dev = &mod;
+    QVector<int> stat;
+    Items dev = repo.GetItem2( s, stat, true, true);
 
-    // if(dev != nullptr)
-    // {
-    //     winCard = new CardProdWindow(dev, this);
-    //     winCard->show();
-    // }
+    if(dev.id > 0)
+    {
+        CardProdWindow *winCard = new CardProdWindow(&dev, this);
+        winCard->setAttribute(Qt::WA_DeleteOnClose);
+        winCard->show();
+    }
 
 }
 
@@ -430,7 +429,6 @@ void MainWindow::on_aModVNFT_triggered()
 {
     ItemVNFTWindow *win = new ItemVNFTWindow(ItemType::Modul, this);
     win->exec();
-
 }
 
 
@@ -439,6 +437,5 @@ void MainWindow::on_aRegModul_triggered()
     CreateModulWindow *win = new CreateModulWindow(this);
     win->setAttribute(Qt::WA_DeleteOnClose);
     win->show();
-
 }
 

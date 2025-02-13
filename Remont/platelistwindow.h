@@ -5,7 +5,7 @@
 #include <qtablewidget.h>
 
 #include <models/listplate.h>
-#include <models/platemodel.h>
+#include <models/devicemodel.h>
 // #include <models/platetype.h>
 
 namespace Ui {
@@ -55,7 +55,7 @@ private:
     void UpdateForm();
     void LinkTypePlate();
 
-    PlateModel *model;
+    DeviceModel *model;
 };
 
 #endif // PLATELISTWINDOW_H
