@@ -22,15 +22,14 @@ class SelectDeviceWindow : public QDialog
 
 public:
 
-    SelectDeviceWindow(ItemType::IndexType _type, QWidget *parent = nullptr);
+    SelectDeviceWindow(IndexType _type, QWidget *parent = nullptr);
     Items* SelectDevice(bool isNow, QVector<int>& statusList, QString searchNum = "",  bool _isBusy = false, bool isParent = false);
     void setDisableSearch();
 
     ~SelectDeviceWindow();
-    Items *device = nullptr;
-    Items device2;
 
-    void AddSelectedType(ItemType::IndexType _type);
+    Items device;
+    void AddSelectedType(IndexType _type);
 
 private slots:
     void on_tbSearch_clicked();
@@ -49,11 +48,15 @@ private:
     DeviceModel *model = nullptr;
     void startLoad();
 
-    ItemType::IndexType type;
+    IndexType type;
     QVector<int> vStatus;
     bool isBusy = false;
     bool isParent = false;
 
+
+    // QDialog interface
+// public slots:
+//     int exec() override;
 };
 
 

@@ -13,18 +13,18 @@ AcceptRemontWindow::AcceptRemontWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    claims.Load();
+    // claims.Load();
 
-    auto newEnd = std::remove_if(claims.listItems.begin(), claims.listItems.end(), [](Claim claim) { return !claim.DateOut.isNull();});
+    // auto newEnd = std::remove_if(claims.listItems.begin(), claims.listItems.end(), [](Claim claim) { return !claim.DateOut.isNull();});
 
-    claims.listItems.erase(newEnd, claims.listItems.end());
+    // claims.listItems.erase(newEnd, claims.listItems.end());
 
-    for(auto &it : claims.listItems)
-    {
-        // repo.LoadClaimProducts(it.id, it.listProduct);
-        // repo.LoadClaimModules(it.id, it.listModul);
-        // ui->cbClaim->addItem(it.Number, it.id);
-    }
+    // for(auto &it : claims.listItems)
+    // {
+    //     // repo.LoadClaimProducts(it.id, it.listProduct);
+    //     // repo.LoadClaimModules(it.id, it.listModul);
+    //     // ui->cbClaim->addItem(it.Number, it.id);
+    // }
 
     ui->deDate->setDateTime(QDateTime::currentDateTime());
 

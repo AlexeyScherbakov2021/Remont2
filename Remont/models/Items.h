@@ -1,26 +1,27 @@
 #ifndef ITEMS_H
 #define ITEMS_H
 
-#include "ItemsType.h"
+// #include "ItemsType.h"
+#include "entity.h"
 #include <QDateTime>
 #include <QString>
 #include <infrastructure/IStatus.h>
 
 
-class Items : public StatusList
+class Items : public IEntity, public StatusList
 {
 public:
-    int id = 0;
-    int idParent = 0;
-    int idShip = 0;
+    // int id = 0;
+    // int idParent = 0;
+    // int idShip = 0;
     int idSet = 0;
-    int idType = 0;
+    // int idType = 0;
 
-    QString number;
+    // QString number;
     QString number2;
-    QString numberDoc;
-    QString name;
-    QDateTime dateCreate;
+    // QString numberDoc;
+    // QString name;
+    // QDateTime dateCreate;
     QDateTime dateOn;
     QDateTime dateOff;
     int garantMonth = 0;
@@ -39,15 +40,6 @@ public:
         return number + " (" + type.typeName + " " + type.VNFT + ")";
     }
 
-    void SetLastStatus()
-    {
-        if(listStatus.size() > 0)
-        {
-            currStatus = listStatus.last().nameStatus;
-            commentStatus = listStatus.last().Comment;
-        }
-    }
-
 
     QString FullNameAndComment()
     {
@@ -57,7 +49,28 @@ public:
         return name + " №" + number + s;
     }
 
-    void GetInfo(QString& nameType, QString& nameIcon);
+    void GetInfo(QString &nameType, QString &nameIcon) const override
+    {
+        switch(type.indexType)
+        {
+        case IndexType::Product:
+            nameType = "Изделие";
+            nameIcon = ":/image/product.png";
+            break;
+        case IndexType::Modul:
+            nameType = "Модуль";
+            nameIcon = ":/image/modul.png";
+            break;
+        case IndexType::Plate:
+            nameType = "Плата";
+            nameIcon = ":/image/network_adapter.png";
+            break;
+        case IndexType::All:
+            nameType = "Любой";
+            // nameIcon = ":/image/network_adapter.png";
+            break;
+        }
+    }
 
     // bool operator==(const Items &other) const { return this->id == other.id; }
 
@@ -66,29 +79,6 @@ public:
     // StatusList listStatus;
 };
 
-
-inline void Items::GetInfo(QString &nameType, QString &nameIcon)
-{
-    switch(type.indexType)
-    {
-    case ItemType::Product:
-        nameType = "Изделие";
-        nameIcon = ":/image/product.png";
-        break;
-    case ItemType::Modul:
-        nameType = "Модуль";
-        nameIcon = ":/image/modul.png";
-        break;
-    case ItemType::Plate:
-        nameType = "Плата";
-        nameIcon = ":/image/network_adapter.png";
-        break;
-    case ItemType::All:
-        nameType = "Любой";
-        // nameIcon = ":/image/network_adapter.png";
-        break;
-    }
-}
 
 
 // class ItemsProduct : public Items

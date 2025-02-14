@@ -35,7 +35,7 @@ void OTKWindow::on_toolButton_clicked()
 void OTKWindow::RestartLoad()
 {
     delete model;
-    model = new DeviceModel(ItemType::All, this);
+    model = new DeviceModel(IndexType::All, this);
     model->prepareLoad2(ui->leSearch->text(), stat, false, false);
     ui->tableView->setModel(model);
 

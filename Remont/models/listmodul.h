@@ -11,7 +11,7 @@ public:
     explicit ListModul();
 
     // void Load() override;
-    QVariant getData(int row, int col, int role) const override;
+    // QVariant getData(int row, int col, int role) const override;
 
     // bool LinkPlate(int idPlate, int idModul);
     // void LoadChild(Items &modul) override;

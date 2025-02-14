@@ -9,15 +9,15 @@ StartWorkWindow::StartWorkWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    products.FindItems("", Status::SHIPPED);
+    // products.FindItems("", Status::SHIPPED);
 
-    for(auto &it : products.items)
-    {
-        QListWidgetItem *item = new QListWidgetItem();
-        item->setText(it.name + " (" + it.number + ")");
-        item->setData(Qt::UserRole, it.id);
-        ui->lwProduct->addItem(item);
-    }
+    // for(auto &it : products.items)
+    // {
+    //     QListWidgetItem *item = new QListWidgetItem();
+    //     item->setText(it.name + " (" + it.number + ")");
+    //     item->setData(Qt::UserRole, it.id);
+    //     ui->lwProduct->addItem(item);
+    // }
     ui->deDate->setDateTime(QDateTime::currentDateTime());
 }
 

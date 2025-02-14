@@ -28,7 +28,7 @@ private:
     Ui::AcceptRemontWindow *ui;
     RepoMSSQL repo;
     // QList<Claim> listClaim;
-    ListClaim claims;
+    // ListClaim claims;
     int idProd = 0;
     int idMod = 0;
     int idParentProd = 0;

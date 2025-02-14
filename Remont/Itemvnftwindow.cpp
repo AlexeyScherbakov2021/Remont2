@@ -3,7 +3,7 @@
 // #include <models/platetype.h>
 #include <qmessagebox.h>
 
-ItemVNFTWindow::ItemVNFTWindow(ItemType::IndexType t, QWidget *parent)
+ItemVNFTWindow::ItemVNFTWindow(IndexType t, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::ItemVNFTWindow), workType(t)
 {

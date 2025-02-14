@@ -51,6 +51,16 @@ public:
     QString getNameLastStatus() const;
     QString getLastComment() const;
     bool getIsRepair() const;
+
+    void SetLastStatus(QString& currStatus, QString& commentStatus)
+    {
+        if(listStatus.size() > 0)
+        {
+            currStatus = listStatus.last().nameStatus;
+            commentStatus = listStatus.last().Comment;
+        }
+    }
+
 };
 
 

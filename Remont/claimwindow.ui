@@ -68,6 +68,9 @@
    </item>
    <item>
     <widget class="QTableWidget" name="twClaim">
+     <property name="editTriggers">
+      <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+     </property>
      <property name="alternatingRowColors">
       <bool>true</bool>
      </property>

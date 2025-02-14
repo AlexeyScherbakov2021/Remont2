@@ -11,7 +11,7 @@ PlateFWWindow::PlateFWWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    model = new DeviceModel(ItemType::Plate, this);
+    model = new DeviceModel(IndexType::Plate, this);
     model->setBaseOff();
     // model->setFunction((PlateModel::pLoadItems)&PlateFWWindow::LoadItems);
     ui->tableView->setModel(model);

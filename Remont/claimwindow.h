@@ -3,7 +3,10 @@
 
 #include "repomssql.h"
 #include <QDialog>
+#include <QSqlQueryModel>
+#include <QStandardItemModel>
 #include <models/claim.h>
+#include <models/devicemodel.h>
 #include <models/listclaim.h>
 
 namespace Ui {
@@ -15,9 +18,8 @@ class ClaimWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit ClaimWindow(QWidget *parent = nullptr/*, bool isSelected = false*/);
+    explicit ClaimWindow(QWidget *parent = nullptr);
     ~ClaimWindow();
-    // Claim selectedClaim;
 
 private slots:
     void on_pbAdd_clicked();
@@ -30,6 +32,8 @@ private:
     Ui::ClaimWindow *ui;
     // QList<Claim> listClaim;
     ListClaim claims;
+    void AddLineToWidget(int row);
+
     RepoMSSQL repo;
     // bool isSelected;
 

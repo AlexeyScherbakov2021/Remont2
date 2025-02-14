@@ -26,8 +26,10 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     models/devicemodel.cpp \
+    models/entity.cpp \
     models/listclaim.cpp \
     models/listdevice.cpp \
+    models/listentity.cpp \
     models/listmodul.cpp \
     models/listplate.cpp \
     models/listproduct.cpp \
@@ -60,6 +62,7 @@ HEADERS += \
     createprodwindow.h \
     endremontwindow.h \
     infrastructure/IStatus.h \
+    infrastructure/general.h \
     infrastructure/scaner.h \
     infrastructure/trackrecord.h \
     listshipwindow.h \
@@ -74,6 +77,7 @@ HEADERS += \
     models/enumvariable.h \
     models/listclaim.h \
     models/listdevice.h \
+    models/listentity.h \
     models/listmodul.h \
     models/listplate.h \
     models/listproduct.h \

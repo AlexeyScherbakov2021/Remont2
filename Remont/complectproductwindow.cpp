@@ -46,14 +46,14 @@ void ComplectProductWindow::on_tbSearchModul_clicked()
     QVector<int> stat {Status::CREATE, Status::CORRECT, Status::CORRECT_OSO};
     QPointer<SelectDeviceWindow> win;
 
-    if(dev.type.indexType == ItemType::Product)
+    if(dev.type.indexType == IndexType::Product)
     {
-        win = new SelectDeviceWindow(ItemType::Modul, this);
-        win->AddSelectedType(ItemType::Plate);
+        win = new SelectDeviceWindow(IndexType::Modul, this);
+        win->AddSelectedType(IndexType::Plate);
     }
     else
     {
-        win = new SelectDeviceWindow(ItemType::Plate, this);
+        win = new SelectDeviceWindow(IndexType::Plate, this);
     }
 
     Items child = *win->SelectDevice(true, stat, ui->leNumModSearch->text(), false, false);
@@ -69,16 +69,18 @@ void ComplectProductWindow::on_tbSearchModul_clicked()
 //----------------------------------------------------------------------------------------------
 void ComplectProductWindow::on_tbProdSearch_clicked()
 {
-    QVector<int> stat {Status::CREATE, Status::CORRECT, Status::CORRECT_OSO};
-    QPointer<SelectDeviceWindow> win = new SelectDeviceWindow(ItemType::Product, this);
-    win->AddSelectedType(ItemType::Modul);
+    QVector<int> stat {Status::CREATE, Status::CORRECT, Status::CORRECT_OSO, Status::FAULTY};
+
+    QScopedPointer<SelectDeviceWindow> win (new SelectDeviceWindow(IndexType::Product, this));
+    // win->setAttribute(Qt::WA_DeleteOnClose);
+    win->AddSelectedType(IndexType::Modul);
     dev = *win->SelectDevice(true, stat, ui->leNumProdSearch->text(), false, false);
     if(win->result() == QDialog::Accepted)
     {
         repo.LoadChildItems(dev.id, dev.childItems);
         LoadProductToScreen(dev);
     }
-
+    // delete win;
 }
 
 
@@ -208,7 +210,7 @@ void ComplectProductWindow::slotReadScan(QString s)
         if(item.id > 0)
         {
             // добавление в изделия
-            if(dev.id == 0 && item.type.indexType != ItemType::Plate
+            if(dev.id == 0 && item.type.indexType != IndexType::Plate
                     || dev.type.indexType == item.type.indexType)
             {
                 ui->leNumProdSearch->setText(s);

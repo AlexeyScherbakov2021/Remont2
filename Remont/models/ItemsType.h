@@ -2,13 +2,13 @@
 #define ITEMSTYPE_H
 
 #include <QString>
-
+#include <infrastructure/general.h>
 
 class ItemType
 {
 
 public:
-    enum IndexType : int { Product, Modul, Plate, All = 100 };
+    // enum IndexType : int { Product, Modul, Plate, Claim, All = 100 };
 
     int id;
     IndexType indexType;

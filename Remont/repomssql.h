@@ -32,7 +32,7 @@ private:
     // void FindItems(QList<Plate> &listPlate, int status = 0);
     void FindItems(QList<Shipment> &listShip, int status = 0, bool isFree = false);
 
-    void FindItems(ItemType::IndexType iType, QList<Items> &listItems, int status = 0, bool isFree = false);
+    void FindItems(IndexType iType, QList<Items> &listItems, int status = 0, bool isFree = false);
 
 public:
     // size_t LoadPart(size_t start, size_t count, ItemType::IndexType iType, const QString &number,
@@ -41,27 +41,27 @@ public:
     bool LoadChildItems(int idParent, QList<Items> &listItems) const;
 
 
-    int LoadPart(size_t start, size_t count, ItemType::IndexType iType, const QString &number,
+    int LoadPart(size_t start, size_t count, IndexType iType, const QString &number,
                     QList<Items> &listItems, QVector<int>& listStatus, bool isBusy = false, bool isParent = false) const;
 
     int LoadPartAll(size_t start, size_t count, const QString &number,
                     QList<Items> &listItems, QVector<int>& listStatus, bool isBusy = false, bool isParent = false) const;
 
     bool AddItem(Items &item) const;
-    void FindItems(ItemType::IndexType iType, const QString &number, QList<Items> &listItems, int status = 0, bool isFree = false);
+    void FindItems(IndexType iType, const QString &number, QList<Items> &listItems, int status = 0, bool isFree = false);
     bool UpdateItem(Items &item);
     bool DeleteItem(int id) const;
     Items GetItem(int id) const;
     // Items GetItem(QString number, int status = 0, bool isBusy = false) const;
     Items GetItem2(QString number, QVector<int>& listStatus, bool isBusy = false, bool isParent = false) const;
 
-    void LoadItemsType(QList<ItemType> &listType, ItemType::IndexType indexType) const;
+    void LoadItemsType(QList<ItemType> &listType, IndexType indexType) const;
 
     void LoadStatus(Items& item) const;
     bool AddStatus(Items &item, Status &status) const;
     bool DelLastStatus(Items &item) const;
 
-    void LoadTypeItem(ItemType::IndexType indexType, QVector<ItemType> &listType) const;       //=============
+    void LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) const;       //=============
 
 
 public:
@@ -106,7 +106,7 @@ public:
     void LoadOrganization(QMap<int, QString> &listOrg);
     void LoadOrganization(QList<Organization> &listOrg);
 
-    void LoadClaim(QList<Claim> &listClaim);
+    bool LoadClaim(const QString number, QList<Claim> &listClaim);
     void LoadClaimType(QMap<int, QString> &listTypeClaim);
     // void LoadClaimModules(int idClaim, QList<Modul> &listModul);
     // void LoadClaimProducts(int idClaim, QList<Product> &listProduct);

@@ -5,20 +5,32 @@
 #include "listdevice.h"
 
 
-class ListClaim //: public ListDevice<Claim>
+class ListClaim : public ListEntity<Claim>
 {
 public:
     ListClaim();
 
-    QList<Claim> listItems;
-    Claim GetItem(int id) ;
-    void LoadChild(Claim &item) ;
-    void Load() ;
-    void getData(int row, int col) const ;
-    bool DeleteItem(int id);
+    bool AddItem(Claim &item) override;
+    int GetRowFromId(int id) override;
+    bool DeleteItemId(int id) override;
+    void DeleteItemFromList(int row) override;
+    bool DeleteItem(int row) override;
+    bool UpdateItem(Claim &item) override;
+    Claim GetItem(int row) override;
+    bool LoadChild(Claim &item) override;
+    QVariant getData(int row, int col, int role = Qt::DisplayRole) const override;
+    void setData(int row, int col, const QVariant value, int role = Qt::EditRole) const override;
+    void GetHeader(QStringList &headers) override;
+    // int LoadPart2(int start, int count, const QString &number, QVector<int> vStatus, bool isBusy, bool isParent) override;
+
+    bool Load(const QString Number = "");
+    int getColumnCount();
+    int getRowCount();
+
+    Claim GetItemAtRow(int row) override;
 
 private:
-    RepoMSSQL repo;
+    QStringList headers;
 
 };
 

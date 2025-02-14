@@ -24,7 +24,7 @@ CreateProductWindow::CreateProductWindow(QWidget *parent)
 
     ui->deCreateDateP->setDateTime(QDateTime::currentDateTime());
 
-    repo.LoadTypeItem(ItemType::Product, listTypeProduct);
+    repo.LoadTypeItem(IndexType::Product, listTypeProduct);
     for(auto &it : listTypeProduct)
     {
         QVariant var;

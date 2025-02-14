@@ -18,7 +18,7 @@ CreateModulWindow::CreateModulWindow(QWidget *parent)
 
     ui->deCreateDate->setDateTime(QDateTime::currentDateTime());
 
-    repo.LoadTypeItem(ItemType::Modul, listTypeModule);
+    repo.LoadTypeItem(IndexType::Modul, listTypeModule);
 
     for(auto &it : listTypeModule)
     {

@@ -11,7 +11,7 @@ class DeviceModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    explicit DeviceModel(ItemType::IndexType type, QObject *parent = nullptr);
+    explicit DeviceModel(IndexType type, QObject *parent = nullptr);
     ~DeviceModel();
 
     // Header:
@@ -46,7 +46,7 @@ public:
     void DeleteItemFromListId(int id) ;
     void DeleteItemFromList(int row) ;
 
-    void createList(ItemType::IndexType);
+    void createList(IndexType);
 
     void AddItem(Items* item);
     void UpdateItem(int row);

@@ -7,14 +7,13 @@
 
 class ListProduct : public ListDevice
 {
-
         // ListDevice interface
 public:
 
     explicit ListProduct();
 
     // void Load() override;
-    QVariant getData(int row, int col, int role) const override;
+    // QVariant getData(int row, int col, int role) const override;
     // void LoadChild(Items &prod) override;
     // Product GetItem(int id) override;
 

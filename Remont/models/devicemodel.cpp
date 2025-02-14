@@ -1,11 +1,12 @@
 #include "devicemodel.h"
 
+#include "listclaim.h"
 #include "listmodul.h"
 #include "listproduct.h"
 
 #include <QIcon>
 
-DeviceModel::DeviceModel(ItemType::IndexType type, QObject *parent)
+DeviceModel::DeviceModel(IndexType type, QObject *parent)
     : QAbstractTableModel(parent)
 {
     createList(type);
@@ -193,21 +194,25 @@ void DeviceModel::DeleteItemFromList(int row)
 }
 
 
-void DeviceModel::createList(ItemType::IndexType type)
+void DeviceModel::createList(IndexType type)
 {
     switch(type)
     {
-    case ItemType::Product:
+    case IndexType::Product:
         listDev = std::make_unique<ListProduct>();
         break;
-    case ItemType::Modul:
+    case IndexType::Modul:
         listDev = std::make_unique<ListModul>();
         break;
-    case ItemType::Plate:
+    case IndexType::Plate:
         listDev = std::make_unique<ListPlate>();
         break;
-    case ItemType::All:
-        listDev = std::make_unique<ListDevice>(ItemType::All);
+    case IndexType::All:
+        listDev = std::make_unique<ListDevice>(IndexType::All);
+        break;
+
+    case IndexType::ClaimType:
+        // listDev = std::make_unique<ListClaim>();
         break;
     default:
         Q_ASSERT(false);

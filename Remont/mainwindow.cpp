@@ -61,16 +61,18 @@ void MainWindow::on_pbClaim_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbCard_clicked()
 {
-    SelectDeviceWindow *win = new SelectDeviceWindow(ItemType::Product, this);
-    win->AddSelectedType(ItemType::Modul);
-    win->AddSelectedType(ItemType::Plate);
-    QVector<int> stat;
-    Items *dev = win->SelectDevice(false, stat, "", true, true);
-    if(dev != nullptr)
-    {
-        CardProdWindow *winCard = new CardProdWindow(dev, this);
-        winCard->show();
-    }
+    ui->aCardDevice->trigger();
+
+    // SelectDeviceWindow *win = new SelectDeviceWindow(ItemType::Product, this);
+    // win->AddSelectedType(ItemType::Modul);
+    // win->AddSelectedType(ItemType::Plate);
+    // QVector<int> stat;
+    // Items *dev = win->SelectDevice(false, stat, "", true, true);
+    // if(dev != nullptr)
+    // {
+    //     CardProdWindow *winCard = new CardProdWindow(dev, this);
+    //     winCard->show();
+    // }
 }
 
 
@@ -89,9 +91,10 @@ void MainWindow::on_pbApplyRemont_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbRegister_clicked()
 {
-    CreateProductWindow *win = new CreateProductWindow(this);
-    win->setAttribute(Qt::WA_DeleteOnClose);
-    win->show();
+    ui->aRegProduct->trigger();
+    // CreateProductWindow *win = new CreateProductWindow(this);
+    // win->setAttribute(Qt::WA_DeleteOnClose);
+    // win->show();
 }
 
 
@@ -100,9 +103,11 @@ void MainWindow::on_pbRegister_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbOTK_clicked()
 {
-    OTKWindow *win = new OTKWindow(this);
-    win->setAttribute(Qt::WA_DeleteOnClose);
-    win->show();
+    ui->aControlOTK->trigger();
+
+    // OTKWindow *win = new OTKWindow(this);
+    // win->setAttribute(Qt::WA_DeleteOnClose);
+    // win->show();
 }
 
 
@@ -111,8 +116,9 @@ void MainWindow::on_pbOTK_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbCreatePlate_clicked()
 {
-    PlateWindow *win = new PlateWindow(this);
-    win->show();
+    ui->aRegPlate->trigger();
+    // PlateWindow *win = new PlateWindow(this);
+    // win->show();
 }
 
 
@@ -121,8 +127,10 @@ void MainWindow::on_pbCreatePlate_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbShip_clicked()
 {
-    ListShipWindow *win = new ListShipWindow(this);
-    win->show();
+    ui->aShipping->trigger();
+
+    // ListShipWindow *win = new ListShipWindow(this);
+    // win->show();
 }
 
 
@@ -131,8 +139,10 @@ void MainWindow::on_pbShip_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbComplect_clicked()
 {
-    ComplectProductWindow *win = new ComplectProductWindow(this);
-    win->show();
+    ui->aInstallModul->trigger();
+
+    // ComplectProductWindow *win = new ComplectProductWindow(this);
+    // win->show();
 }
 
 
@@ -151,8 +161,10 @@ void MainWindow::on_pbStartRemont_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbStartWork_clicked()
 {
-    StartWorkWindow *win = new StartWorkWindow(this);
-    win->show();
+    ui->aStartWork->trigger();
+
+    // StartWorkWindow *win = new StartWorkWindow(this);
+    // win->show();
 }
 
 
@@ -161,8 +173,10 @@ void MainWindow::on_pbStartWork_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbEndRemont_clicked()
 {
-    EndRemontWindow *win = new EndRemontWindow(this);
-    win->show();
+    ui->aEndRepair->trigger();
+
+    // EndRemontWindow *win = new EndRemontWindow(this);
+    // win->show();
 }
 
 
@@ -274,9 +288,9 @@ void MainWindow::on_aEndRepair_triggered()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_aCardDevice_triggered()
 {
-    SelectDeviceWindow *win = new SelectDeviceWindow(ItemType::Product, this);
-    win->AddSelectedType(ItemType::Modul);
-    win->AddSelectedType(ItemType::Plate);
+    SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
+    win->AddSelectedType(IndexType::Modul);
+    win->AddSelectedType(IndexType::Plate);
     QVector<int> stat;
     Items *dev = win->SelectDevice(false, stat, "", true, true);
     if(dev != nullptr)
@@ -365,7 +379,7 @@ void MainWindow::on_aListPlate_triggered()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_aPlateVNFT_triggered()
 {
-    ItemVNFTWindow *win = new ItemVNFTWindow(ItemType::Plate, this);
+    ItemVNFTWindow *win = new ItemVNFTWindow(IndexType::Plate, this);
     win->open();
 }
 
@@ -417,7 +431,7 @@ void MainWindow::on_aGenQR_triggered()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_aPRodVNFT_triggered()
 {
-    ItemVNFTWindow *win = new ItemVNFTWindow(ItemType::Product, this);
+    ItemVNFTWindow *win = new ItemVNFTWindow(IndexType::Product, this);
     win->exec();
 }
 
@@ -427,7 +441,7 @@ void MainWindow::on_aPRodVNFT_triggered()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_aModVNFT_triggered()
 {
-    ItemVNFTWindow *win = new ItemVNFTWindow(ItemType::Modul, this);
+    ItemVNFTWindow *win = new ItemVNFTWindow(IndexType::Modul, this);
     win->exec();
 }
 

@@ -4,7 +4,7 @@
 
 
 
-SelectDeviceWindow::SelectDeviceWindow(ItemType::IndexType _type, QWidget *parent)
+SelectDeviceWindow::SelectDeviceWindow(IndexType _type, QWidget *parent)
     : QDialog(parent), ui(new Ui::SelectDeviceWindow), type(_type)
 {
     ui->setupUi(this);
@@ -30,13 +30,15 @@ SelectDeviceWindow::SelectDeviceWindow(ItemType::IndexType _type, QWidget *paren
 SelectDeviceWindow::~SelectDeviceWindow()
 {
     delete ui;
-    delete device;
+    // delete device;
+
+    // qDebug() << "destructor SelectDeviceWindow";
 }
 
 //---------------------------------------------------------------------------------------
 // Добавление нового типа для поиска
 //---------------------------------------------------------------------------------------
-void SelectDeviceWindow::AddSelectedType(ItemType::IndexType _type)
+void SelectDeviceWindow::AddSelectedType(IndexType _type)
 {
     int row = typeModel.rowCount();
     typeModel.insertRow(row);
@@ -44,23 +46,27 @@ void SelectDeviceWindow::AddSelectedType(ItemType::IndexType _type)
     QString name;
     QString sIcon;
 
-    switch(_type)
-    {
-    case ItemType::Product:
-        name = "Изделия";
-        sIcon = ":/image/product.png";
-        break;
-    case ItemType::Modul:
-        name = "Модули";
-        sIcon = "://image/modul.png";
-        break;
-    case ItemType::Plate:
-        name = "Платы";
-        sIcon = "://image/network_adapter.png";
-        break;
-    case ItemType::All:
-        break;
-    }
+    Items dev;
+    dev.type.indexType = _type;
+    dev.GetInfo(name, sIcon);
+
+    // switch(_type)
+    // {
+    // case ItemType::Product:
+    //     name = "Изделия";
+    //     sIcon = ":/image/product.png";
+    //     break;
+    // case ItemType::Modul:
+    //     name = "Модули";
+    //     sIcon = "://image/modul.png";
+    //     break;
+    // case ItemType::Plate:
+    //     name = "Платы";
+    //     sIcon = "://image/network_adapter.png";
+    //     break;
+    // case ItemType::All:
+    //     break;
+    // }
 
     QStandardItem *item = new QStandardItem(QIcon(sIcon), name);
     item->setData(_type, Qt::UserRole);
@@ -96,18 +102,17 @@ Items *SelectDeviceWindow::SelectDevice(bool isNow, QVector<int> &statusList, QS
     {
         if(listTemp.size() == 1 && searchNum == listTemp.first().number)
         {
-            device2 = listTemp.first();
+            device = listTemp.first();
             accept();
-            return &device2;
+            return &device;
         }
     }
 
     connect(ui->cbType, SIGNAL(currentIndexChanged(int)), SLOT(slotTypeChanged(int)));
-
     startLoad();
     exec();
 
-    return &device2;
+    return &device;
 }
 
 
@@ -127,12 +132,9 @@ void SelectDeviceWindow::setDisableSearch()
 void SelectDeviceWindow::Search(QString /*number*/)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-
     startLoad();
     QApplication::restoreOverrideCursor();
-
 }
-
 
 
 //--------------------------------------------------------------------------------------------------
@@ -151,8 +153,7 @@ void SelectDeviceWindow::on_pbSelect_clicked()
 {
     QModelIndex index = ui->tableView->currentIndex();
 
-    device2 = *model->GetItem(index.row());
-
+    device = *model->GetItem(index.row());
     accept();
 }
 
@@ -168,7 +169,7 @@ void SelectDeviceWindow::on_tableView_doubleClicked(const QModelIndex &/*index*/
 void SelectDeviceWindow::slotTypeChanged(int row)
 {
     QModelIndex index = typeModel.index(row, 0);
-    ItemType::IndexType type = (ItemType::IndexType)typeModel.data(index, Qt::UserRole).toInt();
+    IndexType type = (IndexType)typeModel.data(index, Qt::UserRole).toInt();
     delete model;
     model = new DeviceModel(type, this);
     startLoad();
@@ -184,3 +185,10 @@ void SelectDeviceWindow::slotTypeChanged(int row)
 //     }
 // }
 
+
+
+// int SelectDeviceWindow::exec()
+// {
+//     connect(ui->cbType, SIGNAL(currentIndexChanged(int)), SLOT(slotTypeChanged(int)));
+//     startLoad();
+// }

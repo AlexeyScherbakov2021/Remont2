@@ -18,7 +18,7 @@ class ItemVNFTWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit ItemVNFTWindow(ItemType::IndexType t, QWidget *parent = nullptr);
+    explicit ItemVNFTWindow(IndexType t, QWidget *parent = nullptr);
     ~ItemVNFTWindow();
 
 private slots:
@@ -33,7 +33,7 @@ private:
     Ui::ItemVNFTWindow *ui;
     RepoMSSQL repo;
     QSqlTableModel model2;
-    ItemType::IndexType workType;
+    IndexType workType;
 };
 
 #endif // ITEMVNFTWINDOW_H

@@ -21,7 +21,7 @@ CardProdWindow::CardProdWindow(Items *device, QWidget *parent)
     Items product;
     QList<Remont> listRemont;
 
-    if(device->type.indexType == ItemType::Modul)
+    if(device->type.indexType == IndexType::Modul)
     {
         Items *mod = static_cast<Items*>(device);
         // product = repo.GetItem(mod->idProduct);
@@ -30,7 +30,7 @@ CardProdWindow::CardProdWindow(Items *device, QWidget *parent)
         LoadHistoryToForm(mod->listStatus);
         repo.LoadRemont(listRemont, mod->id, ev::MODUL);
     }
-    if(device->type.indexType == ItemType::Product)
+    if(device->type.indexType == IndexType::Product)
     {
         prod = static_cast<Items*>(device);
         // repo.LoadChildProduct(*prod);
