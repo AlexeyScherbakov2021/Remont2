@@ -12,7 +12,7 @@ bool ListClaim::AddItem(Claim &item)
     return true;
 }
 
-int ListClaim::GetRowFromId(int id)
+int ListClaim::GetRowFromId(int /*id*/)
 {
     return 0;
 }
@@ -22,7 +22,7 @@ bool ListClaim::DeleteItemId(int id)
     return repo.DeleteClaim(id);
 }
 
-void ListClaim::DeleteItemFromList(int row)
+void ListClaim::DeleteItemFromList(int /*row*/)
 {
 }
 
@@ -47,7 +47,7 @@ Claim ListClaim::GetItem(int row)
     // return Claim();
 }
 
-bool ListClaim::LoadChild(Claim &item)
+bool ListClaim::LoadChild(Claim &/*item*/)
 {
     return false;
 }
@@ -80,7 +80,7 @@ QVariant ListClaim::getData(int row, int col, int role) const
     return var;
 }
 
-void ListClaim::setData(int row, int col, const QVariant value, int role) const
+void ListClaim::setData(int /*row*/, int /*col*/, const QVariant /*value*/, int /*role*/) const
 {
 }
 
@@ -106,7 +106,7 @@ int ListClaim::getRowCount()
 
 
 
-Claim ListClaim::GetItemAtRow(int row)
+Claim* ListClaim::GetItemAtRow(int row)
 {
-    return items.at(row);
+    return nullptr;
 }

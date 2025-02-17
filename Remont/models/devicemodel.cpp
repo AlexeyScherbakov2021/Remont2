@@ -18,6 +18,9 @@ DeviceModel::~DeviceModel()
 
 }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 QVariant DeviceModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     QVariant var;
@@ -33,6 +36,9 @@ QVariant DeviceModel::headerData(int section, Qt::Orientation orientation, int r
 }
 
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 int DeviceModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
@@ -41,6 +47,9 @@ int DeviceModel::rowCount(const QModelIndex &parent) const
     return listDev->items.size();
 }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 int DeviceModel::columnCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
@@ -49,16 +58,25 @@ int DeviceModel::columnCount(const QModelIndex &parent) const
     return headers.size();
 }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 bool DeviceModel::hasChildren(const QModelIndex &/*parent*/) const
 {
     return false;
 }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 bool DeviceModel::canFetchMore(const QModelIndex &/*parent*/) const
 {
     return isFetch;
 }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 void DeviceModel::fetchMore(const QModelIndex &/*parent*/)
 {
 
@@ -78,6 +96,9 @@ void DeviceModel::fetchMore(const QModelIndex &/*parent*/)
     }
 }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 QVariant DeviceModel::data(const QModelIndex &index, int role) const
 {
     QVariant var;
@@ -90,6 +111,9 @@ QVariant DeviceModel::data(const QModelIndex &index, int role) const
     return var;
 }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 bool DeviceModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (data(index, role) != value) {
@@ -110,6 +134,9 @@ bool DeviceModel::setData(const QModelIndex &index, const QVariant &value, int r
 //     return QAbstractItemModel::flags(index) | Qt::ItemIsEditable; // FIXME: Implement me!
 // }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 bool DeviceModel::insertRows(int row, int count, const QModelIndex &parent)
 {
     beginInsertRows(parent, row, row + count - 1);
@@ -118,6 +145,9 @@ bool DeviceModel::insertRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 bool DeviceModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     if(count <= 0)
@@ -130,6 +160,9 @@ bool DeviceModel::removeRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 void DeviceModel::prepareLoad(const QString _number, int _status, bool _isBusy, bool _isParent)
 {
     Q_ASSERT_X(listDev != nullptr, "", "not calling createList()");
@@ -146,6 +179,9 @@ void DeviceModel::prepareLoad(const QString _number, int _status, bool _isBusy, 
 
 }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 void DeviceModel::prepareLoad2(const QString _number, QVector<int>& _status, bool _isBusy, bool _isParent)
 {
     // qDebug() << "prepareLoad2" ;
@@ -165,6 +201,9 @@ void DeviceModel::prepareLoad2(const QString _number, QVector<int>& _status, boo
 }
 
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 Items *DeviceModel::GetItem(int row)
 {
     if(row >= 0 && row < listDev->items.size())
@@ -173,12 +212,18 @@ Items *DeviceModel::GetItem(int row)
         return nullptr;
 }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 bool DeviceModel::DeleteItem(int row)
 {
     removeRows(row, 1);
     return true;
 }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 void DeviceModel::DeleteItemFromListId(int id)
 {
     int row = listDev->GetRowFromId(id);
@@ -186,6 +231,9 @@ void DeviceModel::DeleteItemFromListId(int id)
         DeleteItemFromList(row);
 }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 void DeviceModel::DeleteItemFromList(int row)
 {
     beginRemoveRows(QModelIndex(), row, row);
@@ -194,6 +242,9 @@ void DeviceModel::DeleteItemFromList(int row)
 }
 
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 void DeviceModel::createList(IndexType type)
 {
     switch(type)
@@ -224,6 +275,9 @@ void DeviceModel::createList(IndexType type)
 //     lp = p;
 // }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 void DeviceModel::AddItem(Items *item)
 {
     int row = listDev->items.size();
@@ -231,6 +285,9 @@ void DeviceModel::AddItem(Items *item)
     insertRows(row, 1);
 }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 void DeviceModel::UpdateItem(int row)
 {
     Items* item = GetItem(row);
@@ -238,6 +295,9 @@ void DeviceModel::UpdateItem(int row)
         listDev->UpdateItem(*item);
 }
 
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
 void DeviceModel::setBaseOff()
 {
     isBaseOff = true;

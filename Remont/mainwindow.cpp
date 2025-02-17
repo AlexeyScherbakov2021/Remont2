@@ -22,6 +22,7 @@
 #include "prodvnftwindow.h"
 #include "modvnftwindow.h"
 #include "createmodwindow.h"
+#include "setterdlg.h"
 #include <models/listdevice.h>
 #include <models/ItemsType.h>
 
@@ -446,9 +447,23 @@ void MainWindow::on_aModVNFT_triggered()
 }
 
 
+//----------------------------------------------------------------------------------------------
+// Регистрация модулей модулей
+//----------------------------------------------------------------------------------------------
 void MainWindow::on_aRegModul_triggered()
 {
     CreateModulWindow *win = new CreateModulWindow(this);
+    win->setAttribute(Qt::WA_DeleteOnClose);
+    win->show();
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Открыть наборы
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aSetter_triggered()
+{
+    SetterDlg *win = new SetterDlg(this);
     win->setAttribute(Qt::WA_DeleteOnClose);
     win->show();
 }

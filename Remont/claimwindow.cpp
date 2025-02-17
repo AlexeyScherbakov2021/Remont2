@@ -144,9 +144,9 @@ void ClaimWindow::on_pbDelete_clicked()
     if(row < 0 )
         return;
 
-    Claim claim = claims.GetItemAtRow(row);
+    Claim* claim = claims.GetItemAtRow(row);
     if(QMessageBox::warning(this, "Предупреждение",
-                             QString("Удалить рекламацию № %1 ?").arg(claim.number), QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes)
+                             QString("Удалить рекламацию № %1 ?").arg(claim->number), QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes)
         return;
 
     if(claims.DeleteItem(row))

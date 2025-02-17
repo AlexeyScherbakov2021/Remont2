@@ -178,7 +178,7 @@ background-color: LightGray;
      </rect>
     </property>
     <property name="text">
-     <string>Установка в оборудование</string>
+     <string>Установка устройств</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pbStartWork">
@@ -229,6 +229,7 @@ background-color: LightGray;
     <property name="title">
      <string>Отгрузки</string>
     </property>
+    <addaction name="aSetter"/>
     <addaction name="aNewShip"/>
     <addaction name="aShipBefore"/>
     <addaction name="aShipping"/>
@@ -438,6 +439,11 @@ background-color: LightGray;
   <action name="aRegModul">
    <property name="text">
     <string>Регистрация модулей</string>
+   </property>
+  </action>
+  <action name="aSetter">
+   <property name="text">
+    <string>Наборы</string>
    </property>
   </action>
  </widget>

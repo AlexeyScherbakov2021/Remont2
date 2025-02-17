@@ -7,7 +7,6 @@
 #include <QString>
 #include <infrastructure/IStatus.h>
 
-
 class Items : public IEntity, public StatusList
 {
 public:
@@ -29,7 +28,7 @@ public:
     bool isZip = false;
 
     ItemType type;
-    QList<Items> childItems;
+    // QList<Items> childItems;
 
     QString VNFT;
     QString currStatus;
@@ -68,6 +67,9 @@ public:
         case IndexType::All:
             nameType = "Любой";
             // nameIcon = ":/image/network_adapter.png";
+            break;
+        case IndexType::ClaimType:
+        default:
             break;
         }
     }

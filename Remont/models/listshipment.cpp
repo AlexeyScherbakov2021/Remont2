@@ -25,7 +25,7 @@ Shipment ListShipment::GetItem(int id)
 
 
 
-bool ListShipment::DeleteItem(int id)
+bool ListShipment::DeleteItem(int /*id*/)
 {
     // return repo.DeleteShipment(id);
     return false;

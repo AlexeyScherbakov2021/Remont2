@@ -27,7 +27,7 @@ public:
     int getColumnCount();
     int getRowCount();
 
-    Claim GetItemAtRow(int row) override;
+    Claim* GetItemAtRow(int row) override;
 
 private:
     QStringList headers;

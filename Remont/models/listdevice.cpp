@@ -70,7 +70,7 @@ bool ListDevice::UpdateItem(Items &item)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void ListDevice::FindItems(const QString &number, int status, bool isFree)
+void ListDevice::FindItems(const QString &/*number*/, int /*status*/, bool /*isFree*/)
 {
     // repo.FindItems(typeDev, number, items, status, isFree);
 }
@@ -176,6 +176,10 @@ int ListDevice::LoadPart2(int start, int count, const QString &number, QVector<i
 
 
 
-Items ListDevice::GetItemAtRow(int row)
+Items* ListDevice::GetItemAtRow(int row)
 {
+    if(row < items.size())
+        return &items[row];
+
+    return nullptr;
 }

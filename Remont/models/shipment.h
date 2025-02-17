@@ -30,6 +30,9 @@ public:
 
     explicit Shipment() {}
 
+    virtual void GetInfo(QString& /*nameType*/, QString& /*nameIcon*/) const {}
+
+
 };
 
 #endif // SHIPMENT_H

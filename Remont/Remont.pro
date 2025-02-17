@@ -35,6 +35,7 @@ SOURCES += \
     models/listproduct.cpp \
     models/listsetter.cpp \
     models/listshipment.cpp \
+    models/settermodel.cpp \
     otkactiondlg.cpp \
     otkwindow.cpp \
     platefwwindow.cpp \
@@ -48,6 +49,8 @@ SOURCES += \
     repomssql.cpp \
     scan.cpp \
     selectdevicewindow.cpp \
+    setterdlg.cpp \
+    settereditdlg.cpp \
     shipwindow.cpp \
     startworkwindow.cpp
 
@@ -85,6 +88,7 @@ HEADERS += \
     models/listshipment.h \
     models/organization.h \
     models/remont.h \
+    models/settermodel.h \
     models/setterout.h \
     models/shipment.h \
     otkactiondlg.h \
@@ -100,6 +104,8 @@ HEADERS += \
     repomssql.h \
     scan.h \
     selectdevicewindow.h \
+    setterdlg.h \
+    settereditdlg.h \
     shipwindow.h \
     startworkwindow.h
 
@@ -125,6 +131,8 @@ FORMS += \
     remontwindow.ui \
     scan.ui \
     selectdevicewindow.ui \
+    setterdlg.ui \
+    settereditdlg.ui \
     shipwindow.ui \
     startworkwindow.ui
 

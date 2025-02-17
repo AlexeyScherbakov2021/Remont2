@@ -140,7 +140,7 @@ void CardProdWindow::LoadRemontToForm(QList<Remont> &listRemont)
 void CardProdWindow::loadShipmentToForm(const Items *prod)
 {
     SetterOut setter ;//= repo.GetSetter(prod->idSetterOut);
-    Shipment ship = repo.GetShipment(setter.idShipment);
+    // Shipment ship = repo.GetShipment(setter.idShipment);
 
     if(setter.id <= 0)
         return;
@@ -151,53 +151,53 @@ void CardProdWindow::loadShipmentToForm(const Items *prod)
     //     repo.LoadChildProduct(it);
     // }
 
-    ui->lbContract->setText(ship.schet);
-    ui->lbCardOrder->setText(ship.cardOrder);
-    ui->lbObjectInstall->setText(ship.objectInstall);
-    ui->lbProduction->setText(prod->name);
-    ui->lbDateUPD->setText(ship.dateUPD.toString("dd.MM.yyyy"));
-    ui->lbNumberUPD->setText(ship.numberUPD);
+    // ui->lbContract->setText(ship.schet);
+    // ui->lbCardOrder->setText(ship.cardOrder);
+    // ui->lbObjectInstall->setText(ship.objectInstall);
+    // ui->lbProduction->setText(prod->name);
+    // ui->lbDateUPD->setText(ship.dateUPD.toString("dd.MM.yyyy"));
+    // ui->lbNumberUPD->setText(ship.numberUPD);
 
     QTreeWidgetItem *top = new QTreeWidgetItem();
     top->setText(0, setter.name);
     top->setIcon(0, QIcon("://image/setter.png"));
     ui->treeWidget->addTopLevelItem(top);
     top->setExpanded(true);
-    for(auto const &it : setter.listItems)
-    {
-        QTreeWidgetItem *child = new QTreeWidgetItem();
-        child->setIcon(0, QIcon("://image/product.png"));
-        QString s = it.name + "(" + it.number + ")";
-        if(it.getIsRepair())
-            s += " неисправен";
-        child->setText(0, s);
-        if(it.number == number)
-        {
-            QFont font;
-            font.setBold(true);
-            child->setFont(0, font);
-        }
-        top->addChild(child);
-        child->setExpanded(true);
-        // for(auto mod : it.listModules)
-        // {
-        //     // Modul modul = mod;
-        //     mod.LoadStatus(mod);
-        //     QTreeWidgetItem *modItem = new QTreeWidgetItem();
-        //     modItem->setIcon(0, QIcon("://image/modul.png"));
-        //     s = mod.name + "(" + mod.number + ")";
-        //     if(mod.getIsRepair())
-        //         s += " неисправен";
-        //     modItem->setText(0, s);
-        //     if(mod.number == number)
-        //     {
-        //         QFont font;
-        //         font.setBold(true);
-        //         modItem->setFont(0, font);
-        //     }
-        //     child->addChild(modItem);
-        // }
-    }
+    // for(auto const &it : setter.listItems)
+    // {
+    //     QTreeWidgetItem *child = new QTreeWidgetItem();
+    //     child->setIcon(0, QIcon("://image/product.png"));
+    //     QString s = it.name + "(" + it.number + ")";
+    //     if(it.getIsRepair())
+    //         s += " неисправен";
+    //     child->setText(0, s);
+    //     if(it.number == number)
+    //     {
+    //         QFont font;
+    //         font.setBold(true);
+    //         child->setFont(0, font);
+    //     }
+    //     top->addChild(child);
+    //     child->setExpanded(true);
+    //     // for(auto mod : it.listModules)
+    //     // {
+    //     //     // Modul modul = mod;
+    //     //     mod.LoadStatus(mod);
+    //     //     QTreeWidgetItem *modItem = new QTreeWidgetItem();
+    //     //     modItem->setIcon(0, QIcon("://image/modul.png"));
+    //     //     s = mod.name + "(" + mod.number + ")";
+    //     //     if(mod.getIsRepair())
+    //     //         s += " неисправен";
+    //     //     modItem->setText(0, s);
+    //     //     if(mod.number == number)
+    //     //     {
+    //     //         QFont font;
+    //     //         font.setBold(true);
+    //     //         modItem->setFont(0, font);
+    //     //     }
+    //     //     child->addChild(modItem);
+    //     // }
+    // }
 }
 
 //-------------------------------------------------------------------------------------------------------

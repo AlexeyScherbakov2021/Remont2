@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <models/ItemsType.h>
 #include <models/enumvariable.h>
+#include <infrastructure/IStatus.h>
 
 // class Product;
 // class Modul;
@@ -62,6 +63,8 @@ public:
     bool DelLastStatus(Items &item) const;
 
     void LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) const;       //=============
+
+    int LoadPart(size_t start, size_t count, const QString &number, QList<SetterOut> &listItems, bool isBusy = false) const;
 
 
 public:

@@ -13,13 +13,11 @@
 class SetterOut : public IEntity
 {
 public:
-    int idShipment;
-    QString name;
-    QString orderNumber;
-    // QList<Product> listProduct;
-    QList<Items> listItems;
 
-    explicit SetterOut() : idShipment{0} {}
+    // QList<Items> listItems;
+
+    explicit SetterOut() {}
+    virtual void GetInfo(QString& /*nameType*/, QString& /*nameIcon*/) const {}
 
 };
 

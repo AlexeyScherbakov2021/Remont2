@@ -60,6 +60,8 @@ private slots:
     void on_aModVNFT_triggered();
     void on_aRegModul_triggered();
 
+    void on_aSetter_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;

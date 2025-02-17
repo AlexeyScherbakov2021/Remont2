@@ -43,6 +43,9 @@ public:
 
     Claim() {}
 
+    virtual void GetInfo(QString& /*nameType*/, QString& /*nameIcon*/) const {}
+
+
 };
 
 #endif // CLAIM_H

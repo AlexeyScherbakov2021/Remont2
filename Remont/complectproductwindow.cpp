@@ -210,7 +210,7 @@ void ComplectProductWindow::slotReadScan(QString s)
         if(item.id > 0)
         {
             // добавление в изделия
-            if(dev.id == 0 && item.type.indexType != IndexType::Plate
+            if((dev.id == 0 && item.type.indexType != IndexType::Plate)
                     || dev.type.indexType == item.type.indexType)
             {
                 ui->leNumProdSearch->setText(s);

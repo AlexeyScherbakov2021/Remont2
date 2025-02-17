@@ -1,22 +1,15 @@
 
 #include <models/claim.h>
-// #include <models/modul.h>
-// #include <models/product.h>
 #include <models/setterout.h>
 #include <models/shipment.h>
-// #include<models/plate.h>
-// #include <models/prodtype.h>
-// #include <models/modultype.h>
 #include <models/remont.h>
-
 // #include <QElapsedTimer>
-// #include <models/platetype.h>
 #include <models/organization.h>
 #include<models/Items.h>
-#include <QMessageBox>
-#include <QSqlRecord>
+// #include <QMessageBox>
+// #include <QSqlRecord>
+#include <infrastructure/IStatus.h>
 #include "repomssql.h"
-// #include <infrastructure/IStatus.h>
 
 class Product;
 
@@ -57,7 +50,7 @@ bool RepoMSSQL::ConnectDb()
     if(!db.open())
     {
         // qDebug() << "Ошибка соединения с базой данных." << db.lastError().text();
-        QMessageBox::critical(0, "Ошибка", "Ошибка соединения с базой данных.");
+        // QMessageBox::critical(0, "Ошибка", "Ошибка соединения с базой данных.");
         std::terminate();
         return false;
     }
@@ -302,8 +295,8 @@ Items RepoMSSQL::GetItem(int id) const
         item.isZip = query.value(14).toBool();
         item.type.typeName = query.value(15).toString();
         item.type.indexType = (IndexType)query.value(16).toInt();
-        item.type.VNFT = query.value(18).toString();
-        item.type.garantMonth = query.value(19).toInt();
+        item.type.VNFT = query.value(17).toString();
+        item.type.garantMonth = query.value(18).toInt();
         item.type.id = item.idType;
         item.VNFT = item.type.VNFT;
         LoadStatus(item);
@@ -498,7 +491,7 @@ Items RepoMSSQL::GetItem2( QString number, QVector<int>& listStatus, bool isBusy
         item.type.id = item.idType;
         item.VNFT = item.type.VNFT;
 
-        item.LoadStatus(item);
+        LoadStatus(item);
         item.SetLastStatus(item.currStatus, item.commentStatus);
         // Status status;
         // status.idItem = item.id;
@@ -1334,10 +1327,10 @@ SetterOut RepoMSSQL::GetSetter(int id)
     query.exec();
     if(query.next())
     {
-        setter.id = id;
-        setter.idShipment = query.value(0).toInt();
-        setter.name = query.value(1).toString();
-        setter.orderNumber = query.value(2).toString();
+        // setter.id = id;
+        // setter.idShipment = query.value(0).toInt();
+        // setter.name = query.value(1).toString();
+        // setter.orderNumber = query.value(2).toString();
     }
 
     return setter;
@@ -1516,12 +1509,13 @@ bool RepoMSSQL::AddItem(SetterOut &setter)
     bool res;
     QSqlQuery query;
 
-    query.prepare("insert into SetterOut (idShipment,s_name,s_OrderNum) "
-                  "output inserted.id values(:idShipment,:s_name,:s_OrderNum)");
+    query.prepare("insert into SetterOut (idShipment,s_name,s_OrderNum,dateCreate) "
+                  "output inserted.id values(:idShipment,:s_name,:s_OrderNum,:dateCreate)");
 
-    query.bindValue(":idShipment", setter.idShipment);
+    query.bindValue(":idShipment", setter.idShip);
     query.bindValue(":s_name", setter.name);
-    query.bindValue(":s_OrderNum", setter.orderNumber);
+    query.bindValue(":s_OrderNum", setter.numberDoc);
+    query.bindValue(":dateCreate", setter.dateCreate);
 
     res = query.exec();
     if(!res)
@@ -1843,14 +1837,14 @@ void RepoMSSQL::LoadShipment(QList<Shipment> &listShip, bool /*isFinish*/)
 //------------------------------------------------------------------------------------------------------
 void RepoMSSQL::LoadChildSetter(SetterOut &setter)
 {
-    setter.listItems.clear();
+    setter.childItems.clear();
     QSqlQuery query;
-    query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
-                  "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-                  "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
-                  "from Product where idSetter = :idSetter");
+    query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,"
+                  "dateCreate,dateOn,dateOff,i.garantMonth,dateGarant,isZip,it.indexType,it.VNFT,it.typeName "
+                  "from Items i join itemType it on it.id=i.idType "
+                  "where idSet = :idSet");
 
-    query.bindValue(":idSetter", setter.id);
+    query.bindValue(":idSet", setter.id);
 
     query.exec();
     while(query.next())
@@ -1858,30 +1852,26 @@ void RepoMSSQL::LoadChildSetter(SetterOut &setter)
         Items prod;
 
         prod.id = query.value(0).toInt();
-        prod.idShip = query.value(1).toInt();
-        prod.idSet = query.value(2).toInt();
-        prod.idType = query.value(3).toInt();
-        prod.name = query.value(4).toString();
+        prod.idParent = query.value(1).toInt();
+        prod.idShip = query.value(2).toInt();
+        prod.idSet = query.value(3).toInt();
+        prod.idType = query.value(4).toInt();
         prod.number = query.value(5).toString();
         prod.number2 = query.value(6).toString();
-        prod.dateCreate = query.value(7).toDateTime();
-        // prod.redaction1 = query.value(8).toString();
-        // prod.redaction2 = query.value(9).toString();
-        // prod.redactionPS = query.value(10).toString();
-        // prod.questList = query.value(11).toString();
-        // prod.isAvr = query.value(12).toBool();
-        // prod.isAkb = query.value(13).toBool();
-        // prod.isCooler = query.value(14).toBool();
-        // prod.isSkm = query.value(15).toBool();
-        // prod.numberBI = query.value(16).toString();
-        // prod.numberUSIKP = query.value(17).toString();
-        // prod.shunt = query.value(18).toString();
-        // prod.isZip = query.value(19).toBool();
-        // prod.garantMonth = query.value(20).toInt();
-        // prod.EndGarant = query.value(21).toDateTime();
-        // prod.dateOn = query.value(22).toDateTime();
+        prod.numberDoc = query.value(7).toString();
+        prod.name = query.value(8).toString();
+        prod.dateCreate = query.value(9).toDateTime();
+        prod.dateOn = query.value(10).toDateTime();
+        prod.dateOff = query.value(11).toDateTime();
+        prod.garantMonth = query.value(12).toInt();
+        prod.dateGarant = query.value(13).toDateTime();
+        prod.isZip = query.value(14).toBool();
+        prod.type.id = prod.id;
+        prod.type.indexType = (IndexType)query.value(15).toInt();
+        prod.type.VNFT = query.value(16).toString();
+        prod.type.typeName = query.value(17).toString();
         LoadStatus(prod);
-        setter.listItems.push_back(prod);
+        setter.childItems.push_back(prod);
     }
 
 }
@@ -2706,6 +2696,59 @@ void RepoMSSQL::LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) c
 }
 
 //------------------------------------------------------------------------------------------------------
+// Загрузка наборов
+//------------------------------------------------------------------------------------------------------
+int RepoMSSQL::LoadPart(size_t start, size_t count, const QString &number, QList<SetterOut> &listItems, bool isBusy) const
+{
+    int res = 0;
+    QSqlQuery query;
+    QStringList slWhere;
+
+
+    QString sqlNumber = " s_orderNum like :s_orderNum";
+    QString sqlBusy = " idShipment is null";
+
+    QStringList sql = {"select id,idShipment,s_name,s_orderNum,dateCreate from SetterOut " };
+
+    if(!number.isEmpty())
+        slWhere.push_back(sqlNumber);
+
+    if(!isBusy)
+        slWhere.push_back(sqlBusy);
+
+    if(slWhere.size() > 0)
+    {
+        sql.push_back(" where ");
+        sql.push_back(slWhere.join(" and "));
+    }
+
+    sql.push_back(" order by dateCreate,s_orderNum desc offset :start rows fetch next :count rows only");
+    QString sql2 = sql.join("");
+    query.prepare(sql2);
+    query.bindValue(":start", start);
+    query.bindValue(":count", count);
+    query.bindValue(":s_orderNum", QString("%%1%").arg(number));
+
+    // qDebug() << sql2;
+
+    query.exec();
+    while(query.next())
+    {
+        SetterOut item;
+
+        item.id = query.value(0).toInt();
+        item.idShip = query.value(1).toInt();
+        item.name = query.value(2).toString();
+        item.numberDoc = query.value(3).toString();
+        item.dateCreate = query.value(4).toDateTime();
+        listItems.push_back(item);
+        ++res;
+    }
+
+    return res;
+}
+
+//------------------------------------------------------------------------------------------------------
 // Загрузка организаций
 //------------------------------------------------------------------------------------------------------
 void RepoMSSQL::LoadOrganization(QMap<int, QString> &listOrg)
@@ -2766,10 +2809,10 @@ void RepoMSSQL::LoadShipSetter(QList<SetterOut> &listSetter, int idShip)
     while(query.next())
     {
         SetterOut setter;
-        setter.id = query.value(0).toInt();
-        setter.idShipment = idShip;
-        setter.name = query.value(1).toString();
-        setter.orderNumber = query.value(2).toString();
+        // setter.id = query.value(0).toInt();
+        // setter.idShipment = idShip;
+        // setter.name = query.value(1).toString();
+        // setter.orderNumber = query.value(2).toString();
         listSetter.push_back(setter);
     }
 }

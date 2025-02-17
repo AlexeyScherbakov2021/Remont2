@@ -255,7 +255,7 @@ void ClaimDetail::on_tbDeleteDevice_clicked()
     if(item == nullptr)
         return;
 
-    int id = item->data(Qt::UserRole).toInt();
+    // int id = item->data(Qt::UserRole).toInt();
     int type = item->data(Qt::UserRole + 1).toInt();
 
     if(type == ev::PRODUCT)
@@ -296,20 +296,20 @@ void ClaimDetail::slotEnabledWidget()
     res = true;
     if(item != nullptr)
     {
-        int id = item->data(Qt::UserRole).toInt();
-        int type = item->data(Qt::UserRole + 1).toInt();
+        // int id = item->data(Qt::UserRole).toInt();
+        // int type = item->data(Qt::UserRole + 1).toInt();
 
-        if(type == ev::PRODUCT)
-        {
-            auto prod_iter = std::find_if(claim->listProduct.cbegin(), claim->listProduct.cend(), [id] (Items p) { return p.id == id;});
-            // res = (prod_iter != claim->listProduct.cend() && !(*prod_iter).getIsRepair());
-        }
-        else
-        {
-            auto mod_iter = std::find_if(claim->listModul.cbegin(), claim->listModul.cend(), [id] (Items m) { return m.id == id;});
-            // if(mod_iter != claim->listModul.cend())
-            //     res = !(*mod_iter).getIsRepair();
-        }
+        // if(type == ev::PRODUCT)
+        // {
+        //     auto prod_iter = std::find_if(claim->listProduct.cbegin(), claim->listProduct.cend(), [id] (Items p) { return p.id == id;});
+        //     res = (prod_iter != claim->listProduct.cend() && !(*prod_iter).getIsRepair());
+        // }
+        // else
+        // {
+        //     auto mod_iter = std::find_if(claim->listModul.cbegin(), claim->listModul.cend(), [id] (Items m) { return m.id == id;});
+        //     if(mod_iter != claim->listModul.cend())
+        //         res = !(*mod_iter).getIsRepair();
+        // }
     }
     ui->tbDeleteDevice->setEnabled(res);
 }

@@ -38,7 +38,7 @@ public:
     virtual void setData(int row, int col, const QVariant value, int role) const override;
     virtual void GetHeader(QStringList& headers) override;
     int LoadPart2(int start, int count, const QString &number, QVector<int> vStatus, bool isBusy = false, bool isParent = false) override;
-    Items GetItemAtRow(int row) override;
+    Items* GetItemAtRow(int row) override;
 
     // size_t LoadPart(int start, int count, const QString &number, int status = 0, bool isBusy = false, bool isParent = false)
     // {

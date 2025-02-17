@@ -368,8 +368,8 @@ void ShipWindow::on_pbFinish_clicked()
 {
     int countProd = 0;
 
-    for(auto &it : ship->listSetterOut)
-        countProd += it.listItems.size();
+    // for(auto &it : ship->listSetterOut)
+    //     countProd += it.listItems.size();
 
     if(ship->listItems.size() == 0
         && ship->listItems.size() == 0
@@ -470,13 +470,13 @@ void ShipWindow::on_tbAddSetter_clicked()
         if(ship->id == 0)
             repo.AddItem(*ship);
 
-        setter.idShipment = ship->id;
-        if(repo.AddItem(setter))
-        {
-            ship->listSetterOut.push_back(setter);
-            AddItemTree(res, setter.id, TypeItemTree::SET);
-            // qDebug() << "Добавлен набор id=" << setter.id;
-        }
+        // setter.idShipment = ship->id;
+        // if(repo.AddItem(setter))
+        // {
+        //     ship->listSetterOut.push_back(setter);
+        //     AddItemTree(res, setter.id, TypeItemTree::SET);
+        //     // qDebug() << "Добавлен набор id=" << setter.id;
+        // }
     }
 
 }
