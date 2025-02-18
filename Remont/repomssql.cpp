@@ -3,13 +3,10 @@
 #include <models/setterout.h>
 #include <models/shipment.h>
 #include <models/remont.h>
-// #include <QElapsedTimer>
 #include <models/organization.h>
 #include<models/Items.h>
 
 #include <QSqlDriver>
-// #include <QMessageBox>
-// #include <QSqlRecord>
 #include <infrastructure/IStatus.h>
 #include "repomssql.h"
 
@@ -630,6 +627,72 @@ bool RepoMSSQL::DeleteShipment(int id)
         qDebug() << "Ошибка при удалении записи в Shipment";
 
     return res;
+}
+
+//------------------------------------------------------------------------------------------------------
+// Загрузка отгрузок
+//------------------------------------------------------------------------------------------------------
+int RepoMSSQL::LoadPart(size_t start, size_t count, const QString &number, QList<Shipment> &listItems, bool isShip) const
+{
+    int res = 0;
+    QSqlQuery query;
+    // QStringList slWhere;
+
+    QString sqlNumber = " c_schet like :c_schet";
+
+    QStringList sql = {"select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
+                        "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,id "
+                       "from Shipment where c_dateOut is "};
+
+    if(isShip)
+        sql << "not null";
+    else
+        sql << "null";
+
+    if(!number.isEmpty())
+    {
+        sql << " and " << sqlNumber;
+    }
+
+    sql << " order by c_dateUPD desc,c_schet  offset :start rows fetch next :count rows only";
+
+    QString sql2 = sql.join("");
+    query.prepare(sql2);
+
+    // query.bindValue(":isShip", isShip ? "not null" : "null");
+
+    query.bindValue(":c_schet", QString("%%1%").arg(number));
+    query.bindValue(":start", start);
+    query.bindValue(":count", count);
+
+    // qDebug() << sql2;
+
+    query.exec();
+
+    while(query.next())
+    {
+        Shipment ship;
+        ship.number = query.value(0).toString();
+        ship.objectInstall = query.value(1).toString();
+        ship.dateRegister = query.value(2).toDateTime();
+        ship.idOrganization = query.value(3).toInt();
+        ship.questList = query.value(4).toString();
+        ship.schet = query.value(5).toString();
+        ship.cardOrder = query.value(6).toString();
+        ship.numberUPD = query.value(7).toString();
+        ship.buyer = query.value(8).toString();
+        ship.dateUPD = query.value(9).toDateTime();
+        ship.id = query.value(10).toInt();
+        listItems.push_back(ship);
+        ++res;
+    }
+
+    return res;
+}
+
+void RepoMSSQL::LoadChildShip(Shipment &ship)
+{
+
 }
 
 //------------------------------------------------------------------------------------------------------
@@ -2764,7 +2827,6 @@ int RepoMSSQL::LoadPart(size_t start, size_t count, const QString &number, QList
     QSqlQuery query;
     QStringList slWhere;
 
-
     QString sqlNumber = " s_orderNum like :s_orderNum";
     QString sqlBusy = " idShipment is null";
 
@@ -2782,7 +2844,7 @@ int RepoMSSQL::LoadPart(size_t start, size_t count, const QString &number, QList
         sql.push_back(slWhere.join(" and "));
     }
 
-    sql.push_back(" order by dateCreate,s_orderNum desc offset :start rows fetch next :count rows only");
+    sql.push_back(" order by dateCreate desc,s_orderNum  offset :start rows fetch next :count rows only");
     QString sql2 = sql.join("");
     query.prepare(sql2);
     query.bindValue(":start", start);

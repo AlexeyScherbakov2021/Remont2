@@ -22,55 +22,55 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
     ui->cbCusomer->setCurrentIndex(selectRow);
 
 
-    if(ship->id != 0)
-    {
-        // была выбрана существующая отгрузка
-        ui->leBuyer->setText(ship->buyer);
-        ui->leCardOrder->setText(ship->cardOrder);
-        ui->leNumUPD->setText(ship->numberUPD);
-        ui->leObjectInstall->setText(ship->objectInstall);
-        ui->leSchet->setText(ship->schet);
-        ui->leCustomer->setText(ship->customer);
-        ui->deDateUPD->setDateTime(ship->dateUPD);
+    // if(ship->id != 0)
+    // {
+    //     // была выбрана существующая отгрузка
+    //     ui->leBuyer->setText(ship->buyer);
+    //     ui->leCardOrder->setText(ship->cardOrder);
+    //     ui->leNumUPD->setText(ship->numberUPD);
+    //     ui->leObjectInstall->setText(ship->objectInstall);
+    //     ui->leSchet->setText(ship->schet);
+    //     ui->leCustomer->setText(ship->customer);
+    //     ui->deDateUPD->setDateTime(ship->dateUPD);
 
-        // qDebug() << ship->dateRegister;
-        // if(!ship->dateRegister.isNull())
-        // {
-        ui->deDateOut->setDateTime(ship->dateRegister);
-        // ui->deDateOut->setDateTime(ship->dateRegister);
-        // }
+    //     // qDebug() << ship->dateRegister;
+    //     // if(!ship->dateRegister.isNull())
+    //     // {
+    //     ui->deDateOut->setDateTime(ship->dateRegister);
+    //     // ui->deDateOut->setDateTime(ship->dateRegister);
+    //     // }
 
-        // ui->leTemp->setText(ship->customer); //=============================================================== УДАЛИТЬ!!!
+    //     // ui->leTemp->setText(ship->customer); //=============================================================== УДАЛИТЬ!!!
 
-        repo.LoadShipSetter(ship->listSetterOut, ship->id);
-        for(auto &it : ship->listSetterOut)
-        {
-            QTreeWidgetItem *itemSet = AddItemTree(it.name, it.id, TypeItemTree::SET);
-            repo.LoadChildSetter(it);
-            // for(auto &itProd : it.listItems)
-            //     AddItemProd(itProd, itemSet);
-        }
+    //     // repo.LoadShipSetter(ship->listSetterOut, ship->id);
+    //     // for(auto &it : ship->listSetterOut)
+    //     // {
+    //     //     QTreeWidgetItem *itemSet = AddItemTree(it.name, it.id, TypeItemTree::SET);
+    //     //     repo.LoadChildSetter(it);
+    //     //     // for(auto &itProd : it.listItems)
+    //     //     //     AddItemProd(itProd, itemSet);
+    //     // }
 
-        // repo.LoadShipProduct(ship->listItems, ship->id);
-        // for(auto &it : ship->listItems)
-        //     AddItemProd(it);
+    //     // repo.LoadShipProduct(ship->listItems, ship->id);
+    //     // for(auto &it : ship->listItems)
+    //     //     AddItemProd(it);
 
-        // repo.LoadShipModule(ship->listItems, ship->id);
-        // for(auto &it : ship->listItems)
-        //     AddItemTree(it.name + " (" + it.number + ")", it.id, TypeItemTree::MODUL);
-    }
-    else
-    {
-        ui->deDateUPD->setDateTime(QDateTime::currentDateTime());
-    }
+    //     // repo.LoadShipModule(ship->listItems, ship->id);
+    //     // for(auto &it : ship->listItems)
+    //     //     AddItemTree(it.name + " (" + it.number + ")", it.id, TypeItemTree::MODUL);
+    // }
+    // else
+    // {
+    //     ui->deDateUPD->setDateTime(QDateTime::currentDateTime());
+    // }
 
-    connect(ui->leBuyer, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
-    connect(ui->leCardOrder, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
-    connect(ui->leNumModul, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
-    connect(ui->leNumUPD, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
-    connect(ui->leObjectInstall, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
-    connect(ui->leSchet, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
-    connect(ui->cbCusomer, SIGNAL(currentIndexChanged(int)), SLOT(slotIsEditing()));
+    // connect(ui->leBuyer, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
+    // connect(ui->leCardOrder, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
+    // connect(ui->leNumModul, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
+    // connect(ui->leNumUPD, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
+    // connect(ui->leObjectInstall, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
+    // connect(ui->leSchet, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
+    // connect(ui->cbCusomer, SIGNAL(currentIndexChanged(int)), SLOT(slotIsEditing()));
 }
 
 ShipWindow::~ShipWindow()
@@ -106,17 +106,17 @@ void ShipWindow::on_tbNumProd_clicked()
 //-----------------------------------------------------------------------------------
 void ShipWindow::on_tbAddSetterProd_clicked()
 {
-    QTreeWidgetItem *item = ui->twTreeDevice->currentItem();
+    // QTreeWidgetItem *item = ui->twTreeDevice->currentItem();
 
-    if(item == nullptr)
-        return;
+    // if(item == nullptr)
+    //     return;
 
-    // if(item != nullptr)
-    // {
-        TypeItemTree type = (TypeItemTree)item->data(0, Qt::UserRole + 1).toInt();
-        if(type != TypeItemTree::SET)
-            return;
-    // }
+    // // if(item != nullptr)
+    // // {
+    //     TypeItemTree type = (TypeItemTree)item->data(0, Qt::UserRole + 1).toInt();
+    //     if(type != TypeItemTree::SET)
+    //         return;
+    // // }
 
     // SelectDeviceWindow *win = new SelectDeviceWindow(this);
     // win->setTypeSearch(SelectDeviceWindow::TypeDevice::TypeProduct);
@@ -163,17 +163,17 @@ void ShipWindow::on_tbAddSetterProd_clicked()
 //-----------------------------------------------------------------------------------
 QTreeWidgetItem* ShipWindow::AddItemProd(Items &prod, QTreeWidgetItem *parent)
 {
-    QTreeWidgetItem *itemProd = AddItemTree(prod.name + " (" + prod.number + ")", prod.id, TypeItemTree::PRODUCT, parent);
+    // QTreeWidgetItem *itemProd = AddItemTree(prod.name + " (" + prod.number + ")", prod.id, TypeItemTree::PRODUCT, parent);
 
-    if(itemProd != nullptr)
-    {
-        // Включение изделия в класс Shipment
-        // repo.LoadChildProduct(prod);
-        // for(auto &it : prod.listModules)
-        //     AddItemTree(it.name + " (" + it.number + ")", it.id, TypeItemTree::MODUL, itemProd);
-    }
+    // if(itemProd != nullptr)
+    // {
+    //     // Включение изделия в класс Shipment
+    //     // repo.LoadChildProduct(prod);
+    //     // for(auto &it : prod.listModules)
+    //     //     AddItemTree(it.name + " (" + it.number + ")", it.id, TypeItemTree::MODUL, itemProd);
+    // }
 
-    return itemProd;
+    return nullptr;
 }
 
 
@@ -234,36 +234,36 @@ void ShipWindow::on_tbNumModul_clicked()
 //-----------------------------------------------------------------------------------
 QTreeWidgetItem* ShipWindow::AddItemTree(QString text, int id, TypeItemTree type, QTreeWidgetItem *parent)
 {
-    if(listID.contains(id * 10 + type))
-        return nullptr;
+    // if(listID.contains(id * 10 + type))
+    //     return nullptr;
 
-    QString nameIcon;
+    // QString nameIcon;
     QTreeWidgetItem *item = new QTreeWidgetItem();
-    item->setText(0, text);
-    item->setData(0, Qt::UserRole, id);
-    item->setData(0, Qt::UserRole + 1, type);
-    switch(type)
-    {
-    case TypeItemTree::PRODUCT:
-        nameIcon = "://image/product.png";
-        break;
-    case TypeItemTree::MODUL:
-        nameIcon = "://image/modul.png";
-        break;
-    case TypeItemTree::SET:
-        nameIcon = "://image/setter.png";
-        break;
-    }
+    // item->setText(0, text);
+    // item->setData(0, Qt::UserRole, id);
+    // item->setData(0, Qt::UserRole + 1, type);
+    // switch(type)
+    // {
+    // case TypeItemTree::PRODUCT:
+    //     nameIcon = "://image/product.png";
+    //     break;
+    // case TypeItemTree::MODUL:
+    //     nameIcon = "://image/modul.png";
+    //     break;
+    // case TypeItemTree::SET:
+    //     nameIcon = "://image/setter.png";
+    //     break;
+    // }
 
-    item->setIcon(0, QIcon(nameIcon));
-    if(parent == nullptr)
-    {
-        ui->twTreeDevice->addTopLevelItem(item);
-        listID.insert(id * 10 + type, 0);
-    }
-    else
-        parent->addChild(item);
-    item->setExpanded(true);
+    // item->setIcon(0, QIcon(nameIcon));
+    // if(parent == nullptr)
+    // {
+    //     ui->twTreeDevice->addTopLevelItem(item);
+    //     listID.insert(id * 10 + type, 0);
+    // }
+    // else
+    //     parent->addChild(item);
+    // item->setExpanded(true);
 
     return item;
 }
@@ -274,90 +274,90 @@ QTreeWidgetItem* ShipWindow::AddItemTree(QString text, int id, TypeItemTree type
 //-----------------------------------------------------------------------------------
 void ShipWindow::on_pbDelete_clicked()
 {
-    QTreeWidgetItem *item = ui->twTreeDevice->currentItem();
-    if(item == nullptr)
-        return;
+    // QTreeWidgetItem *item = ui->twTreeDevice->currentItem();
+    // if(item == nullptr)
+    //     return;
 
-    if(item->parent() != nullptr)
-    {
-        TypeItemTree type = (TypeItemTree)item->parent()->data(0, Qt::UserRole + 1).toInt();
-        if(type != TypeItemTree::SET)
-            return;
+    // if(item->parent() != nullptr)
+    // {
+    //     TypeItemTree type = (TypeItemTree)item->parent()->data(0, Qt::UserRole + 1).toInt();
+    //     if(type != TypeItemTree::SET)
+    //         return;
 
-    }
+    // }
 
-    int id = item->data(0, Qt::UserRole).toInt();
-    TypeItemTree type = (TypeItemTree)item->data(0, Qt::UserRole + 1).toInt();
+    // int id = item->data(0, Qt::UserRole).toInt();
+    // TypeItemTree type = (TypeItemTree)item->data(0, Qt::UserRole + 1).toInt();
 
-    bool res = false;
-    switch(type)
-    {
-        case TypeItemTree::PRODUCT:
-            {
-                Items prod;
-                if(item->parent() == nullptr)
-                {
-                    // изделие находится в отгрузке
-                    // auto prod_it = std::find_if(ship->listItems.cbegin(), ship->listProduct.cend(),
-                    //                         [id](const Items &p) { return p.id == id; });
-                    // if(prod_it != ship->listItems.cend())
-                    // {
-                    //     prod = *prod_it;
-                    //     ship->listItems.removeIf([prod] (auto p) { return prod.id == p.id; });
-                    // }
-                }
-                else
-                {
-                    // изделие находится в наборе
-                    int id_parent = item->parent()->data(0, Qt::UserRole).toInt();
-                    auto set_it = std::find_if(ship->listSetterOut.begin(), ship->listSetterOut.end(),
-                                               [id_parent](const SetterOut &s) { return s.id == id_parent; });
+    // bool res = false;
+    // switch(type)
+    // {
+    //     case TypeItemTree::PRODUCT:
+    //         {
+    //             Items prod;
+    //             if(item->parent() == nullptr)
+    //             {
+    //                 // изделие находится в отгрузке
+    //                 // auto prod_it = std::find_if(ship->listItems.cbegin(), ship->listProduct.cend(),
+    //                 //                         [id](const Items &p) { return p.id == id; });
+    //                 // if(prod_it != ship->listItems.cend())
+    //                 // {
+    //                 //     prod = *prod_it;
+    //                 //     ship->listItems.removeIf([prod] (auto p) { return prod.id == p.id; });
+    //                 // }
+    //             }
+    //             else
+    //             {
+    //                 // изделие находится в наборе
+    //                 // int id_parent = item->parent()->data(0, Qt::UserRole).toInt();
+    //                 // auto set_it = std::find_if(ship->listSetterOut.begin(), ship->listSetterOut.end(),
+    //                 //                            [id_parent](const SetterOut &s) { return s.id == id_parent; });
 
-                    if(set_it != ship->listSetterOut.end())
-                    {
-                        // auto prod_it = std::find_if((*set_it).listProduct.cbegin(), (*set_it).listProduct.cend(),
-                        //                    [&](const Product &p) { return p.id == id; });
-                        // if(prod_it != (*set_it).listItems.cend())
-                        // {
-                        //     prod = *prod_it;
-                        //     // SetterOut setter = *set_it;
-                        //     (*set_it).listProduct.removeIf( [prod](const Items p) { return prod.id == p.id; } );
-                        // }
-                    }
-                }
+    //                 // if(set_it != ship->listSetterOut.end())
+    //                 // {
+    //                 //     // auto prod_it = std::find_if((*set_it).listProduct.cbegin(), (*set_it).listProduct.cend(),
+    //                 //     //                    [&](const Product &p) { return p.id == id; });
+    //                 //     // if(prod_it != (*set_it).listItems.cend())
+    //                 //     // {
+    //                 //     //     prod = *prod_it;
+    //                 //     //     // SetterOut setter = *set_it;
+    //                 //     //     (*set_it).listProduct.removeIf( [prod](const Items p) { return prod.id == p.id; } );
+    //                 //     // }
+    //                 // }
+    //             }
 
-                if(prod.id != 0)
-                {
-                    prod.idShip = 0;
-                    prod.idSet = 0;
-                    res = repo.UpdateItem(prod);
-                }
-            }
-            break;
+    //             if(prod.id != 0)
+    //             {
+    //                 prod.idShip = 0;
+    //                 prod.idSet = 0;
+    //                 res = repo.UpdateItem(prod);
+    //             }
+    //         }
+    //         break;
 
-        case TypeItemTree::MODUL:
-            {
-                // auto mod_it = std::find_if(ship->listModules.cbegin(), ship->listModules.cend(),
-                //                            [&](const Items &m) { return m.id == id; });
-                // if(mod_it != ship->listModules.cend())
-                // {
-                //     Modul modul = *mod_it;
-                //     modul.idShipment = 0;
-                //     res = repo.UpdateItem(modul);
-                //     ship->listModules.removeIf([modul] (auto m) { return modul.id == m.id;});
-                // }
-            }
-            break;
-        case TypeItemTree::SET:
-            res = repo.DeleteSetter(id);
-            break;
-    }
+    //     case TypeItemTree::MODUL:
+    //         {
+    //             // auto mod_it = std::find_if(ship->listModules.cbegin(), ship->listModules.cend(),
+    //             //                            [&](const Items &m) { return m.id == id; });
+    //             // if(mod_it != ship->listModules.cend())
+    //             // {
+    //             //     Modul modul = *mod_it;
+    //             //     modul.idShipment = 0;
+    //             //     res = repo.UpdateItem(modul);
+    //             //     ship->listModules.removeIf([modul] (auto m) { return modul.id == m.id;});
+    //             // }
+    //         }
+    //         break;
+    //     case TypeItemTree::SET:
+    //         res = repo.DeleteSetter(id);
+    //         break;
+    // }
 
-    if(res)
-    {
-        listID.remove(id * 10 + type);
-        delete item;
-    }
+    // if(res)
+    // {
+    //     listID.remove(id * 10 + type);
+    //     delete item;
+    // }
 }
 
 
@@ -366,26 +366,26 @@ void ShipWindow::on_pbDelete_clicked()
 //-----------------------------------------------------------------------------------
 void ShipWindow::on_pbFinish_clicked()
 {
-    int countProd = 0;
+    // int countProd = 0;
 
-    // for(auto &it : ship->listSetterOut)
-    //     countProd += it.listItems.size();
+    // // for(auto &it : ship->listSetterOut)
+    // //     countProd += it.listItems.size();
 
-    if(ship->listItems.size() == 0
-        && ship->listItems.size() == 0
-        && countProd == 0)
-    {
-        QMessageBox::warning(this, "Предупреждение", "Не сформирован состав отгрузки.");
-        return;
-    }
+    // if(ship->listItems.size() == 0
+    //     && ship->listItems.size() == 0
+    //     && countProd == 0)
+    // {
+    //     QMessageBox::warning(this, "Предупреждение", "Не сформирован состав отгрузки.");
+    //     return;
+    // }
 
-    if(ui->leNumUPD->text().isEmpty())
-    {
-        QMessageBox::warning(this, "Предупреждение", "Для отгрузки необходимо указать документ УПД.");
-        return;
-    }
+    // if(ui->leNumUPD->text().isEmpty())
+    // {
+    //     QMessageBox::warning(this, "Предупреждение", "Для отгрузки необходимо указать документ УПД.");
+    //     return;
+    // }
 
-    ship->dateRegister = QDateTime::currentDateTime();
+    // ship->dateRegister = QDateTime::currentDateTime();
 
     // for(auto &it : ship->listSetterOut)
     // {
@@ -393,7 +393,7 @@ void ShipWindow::on_pbFinish_clicked()
     // }
     // SetStatusProduct(ship->listItems);
     // SetStatusModules(ship->listItems);
-    accept();
+    // accept();
 }
 
 //-----------------------------------------------------------------------------------
@@ -401,11 +401,11 @@ void ShipWindow::on_pbFinish_clicked()
 //-----------------------------------------------------------------------------------
 void ShipWindow::SetStatusProduct(QList<Items> &listProduct)
 {
-    for(auto &itProd : listProduct)
-    {
-        itProd.AddStatus(itProd, Status::SHIPPED);
-        // SetStatusModules(itProd.listModules);
-    }
+    // for(auto &itProd : listProduct)
+    // {
+    //     itProd.AddStatus(itProd, Status::SHIPPED);
+    //     // SetStatusModules(itProd.listModules);
+    // }
 }
 
 //-----------------------------------------------------------------------------------
@@ -413,8 +413,8 @@ void ShipWindow::SetStatusProduct(QList<Items> &listProduct)
 //-----------------------------------------------------------------------------------
 void ShipWindow::SetStatusModules(QList<Items> &listModules)
 {
-    for(auto &itMod : listModules)
-        itMod.AddStatus(itMod, Status::SHIPPED);
+    // for(auto &itMod : listModules)
+    //     itMod.AddStatus(itMod, Status::SHIPPED);
 }
 
 
@@ -423,33 +423,33 @@ void ShipWindow::SetStatusModules(QList<Items> &listModules)
 //-----------------------------------------------------------------------------------
 void ShipWindow::on_ShipWindow_finished(int /*result*/)
 {
-    ship->buyer = ui->leBuyer->text();
-    ship->cardOrder = ui->leCardOrder->text();
-    // ship->customer = ui->leCustomer->text();
-    ship->numberUPD = ui->leNumUPD->text();
-    ship->objectInstall = ui->leObjectInstall->text();
-    ship->schet = ui->leSchet->text();
-    ship->dateUPD = ui->deDateUPD->dateTime();
-    if(ui->cbCusomer->currentIndex() >= 0)
-    {
-        ship->idOrganization = ui->cbCusomer->currentData().toInt();
-        ship->customer = ui->cbCusomer->currentText();
-    }
-    repo.UpdateItem(*ship);
+    // ship->buyer = ui->leBuyer->text();
+    // ship->cardOrder = ui->leCardOrder->text();
+    // // ship->customer = ui->leCustomer->text();
+    // ship->numberUPD = ui->leNumUPD->text();
+    // ship->objectInstall = ui->leObjectInstall->text();
+    // ship->schet = ui->leSchet->text();
+    // ship->dateUPD = ui->deDateUPD->dateTime();
+    // if(ui->cbCusomer->currentIndex() >= 0)
+    // {
+    //     ship->idOrganization = ui->cbCusomer->currentData().toInt();
+    //     ship->customer = ui->cbCusomer->currentText();
+    // }
+    // repo.UpdateItem(*ship);
 }
 
 
 void ShipWindow::on_pbClose_clicked()
 {
-    if(isEditing)
-        accept();
-    else
-        reject();
+    // if(isEditing)
+    //     accept();
+    // else
+    //     reject();
 }
 
 void ShipWindow::slotIsEditing()
 {
-    isEditing = true;
+    // isEditing = true;
 }
 
 
@@ -459,25 +459,25 @@ void ShipWindow::slotIsEditing()
 void ShipWindow::on_tbAddSetter_clicked()
 {
     // bool ok;
-    QString res = ui->leSetterOut->text();
+    // QString res = ui->leSetterOut->text();
 
-    if(/*ok && */!res.isEmpty())
-    {
-        // Добавление набора в класс Shipment
-        SetterOut setter;
-        setter.name = res;
+    // if(/*ok && */!res.isEmpty())
+    // {
+    //     // Добавление набора в класс Shipment
+    //     SetterOut setter;
+    //     setter.name = res;
 
-        if(ship->id == 0)
-            repo.AddItem(*ship);
+    //     if(ship->id == 0)
+    //         repo.AddItem(*ship);
 
-        // setter.idShipment = ship->id;
-        // if(repo.AddItem(setter))
-        // {
-        //     ship->listSetterOut.push_back(setter);
-        //     AddItemTree(res, setter.id, TypeItemTree::SET);
-        //     // qDebug() << "Добавлен набор id=" << setter.id;
-        // }
-    }
+    //     // setter.idShipment = ship->id;
+    //     // if(repo.AddItem(setter))
+    //     // {
+    //     //     ship->listSetterOut.push_back(setter);
+    //     //     AddItemTree(res, setter.id, TypeItemTree::SET);
+    //     //     // qDebug() << "Добавлен набор id=" << setter.id;
+    //     // }
+    // }
 
 }
 

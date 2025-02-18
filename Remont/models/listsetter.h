@@ -12,20 +12,6 @@ class ListSetter : public ListEntity<SetterOut>
 public:
     explicit ListSetter();
 
-    // QList<SetterOut> listItems;
-
-    // ListDevice interface
-public:
-    // SetterOut GetItem(int id) ;
-    // void LoadChild(SetterOut &item) ;
-    // void Load() ;
-    // void getData(int row, int col) const ;
-    // bool DeleteItem(int id) ;
-private:
-    // RepoMSSQL repo;
-
-
-    // ListEntity interface
 public:
     bool AddItem(SetterOut &item) override;
     int GetRowFromId(int id) override;

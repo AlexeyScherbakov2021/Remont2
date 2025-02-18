@@ -10,20 +10,13 @@
 #include <infrastructure/IStatus.h>
 #include <infrastructure/trackrecord.h>
 
-// class Product;
-// class Modul;
-// class Plate;
 class SetterOut;
 class Shipment;
 class Status;
 class Claim;
-// class ProductType;
-// class ModulType;
 class Remont;
-// class PlateType;
 class Organization;
 class Items;
-// class TrackRecord;
 
 class RepoMSSQL
 {
@@ -71,25 +64,32 @@ public:
     bool DeleteSetter(int id);
     void LoadChildSetter(SetterOut &setter);
     SetterOut GetSetter(int id);
-
     bool ItemsSyncSet(int idSet, TrackRecord<Items> *track);
+
+    // Shipment
+    bool AddItem(Shipment &ship);
+    bool UpdateItem(Shipment &ship);
+    bool DeleteShipment(int id);
+    int LoadPart(size_t start, size_t count, const QString &number, QList<Shipment> &listItems, bool isShip = false) const;
+    void LoadChildShip(Shipment &ship);
+
+
+    void FindItems(const QString &number, QList<Shipment> &listShip, int status = 0, bool isFree = false);
+    void LoadShipment(QList<Shipment> &listShip, bool isFinish);
+
 
 public:
     RepoMSSQL();
     bool ConnectDb();
 
-    bool AddItem(Shipment &ship);
     bool AddItem(Claim &claim);
 
-    bool UpdateItem(Shipment &ship);
     bool UpdateItem(Claim &claim);
 
-    bool DeleteShipment(int id);
     bool DeleteClaim(int id);
 
     Shipment GetShipment(int id);
 
-    void FindItems(const QString &number, QList<Shipment> &listShip, int status = 0, bool isFree = false);
 
     // void LoadProductType(QMap<int, QString> &listTypeProduct);
     // void LoadProductType(QMap<int, ProductType> &listTypeProduct);
@@ -102,7 +102,6 @@ public:
 
     bool LinkPlate(int idPlate, int idModul);
     // void LoadChildProduct(Product &prod);
-    void LoadShipment(QList<Shipment> &listShip, bool isFinish);
     void LoadShipSetter(QList<SetterOut> &listSetter, int idShip);
     // void LoadShipModule(QList<Modul> &listModul, int idShip);
     // void LoadShipProduct(QList<Product> &listProduct, int idShip);

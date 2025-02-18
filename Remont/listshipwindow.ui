@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1008</width>
-    <height>488</height>
+    <height>552</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -131,6 +131,9 @@
      </column>
     </widget>
    </item>
+   <item>
+    <widget class="QTableView" name="tableView"/>
+   </item>
    <item alignment="Qt::AlignmentFlag::AlignHCenter">
     <widget class="QPushButton" name="pbClose">
      <property name="maximumSize">
@@ -173,8 +176,8 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>619</x>
-     <y>461</y>
+     <x>548</x>
+     <y>531</y>
     </hint>
     <hint type="destinationlabel">
      <x>347</x>

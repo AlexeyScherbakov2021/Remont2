@@ -3,8 +3,6 @@
 
 #include "ItemsType.h"
 #include "entity.h"
-
-// #include <QSharedPointer>
 #include <repomssql.h>
 
 

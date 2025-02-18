@@ -1,12 +1,17 @@
-#include "settermodel.h"
+#include "shipmodel.h"
+#include "listshipment.h"
 
-SetterModel::SetterModel( QObject *parent) : QAbstractTableModel(parent)
+ShipModel::ShipModel(QObject *parent)
+    : QAbstractTableModel(parent)
 {
     createList();
-    listSetter->GetHeader(headers);
+    listShip->GetHeader(headers);
 }
 
-QVariant SetterModel::headerData(int section, Qt::Orientation orientation, int role) const
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
+QVariant ShipModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     QVariant var;
     if(role == Qt::DisplayRole)
@@ -23,34 +28,23 @@ QVariant SetterModel::headerData(int section, Qt::Orientation orientation, int r
     return var;
 }
 
-// bool SetterModel::setHeaderData(int section,
-//                                 Qt::Orientation orientation,
-//                                 const QVariant &value,
-//                                 int role)
-// {
-//     if (value != headerData(section, orientation, role)) {
-//         // FIXME: Implement me!
-//         emit headerDataChanged(orientation, section, section);
-//         return true;
-//     }
-//     return false;
-// }
 
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-int SetterModel::rowCount(const QModelIndex &parent) const
+int ShipModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
         return 0;
 
-    return listSetter->items.size();
+    return listShip->items.size();
+    // return 0;
 }
 
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-int SetterModel::columnCount(const QModelIndex &parent) const
+int ShipModel::columnCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
         return 0;
@@ -58,7 +52,7 @@ int SetterModel::columnCount(const QModelIndex &parent) const
     return headers.size();
 }
 
-// bool SetterModel::hasChildren(const QModelIndex &parent) const
+// bool ShipModel::hasChildren(const QModelIndex &parent) const
 // {
 //     // FIXME: Implement me!
 // }
@@ -66,7 +60,7 @@ int SetterModel::columnCount(const QModelIndex &parent) const
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-bool SetterModel::canFetchMore(const QModelIndex &parent) const
+bool ShipModel::canFetchMore(const QModelIndex &parent) const
 {
     return isFetch;
 }
@@ -74,11 +68,11 @@ bool SetterModel::canFetchMore(const QModelIndex &parent) const
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-void SetterModel::fetchMore(const QModelIndex &parent)
+void ShipModel::fetchMore(const QModelIndex &parent)
 {
     if(!isBaseOff)
     {
-        int resLoad = listSetter->LoadPart(startLoad, cntLoad, number, isBusy);
+        int resLoad = listShip->LoadPart(startLoad, cntLoad, number, isShip);
 
         if(resLoad > 0)
         {
@@ -92,17 +86,18 @@ void SetterModel::fetchMore(const QModelIndex &parent)
     }
 }
 
+
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-QVariant SetterModel::data(const QModelIndex &index, int role) const
+QVariant ShipModel::data(const QModelIndex &index, int role) const
 {
     QVariant var;
 
     if (!index.isValid())
         return var;
 
-    var = listSetter->getData(index.row(), index.column(), role);
+    var = listShip->getData(index.row(), index.column(), role);
 
     return var;
 }
@@ -110,23 +105,21 @@ QVariant SetterModel::data(const QModelIndex &index, int role) const
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-bool SetterModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool ShipModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (data(index, role) != value)
-    {
-        listSetter->setData(index.row(), index.column(), value, role);
+    if (data(index, role) != value) {
+        listShip->setData(index.row(), index.column(), value, role);
         emit dataChanged(index, index, {role});
         return true;
     }
     return false;
 }
 
-void SetterModel::setData(const QModelIndex &index, SetterOut *item)
-{
-    listSetter->setItem(index.row(), item);
-}
 
-// Qt::ItemFlags SetterModel::flags(const QModelIndex &index) const
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
+// Qt::ItemFlags ShipModel::flags(const QModelIndex &index) const
 // {
 //     if (!index.isValid())
 //         return Qt::NoItemFlags;
@@ -137,7 +130,7 @@ void SetterModel::setData(const QModelIndex &index, SetterOut *item)
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-bool SetterModel::insertRows(int row, int count, const QModelIndex &parent)
+bool ShipModel::insertRows(int row, int count, const QModelIndex &parent)
 {
     beginInsertRows(parent, row, row + count - 1);
     // FIXME: Implement me!
@@ -145,21 +138,14 @@ bool SetterModel::insertRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
-// bool SetterModel::insertColumns(int column, int count, const QModelIndex &parent)
-// {
-//     beginInsertColumns(parent, column, column + count - 1);
-//     // FIXME: Implement me!
-//     endInsertColumns();
-//     return true;
-// }
 
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-bool SetterModel::removeRows(int row, int count, const QModelIndex &parent)
+bool ShipModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     beginRemoveRows(parent, row, row + count - 1);
-    listSetter->DeleteItem(row);
+    listShip->DeleteItem(row);
     endRemoveRows();
     return true;
 }
@@ -167,12 +153,12 @@ bool SetterModel::removeRows(int row, int count, const QModelIndex &parent)
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-void SetterModel::prepareLoad(const QString _number, bool _isBusy)
+void ShipModel::prepareLoad(const QString _number, bool _isShip)
 {
     number = _number;
-    isBusy = _isBusy;
+    isShip = _isShip;
 
-    listSetter->items.clear();
+    listShip->items.clear();
 
     startLoad = 0;
     cntLoad = 60;
@@ -182,57 +168,56 @@ void SetterModel::prepareLoad(const QString _number, bool _isBusy)
 
 }
 
-SetterOut *SetterModel::GetItem(int row)
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
+Shipment *ShipModel::GetItem(int row)
 {
-    return listSetter->GetItemAtRow(row);
+    return listShip->GetItemAtRow(row);
 }
 
-bool SetterModel::DeleteItem(int row)
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
+bool ShipModel::DeleteItem(int row)
 {
     return removeRow(row);
 }
 
-// bool SetterModel::removeColumns(int column, int count, const QModelIndex &parent)
-// {
-//     beginRemoveColumns(parent, column, column + count - 1);
-//     // FIXME: Implement me!
-//     endRemoveColumns();
-//     return true;
-// }
 
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-void SetterModel::createList()
+void ShipModel::createList()
 {
-    listSetter = std::make_unique<ListSetter>();
+    listShip = std::make_unique<ListShipment>();
 }
 
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-void SetterModel::AddItem(SetterOut *item)
+void ShipModel::AddItem(Shipment *item)
 {
-    int row = listSetter->items.size();
-    if(listSetter->AddItem(*item))
-    // listSetter->items.push_back(*item);
+    int row = listShip->items.size();
+    if(listShip->AddItem(*item))
         insertRows(row, 1);
 }
 
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-void SetterModel::UpdateItem(int row)
+void ShipModel::UpdateItem(int row)
 {
-    SetterOut* item = listSetter->GetItemAtRow(row);
+    Shipment* item = listShip->GetItemAtRow(row);
     if(item != nullptr)
-        listSetter->UpdateItem(*item);
+        listShip->UpdateItem(*item);
 }
 
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-void SetterModel::setBaseOff()
+void ShipModel::setBaseOff()
 {
     isBaseOff = true;
 }
+

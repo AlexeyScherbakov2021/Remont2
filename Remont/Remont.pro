@@ -36,6 +36,7 @@ SOURCES += \
     models/listsetter.cpp \
     models/listshipment.cpp \
     models/settermodel.cpp \
+    models/shipmodel.cpp \
     otkactiondlg.cpp \
     otkwindow.cpp \
     platefwwindow.cpp \
@@ -91,6 +92,7 @@ HEADERS += \
     models/settermodel.h \
     models/setterout.h \
     models/shipment.h \
+    models/shipmodel.h \
     otkactiondlg.h \
     otkwindow.h \
     platefwwindow.h \

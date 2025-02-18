@@ -14,35 +14,39 @@ ListShipWindow::ListShipWindow(QWidget *parent, bool isFree)
 
     QApplication::changeOverrideCursor(Qt::WaitCursor);
 
+    model = new ShipModel(this);
+
+    model->prepareLoad("");
+    ui->tableView->setModel(model);
     // QElapsedTimer t;
     // t.start();
     // qDebug() << t.elapsed() << "Start select";
 
-    Ship.FindItems("", 0, isFree);
+    // Ship.FindItems("", 0, isFree);
 
     // qDebug() << t.elapsed() << "End select";
     // t.restart();
 
-    ui->tableWidget->setRowCount(Ship.listItems.size());
-    ui->tableWidget->setColumnWidth(0, 200);
-    ui->tableWidget->setColumnWidth(1, 200);
-    ui->tableWidget->setColumnWidth(2, 80);
-    ui->tableWidget->setColumnWidth(3, 250);
-    ui->tableWidget->setColumnWidth(4, 80);
-    ui->tableWidget->setColumnWidth(5, 70);
+    // ui->tableWidget->setRowCount(Ship.listItems.size());
+    // ui->tableWidget->setColumnWidth(0, 200);
+    // ui->tableWidget->setColumnWidth(1, 200);
+    // ui->tableWidget->setColumnWidth(2, 80);
+    // ui->tableWidget->setColumnWidth(3, 250);
+    // ui->tableWidget->setColumnWidth(4, 80);
+    // ui->tableWidget->setColumnWidth(5, 70);
 
-    int row = 0;
-    for(auto &it : Ship.listItems)
-    {
-        addRowWidget(it, row);
-        ++row;
-    }
+    // int row = 0;
+    // for(auto &it : Ship.listItems)
+    // {
+    //     addRowWidget(it, row);
+    //     ++row;
+    // }
 
     // qDebug() << t.elapsed() << "Added to Table";
     // t.restart();
 
     // ui->tableWidget->resizeColumnsToContents();
-    ui->tableWidget->resizeRowsToContents();
+    // ui->tableWidget->resizeRowsToContents();
 
     // qDebug() << t.elapsed() << "Resize Table";
 
@@ -115,18 +119,18 @@ void ListShipWindow::setRowWidget(Shipment &ship, int row)
 //----------------------------------------------------------------------------
 void ListShipWindow::on_pbNew_clicked()
 {
-    Shipment ship;
-    ShipWindow *win = new ShipWindow(&ship, this);
-    int res = win->exec();
-    qDebug() << res;
-    if(res == QDialog::Accepted)
-    {
-        if(!ship.dateRegister.isValid())
-        {
-            Ship.listItems.push_back(ship);
-            addRowWidget(ship);
-        }
-    }
+    // Shipment ship;
+    // ShipWindow *win = new ShipWindow(&ship, this);
+    // int res = win->exec();
+    // qDebug() << res;
+    // if(res == QDialog::Accepted)
+    // {
+    //     if(!ship.dateRegister.isValid())
+    //     {
+    //         Ship.listItems.push_back(ship);
+    //         addRowWidget(ship);
+    //     }
+    // }
 }
 
 
@@ -148,22 +152,22 @@ void ListShipWindow::on_pbEdit_clicked()
 //----------------------------------------------------------------------------
 void ListShipWindow::on_tableWidget_cellDoubleClicked(int row, int /*column*/)
 {
-    Shipment ship = Ship.listItems[row];
+    // Shipment ship = Ship.listItems[row];
 
-    ShipWindow *win = new ShipWindow(&ship, this);
-    if(win->exec() == QDialog::Accepted)
-    {
-        if(ship.dateRegister.isValid())
-        {
-            Ship.listItems.removeIf([ship](Shipment s) { return s.id == ship.id; });
-            ui->tableWidget->removeRow(row);
-        }
-        else
-        {
-            setRowWidget(ship, row);
-            Ship.listItems[row] = ship;
-        }
-    }
+    // ShipWindow *win = new ShipWindow(&ship, this);
+    // if(win->exec() == QDialog::Accepted)
+    // {
+    //     if(ship.dateRegister.isValid())
+    //     {
+    //         Ship.listItems.removeIf([ship](Shipment s) { return s.id == ship.id; });
+    //         ui->tableWidget->removeRow(row);
+    //     }
+    //     else
+    //     {
+    //         setRowWidget(ship, row);
+    //         Ship.listItems[row] = ship;
+    //     }
+    // }
 }
 
 
@@ -172,19 +176,19 @@ void ListShipWindow::on_tableWidget_cellDoubleClicked(int row, int /*column*/)
 //----------------------------------------------------------------------------
 void ListShipWindow::on_pbDeleteShip_clicked()
 {
-    int row = ui->tableWidget->currentRow();
-    if( row < 0)
-        return;
+    // int row = ui->tableWidget->currentRow();
+    // if( row < 0)
+    //     return;
 
-    Shipment ship = Ship.listItems[row];
+    // Shipment ship = Ship.listItems[row];
 
-    if(QMessageBox::question(this, "Предупреждение",
-            QString("Удалить отгрузку счет \"%1\"?").arg(ship.schet), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
-    {
-        if(repo.DeleteShipment(ship.id))
-        {
-            ui->tableWidget->removeRow(row);
-        }
-    }
+    // if(QMessageBox::question(this, "Предупреждение",
+    //         QString("Удалить отгрузку счет \"%1\"?").arg(ship.schet), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+    // {
+    //     if(repo.DeleteShipment(ship.id))
+    //     {
+    //         ui->tableWidget->removeRow(row);
+    //     }
+    // }
 }
 

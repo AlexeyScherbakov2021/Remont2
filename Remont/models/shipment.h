@@ -3,9 +3,12 @@
 
 #include "entity.h"
 // #include "modul.h"
-#include "setterout.h"
+// #include "setterout.h"
 // #include "product.h"
 #include "Items.h"
+#include "setterout.h"
+
+// class SetterOut;
 
 class Shipment : public IEntity
 {
@@ -23,9 +26,7 @@ public:
     QString questList;
     QString numberUPD;
 
-    // QList<Product> listProduct;
     QList<SetterOut> listSetterOut;
-    // QList<Modul> listModules;
     QList<Items> listItems;
 
     explicit Shipment() {}

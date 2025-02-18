@@ -4,6 +4,7 @@
 #include "repomssql.h"
 #include <QDialog>
 #include <models/listshipment.h>
+#include <models/shipmodel.h>
 
 namespace Ui {
 class ListShipWindow;
@@ -30,6 +31,8 @@ private:
 
     void addRowWidget(Shipment &ship, int row = -1);
     void setRowWidget(Shipment &ship, int row);
+
+    ShipModel *model;
 };
 
 #endif // LISTSHIPWINDOW_H

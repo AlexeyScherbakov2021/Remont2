@@ -1,36 +1,5 @@
 #include "listsetter.h"
 
-
-
-// SetterOut ListSetter::GetItem(int /*id*/)
-// {
-//     SetterOut setter;
-//     return setter;
-// }
-
-// void ListSetter::LoadChild(SetterOut &/*item*/)
-// {
-// }
-
-// void ListSetter::Load()
-// {
-// }
-
-// void ListSetter::getData(int /*row*/, int /*col*/) const
-// {
-//     return void();
-// }
-
-
-// bool ListSetter::DeleteItem(int id)
-// {
-//     return repo.DeleteSetter(id);
-//     // return repo.DeleteSetter(id);
-//     // return false;
-// }
-
-
-
 ListSetter::ListSetter() : ListEntity(IndexType::SetterType)
 {
 
@@ -204,7 +173,5 @@ void ListSetter::GetHeader(QStringList &headers)
 //-------------------------------------------------------------------------
 int ListSetter::LoadPart(int start, int count, const QString &number, bool isBusy)
 {
-    // repo.load
     return repo.LoadPart(start, count, number, items, isBusy);
-    // return 0;
 }

@@ -3,31 +3,33 @@
 
 #include "listdevice.h"
 #include "shipment.h"
+// #include "shipmodel.h"
 
 
-class ListShipment //: public ListDevice<Shipment>
+class ListShipment : public ListEntity<Shipment>
 {
+    friend class ShipModel;
+
 public:
     explicit ListShipment();
 
-    QList<Shipment> listItems;
+    // QList<Shipment> listItems;
 
-    // ListDevice interface
 public:
-    void LoadChild(Shipment &item);
-    void Load() ;
-    void getData(int row, int col) const ;
-    Shipment GetItem(int id);
-
-    bool DeleteItem(int id);
-
-    void FindItems(const QString &number, int status = 0, bool isFree = false)
-    {
-        repo.FindItems(number, listItems, status, isFree);
-    }
-
-private:
-    RepoMSSQL repo;
+    bool AddItem(Shipment &item) override;
+    int GetRowFromId(int id) override;
+    bool DeleteItemId(int id) override;
+    void DeleteItemFromList(int row) override;
+    bool DeleteItem(int row) override;
+    bool UpdateItem(Shipment &item) override;
+    Shipment GetItem(int id) override;
+    Shipment* GetItemAtRow(int row) override;
+    bool LoadChild(Shipment &item) override;
+    QVariant getData(int row, int col, int role) const override;
+    void setData(int row, int col, const QVariant value, int role) const override;
+    void setItem(int row, Shipment *ship);
+    void GetHeader(QStringList &headers) override;
+    int LoadPart(int, int, const QString &, bool);
 
 };
 
