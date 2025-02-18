@@ -8,6 +8,7 @@
 #include <models/ItemsType.h>
 #include <models/enumvariable.h>
 #include <infrastructure/IStatus.h>
+#include <infrastructure/trackrecord.h>
 
 // class Product;
 // class Modul;
@@ -22,7 +23,7 @@ class Remont;
 // class PlateType;
 class Organization;
 class Items;
-// class ItemType;
+// class TrackRecord;
 
 class RepoMSSQL
 {
@@ -39,9 +40,8 @@ public:
     // size_t LoadPart(size_t start, size_t count, ItemType::IndexType iType, const QString &number,
     //             QList<Items> &listItems, int status = 0, bool isBusy = false, bool isParent = false);
 
+    // Items
     bool LoadChildItems(int idParent, QList<Items> &listItems) const;
-
-
     int LoadPart(size_t start, size_t count, IndexType iType, const QString &number,
                     QList<Items> &listItems, QVector<int>& listStatus, bool isBusy = false, bool isParent = false) const;
 
@@ -55,7 +55,6 @@ public:
     Items GetItem(int id) const;
     // Items GetItem(QString number, int status = 0, bool isBusy = false) const;
     Items GetItem2(QString number, QVector<int>& listStatus, bool isBusy = false, bool isParent = false) const;
-
     void LoadItemsType(QList<ItemType> &listType, IndexType indexType) const;
 
     void LoadStatus(Items& item) const;
@@ -64,27 +63,31 @@ public:
 
     void LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) const;       //=============
 
-    int LoadPart(size_t start, size_t count, const QString &number, QList<SetterOut> &listItems, bool isBusy = false) const;
 
+    // SetterOut
+    int LoadPart(size_t start, size_t count, const QString &number, QList<SetterOut> &listItems, bool isBusy = false) const;
+    bool AddItem(SetterOut &setter);
+    bool UpdateItem(SetterOut &setter);
+    bool DeleteSetter(int id);
+    void LoadChildSetter(SetterOut &setter);
+    SetterOut GetSetter(int id);
+
+    bool ItemsSyncSet(int idSet, TrackRecord<Items> *track);
 
 public:
     RepoMSSQL();
     bool ConnectDb();
 
     bool AddItem(Shipment &ship);
-    bool AddItem(SetterOut &setter);
     bool AddItem(Claim &claim);
 
     bool UpdateItem(Shipment &ship);
-    bool UpdateItem(SetterOut &setter);
     bool UpdateItem(Claim &claim);
 
     bool DeleteShipment(int id);
-    bool DeleteSetter(int id);
     bool DeleteClaim(int id);
 
     Shipment GetShipment(int id);
-    SetterOut GetSetter(int id);
 
     void FindItems(const QString &number, QList<Shipment> &listShip, int status = 0, bool isFree = false);
 
@@ -99,7 +102,6 @@ public:
 
     bool LinkPlate(int idPlate, int idModul);
     // void LoadChildProduct(Product &prod);
-    void LoadChildSetter(SetterOut &setter);
     void LoadShipment(QList<Shipment> &listShip, bool isFinish);
     void LoadShipSetter(QList<SetterOut> &listSetter, int idShip);
     // void LoadShipModule(QList<Modul> &listModul, int idShip);

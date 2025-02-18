@@ -2,6 +2,7 @@
 #define SETTERDLG_H
 
 #include <QDialog>
+#include <QPointer>
 
 #include <models/settermodel.h>
 
@@ -19,19 +20,14 @@ public:
 
 private slots:
     void on_tbSearch_clicked();
-
     void on_pbNew_clicked();
-
     void on_pbEdit_clicked();
-
     void on_pbDelete_clicked();
-
     void on_tableView_doubleClicked(const QModelIndex &index);
 
 private:
     Ui::SetterDlg *ui;
-
-    SetterModel *model;
+    SetterModel* model;
 };
 
 #endif // SETTERDLG_H

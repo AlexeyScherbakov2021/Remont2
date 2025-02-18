@@ -11,6 +11,7 @@ class SetterModel : public QAbstractTableModel
 
 public:
     explicit SetterModel(QObject *parent = nullptr);
+    ~SetterModel(){ }
 
     // Header:
     QVariant headerData(int section,

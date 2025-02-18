@@ -88,6 +88,10 @@ void SetterDlg::on_tableView_doubleClicked(const QModelIndex &index)
     {
         model->setData(index, setter);
         model->UpdateItem(index.row());
+
+        RepoMSSQL repo;
+        repo.ItemsSyncSet(setter->id, &win->track);
+
     }
 }
 

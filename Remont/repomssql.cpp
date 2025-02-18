@@ -6,6 +6,8 @@
 // #include <QElapsedTimer>
 #include <models/organization.h>
 #include<models/Items.h>
+
+#include <QSqlDriver>
 // #include <QMessageBox>
 // #include <QSqlRecord>
 #include <infrastructure/IStatus.h>
@@ -20,6 +22,7 @@ RepoMSSQL::RepoMSSQL()
     {
         db = QSqlDatabase::addDatabase("QODBC");
         ConnectDb();
+
     }
 }
 
@@ -1899,6 +1902,38 @@ void RepoMSSQL::LoadChildSetter(SetterOut &setter)
         setter.childItems.push_back(prod);
     }
 
+}
+
+bool RepoMSSQL::ItemsSyncSet(int idSet, TrackRecord<Items> *track)
+{
+    bool res = false;
+
+    QSqlDatabase::database().transaction();
+
+    QSqlQuery query;
+    query.prepare("update Items set idSet=null where id=:id");
+    for(auto &it: track->listDel)
+    {
+        query.bindValue(":id", it.id);
+        res = query.exec();
+    }
+
+    query.clear();
+
+    query.prepare("update Items set idSet=:idSet where id=:id");
+    for(auto &it: track->listAdd)
+    {
+        query.bindValue(":id", it.id);
+        query.bindValue(":idSet", idSet);
+        res = query.exec();
+    }
+
+    res = QSqlDatabase::database().commit();
+
+    if(!res)
+        qDebug() << "Ошибка при изменении записи в UpdateItem";
+
+    return res;
 }
 
 //------------------------------------------------------------------------------------------------------

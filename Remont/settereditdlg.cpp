@@ -19,6 +19,7 @@ SetterEditDlg::SetterEditDlg(SetterOut* _setter, QWidget *parent)
     int row = 0;
     for(auto &it : setter->childItems)
     {
+        listItems.push_back(it);
         AddLineToWidget(&it, row);
         ++row;
     }
@@ -40,6 +41,7 @@ void SetterEditDlg::AddLineToWidget(Items *item, int row)
     QString nameType, nameIcon;
     QListWidgetItem *line = new QListWidgetItem();
     line->setText(item->GetDefaultName());
+    line->setData(Qt::UserRole, item->id);
     item->GetInfo(nameType, nameIcon);
     line->setIcon(QIcon(nameIcon));
 
@@ -58,7 +60,20 @@ void SetterEditDlg::on_tbDelete_clicked()
                 QString("Удалить %1 ?").arg(item->text()),
                 QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
         {
-            delete item;
+            int id = item->data(Qt::UserRole).toInt();
+            int row = 0;
+            for(auto &it : listItems)
+            {
+                if(it.id == id)
+                {
+                    track.DelRecord(id, it);
+                    listItems.remove(row);
+                    delete item;
+                    break;
+                }
+                ++row;
+            }
+
         }
     }
 }
@@ -76,12 +91,20 @@ void SetterEditDlg::on_tbSearch_clicked()
     Items* dev = win->SelectDevice(true, stat, ui->leSearch->text());
     if(dev->id != 0)
     {
-        AddLineToWidget(dev, ui->listWidget->count());
+        if(track.AddRecord(dev->id, *dev))
+        {
+            AddLineToWidget(dev, ui->listWidget->count());
+            listItems.push_back(*dev);
+        }
+
     }
 
 }
 
 
+//-----------------------------------------------------------------------------
+// Кнопка ОК
+//-----------------------------------------------------------------------------
 void SetterEditDlg::on_pbOk_clicked()
 {
     setter->name = ui->leName->text();
