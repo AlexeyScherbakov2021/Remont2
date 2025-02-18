@@ -162,9 +162,33 @@ QVariant ListSetter::getData(int row, int col, int role) const
 //-------------------------------------------------------------------------
 //
 //-------------------------------------------------------------------------
-void ListSetter::setData(int /*row*/, int /*col*/, const QVariant /*value*/, int /*role*/) const
+void ListSetter::setData(int row, int col, const QVariant value, int role) const
 {
+    if(role == Qt::EditRole)
+    {
 
+        SetterOut *setter = const_cast<SetterOut*>(&items[row]);
+        switch(col)
+        {
+        case 0:
+            setter->numberDoc = value.toString();
+            break;
+        case 1:
+            setter->dateCreate = value.toDateTime();
+            break;
+        case 2:
+            setter->name = value.toString();
+            break;
+        }
+    }
+}
+
+void ListSetter::setItem(int row, SetterOut *setter)
+{
+    items[row].idShip = setter->idShip;
+    items[row].name = setter->name;
+    items[row].numberDoc = setter->numberDoc;
+    items[row].dateCreate = setter->dateCreate;
 }
 
 //-------------------------------------------------------------------------

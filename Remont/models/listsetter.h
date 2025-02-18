@@ -38,6 +38,7 @@ public:
     bool LoadChild(SetterOut &item) override;
     QVariant getData(int row, int col, int role) const override;
     void setData(int row, int col, const QVariant value, int role) const override;
+    void setItem(int row, SetterOut *setter);
     void GetHeader(QStringList &headers) override;
     int LoadPart(int, int, const QString &, bool);
 };

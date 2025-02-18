@@ -1512,7 +1512,8 @@ bool RepoMSSQL::AddItem(SetterOut &setter)
     query.prepare("insert into SetterOut (idShipment,s_name,s_OrderNum,dateCreate) "
                   "output inserted.id values(:idShipment,:s_name,:s_OrderNum,:dateCreate)");
 
-    query.bindValue(":idShipment", setter.idShip);
+    if(setter.idShip != 0)
+        query.bindValue(":idShipment", setter.idShip);
     query.bindValue(":s_name", setter.name);
     query.bindValue(":s_OrderNum", setter.numberDoc);
     query.bindValue(":dateCreate", setter.dateCreate);
@@ -1608,10 +1609,34 @@ bool RepoMSSQL::UpdateItem(Shipment &ship)
     return res;
 }
 
-bool RepoMSSQL::UpdateItem(SetterOut &/*setter*/)
+
+
+//------------------------------------------------------------------------------------------------------
+// Обновление набора
+//------------------------------------------------------------------------------------------------------
+bool RepoMSSQL::UpdateItem(SetterOut &setter)
 {
-    return false;
+    bool res;
+    QSqlQuery query;
+
+    query.prepare("update SetterOut set idShipment=:idShipment,s_name=:s_name,s_orderNum=:s_orderNum,"
+                  "dateCreate=:dateCreate where id=:id");
+
+    if(setter.idShip > 0)
+        query.bindValue(":idShipment", setter.idShip);
+    query.bindValue(":s_name", setter.name);
+    query.bindValue(":s_orderNum", setter.numberDoc);
+    query.bindValue(":dateCreate", setter.dateCreate);
+    query.bindValue(":id", setter.id);
+
+    res = query.exec();
+    if(!res)
+        qDebug() << "Ошибка при изменении записи в SetterOut";
+
+    return res;
 }
+
+
 
 bool RepoMSSQL::UpdateItem(Claim &claim)
 {

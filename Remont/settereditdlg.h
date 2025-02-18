@@ -22,6 +22,8 @@ private slots:
 
     void on_tbSearch_clicked();
 
+    void on_pbOk_clicked();
+
 private:
     Ui::SetterEditDlg *ui;
     SetterOut* setter;

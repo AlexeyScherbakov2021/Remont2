@@ -2,6 +2,8 @@
 #include "settereditdlg.h"
 #include "ui_setterdlg.h"
 
+#include <QMessageBox>
+
 SetterDlg::SetterDlg(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::SetterDlg)
@@ -35,7 +37,12 @@ void SetterDlg::on_tbSearch_clicked()
 //-------------------------------------------------------------------------
 void SetterDlg::on_pbNew_clicked()
 {
-
+    SetterOut setter;
+    SetterEditDlg *win = new SetterEditDlg(&setter, this);
+    if(win->exec() == QDialog::Accepted)
+    {
+        model->AddItem(&setter);
+    }
 }
 
 
@@ -44,7 +51,16 @@ void SetterDlg::on_pbNew_clicked()
 //-------------------------------------------------------------------------
 void SetterDlg::on_pbDelete_clicked()
 {
+    QModelIndex index = ui->tableView->currentIndex();
+    if(index == QModelIndex())
+        return;
 
+    SetterOut *setter = model->GetItem(index.row());
+
+    if(QMessageBox::warning(this, "Предупреждение",QString("Удалить '%1 (%2)' ?").arg(setter->numberDoc).arg(setter->name), QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
+    {
+        model->DeleteItem(index.row());
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -70,7 +86,8 @@ void SetterDlg::on_tableView_doubleClicked(const QModelIndex &index)
     SetterEditDlg *win = new SetterEditDlg(setter, this);
     if(win->exec() == QDialog::Accepted)
     {
-
+        model->setData(index, setter);
+        model->UpdateItem(index.row());
     }
 }
 

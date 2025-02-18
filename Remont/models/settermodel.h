@@ -36,6 +36,7 @@ public:
 
     // Editable:
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+    void setData(const QModelIndex &index, SetterOut* item);
 
     // Qt::ItemFlags flags(const QModelIndex &index) const override;
 
@@ -58,6 +59,7 @@ public:
     void createList();
 
     void AddItem(SetterOut* item);
+    // void UpdateItem(SetterOut *item);
     void UpdateItem(int row);
     void setBaseOff();
     Items* GetItem(QString number);

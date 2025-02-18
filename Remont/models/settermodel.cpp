@@ -120,6 +120,11 @@ bool SetterModel::setData(const QModelIndex &index, const QVariant &value, int r
     return false;
 }
 
+void SetterModel::setData(const QModelIndex &index, SetterOut *item)
+{
+    listSetter->setItem(index.row(), item);
+}
+
 // Qt::ItemFlags SetterModel::flags(const QModelIndex &index) const
 // {
 //     if (!index.isValid())
@@ -153,7 +158,7 @@ bool SetterModel::insertRows(int row, int count, const QModelIndex &parent)
 bool SetterModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     beginRemoveRows(parent, row, row + count - 1);
-    // FIXME: Implement me!
+    listSetter->DeleteItem(row);
     endRemoveRows();
     return true;
 }
@@ -179,6 +184,11 @@ void SetterModel::prepareLoad(const QString _number, bool _isBusy)
 SetterOut *SetterModel::GetItem(int row)
 {
     return listSetter->GetItemAtRow(row);
+}
+
+bool SetterModel::DeleteItem(int row)
+{
+    return removeRow(row);
 }
 
 // bool SetterModel::removeColumns(int column, int count, const QModelIndex &parent)
