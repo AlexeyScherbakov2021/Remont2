@@ -15,7 +15,7 @@ class ListShipWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit ListShipWindow(QWidget *parent = nullptr, bool isFree = true);
+    explicit ListShipWindow(QWidget *parent = nullptr, bool isShip = false);
     ~ListShipWindow();
 
 private slots:
@@ -33,6 +33,7 @@ private:
     RepoMSSQL repo;
     ListShipment Ship;
 
+    bool isShip;
     // void addRowWidget(Shipment &ship, int row = -1);
     // void setRowWidget(Shipment &ship, int row);
 

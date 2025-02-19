@@ -71,7 +71,7 @@ void AcceptRemontWindow::on_pbApply_clicked()
         Items prod;
         prod.id = idProd;
         // status.idDevice = idProd;
-        prod.AddStatus(prod, Status::FAULTY_ON_OSO);
+        prod.AddStatus(prod, StatusItem::FAULTY_ON_OSO);
     }
 
     if(idMod != 0)
@@ -79,7 +79,7 @@ void AcceptRemontWindow::on_pbApply_clicked()
         Items mod;
         mod.id = idMod;
         // status.idDevice = idMod;
-        mod.AddStatus(mod, Status::FAULTY_ON_OSO);;
+        mod.AddStatus(mod, StatusItem::FAULTY_ON_OSO);;
     }
 
     idProd = idMod = 0;

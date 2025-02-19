@@ -78,7 +78,7 @@ void SetterModel::fetchMore(const QModelIndex &parent)
 {
     if(!isBaseOff)
     {
-        int resLoad = listSetter->LoadPart(startLoad, cntLoad, number, isBusy);
+        int resLoad = listSetter->LoadPart(startLoad, cntLoad, number, isFree);
 
         if(resLoad > 0)
         {
@@ -167,10 +167,10 @@ bool SetterModel::removeRows(int row, int count, const QModelIndex &parent)
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-void SetterModel::prepareLoad(const QString _number, bool _isBusy)
+void SetterModel::prepareLoad(const QString _number, bool _isFree)
 {
     number = _number;
-    isBusy = _isBusy;
+    isFree = _isFree;
 
     listSetter->items.clear();
 

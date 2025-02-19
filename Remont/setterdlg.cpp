@@ -4,14 +4,19 @@
 
 #include <QMessageBox>
 
-SetterDlg::SetterDlg(QWidget *parent)
+SetterDlg::SetterDlg(bool isSelect, bool _isFree, QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::SetterDlg)
+    , ui(new Ui::SetterDlg), isFree(_isFree)
 {
     ui->setupUi(this);
 
+    if(!isSelect)
+    {
+        ui->pbSelect->setVisible(false);
+    }
+
     model = new SetterModel(this);
-    model->prepareLoad("", true);
+    model->prepareLoad("", isFree);
     ui->tableView->setModel(model);
 }
 
@@ -28,7 +33,7 @@ SetterDlg::~SetterDlg()
 //-------------------------------------------------------------------------
 void SetterDlg::on_tbSearch_clicked()
 {
-    model->prepareLoad(ui->leSearch->text(), true);
+    model->prepareLoad(ui->leSearch->text(), isFree);
 }
 
 
@@ -92,6 +97,20 @@ void SetterDlg::on_tableView_doubleClicked(const QModelIndex &index)
         RepoMSSQL repo;
         repo.ItemsSyncSet(setter->id, &win->track);
 
+    }
+}
+
+
+//-------------------------------------------------------------------------
+//
+//-------------------------------------------------------------------------
+void SetterDlg::on_pbSelect_clicked()
+{
+    QModelIndex index = ui->tableView->currentIndex();
+    if(index != QModelIndex())
+    {
+        selectSetter = model->GetItem(index.row());
+        accept();
     }
 }
 

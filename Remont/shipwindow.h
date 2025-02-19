@@ -22,17 +22,12 @@ public:
 
 private slots:
     void on_tbNumProd_clicked();
-    void on_tbNumModul_clicked();
-    void on_tbAddSetterProd_clicked();
-    // void on_pbAddSet_clicked();
     void on_pbDelete_clicked();
     void on_pbFinish_clicked();
-    void on_ShipWindow_finished(int result);
-    void on_pbClose_clicked();
+    // void on_ShipWindow_finished(int result);
     void slotIsEditing();
     void on_tbAddSetter_clicked();
-
-    void on_tbAddSetProd_clicked();
+    void on_pbSave_clicked();
 
 private:
     Ui::ShipWindow *ui;
@@ -41,11 +36,9 @@ private:
     Shipment *ship;
     QHash<int, int> listID;
     QMap<int, QString> listOrg;
+    TrackRecord<Items> trackItem;
+    TrackRecord<SetterOut> trackSet;
 
-    QTreeWidgetItem* AddItemProd(Items &prod, QTreeWidgetItem *parent = nullptr);
-    QTreeWidgetItem* AddItemTree(QString text, int id, TypeItemTree type, QTreeWidgetItem *parent = nullptr);
-    void SetStatusProduct(QList<Items> &listProduct);
-    void SetStatusModules(QList<Items> &listModules);
 };
 
 #endif // SHIPWINDOW_H

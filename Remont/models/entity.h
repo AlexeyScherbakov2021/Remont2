@@ -5,6 +5,7 @@
 
 #include <QDateTime>
 #include <QString>
+#include <infrastructure/general.h>
 
 class Items;
 
@@ -21,7 +22,7 @@ public:
     int idType = 0;
 
     // QList<IEntity> childItems;
-    virtual void GetInfo(QString& /*nameType*/, QString& /*nameIcon*/) const {}
+    virtual IndexType GetInfo(QString& /*nameType*/, QString& /*nameIcon*/) const  = 0; //{ return -1;}
 
     QList<Items> childItems;
 

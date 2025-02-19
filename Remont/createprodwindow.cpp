@@ -125,7 +125,7 @@ void CreateProductWindow::on_pbRegProduct_clicked()
 
     if(repo.AddItem(prod))
     {
-        prod.AddStatus(prod, Status::CREATE);
+        prod.AddStatus(prod, StatusItem::CREATE);
 
         addLineContent(prod);
 

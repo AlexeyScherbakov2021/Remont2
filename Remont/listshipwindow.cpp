@@ -6,9 +6,9 @@
 #include <QElapsedTimer>
 #include <QMessageBox>
 
-ListShipWindow::ListShipWindow(QWidget *parent, bool isFree)
+ListShipWindow::ListShipWindow(QWidget *parent, bool _isShip)
     : QDialog(parent)
-    , ui(new Ui::ListShipWindow)
+    , ui(new Ui::ListShipWindow), isShip(_isShip)
 {
     ui->setupUi(this);
 
@@ -16,7 +16,7 @@ ListShipWindow::ListShipWindow(QWidget *parent, bool isFree)
 
     model = new ShipModel(this);
 
-    model->prepareLoad("");
+    model->prepareLoad("", isShip);
     ui->tableView->setModel(model);
     // QElapsedTimer t;
     // t.start();
@@ -132,17 +132,6 @@ void ListShipWindow::on_pbNew_clicked()
 }
 
 
-//----------------------------------------------------------------------------
-// Кнопка Редактировать
-//----------------------------------------------------------------------------
-void ListShipWindow::on_pbEdit_clicked()
-{
-    // int row = ui->tableWidget->currentRow();
-    // if(row < 0)
-    //     return;
-
-    // on_tableWidget_cellDoubleClicked(row, 0);
-}
 
 
 //----------------------------------------------------------------------------
@@ -191,14 +180,40 @@ void ListShipWindow::on_pbDeleteShip_clicked()
 }
 
 
+//----------------------------------------------------------------------------
+// Кнопка Редактировать
+//----------------------------------------------------------------------------
+void ListShipWindow::on_pbEdit_clicked()
+{
+    // int row = ui->tableWidget->currentRow();
+    // if(row < 0)
+    //     return;
+
+    // on_tableWidget_cellDoubleClicked(row, 0);
+
+    on_tableView_doubleClicked(ui->tableView->currentIndex());
+}
+
+
+//----------------------------------------------------------------------------
+// Двойной щелчок в таблице
+//----------------------------------------------------------------------------
 void ListShipWindow::on_tableView_doubleClicked(const QModelIndex &index)
 {
+    Shipment *ship = model->GetItem(index.row());
+    if(ship == nullptr)
+        return;
 
+    QScopedPointer<ShipWindow> win(new ShipWindow(ship));
+    if(win->exec() == QDialog::Accepted)
+    {
+        // qDebug() << "Измение в строке" << ship->schet << ship->cardOrder;
+    }
 }
 
 
 void ListShipWindow::on_tbSearch_clicked()
 {
-    model->prepareLoad(ui->leSearch->text());
+    model->prepareLoad(ui->leSearch->text(), isShip);
 }
 

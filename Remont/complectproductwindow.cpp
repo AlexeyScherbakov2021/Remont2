@@ -43,7 +43,7 @@ void ComplectProductWindow::on_tbSearchModul_clicked()
     if(dev.id == 0)
         return;
 
-    QVector<int> stat {Status::CREATE, Status::CORRECT, Status::CORRECT_OSO};
+    QVector<StatusItem> stat {StatusItem::CREATE, StatusItem::CORRECT, StatusItem::CORRECT_OSO};
     QPointer<SelectDeviceWindow> win;
 
     if(dev.type.indexType == IndexType::Product)
@@ -69,7 +69,7 @@ void ComplectProductWindow::on_tbSearchModul_clicked()
 //----------------------------------------------------------------------------------------------
 void ComplectProductWindow::on_tbProdSearch_clicked()
 {
-    QVector<int> stat {Status::CREATE, Status::CORRECT, Status::CORRECT_OSO, Status::FAULTY};
+    QVector<StatusItem> stat {StatusItem::CREATE, StatusItem::CORRECT, StatusItem::CORRECT_OSO, StatusItem::FAULTY};
 
     QScopedPointer<SelectDeviceWindow> win (new SelectDeviceWindow(IndexType::Product, this));
     // win->setAttribute(Qt::WA_DeleteOnClose);
@@ -176,7 +176,7 @@ void ComplectProductWindow::on_pbOK_clicked()
         mod.idParent = dev.id;
         // записать в базу новый статус и id изделия для модуля
         if(repo.UpdateItem(mod))
-            mod.AddStatus(mod, Status::INSTALL);
+            mod.AddStatus(mod, StatusItem::INSTALL);
 
     }
 
@@ -190,7 +190,7 @@ void ComplectProductWindow::on_pbOK_clicked()
         if(repo.UpdateItem(mod))
             mod.DeleteLastStatus(mod);
 
-        mod.listStatus.removeIf( [] (auto n) { return n.idStatus == Status::INSTALL; });
+        mod.listStatus.removeIf( [] (auto n) { return n.idStatus == StatusItem::INSTALL; });
     }
 
     accept();
@@ -204,7 +204,7 @@ void ComplectProductWindow::slotReadScan(QString s)
 {
     if(isActiveWindow())
     {
-        QVector<int> stat = {Status::CREATE};
+        QVector<StatusItem> stat = {StatusItem::CREATE};
         Items item = repo.GetItem2(s, stat);
 
         if(item.id > 0)

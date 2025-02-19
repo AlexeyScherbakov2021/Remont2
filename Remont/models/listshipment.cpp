@@ -84,7 +84,7 @@ Shipment ListShipment::GetItem(int id)
 //-------------------------------------------------------------------------
 Shipment* ListShipment::GetItemAtRow(int row)
 {
-    if(row < items.size())
+    if(row < items.size() && row >= 0)
         return &items[row];
     return nullptr;
 }

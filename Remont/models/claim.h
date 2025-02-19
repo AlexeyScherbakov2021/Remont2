@@ -43,7 +43,12 @@ public:
 
     Claim() {}
 
-    virtual void GetInfo(QString& /*nameType*/, QString& /*nameIcon*/) const {}
+    virtual IndexType GetInfo(QString& nameType, QString& nameIcon) const
+    {
+        nameType = "Рекламация";
+        nameIcon = ":/image/claim_open.png";
+        return IndexType::ClaimType;
+    }
 
 
 };

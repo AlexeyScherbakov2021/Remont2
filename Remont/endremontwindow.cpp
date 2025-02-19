@@ -84,7 +84,7 @@ void EndRemontWindow::on_tbNumber_clicked()
 //---------------------------------------------------------------------------------------
 void EndRemontWindow::on_pbEndRemont_clicked()
 {
-    Status::Stat stat = ui->cbScrap->isChecked() ? Status::END_WORK : Status::CORRECT_OSO;
+    StatusItem stat = ui->cbScrap->isChecked() ? StatusItem::END_WORK : StatusItem::CORRECT_OSO;
 
     if(product.id != 0)
     {
@@ -116,7 +116,7 @@ void EndRemontWindow::on_pbEndRemont_clicked()
         if(modul.idParent != 0)
         {
             // product = repo.GetProduct(modul.idParent);
-            product.AddStatus(product, Status::WORK , ui->deDate->dateTime());
+            product.AddStatus(product, StatusItem::WORK , ui->deDate->dateTime());
         }
 
     }

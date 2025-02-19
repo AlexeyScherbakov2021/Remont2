@@ -10,25 +10,25 @@ class Items;
 class Status
 {
 public:
-    enum Stat {
-        NONE,               // нет статуса
-        CREATE,             // создан
-        FAULTY,             // неисправен на производстве
-        CORRECT,            // исправен на производстве
-        INSTALL,            // установен в оборудовании
-        SHIPPED,            // отгружен
-        WORK,               // в работе
-        FAULTY_ON_OBJECT,   // неисправен на объекте
-        FAULTY_ON_OSO,      // неисправен в ОСО
-        REMONT,             // в ремонте
-        CORRECT_OSO,        // исправен б/у в осо
-        END_WORK            // утилизирован
-    };
+    // enum Stat {
+    //     NONE,               // нет статуса
+    //     CREATE,             // создан
+    //     FAULTY,             // неисправен на производстве
+    //     CORRECT,            // исправен на производстве
+    //     INSTALL,            // установен в оборудовании
+    //     SHIPPED,            // отгружен
+    //     WORK,               // в работе
+    //     FAULTY_ON_OBJECT,   // неисправен на объекте
+    //     FAULTY_ON_OSO,      // неисправен в ОСО
+    //     REMONT,             // в ремонте
+    //     CORRECT_OSO,        // исправен б/у в осо
+    //     END_WORK            // утилизирован
+    // };
 
     int id = 0;
     int idDevice = 0;
     int idItem = 0;
-    Stat idStatus = Status::NONE;
+    StatusItem idStatus = StatusItem::NONE;
     QString nameStatus;
     QDateTime dateStatus = QDateTime::currentDateTime();
     int typeStatus = 0;
@@ -45,9 +45,9 @@ public:
 
     QVector<Status> listStatus;
     void LoadStatus(Items& item);
-    bool AddStatus(Items &item, Status::Stat idStat, const QString &comment = "");
+    bool AddStatus(Items &item, StatusItem idStat, const QString &comment = "");
     void DeleteLastStatus(Items &device);
-    bool AddStatus(Items &item, Status::Stat idStat, const QDateTime &dateRegister,  const QString &comment = "");
+    bool AddStatus(Items &item, StatusItem idStat, const QDateTime &dateRegister,  const QString &comment = "");
     QString getNameLastStatus() const;
     QString getLastComment() const;
     bool getIsRepair() const;

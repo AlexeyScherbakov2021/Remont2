@@ -10,17 +10,8 @@
 class Items : public IEntity, public StatusList
 {
 public:
-    // int id = 0;
-    // int idParent = 0;
-    // int idShip = 0;
     int idSet = 0;
-    // int idType = 0;
-
-    // QString number;
     QString number2;
-    // QString numberDoc;
-    // QString name;
-    // QDateTime dateCreate;
     QDateTime dateOn;
     QDateTime dateOff;
     int garantMonth = 0;
@@ -28,7 +19,6 @@ public:
     bool isZip = false;
 
     ItemType type;
-    // QList<Items> childItems;
 
     QString VNFT;
     QString currStatus;
@@ -39,7 +29,6 @@ public:
         return number + " (" + type.typeName + " " + type.VNFT + ")";
     }
 
-
     QString FullNameAndComment()
     {
         QString s = getLastComment();
@@ -48,7 +37,7 @@ public:
         return name + " №" + number + s;
     }
 
-    void GetInfo(QString &nameType, QString &nameIcon) const override
+    IndexType GetInfo(QString &nameType, QString &nameIcon) const override
     {
         switch(type.indexType)
         {
@@ -72,6 +61,8 @@ public:
         default:
             break;
         }
+
+        return type.indexType;
     }
 
     // bool operator==(const Items &other) const { return this->id == other.id; }

@@ -87,7 +87,7 @@ void SetterEditDlg::on_tbSearch_clicked()
     SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
     win->AddSelectedType(IndexType::Modul);
     win->AddSelectedType(IndexType::Plate);
-    QVector<int> stat {Status::CORRECT, Status::CORRECT_OSO };
+    QVector<StatusItem> stat {StatusItem::CORRECT, StatusItem::CORRECT_OSO };
     Items* dev = win->SelectDevice(true, stat, ui->leSearch->text());
     if(dev->id != 0)
     {

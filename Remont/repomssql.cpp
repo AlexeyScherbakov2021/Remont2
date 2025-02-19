@@ -406,7 +406,7 @@ Items RepoMSSQL::GetItem(int id) const
 // }
 
 
-Items RepoMSSQL::GetItem2( QString number, QVector<int>& listStatus, bool isBusy, bool isParent) const
+Items RepoMSSQL::GetItem2( QString number, QVector<StatusItem>& listStatus, bool isBusy, bool isParent) const
 {
     Items item;
 
@@ -641,7 +641,7 @@ int RepoMSSQL::LoadPart(size_t start, size_t count, const QString &number, QList
     QString sqlNumber = " c_schet like :c_schet";
 
     QStringList sql = {"select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
-                        "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,s.id,o.orgName "
+                        "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,s.id,o.orgName,c_customer "
                        "from Shipment s "
                        "left join Organization o on o.id=s.idOrganization "
                        "where c_dateUPD is "};
@@ -686,6 +686,7 @@ int RepoMSSQL::LoadPart(size_t start, size_t count, const QString &number, QList
         ship.dateUPD = query.value(9).toDateTime();
         ship.id = query.value(10).toInt();
         ship.org.orgName = query.value(11).toString();
+        ship.customer = query.value(12).toString();
         listItems.push_back(ship);
         ++res;
     }
@@ -693,8 +694,138 @@ int RepoMSSQL::LoadPart(size_t start, size_t count, const QString &number, QList
     return res;
 }
 
+//------------------------------------------------------------------------------------------------------
+// Загрузка содержимиого отгрузки
+//------------------------------------------------------------------------------------------------------
 void RepoMSSQL::LoadChildShip(Shipment &ship)
 {
+    ship.listSetterOut.clear();
+
+    QSqlQuery query;
+    query.prepare("select id,idShipment,s_name,s_orderNum,dateCreate "
+                  "from SetterOut where idShipment = :idShipment");
+
+    query.bindValue(":idShipment", ship.id);
+    query.exec();
+    while(query.next())
+    {
+        SetterOut item;
+
+        item.id = query.value(0).toInt();
+        item.idShip = query.value(1).toInt();
+        item.name = query.value(2).toString();
+        item.numberDoc = query.value(3).toString();
+        item.dateCreate = query.value(4).toDateTime();
+        ship.listSetterOut.push_back(item);
+    }
+
+    query.clear();
+    ship.childItems.clear();
+    query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,"
+                  "dateCreate,dateOn,dateOff,i.garantMonth,dateGarant,isZip,it.indexType,it.VNFT,it.typeName "
+                  "from Items i join itemType it on it.id=i.idType "
+                  "where idShip = :idShip");
+
+    query.bindValue(":idShip", ship.id);
+
+    query.exec();
+    while(query.next())
+    {
+        Items prod;
+        prod.id = query.value(0).toInt();
+        prod.idParent = query.value(1).toInt();
+        prod.idShip = query.value(2).toInt();
+        prod.idSet = query.value(3).toInt();
+        prod.idType = query.value(4).toInt();
+        prod.number = query.value(5).toString();
+        prod.number2 = query.value(6).toString();
+        prod.numberDoc = query.value(7).toString();
+        prod.name = query.value(8).toString();
+        prod.dateCreate = query.value(9).toDateTime();
+        prod.dateOn = query.value(10).toDateTime();
+        prod.dateOff = query.value(11).toDateTime();
+        prod.garantMonth = query.value(12).toInt();
+        prod.dateGarant = query.value(13).toDateTime();
+        prod.isZip = query.value(14).toBool();
+        prod.type.id = prod.id;
+        prod.type.indexType = (IndexType)query.value(15).toInt();
+        prod.type.VNFT = query.value(16).toString();
+        prod.type.typeName = query.value(17).toString();
+        LoadStatus(prod);
+        ship.childItems.push_back(prod);
+    }
+
+}
+
+//------------------------------------------------------------------------------------------------------
+// Добавление, удаление состава отгрузки
+//------------------------------------------------------------------------------------------------------
+bool RepoMSSQL::ItemsSyncShip(int idShip, TrackRecord<Items> *track)
+{
+    bool res = false;
+
+    QSqlDatabase::database().transaction();
+
+    QSqlQuery query;
+    query.prepare("update Items set idShip=null where id=:id");
+    for(auto &it: track->listDel)
+    {
+        query.bindValue(":id", it.id);
+        res = query.exec();
+    }
+
+    query.clear();
+
+    query.prepare("update Items set idShip=:idShip where id=:id");
+    for(auto &it: track->listAdd)
+    {
+        query.bindValue(":id", it.id);
+        query.bindValue(":idShip", idShip);
+        res = query.exec();
+    }
+
+    res = QSqlDatabase::database().commit();
+
+    if(!res)
+        qDebug() << "Ошибка при изменении записи в ItemsSyncShip";
+
+    return res;
+
+}
+
+//------------------------------------------------------------------------------------------------------
+// Добавление, удаление состава отгрузки
+//------------------------------------------------------------------------------------------------------
+bool RepoMSSQL::SetsSyncShip(int idShip, TrackRecord<SetterOut> *track)
+{
+    bool res = false;
+
+    QSqlDatabase::database().transaction();
+
+    QSqlQuery query;
+    query.prepare("update SetterOut set idShipment=null where id=:id");
+    for(auto &it: track->listDel)
+    {
+        query.bindValue(":id", it.id);
+        res = query.exec();
+    }
+
+    query.clear();
+
+    query.prepare("update SetterOut set idShipment=:idShipment where id=:id");
+    for(auto &it: track->listAdd)
+    {
+        query.bindValue(":id", it.id);
+        query.bindValue(":idShipment", idShip);
+        res = query.exec();
+    }
+
+    res = QSqlDatabase::database().commit();
+
+    if(!res)
+        qDebug() << "Ошибка при изменении записи в SetsSyncShip";
+
+    return res;
 
 }
 
@@ -1660,15 +1791,18 @@ bool RepoMSSQL::UpdateItem(Shipment &ship)
 
     query.bindValue(":c_number", ship.number);
     query.bindValue(":c_objectInstall", ship.objectInstall);
-    query.bindValue(":c_dateOut", ship.dateRegister);
+    if(!ship.dateRegister.isNull())
+        query.bindValue(":c_dateOut", ship.dateRegister);
     // query.bindValue(":c_customer", ship.customer);
     query.bindValue(":c_questList", ship.questList);
     query.bindValue(":c_schet", ship.schet);
     query.bindValue(":c_cardOrder", ship.cardOrder);
     query.bindValue(":c_numberUPD", ship.numberUPD);
     query.bindValue(":c_buyer", ship.buyer);
-    query.bindValue(":c_dateUPD", ship.dateUPD);
-    query.bindValue(":idOrganization", ship.idOrganization);
+    if(!ship.dateUPD.isNull())
+        query.bindValue(":c_dateUPD", ship.dateUPD);
+    if(ship.idOrganization > 0)
+        query.bindValue(":idOrganization", ship.idOrganization);
     query.bindValue(":id", ship.id);
 
     res = query.exec();
@@ -1970,6 +2104,9 @@ void RepoMSSQL::LoadChildSetter(SetterOut &setter)
 
 }
 
+//------------------------------------------------------------------------------------------------------
+// Добавление, удаление состава набора
+//------------------------------------------------------------------------------------------------------
 bool RepoMSSQL::ItemsSyncSet(int idSet, TrackRecord<Items> *track)
 {
     bool res = false;
@@ -1997,7 +2134,7 @@ bool RepoMSSQL::ItemsSyncSet(int idSet, TrackRecord<Items> *track)
     res = QSqlDatabase::database().commit();
 
     if(!res)
-        qDebug() << "Ошибка при изменении записи в UpdateItem";
+        qDebug() << "Ошибка при изменении записи в ItemsSyncSet";
 
     return res;
 }
@@ -2180,7 +2317,7 @@ void RepoMSSQL::FindItems(IndexType iType, QList<Items> &listItems, int status, 
     listItems.clear();
     QSqlQuery query;
 
-    if(status == Status::NONE)
+    if(status == StatusItem::NONE)
     {
         if(!isFree)
             query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
@@ -2308,7 +2445,7 @@ bool RepoMSSQL::LoadChildItems(int idParent, QList<Items> &listItems) const
         Status status;
         status.idItem = item.id;
         status.dateStatus = query.value(20).toDateTime();
-        status.idStatus = (Status::Stat)query.value(21).toInt();
+        status.idStatus = (StatusItem)query.value(21).toInt();
         status.Comment = query.value(22).toString();
         status.nameStatus = item.currStatus;
         item.listStatus.push_back(status);
@@ -2323,7 +2460,7 @@ bool RepoMSSQL::LoadChildItems(int idParent, QList<Items> &listItems) const
 
 int RepoMSSQL::LoadPart(size_t start, size_t count, IndexType iType,
                            const QString &number, QList<Items> &listItems,
-                           QVector<int>& listStatus, bool isBusy, bool isParent) const
+                           const QVector<StatusItem>& listStatus, bool isBusy, bool isParent) const
 {
     int res = 0;
     QStringList slStatus;
@@ -2415,7 +2552,7 @@ int RepoMSSQL::LoadPart(size_t start, size_t count, IndexType iType,
 
         Status status;
         status.dateStatus = query.value(20).toDateTime();
-        status.idStatus = (Status::Stat)query.value(21).toInt();
+        status.idStatus = (StatusItem)query.value(21).toInt();
         status.Comment = query.value(22).toString();
         status.idItem = item.id;
         status.nameStatus = item.currStatus;
@@ -2428,7 +2565,7 @@ int RepoMSSQL::LoadPart(size_t start, size_t count, IndexType iType,
     return res;
 }
 
-int RepoMSSQL::LoadPartAll(size_t start, size_t count, const QString &number, QList<Items> &listItems, QVector<int> &listStatus, bool isBusy, bool isParent) const
+int RepoMSSQL::LoadPartAll(size_t start, size_t count, const QString &number, QList<Items> &listItems, QVector<StatusItem> &listStatus, bool isBusy, bool isParent) const
 {
     int res = 0;
     QStringList slStatus;
@@ -2516,7 +2653,7 @@ int RepoMSSQL::LoadPartAll(size_t start, size_t count, const QString &number, QL
         Status status;
         status.idItem = item.id;
         status.dateStatus = query.value(20).toDateTime();
-        status.idStatus = (Status::Stat)query.value(21).toInt();
+        status.idStatus = (StatusItem)query.value(21).toInt();
         status.Comment = query.value(22).toString();
         status.nameStatus = item.currStatus;
         item.listStatus.push_back(status);
@@ -2655,7 +2792,7 @@ void RepoMSSQL::FindItems(IndexType iType, const QString &number, QList<Items> &
     if(number.isEmpty())
         return FindItems(iType, listItems, status, isFree);
 
-    if(status == Status::NONE)
+    if(status == StatusItem::NONE)
     {
         if(!isFree)
             query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
@@ -2748,7 +2885,7 @@ void RepoMSSQL::LoadStatus(Items& item) const
         Status stat;
         stat.id = query.value(0).toInt();
         stat.idItem = query.value(1).toInt();
-        stat.idStatus = (Status::Stat)query.value(2).toInt();
+        stat.idStatus = (StatusItem)query.value(2).toInt();
         stat.dateStatus = query.value(3).toDateTime();
         stat.Comment = query.value(4).toString();
         stat.nameStatus = query.value(5).toString();
@@ -2824,7 +2961,7 @@ void RepoMSSQL::LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) c
 //------------------------------------------------------------------------------------------------------
 // Загрузка наборов
 //------------------------------------------------------------------------------------------------------
-int RepoMSSQL::LoadPart(size_t start, size_t count, const QString &number, QList<SetterOut> &listItems, bool isBusy) const
+int RepoMSSQL::LoadPart(size_t start, size_t count, const QString &number, QList<SetterOut> &listItems, bool isFree) const
 {
     int res = 0;
     QSqlQuery query;
@@ -2838,7 +2975,7 @@ int RepoMSSQL::LoadPart(size_t start, size_t count, const QString &number, QList
     if(!number.isEmpty())
         slWhere.push_back(sqlNumber);
 
-    if(!isBusy)
+    if(isFree)
         slWhere.push_back(sqlBusy);
 
     if(slWhere.size() > 0)
@@ -2914,7 +3051,6 @@ void RepoMSSQL::LoadOrganization(QList<Organization> &listOrg)
         org.KPP = query.value(3).toString();
         listOrg.push_back(org);
     }
-
 }
 
 //------------------------------------------------------------------------------------------------------
@@ -2941,6 +3077,28 @@ void RepoMSSQL::LoadShipSetter(QList<SetterOut> &listSetter, int idShip)
         listSetter.push_back(setter);
     }
 }
+
+//------------------------------------------------------------------------------------------------------
+// Загрузка организации
+//------------------------------------------------------------------------------------------------------
+Organization RepoMSSQL::GetOrganization(int id)
+{
+    Organization org;
+    QSqlQuery query;
+
+    query.prepare("select id,OrgName,INN,KPP from Organization where id=:id");
+    query.bindValue(":id", id);
+    query.exec();
+    if(query.next())
+    {
+        org.id = query.value(0).toInt();
+        org.orgName = query.value(1).toString();
+        org.INN = query.value(2).toString();
+        org.KPP = query.value(3).toString();
+    }
+    return org;
+}
+
 
 //------------------------------------------------------------------------------------------------------
 // Загрузка модулей в отгрузке

@@ -127,7 +127,7 @@ void CreateModulWindow::on_pbRegModul_clicked()
 
     if(repo.AddItem(mod))
     {
-        mod.AddStatus(mod, Status::CREATE);
+        mod.AddStatus(mod, StatusItem::CREATE);
 
         addLineModul(mod);
 

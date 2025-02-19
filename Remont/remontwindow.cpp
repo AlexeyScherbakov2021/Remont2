@@ -33,7 +33,7 @@ void RemontWindow::on_pbOK_clicked()
     {
         Items prod;
         prod.id = idProd;
-        prod.AddStatus(prod, Status::REMONT);
+        prod.AddStatus(prod, StatusItem::REMONT);
         remont.idParent = idProd;
         repo.AddRemont(remont, ev::PRODUCT);
     }
@@ -42,7 +42,7 @@ void RemontWindow::on_pbOK_clicked()
     {
         Items mod;
         mod.id = idMod;
-        mod.AddStatus(mod, Status::REMONT);
+        mod.AddStatus(mod, StatusItem::REMONT);
         remont.idParent = idMod;
         repo.AddRemont(remont, ev::MODUL);
     }

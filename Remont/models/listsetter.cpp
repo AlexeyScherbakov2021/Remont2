@@ -171,7 +171,7 @@ void ListSetter::GetHeader(QStringList &headers)
 //-------------------------------------------------------------------------
 //
 //-------------------------------------------------------------------------
-int ListSetter::LoadPart(int start, int count, const QString &number, bool isBusy)
+int ListSetter::LoadPart(int start, int count, const QString &number, bool isFree)
 {
-    return repo.LoadPart(start, count, number, items, isBusy);
+    return repo.LoadPart(start, count, number, items, isFree);
 }

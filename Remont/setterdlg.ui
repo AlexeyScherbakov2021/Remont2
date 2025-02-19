@@ -138,6 +138,17 @@
       </spacer>
      </item>
      <item>
+      <widget class="QPushButton" name="pbSelect">
+       <property name="text">
+        <string>Выбрать</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/image/Apply24x24.png</normaloff>:/image/Apply24x24.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="pbClose">
        <property name="text">
         <string>Закрыть</string>

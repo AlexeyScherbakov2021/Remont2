@@ -17,7 +17,12 @@ public:
     // QList<Items> listItems;
 
     explicit SetterOut() {}
-    virtual void GetInfo(QString& /*nameType*/, QString& /*nameIcon*/) const {}
+    virtual IndexType GetInfo(QString& nameType, QString& nameIcon) const
+    {
+        nameType = "Набор";
+        nameIcon = ":/image/setter.png";
+        return IndexType::SetterType;
+    }
 
 };
 

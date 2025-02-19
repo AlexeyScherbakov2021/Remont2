@@ -62,13 +62,13 @@ void OTKWindow::StartControlWindow(Items *item)
         QIcon icon(nameIcon);
 
         Status stat = item->listStatus.last();
-        if(stat.idStatus == Status::CORRECT)
+        if(stat.idStatus == StatusItem::CORRECT)
         {
             QListWidgetItem *listItem = new QListWidgetItem(icon, item->GetDefaultName());
             listItem->setData(Qt::UserRole, item->id);
             ui->lwCheckedProd->insertItem(ui->lwBrokenProd->count(), listItem);
         }
-        else if(stat.idStatus == Status::FAULTY)
+        else if(stat.idStatus == StatusItem::FAULTY)
         {
             QListWidgetItem *listItem = new QListWidgetItem(icon, item->GetDefaultName() + " [" + item->getLastComment() + "]");
             listItem->setData(Qt::UserRole, item->id);
@@ -115,7 +115,7 @@ void OTKWindow::on_tbDelCheckProd_clicked()
     Items dev = repo.GetItem(id);
     if(dev.id > 0)
     {
-        Q_ASSERT(dev.listStatus.size() != 0 || dev.listStatus.last().idStatus != Status::CORRECT);
+        Q_ASSERT(dev.listStatus.size() != 0 || dev.listStatus.last().idStatus != StatusItem::CORRECT);
         dev.DeleteLastStatus(dev);
         delete ui->lwCheckedProd->currentItem();
         repo.LoadStatus(dev);
@@ -137,7 +137,7 @@ void OTKWindow::on_tbDelBrokenProd_clicked()
     Items dev = repo.GetItem(id);
     if(dev.id > 0)
     {
-        Q_ASSERT(dev.listStatus.size() != 0 || dev.listStatus.last().idStatus != Status::FAULTY);
+        Q_ASSERT(dev.listStatus.size() != 0 || dev.listStatus.last().idStatus != StatusItem::FAULTY);
 
         dev.DeleteLastStatus(dev);
         delete ui->lwBrokenProd->currentItem();

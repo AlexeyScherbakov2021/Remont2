@@ -33,5 +33,6 @@
         <file>image/text_list_numbers.png</file>
         <file>image/network_adapter.png</file>
         <file>image/edit.png</file>
+        <file>image/Save.png</file>
     </qresource>
 </RCC>

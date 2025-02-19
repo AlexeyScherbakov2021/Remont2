@@ -28,11 +28,16 @@ public:
 
     Organization org;
     QList<SetterOut> listSetterOut;
-    QList<Items> listItems;
+    // QList<Items> listItems;
 
     explicit Shipment() {}
 
-    virtual void GetInfo(QString& /*nameType*/, QString& /*nameIcon*/) const {}
+    virtual IndexType GetInfo(QString& nameType, QString& nameIcon) const
+    {
+        nameType = "Отгрузка";
+        nameIcon = ":/image/lorry.png";
+        return IndexType::ShipType;
+    }
 
 
 };

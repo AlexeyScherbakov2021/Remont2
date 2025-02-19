@@ -2,7 +2,7 @@ QT       += core gui sql serialport svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
-CONFIG += c++17
+CONFIG += c++20
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -53,7 +53,8 @@ SOURCES += \
     setterdlg.cpp \
     settereditdlg.cpp \
     shipwindow.cpp \
-    startworkwindow.cpp
+    startworkwindow.cpp \
+    treeitemsform.cpp
 
 HEADERS += \
     Itemvnftwindow.h \
@@ -109,7 +110,8 @@ HEADERS += \
     setterdlg.h \
     settereditdlg.h \
     shipwindow.h \
-    startworkwindow.h
+    startworkwindow.h \
+    treeitemsform.h
 
 FORMS += \
     Itemvnftwindow.ui \
@@ -136,7 +138,8 @@ FORMS += \
     setterdlg.ui \
     settereditdlg.ui \
     shipwindow.ui \
-    startworkwindow.ui
+    startworkwindow.ui \
+    treeitemsform.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

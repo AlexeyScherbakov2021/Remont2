@@ -165,7 +165,7 @@ void ListDevice::GetHeader(QStringList &headers)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-int ListDevice::LoadPart2(int start, int count, const QString &number, QVector<int> vStatus, bool isBusy, bool isParent)
+int ListDevice::LoadPart2(int start, int count, const QString &number, QVector<StatusItem> vStatus, bool isBusy, bool isParent)
 {
     if(typeDev == IndexType::All)
         return repo.LoadPartAll(start, count, number, items, vStatus, isBusy, isParent);

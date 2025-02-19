@@ -73,7 +73,7 @@ private:
     std::unique_ptr<ListSetter> listSetter;
 
     QString number = "";
-    bool isBusy = false;
+    bool isFree = true;
     bool isBaseOff = false;
     // pLoadItems lp = nullptr;
 

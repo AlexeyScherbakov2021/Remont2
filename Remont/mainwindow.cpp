@@ -128,7 +128,7 @@ void MainWindow::on_pbCreatePlate_clicked()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_pbShip_clicked()
 {
-    ui->aShipping->trigger();
+    ui->aShipBefore->trigger();
 
     // ListShipWindow *win = new ListShipWindow(this);
     // win->show();
@@ -225,16 +225,6 @@ void MainWindow::on_aControlOTK_triggered()
 
 
 //----------------------------------------------------------------------------------------------
-// Готовые к отгрузке
-//----------------------------------------------------------------------------------------------
-void MainWindow::on_aShipBefore_triggered()
-{
-    ListShipWindow *win = new ListShipWindow(this);
-    win->show();
-}
-
-
-//----------------------------------------------------------------------------------------------
 // Принять в работу
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_aStartWork_triggered()
@@ -292,7 +282,7 @@ void MainWindow::on_aCardDevice_triggered()
     SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
     win->AddSelectedType(IndexType::Modul);
     win->AddSelectedType(IndexType::Plate);
-    QVector<int> stat;
+    QVector<StatusItem> stat;
     Items *dev = win->SelectDevice(false, stat, "", true, true);
     if(dev != nullptr)
     {
@@ -349,7 +339,7 @@ void MainWindow::slotReadScan(QString s)
     // CardProdWindow *winCard;
     RepoMSSQL repo;
 
-    QVector<int> stat;
+    QVector<StatusItem> stat;
     Items dev = repo.GetItem2( s, stat, true, true);
 
     if(dev.id > 0)
@@ -399,6 +389,15 @@ void MainWindow::on_aReplaceFW_triggered()
 // Отгруженная продукция
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_aShipping_triggered()
+{
+    ListShipWindow *win = new ListShipWindow(this, true);
+    win->show();
+}
+
+//----------------------------------------------------------------------------------------------
+// Готовые к отгрузке
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aShipBefore_triggered()
 {
     ListShipWindow *win = new ListShipWindow(this, false);
     win->show();
@@ -463,7 +462,7 @@ void MainWindow::on_aRegModul_triggered()
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_aSetter_triggered()
 {
-    SetterDlg *win = new SetterDlg(this);
+    SetterDlg *win = new SetterDlg(false, this);
     win->setAttribute(Qt::WA_DeleteOnClose);
     win->show();
 }

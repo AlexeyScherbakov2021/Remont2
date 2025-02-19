@@ -182,7 +182,7 @@ void DeviceModel::prepareLoad(const QString _number, int _status, bool _isBusy, 
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-void DeviceModel::prepareLoad2(const QString _number, QVector<int>& _status, bool _isBusy, bool _isParent)
+void DeviceModel::prepareLoad2(const QString _number, QVector<StatusItem>& _status, bool _isBusy, bool _isParent)
 {
     // qDebug() << "prepareLoad2" ;
 

@@ -23,7 +23,7 @@ class SelectDeviceWindow : public QDialog
 public:
 
     SelectDeviceWindow(IndexType _type, QWidget *parent = nullptr);
-    Items* SelectDevice(bool isNow, QVector<int>& statusList, QString searchNum = "",  bool _isBusy = false, bool isParent = false);
+    Items* SelectDevice(bool isNow, const QVector<StatusItem>& statusList, QString searchNum = "",  bool _isBusy = false, bool isParent = false);
     void setDisableSearch();
 
     ~SelectDeviceWindow();
@@ -49,7 +49,7 @@ private:
     void startLoad();
 
     IndexType type;
-    QVector<int> vStatus;
+    QVector<StatusItem> vStatus;
     bool isBusy = false;
     bool isParent = false;
 

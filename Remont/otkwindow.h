@@ -29,7 +29,7 @@ private:
     Ui::OTKWindow *ui;
 
     DeviceModel *model = nullptr;
-    QVector<int> stat = { Status::CREATE, Status::FAULTY};
+    QVector<StatusItem> stat = { StatusItem::CREATE, StatusItem::FAULTY};
 
     void RestartLoad();
     void StartControlWindow(Items* item);

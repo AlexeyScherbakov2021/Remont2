@@ -7,7 +7,7 @@ void StatusList::LoadStatus(Items& item)
     repo.LoadStatus(item);
 }
 
-bool StatusList::AddStatus(Items &item, Status::Stat idStat, const QString &comment)
+bool StatusList::AddStatus(Items &item, StatusItem idStat, const QString &comment)
 {
     return AddStatus(item, idStat, QDateTime::currentDateTime(), comment );
 }
@@ -21,7 +21,7 @@ void StatusList::DeleteLastStatus(Items &item)
 }
 
 
-bool StatusList::AddStatus(Items &item, Status::Stat idStat, const QDateTime &dateRegister,  const QString &comment)
+bool StatusList::AddStatus(Items &item, StatusItem idStat, const QDateTime &dateRegister,  const QString &comment)
 {
     bool res;
     RepoMSSQL repo;

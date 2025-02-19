@@ -73,7 +73,7 @@ void OtkActionDlg::AddTreeWidget(Items *dev, QTreeWidgetItem *item)
 
 void OtkActionDlg::on_pbOk_clicked()
 {
-    Status::Stat stat = ui->rbAcceptControl->isChecked() ? Status::CORRECT : Status::FAULTY;
+    StatusItem stat = ui->rbAcceptControl->isChecked() ? StatusItem::CORRECT : StatusItem::FAULTY;
     if(dev->AddStatus(*dev, stat, ui->leComment->text()))
         accept();
 }

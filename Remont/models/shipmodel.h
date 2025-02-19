@@ -38,13 +38,14 @@ public:
     void prepareLoad(const QString _number, bool _isBusy = false);
     Shipment* GetItem(int row);
     bool DeleteItem(int row);
-    void DeleteItemFromListId(int id) ;
-    void DeleteItemFromList(int row) ;
+    void DeleteItemFromListId(int id);
+    void DeleteItemFromList(int row);
 
     void createList();
 
     void AddItem(Shipment* item);
     void UpdateItem(int row);
+    // void UpdateItemModel(int row);
     void setBaseOff();
 
 private:

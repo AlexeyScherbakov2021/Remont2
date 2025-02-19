@@ -40,7 +40,7 @@ public:
 
 
     void prepareLoad(const QString _number, int _status, bool _isBusy, bool _isParent);
-    void prepareLoad2(const QString _number, QVector<int>& _status, bool _isBusy, bool _isParent);
+    void prepareLoad2(const QString _number, QVector<StatusItem>& _status, bool _isBusy, bool _isParent);
     Items* GetItem(int row);
     bool DeleteItem(int row);
     void DeleteItemFromListId(int id) ;
@@ -63,7 +63,7 @@ private:
 
     QString number = "";
     int status = 0;
-    QVector<int> vStatus;
+    QVector<StatusItem> vStatus;
     bool isBusy = false;
     bool isParent = false;
     bool isBaseOff = false;

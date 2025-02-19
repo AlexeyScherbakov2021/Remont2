@@ -27,7 +27,7 @@ void TestBase::TestURAItem()
     // добавление статуса
     Status stat;
     stat.idItem = item.id;
-    stat.idStatus = Status::FAULTY_ON_OSO;
+    stat.idStatus = StatusItem::FAULTY_ON_OSO;
     repo.AddStatus(item, stat);
 
     // загрузка списка статусов

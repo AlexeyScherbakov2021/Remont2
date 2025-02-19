@@ -50,7 +50,7 @@ void StartWorkWindow::on_pbProdToWork_clicked()
     prod.dateGarant = prod.dateOn.addMonths(prod.garantMonth);
     // qDebug() << prod.EndGarant;
     // repo.LoadChildProduct(prod);
-    prod.AddStatus(prod, Status::WORK, ui->deDate->dateTime(), ui->leDoc->text());
+    prod.AddStatus(prod, StatusItem::WORK, ui->deDate->dateTime(), ui->leDoc->text());
 
     // for(auto &it : prod.listModules)
     // {

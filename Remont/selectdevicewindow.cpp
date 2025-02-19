@@ -86,7 +86,7 @@ void SelectDeviceWindow::startLoad()
 //--------------------------------------------------------------------------------------------------
 // Поиск устройства по списку статусов
 //--------------------------------------------------------------------------------------------------
-Items *SelectDeviceWindow::SelectDevice(bool isNow, QVector<int> &statusList, QString searchNum, bool _isBusy, bool _isParent)
+Items *SelectDeviceWindow::SelectDevice(bool isNow, const QVector<StatusItem> &statusList, QString searchNum, bool _isBusy, bool _isParent)
 {
     vStatus = statusList;
     isBusy = _isBusy;
@@ -112,7 +112,10 @@ Items *SelectDeviceWindow::SelectDevice(bool isNow, QVector<int> &statusList, QS
     startLoad();
     exec();
 
-    return &device;
+    if(device.id == 0)
+        return nullptr;
+    else
+        return &device;
 }
 
 
