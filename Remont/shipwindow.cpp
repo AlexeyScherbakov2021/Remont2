@@ -4,16 +4,26 @@
 #include "setterdlg.h"
 #include "shipwindow.h"
 #include "ui_shipwindow.h"
+// #include <QElapsedTimer>
 
 ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::ShipWindow), ship(shipment)
 {
+    // QElapsedTimer timer;
+
+    // timer.start();
+
     ui->setupUi(this);
 
     ui->pbFinish->setVisible(shipment->dateUPD.isNull());
 
+    // qDebug() << timer.elapsed() << "Start LoadOrganization";
+
     repo.LoadOrganization(listOrg);
+
+    // qDebug() << timer.elapsed() << "Finish LoadOrganization";
+
     int selectRow = -1;
     for(auto it = listOrg.begin(); it != listOrg.end(); ++it )
     {
@@ -21,6 +31,8 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
         if(it.key() == ship->idOrganization)
             selectRow = ui->cbCusomer->count() -1;
     }
+
+    // qDebug() << timer.elapsed() << "Full List";
 
     ui->cbCusomer->setCurrentIndex(selectRow);
 
@@ -150,21 +162,40 @@ void ShipWindow::on_pbFinish_clicked()
     // установить статус Отгружен для всех устройств
     for(auto &it : ship->listSetterOut)
     {
-
-
-        // SetStatusProduct(it.listItems);
+        SetStatusItems(it.childItems);
+        // for(auto &dev : it.childItems)
+        //     SetStatusItems(&dev);
     }
 
-    for(auto &it : ship->childItems)
-    {
-        // SetStatusProduct(it.listItems);
-    }
+    SetStatusItems(ship->childItems);
 
-    // SetStatusProduct(ship->listItems);
-    // SetStatusModules(ship->listItems);
+    // for(auto &it : ship->childItems)
+    // {
+    //     SetStatusItems(&it);
+    // }
+
     accept();
 }
 
+//-----------------------------------------------------------------------------------
+// Событие закрытия окна
+//-----------------------------------------------------------------------------------
+// void ShipWindow::SetStatusItems(Items *dev)
+// {
+//     dev->AddStatus(*dev, {StatusItem::SHIPPED});
+
+//     for(auto &it : dev->childItems)
+//         SetStatusItems(&it);
+// }
+
+void ShipWindow::SetStatusItems(QList<Items> &items)
+{
+    for(auto &dev : items)
+    {
+        dev.AddStatus(dev, {StatusItem::SHIPPED});
+        SetStatusItems(dev.childItems);
+    }
+}
 
 
 //-----------------------------------------------------------------------------------
@@ -248,4 +279,6 @@ void ShipWindow::on_pbSave_clicked()
     else
         reject();
 }
+
+
 

@@ -26,8 +26,8 @@ private:
     RepoMSSQL repo;
     Items *dev;
 
-    void GetTreeChild(Items* item);
-    void AddTreeWidget(Items *dev, QTreeWidgetItem* item);
+    // void GetTreeChild(Items* item);
+    // void AddTreeWidget(Items *dev, QTreeWidgetItem* item);
 };
 
 #endif // OTKACTIONDLG_H

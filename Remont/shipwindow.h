@@ -39,6 +39,8 @@ private:
     TrackRecord<Items> trackItem;
     TrackRecord<SetterOut> trackSet;
 
+    // void SetStatusItems(Items *dev);
+    void SetStatusItems(QList<Items>& items);
 };
 
 #endif // SHIPWINDOW_H

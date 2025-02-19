@@ -20,17 +20,19 @@ OtkActionDlg::OtkActionDlg(Items* item, QWidget *parent)
     ui->lbGarant->setText(QString::number(item->garantMonth));
     ui->lbStatus->setText(item->currStatus);
 
-    GetTreeChild(item);
+    ui->wTreeItem->AddItem(dev);
 
-    QTreeWidgetItem *root = new QTreeWidgetItem();
-    root->setText(0, item->GetDefaultName());
-    root->setToolTip(0, item->GetDefaultName());
-    QIcon icon(nameIcon);
-    root->setIcon(0, icon);
+    // GetTreeChild(item);
 
-    ui->treeWidget->addTopLevelItem(root);
-    root->setExpanded(true);
-    AddTreeWidget(item, root);
+    // QTreeWidgetItem *root = new QTreeWidgetItem();
+    // root->setText(0, item->GetDefaultName());
+    // root->setToolTip(0, item->GetDefaultName());
+    // QIcon icon(nameIcon);
+    // root->setIcon(0, icon);
+
+    // ui->treeWidget->addTopLevelItem(root);
+    // root->setExpanded(true);
+    // AddTreeWidget(item, root);
 
 }
 
@@ -43,33 +45,33 @@ OtkActionDlg::~OtkActionDlg()
 //------------------------------------------------------------------------------
 // построение дерева потомков для устройства
 //------------------------------------------------------------------------------
-void OtkActionDlg::GetTreeChild(Items *item)
-{
-    repo.LoadChildItems(item->id, item->childItems);
-    for(auto &it : item->childItems)
-    {
-        repo.LoadChildItems(it.id, it.childItems);
-        GetTreeChild(&it);
-    }
-}
+// void OtkActionDlg::GetTreeChild(Items *item)
+// {
+//     repo.LoadChildItems(item->id, item->childItems);
+//     for(auto &it : item->childItems)
+//     {
+//         repo.LoadChildItems(it.id, it.childItems);
+//         GetTreeChild(&it);
+//     }
+// }
 
-void OtkActionDlg::AddTreeWidget(Items *dev, QTreeWidgetItem *item)
-{
-    QString nameType;
-    QString nameIcon;
-    for(auto &it : dev->childItems)
-    {
-        it.GetInfo(nameType, nameIcon);
-        QTreeWidgetItem *child = new QTreeWidgetItem();
-        child->setText(0, it.GetDefaultName());
-        child->setToolTip(0, it.GetDefaultName());
-        QIcon icon(nameIcon);
-        child->setIcon(0, icon);
-        item->addChild(child);
-        AddTreeWidget(&it, child);
-        child->setExpanded(true);
-    }
-}
+// void OtkActionDlg::AddTreeWidget(Items *dev, QTreeWidgetItem *item)
+// {
+//     QString nameType;
+//     QString nameIcon;
+//     for(auto &it : dev->childItems)
+//     {
+//         it.GetInfo(nameType, nameIcon);
+//         QTreeWidgetItem *child = new QTreeWidgetItem();
+//         child->setText(0, it.GetDefaultName());
+//         child->setToolTip(0, it.GetDefaultName());
+//         QIcon icon(nameIcon);
+//         child->setIcon(0, icon);
+//         item->addChild(child);
+//         AddTreeWidget(&it, child);
+//         child->setExpanded(true);
+//     }
+// }
 
 void OtkActionDlg::on_pbOk_clicked()
 {

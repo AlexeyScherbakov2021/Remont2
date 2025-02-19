@@ -53,13 +53,13 @@ background-color: LightGray;
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QGroupBox" name="groupBox">
        <property name="title">
         <string>Состав отгрузки</string>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0">
         <item>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="2">
@@ -151,20 +151,11 @@ background-color: LightGray;
          </layout>
         </item>
         <item>
-         <widget class="QTreeWidget" name="twTreeDevice">
-          <column>
-           <property name="text">
-            <string>Наименование</string>
-           </property>
-          </column>
-         </widget>
-        </item>
-        <item>
          <widget class="TreeItemsForm" name="wTreeItems" native="true">
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>250</height>
+            <height>0</height>
            </size>
           </property>
          </widget>
@@ -365,7 +356,7 @@ background-color: LightGray;
          </property>
          <property name="dateTime">
           <datetime>
-           <hour>4</hour>
+           <hour>16</hour>
            <minute>0</minute>
            <second>0</second>
            <year>2000</year>
@@ -375,7 +366,7 @@ background-color: LightGray;
          </property>
          <property name="time">
           <time>
-           <hour>4</hour>
+           <hour>16</hour>
            <minute>0</minute>
            <second>0</second>
           </time>
@@ -389,7 +380,7 @@ background-color: LightGray;
          </property>
          <property name="minimumTime">
           <time>
-           <hour>4</hour>
+           <hour>16</hour>
            <minute>0</minute>
            <second>0</second>
           </time>
@@ -421,11 +412,14 @@ background-color: LightGray;
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="topMargin">
+      <number>15</number>
+     </property>
      <property name="rightMargin">
       <number>20</number>
      </property>
      <property name="bottomMargin">
-      <number>20</number>
+      <number>15</number>
      </property>
      <item>
       <spacer name="horizontalSpacer_2">
@@ -443,10 +437,16 @@ background-color: LightGray;
      <item alignment="Qt::AlignmentFlag::AlignBottom">
       <widget class="QPushButton" name="pbFinish">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
        </property>
        <property name="text">
         <string>Отгрузить</string>
@@ -469,10 +469,16 @@ background-color: LightGray;
      <item>
       <widget class="QPushButton" name="pbSave">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
        </property>
        <property name="text">
         <string>OK</string>
@@ -492,10 +498,16 @@ background-color: LightGray;
      <item alignment="Qt::AlignmentFlag::AlignBottom">
       <widget class="QPushButton" name="pbClose">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
        </property>
        <property name="text">
         <string>Отменить</string>
@@ -541,7 +553,6 @@ background-color: LightGray;
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>twTreeDevice</tabstop>
   <tabstop>leObjectInstall</tabstop>
   <tabstop>leNumProd</tabstop>
   <tabstop>pbFinish</tabstop>
