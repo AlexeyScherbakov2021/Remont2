@@ -114,7 +114,7 @@ QVariant ListShipment::getData(int row, int col, int role) const
             var = ship.schet;
             break;
         case 1:
-            var = ship.customer;
+            var = ship.org.orgName;
             break;
         case 2:
             var = ship.cardOrder;
@@ -127,6 +127,9 @@ QVariant ListShipment::getData(int row, int col, int role) const
             break;
         case 5:
             var = ship.dateUPD.toString("dd.MM.yyyy");
+            break;
+        case 6:
+            var = ship.dateRegister.toString("dd.MM.yyyy");
             break;
         }
     }
@@ -182,7 +185,7 @@ void ListShipment::setItem(int row, Shipment *ship)
 //-------------------------------------------------------------------------
 void ListShipment::GetHeader(QStringList &headers)
 {
-    headers << "Счет" << "Заказчик" << "Карта заказа" << "Объект установки" << "№ реализ." << "Дата рализ.";
+    headers << "Счет" << "Заказчик" << "Карта заказа" << "Объект установки" << "№ реализ." << "Дата рализ." << "Дата отгр.";
 }
 
 //-------------------------------------------------------------------------

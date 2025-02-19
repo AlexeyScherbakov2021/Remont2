@@ -6,6 +6,7 @@
 // #include "setterout.h"
 // #include "product.h"
 #include "Items.h"
+#include "organization.h"
 #include "setterout.h"
 
 // class SetterOut;
@@ -17,7 +18,6 @@ public:
     QString objectInstall;
     QString schet;
     QString cardOrder;
-    // QString numUPD;
     QDateTime dateUPD;
     QString buyer;
     int idOrganization;
@@ -26,6 +26,7 @@ public:
     QString questList;
     QString numberUPD;
 
+    Organization org;
     QList<SetterOut> listSetterOut;
     QList<Items> listItems;
 

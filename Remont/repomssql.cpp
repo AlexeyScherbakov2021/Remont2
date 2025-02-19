@@ -641,8 +641,10 @@ int RepoMSSQL::LoadPart(size_t start, size_t count, const QString &number, QList
     QString sqlNumber = " c_schet like :c_schet";
 
     QStringList sql = {"select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
-                        "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,id "
-                       "from Shipment where c_dateOut is "};
+                        "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,s.id,o.orgName "
+                       "from Shipment s "
+                       "left join Organization o on o.id=s.idOrganization "
+                       "where c_dateUPD is "};
 
     if(isShip)
         sql << "not null";
@@ -683,6 +685,7 @@ int RepoMSSQL::LoadPart(size_t start, size_t count, const QString &number, QList
         ship.buyer = query.value(8).toString();
         ship.dateUPD = query.value(9).toDateTime();
         ship.id = query.value(10).toInt();
+        ship.org.orgName = query.value(11).toString();
         listItems.push_back(ship);
         ++res;
     }

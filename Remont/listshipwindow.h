@@ -21,16 +21,20 @@ public:
 private slots:
     void on_pbNew_clicked();
     void on_pbEdit_clicked();
-    void on_tableWidget_cellDoubleClicked(int row, int column);
+    // void on_tableWidget_cellDoubleClicked(int row, int column);
     void on_pbDeleteShip_clicked();
+
+    void on_tableView_doubleClicked(const QModelIndex &index);
+
+    void on_tbSearch_clicked();
 
 private:
     Ui::ListShipWindow *ui;
     RepoMSSQL repo;
     ListShipment Ship;
 
-    void addRowWidget(Shipment &ship, int row = -1);
-    void setRowWidget(Shipment &ship, int row);
+    // void addRowWidget(Shipment &ship, int row = -1);
+    // void setRowWidget(Shipment &ship, int row);
 
     ShipModel *model;
 };
