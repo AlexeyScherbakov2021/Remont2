@@ -23,10 +23,12 @@ class RepoMSSQL
 {
 private:
     QSqlDatabase db;
-    void FindItems(QList<Shipment> &listShip, int status = 0, bool isFree = false);
-    void FindItems(IndexType iType, QList<Items> &listItems, int status = 0, bool isFree = false);
+    // void FindItems(QList<Shipment> &listShip, int status = 0, bool isFree = false);
+    // void FindItems(IndexType iType, QList<Items> &listItems, int status = 0, bool isFree = false);
 
 public:
+    RepoMSSQL();
+    bool ConnectDb();
 
     // Items
     bool LoadChildItems(int idParent, QList<Items> &listItems) const;
@@ -37,7 +39,7 @@ public:
                     QList<Items> &listItems, QVector<StatusItem>& listStatus, bool isBusy = false, bool isParent = false) const;
 
     bool AddItem(Items &item) const;
-    void FindItems(IndexType iType, const QString &number, QList<Items> &listItems, int status = 0, bool isFree = false);
+    // void FindItems(IndexType iType, const QString &number, QList<Items> &listItems, int status = 0, bool isFree = false);
     bool UpdateItem(Items &item);
     bool DeleteItem(int id) const;
     Items GetItem(int id) const;
@@ -49,7 +51,6 @@ public:
     bool DelLastStatus(Items &item) const;
 
     void LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) const;       //=============
-
 
     // SetterOut
     int LoadPart(size_t start, size_t count, const QString &number, QList<SetterOut> &listItems, bool isBusy = false) const;
@@ -69,14 +70,16 @@ public:
     bool ItemsSyncShip(int idShip, TrackRecord<Items> *track);
     bool SetsSyncShip(int idShip, TrackRecord<SetterOut> *track);
 
+    // Organization
+    Organization GetOrganization(int id);
+    void LoadOrganization(QMap<int, QString> &listOrg);
+    void LoadOrganization(QList<Organization> &listOrg);
 
-    void FindItems(const QString &number, QList<Shipment> &listShip, int status = 0, bool isFree = false);
-    void LoadShipment(QList<Shipment> &listShip, bool isFinish);
+
+    // void FindItems(const QString &number, QList<Shipment> &listShip, int status = 0, bool isFree = false);
+    // void LoadShipment(QList<Shipment> &listShip, bool isFinish);
 
 
-public:
-    RepoMSSQL();
-    bool ConnectDb();
 
     bool AddItem(Claim &claim);
     bool UpdateItem(Claim &claim);
@@ -86,14 +89,8 @@ public:
     int GetTypeStatus(int idStatus);
     const QString GetNameStatus(int id);
 
-    bool LinkPlate(int idPlate, int idModul);
+    // bool LinkPlate(int idPlate, int idModul);
     void LoadShipSetter(QList<SetterOut> &listSetter, int idShip);
-
-
-    // Organization
-    Organization GetOrganization(int id);
-    void LoadOrganization(QMap<int, QString> &listOrg);
-    void LoadOrganization(QList<Organization> &listOrg);
 
     bool LoadClaim(const QString number, QList<Claim> &listClaim);
     void LoadClaimType(QMap<int, QString> &listTypeClaim);

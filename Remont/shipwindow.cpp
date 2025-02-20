@@ -4,6 +4,7 @@
 #include "setterdlg.h"
 #include "shipwindow.h"
 #include "ui_shipwindow.h"
+// #include <QtConcurrent>
 // #include <QElapsedTimer>
 
 ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
@@ -19,6 +20,8 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
     ui->pbFinish->setVisible(shipment->dateUPD.isNull());
 
     // qDebug() << timer.elapsed() << "Start LoadOrganization";
+
+    // QFuture<bool> future =  QtConcurrent::run([repo]() { repo.LoadOrganization();});
 
     repo.LoadOrganization(listOrg);
 

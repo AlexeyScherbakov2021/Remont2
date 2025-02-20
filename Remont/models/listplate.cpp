@@ -59,10 +59,10 @@ void ListPlate::GetHeader(QStringList& headers)
 //     return var;
 // }
 
-void ListPlate::FindSerialNumber(const QString &number, QList<Items> &listItems)
-{
-    repo.FindItems(IndexType::Plate, number, listItems);
-}
+// void ListPlate::FindSerialNumber(const QString &number, QList<Items> &listItems)
+// {
+//     repo.FindItems(IndexType::Plate, number, listItems);
+// }
 
 
 // void ListPlate::LoadChild(Items &/*plate*/)

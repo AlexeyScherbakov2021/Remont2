@@ -22,7 +22,7 @@ public:
 
 
 public:
-    void FindSerialNumber(const QString &number, QList<Items> &listItems);
+    // void FindSerialNumber(const QString &number, QList<Items> &listItems);
     // void LoadChild(Items &plate) override;
     // Items GetItem(int id) override;
 

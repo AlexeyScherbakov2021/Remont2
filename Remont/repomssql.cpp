@@ -60,155 +60,6 @@ bool RepoMSSQL::ConnectDb()
     return true;
 }
 
-// bool RepoMSSQL::AddItem(Product &prod)
-// {
-//     bool res;
-//     QSqlQuery query;
-
-//     query.prepare("insert into Product (g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
-//                   "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-//                   "g_numberUSIKP,g_shunt,g_zip,g_garantMonth) "
-//                   "output inserted.id values(:g_ProductTypeId,:g_name,:g_number,:g_numberBox,:g_dateRegister,"
-//                   ":g_redaction1,:g_redaction2,:g_redactionPS,:g_questList,:g_avr,:g_akb,:g_cooler,:g_skm,:g_numberBI,"
-//                   ":g_numberUSIKP,:g_shunt,:g_zip,:g_garantMonth)");
-
-//     query.bindValue(":g_ProductTypeId", prod.idType);
-//     query.bindValue(":g_name", prod.name);
-//     query.bindValue(":g_number", prod.number);
-//     query.bindValue(":g_numberBox", prod.number2);
-//     query.bindValue(":g_dateRegister", prod.dateRegister);
-//     query.bindValue(":g_redaction1", prod.redaction1);
-//     query.bindValue(":g_redaction2", prod.redaction2);
-//     query.bindValue(":g_redactionPS", prod.redactionPS);
-//     query.bindValue(":g_questList", prod.questList);
-//     query.bindValue(":g_avr", prod.isAvr);
-//     query.bindValue(":g_akb", prod.isAkb);
-//     query.bindValue(":g_cooler", prod.isCooler);
-//     query.bindValue(":g_skm", prod.isSkm);
-//     query.bindValue(":g_numberBI", prod.numberBI);
-//     query.bindValue(":g_numberUSIKP", prod.numberUSIKP);
-//     query.bindValue(":g_shunt", prod.shunt);
-//     query.bindValue(":g_zip", prod.isZip);
-//     query.bindValue(":g_garantMonth", prod.garantMonth);
-
-//     res = query.exec();
-//     if(!res)
-//     {
-//         qDebug() << "Ошибка при добавлении записи в Product";
-//         qDebug() << db.lastError().text();
-//     }
-//     else
-//     {
-//         if(query.next())
-//             prod.id = query.value(0).toInt();
-//     }
-
-//     return res;
-// }
-
-// bool RepoMSSQL::AddItem(Modul &modul)
-// {
-//     bool res;
-//     QSqlQuery query;
-
-//     query.prepare("insert into Modules (m_modTypeId,m_name,m_number,m_numberFW,m_dateCreate,m_zip,m_garantMonth) "
-//                   "output inserted.id values(:m_modTypeId,:m_name,:m_number,:m_numberFW,:m_dateCreate,:m_zip,:m_garantMonth)");
-
-//     query.bindValue(":m_modTypeId", modul.idType);
-//     query.bindValue(":m_name", modul.name);
-//     query.bindValue(":m_number", modul.number);
-//     query.bindValue(":m_numberFW", modul.number2);
-//     query.bindValue(":m_dateCreate", modul.dateRegister);
-//     query.bindValue(":m_zip", modul.isZip);
-//     query.bindValue(":m_garantMonth", modul.garantMonth);
-
-//     res = query.exec();
-//     if(!res)
-//         qDebug() << "Ошибка при добавлении записи в Modules";
-//     else
-//     {
-//         if(query.next())
-//             modul.id = query.value(0).toInt();
-//     }
-//     return res;
-// }
-
-// bool RepoMSSQL::AddItem(Plate &plate)
-// {
-//     bool res;
-//     QSqlQuery query;
-
-//     query.prepare("insert into Plate (CreateDate,Number,NumberFW,NumberDoc,idPlateType) "
-//                   "output inserted.id values(:CreateDate,:Number,:NumberFW,:NumberDoc,:idPlateType)");
-
-//     query.bindValue(":CreateDate", plate.dateRegister);
-//     query.bindValue(":Number", plate.number);
-//     query.bindValue(":NumberFW", plate.number2);
-//     query.bindValue(":NumberDoc", plate.numberDoc);
-//     // query.bindValue(":VNFT", plate.VNFT);
-//     query.bindValue(":idPlateType", plate.idType);
-
-//     res = query.exec();
-
-//     if(!res)
-//         qDebug() << "Ошибка при добавлении записи в Plate";
-//     else
-//     {
-//         if(query.next())
-//             plate.id = query.value(0).toInt();
-//     }
-
-//     return res;
-// }
-
-// bool RepoMSSQL::UpdateItem(Product &prod)
-// {
-//     bool res;
-//     QSqlQuery query;
-
-//     query.prepare("update Product set idShipment=:idShipment,idSetter=:idSetter,g_ProductTypeId=:g_ProductTypeId"
-//                   ",g_name=:g_name,g_number=:g_number,g_numberBox=:g_numberBox,g_dateRegister=:g_dateRegister,"
-//                   "g_questList=:g_questList,g_avr=:g_avr,g_akb=:g_akb,g_cooler=:g_cooler,g_skm=:g_skm,"
-//                   "g_numberBI=:g_numberBI,g_numberUSIKP=:g_numberUSIKP,g_shunt=:g_shunt,g_zip=:g_zip,"
-//                   "g_garantMonth=:g_garantMonth,g_endGarant=:g_endGarant,g_dateOn=:g_dateOn where id=:id");
-
-//     QVariant var = prod.idShipment > 0 ? prod.idShipment : QVariant();
-//     query.bindValue(":idShipment", var);
-
-//     var = prod.idSetterOut > 0 ? prod.idSetterOut : QVariant();
-//     query.bindValue(":idSetter", var);
-
-//     query.bindValue(":g_ProductTypeId", prod.idType);
-//     query.bindValue(":g_name", prod.name);
-//     query.bindValue(":g_number", prod.number);
-//     query.bindValue(":g_numberBox", prod.number2);
-//     query.bindValue(":g_dateRegister", prod.dateRegister);
-//     query.bindValue(":g_questList", prod.questList);
-//     query.bindValue(":g_avr", prod.isAvr);
-//     query.bindValue(":g_akb", prod.isAkb);
-//     query.bindValue(":g_cooler", prod.isCooler);
-//     query.bindValue(":g_skm", prod.isSkm);
-//     query.bindValue(":g_numberBI", prod.numberBI);
-//     query.bindValue(":g_numberUSIKP", prod.numberUSIKP);
-//     query.bindValue(":g_shunt", prod.shunt);
-//     query.bindValue(":g_zip", prod.isZip);
-//     query.bindValue(":g_garantMonth", prod.garantMonth);
-//     query.bindValue(":g_endGarant", prod.EndGarant);
-//     query.bindValue(":g_dateOn", prod.dateOn);
-
-//     query.bindValue(":id", prod.id);
-
-//     res = query.exec();
-//     if(!res)
-//         qDebug() << "Ошибка при изменении записи в Product";
-
-//     return res;
-// }
-
-// bool RepoMSSQL::UpdateItem(Modul &/*mod*/)
-// {
-//     return false;
-// }
 
 bool RepoMSSQL::UpdateItem(Items &item)
 {
@@ -302,108 +153,9 @@ Items RepoMSSQL::GetItem(int id) const
         LoadStatus(item);
     }
 
-
-    // Items item;
-    // QSqlQuery query;
-
-    // query.prepare("id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-    //               "dateOff,garantMonth,dateGarant,isZip "
-    //               "from Items where id=:id");
-
-    // query.bindValue(":id", id);
-    // query.exec();
-    // if(query.next())
-    // {
-    //     item.id = query.value(0).toInt();
-    //     item.idParent = query.value(1).toInt();
-    //     item.idShip = query.value(2).toInt();
-    //     item.idSet = query.value(3).toInt();
-    //     item.idType = query.value(4).toInt();
-    //     item.number = query.value(5).toString();
-    //     item.number2 = query.value(6).toString();
-    //     item.numberDoc = query.value(7).toString();
-    //     item.name = query.value(8).toString();
-    //     item.dateCreate = query.value(9).toDateTime();
-    //     item.dateOn = query.value(10).toDateTime();
-    //     item.dateOff = query.value(11).toDateTime();
-    //     item.garantMonth = query.value(12).toInt();
-    //     item.dateGarant = query.value(13).toDateTime();
-    //     item.isZip = query.value(14).toBool();
-    //     item.LoadStatus(item);
-    // }
     return item;
 }
 
-// Items RepoMSSQL::GetItem( QString number, int status, bool isFree) const
-// {
-//     Items item;
-//     QSqlQuery query;
-
-//     if(number.isEmpty())
-//         return item;
-
-//     if(status == Status::NONE)
-//     {
-//         if(!isFree)
-//             query.prepare("select id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-//                           "dateOff,garantMonth,dateGarant,isZip "
-//                           "from Items where number like :number and  order by nameItem");
-//         else
-//         {
-//             query.prepare("select id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-//                           "dateOff,garantMonth,dateGarant,isZip "
-//                           "from Items where number like :number and idShip is null and idSet is null order by nameItem");
-//         }
-//     }
-//     else
-//     {
-//         if(!isFree)
-//             query.prepare("select id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-//                           "dateOff,garantMonth,dateGarant,isZip "
-//                           "from Items i "
-//                           "join "
-//                           "(select idItem, max(DateStatus) dateStatus, max(idStatus) as idStatus "
-//                           "from ItemStatus group by idItem "
-//                           "having max(idStatus)=:idStatus "
-//                           ") ms on ms.idItem=i.id where number like :number order by nameItem"
-//                           );
-//         else
-//             query.prepare("select id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-//                           "dateOff,garantMonth,dateGarant,isZip"
-//                           "from Items i "
-//                           "join "
-//                           "(select idItem, max(DateStatus) dateStatus, max(idStatus) as idStatus "
-//                           "from ItemStatus group by idItem "
-//                           "having max(idStatus)=:idStatus "
-//                           ") ms on ms.idItem=i.id where number like :number and idShip is null and idSet is null order by nameItem"
-//                           );
-
-//         query.bindValue(":idStatus", status);
-//     }
-//     query.bindValue(":number", QString("%%1%").arg(number));
-
-//     query.exec();
-//     if(query.next())
-//     {
-//         item.id = query.value(0).toInt();
-//         item.idParent = query.value(1).toInt();
-//         item.idShip = query.value(2).toInt();
-//         item.idSet = query.value(3).toInt();
-//         item.idType = query.value(4).toInt();
-//         item.number = query.value(5).toString();
-//         item.number2 = query.value(6).toString();
-//         item.numberDoc = query.value(7).toString();
-//         item.name = query.value(8).toString();
-//         item.dateCreate = query.value(9).toDateTime();
-//         item.dateOn = query.value(10).toDateTime();
-//         item.dateOff = query.value(11).toDateTime();
-//         item.garantMonth = query.value(12).toInt();
-//         item.dateGarant = query.value(13).toDateTime();
-//         item.isZip = query.value(14).toBool();
-//         item.LoadStatus(item);
-//     }
-//     return item;
-// }
 
 
 Items RepoMSSQL::GetItem2( QString number, QVector<StatusItem>& listStatus, bool isBusy, bool isParent) const
@@ -418,15 +170,6 @@ Items RepoMSSQL::GetItem2( QString number, QVector<StatusItem>& listStatus, bool
     QString sqlBusy = " idShip is null and idSet is null";
     QString sqlParent = " idParent is null";
     QString sqlStatus = "ist.idStatus=:idStatus%1 ";
-
-    // QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-    //                    "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus,it.indexType,it.VNFT,it.garantMonth,"
-    //                    "ist.dateStatus,ist.idStatus,ist.comment "
-    //                    "from Items i join ItemType it on it.id=i.idType "
-    //                    "join (select idItem, max(DateStatus) dateStatus from ItemStatus group by idItem "
-    //                    ") ms on ms.idItem=i.id "
-    //                    "join ItemStatus ist on ist.idItem=ms.idItem and ist.dateStatus=ms.dateStatus "
-    //                    "join StatusDevice sd on sd.id=ist.idStatus"};
 
     QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
                        "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,it.indexType,it.VNFT,it.garantMonth "
@@ -490,17 +233,8 @@ Items RepoMSSQL::GetItem2( QString number, QVector<StatusItem>& listStatus, bool
         item.type.garantMonth = query.value(18).toInt();
         item.type.id = item.idType;
         item.VNFT = item.type.VNFT;
-
         LoadStatus(item);
         item.SetLastStatus(item.currStatus, item.commentStatus);
-        // Status status;
-        // status.idItem = item.id;
-        // status.dateStatus = query.value(20).toDateTime();
-        // status.idStatus = (Status::Stat)query.value(21).toInt();
-        // status.Comment = query.value(22).toString();
-        // status.nameStatus = item.currStatus;
-        // item.listStatus.push_back(status);
-
     }
 
     return item;
@@ -524,91 +258,6 @@ void RepoMSSQL::LoadItemsType(QList<ItemType> &listType, IndexType indexType) co
         listType.push_back(mType);
     }
 }
-
-
-
-// bool RepoMSSQL::UpdateItem(Plate &plate)
-// {
-//     bool res;
-//     QSqlQuery query;
-
-//     query.prepare("update Plate set CreateDate=:CreateDate,Number=:Number,NumberFW=:NumberFW,NumberDoc=:NumberDoc,"
-//                   "idPlateType=:idPlateType "
-//                   "where id=:id");
-
-//     QVariant var = plate.idType > 0 ? plate.idType : QVariant();
-//     query.bindValue(":idPlateType", var);
-//     query.bindValue(":CreateDate", plate.dateRegister);
-//     query.bindValue(":Number", plate.number);
-//     query.bindValue(":NumberFW", plate.number2);
-//     query.bindValue(":NumberDoc", plate.numberDoc);
-//     // query.bindValue(":VNFT", plate.VNFT);
-//     query.bindValue(":id", plate.id);
-
-//     res = query.exec();
-//     if(!res)
-//         qDebug() << "Ошибка при изменении записи в Plate";
-
-//     return res;
-// }
-
-//------------------------------------------------------------------------------------------------------
-// Удаление изделия
-//------------------------------------------------------------------------------------------------------
-// bool RepoMSSQL::DeleteProduct(int id)
-// {
-//     bool res;
-//     QSqlQuery query;
-
-//     query.prepare("delete from Product where id=:id");
-//     query.bindValue(":id", id);
-//     res = query.exec();
-
-//     if(!res)
-//         qDebug() << "Ошибка при удалении записи в Product";
-
-//     return res;
-// }
-
-//------------------------------------------------------------------------------------------------------
-// Удаление модуля
-//------------------------------------------------------------------------------------------------------
-// bool RepoMSSQL::DeleteModul(int id)
-// {
-//     bool res;
-//     QSqlQuery query;
-
-//     query.prepare("delete from Modules where id=:id");
-//     query.bindValue(":id", id);
-//     res = query.exec();
-
-//     if(!res)
-//         qDebug() << "Ошибка при удалении записи в Modules";
-
-//     return res;
-
-// }
-
-
-
-//------------------------------------------------------------------------------------------------------
-// Удаление платы
-//------------------------------------------------------------------------------------------------------
-// bool RepoMSSQL::DeletePlate(int id)
-// {
-//     bool res;
-//     QSqlQuery query;
-
-//     query.prepare("delete from Plate where id=:id");
-//     query.bindValue(":id", id);
-//     res = query.exec();
-
-//     if(!res)
-//         qDebug() << "Ошибка при добавлении записи в RemontM";
-
-//     return res;
-
-// }
 
 
 //------------------------------------------------------------------------------------------------------
@@ -1303,115 +952,6 @@ const QString RepoMSSQL::GetNameStatus(int idStatus)
     return nameStatus;
 }
 
-//------------------------------------------------------------------------------------------------------
-// Загрузка типов модулей
-//------------------------------------------------------------------------------------------------------
-// void RepoMSSQL::LoadModuleType(QMap<int, QString> &listTypeModule)
-// {
-//     listTypeModule.clear();
-//     QSqlQuery query;
-//     query.prepare("select id,mt_name from ModuleType");
-
-//     query.exec();
-//     while(query.next())
-//     {
-//         listTypeModule.insert(query.value(0).toInt(), query.value(1).toString());
-//     }
-// }
-
-// void RepoMSSQL::LoadModuleType(QMap<int,ModulType> &listTypeModule)
-// {
-//     listTypeModule.clear();
-//     QSqlQuery query;
-//     query.prepare("select id,mt_name,mt_number,mt_garantMonth from ModuleType");
-
-//     query.exec();
-//     while(query.next())
-//     {
-//         ModulType mType;
-//         mType.id = query.value(0).toInt();
-//         mType.name = query.value(1).toString();
-//         mType.number = query.value(2).toString();
-//         mType.garantMonth = query.value(3).toInt();
-//         listTypeModule.insert(query.value(0).toInt(), mType);
-//     }
-
-// }
-
-// void RepoMSSQL::LoadModuleType(QList<ModulType> &listTypeModule)
-// {
-//     listTypeModule.clear();
-//     QSqlQuery query;
-//     query.prepare("select id,mt_name,mt_number,mt_garantMonth,mt_VNFT from ModuleType");
-
-//     query.exec();
-//     while(query.next())
-//     {
-//         ModulType mType;
-//         mType.id = query.value(0).toInt();
-//         mType.name = query.value(1).toString();
-//         mType.number = query.value(2).toString();
-//         mType.garantMonth = query.value(3).toInt();
-//         mType.VNFT = query.value(4).toString();
-//         listTypeModule.push_back(mType);
-//     }
-
-// }
-
-//------------------------------------------------------------------------------------------------------
-// Загрузка типов изделий
-//------------------------------------------------------------------------------------------------------
-// void RepoMSSQL::LoadProductType(QMap<int, QString> &listTypeProduct)
-// {
-//     listTypeProduct.clear();
-//     QSqlQuery query;
-//     query.prepare("select id,gt_name from ProductType");
-
-//     query.exec();
-//     while(query.next())
-//     {
-//         listTypeProduct.insert(query.value(0).toInt(), query.value(1).toString());
-//     }
-// }
-
-// void RepoMSSQL::LoadProductType(QMap<int, ProductType> &listTypeProduct)
-// {
-//     listTypeProduct.clear();
-//     QSqlQuery query;
-//     query.prepare("select id,gt_name,gt_number,gt_garantMonth from ProductType");
-
-//     query.exec();
-//     while(query.next())
-//     {
-//         ProductType pType;
-//         pType.id = query.value(0).toInt();
-//         pType.name = query.value(1).toString();
-//         pType.number = query.value(2).toString();
-//         pType.garantMonth = query.value(3).toInt();
-//         listTypeProduct.insert(query.value(0).toInt(), pType);
-//     }
-
-// }
-
-// void RepoMSSQL::LoadProductType(QList<ProductType> &listTypeProduct)
-// {
-//     listTypeProduct.clear();
-//     QSqlQuery query;
-//     query.prepare("select id,gt_name,gt_number,gt_garantMonth,gt_VNFT from ProductType");
-
-//     query.exec();
-//     while(query.next())
-//     {
-//         ProductType pType;
-//         pType.id = query.value(0).toInt();
-//         pType.name = query.value(1).toString();
-//         pType.number = query.value(2).toString();
-//         pType.garantMonth = query.value(3).toInt();
-//         pType.VNFT = query.value(4).toString();
-//         listTypeProduct.push_back(pType);
-//     }
-
-// }
 
 //------------------------------------------------------------------------------------------------------
 // Поиск списка плат по номеру
@@ -1451,65 +991,32 @@ const QString RepoMSSQL::GetNameStatus(int idStatus)
 //     }
 // }
 
-void RepoMSSQL::FindItems(const QString &/*number*/, QList<Shipment> &listShip, int status, bool isFree)
-{
-    return FindItems(listShip, status, isFree);
-}
+// void RepoMSSQL::FindItems(const QString &/*number*/, QList<Shipment> &listShip, int status, bool isFree)
+// {
+//     return FindItems(listShip, status, isFree);
+// }
 
 //------------------------------------------------------------------------------------------------------
 // Привязка платы к модулю
 //------------------------------------------------------------------------------------------------------
-bool RepoMSSQL::LinkPlate(int idPlate, int idModul)
-{
-    bool res;
-    QSqlQuery query;
-
-    query.prepare("update Plate set idModul=:idModul where id=:id");
-
-    query.bindValue(":idModul", idModul);
-    query.bindValue(":id", idPlate);
-
-    res = query.exec();
-
-    if(!res)
-        qDebug() << "Ошибка при добавлении записи в RemontM";
-
-    return res;
-}
-
-//------------------------------------------------------------------------------------------------------
-// Загрузка модулей для изделия
-//------------------------------------------------------------------------------------------------------
-// void RepoMSSQL::LoadChildProduct(Product &prod)
+// bool RepoMSSQL::LinkPlate(int idPlate, int idModul)
 // {
-//     prod.listModules.clear();
+//     bool res;
 //     QSqlQuery query;
-//     query.prepare("select id,idShipment,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,m_zip,"
-//                   "m_garantMonth,m_endGarant,m_dateOn "
-//                   "from Modules where idProduct = :idProduct");
 
-//     query.bindValue(":idProduct", prod.id);
+//     query.prepare("update Plate set idModul=:idModul where id=:id");
 
-//     query.exec();
-//     while(query.next())
-//     {
-//         Modul mod;
-//         mod.id = query.value(0).toInt();
-//         mod.idShipment = query.value(1).toInt();
-//         mod.idProduct = prod.id;
-//         mod.idType = query.value(2).toInt();
-//         mod.name = query.value(3).toString();
-//         mod.number = query.value(4).toString();
-//         mod.number2 = query.value(5).toString();
-//         mod.dateUtil = query.value(6).toDateTime();
-//         mod.dateRegister = query.value(7).toDateTime();
-//         mod.isZip = query.value(8).toBool();
-//         mod.garantMonth = query.value(9).toInt();
-//         mod.EndGarant = query.value(10).toDateTime();
-//         mod.dateOn = query.value(11).toDateTime();
-//         prod.listModules.push_back(mod);
-//     }
+//     query.bindValue(":idModul", idModul);
+//     query.bindValue(":id", idPlate);
+
+//     res = query.exec();
+
+//     if(!res)
+//         qDebug() << "Ошибка при добавлении записи в RemontM";
+
+//     return res;
 // }
+
 
 //------------------------------------------------------------------------------------------------------
 // Поиск набора по id
@@ -1536,136 +1043,6 @@ SetterOut RepoMSSQL::GetSetter(int id)
     return setter;
 }
 
-//------------------------------------------------------------------------------------------------------
-// получение изделия по идентификатору
-//------------------------------------------------------------------------------------------------------
-// Product RepoMSSQL::GetProduct(int id)
-// {
-//     Product prod;
-//     QSqlQuery query;
-
-//     query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
-//                   "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-//                   "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
-//                   "from Product where id=:id");
-
-//     query.bindValue(":id", id);
-//     query.exec();
-//     if(query.next())
-//     {
-//         prod.id = query.value(0).toInt();
-//         prod.idShipment = query.value(1).toInt();
-//         prod.idSetterOut = query.value(2).toInt();
-//         prod.idType = query.value(3).toInt();
-//         prod.name = query.value(4).toString();
-//         prod.number = query.value(5).toString();
-//         prod.number2 = query.value(6).toString();
-//         prod.dateRegister = query.value(7).toDateTime();
-//         prod.redaction1 = query.value(8).toString();
-//         prod.redaction2 = query.value(9).toString();
-//         prod.redactionPS = query.value(10).toString();
-//         prod.questList = query.value(11).toString();
-//         prod.isAvr = query.value(12).toBool();
-//         prod.isAkb = query.value(13).toBool();
-//         prod.isCooler = query.value(14).toBool();
-//         prod.isSkm = query.value(15).toBool();
-//         prod.numberBI = query.value(16).toString();
-//         prod.numberUSIKP = query.value(17).toString();
-//         prod.shunt = query.value(18).toString();
-//         prod.isZip = query.value(19).toBool();
-//         prod.garantMonth = query.value(20).toInt();
-//         prod.EndGarant = query.value(21).toDateTime();
-//         prod.dateOn = query.value(22).toDateTime();
-//         LoadStatus(prod);
-//     }
-//     return prod;
-// }
-
-//------------------------------------------------------------------------------------------------------
-// получение изделия по номеру
-//------------------------------------------------------------------------------------------------------
-// Product RepoMSSQL::GetProduct(QString number, int status, bool isFree)
-// {
-//     Product prod;
-//     QSqlQuery query;
-
-//     if(number.isEmpty())
-//         return prod;
-
-//     if(status == Status::NONE)
-//     {
-//         if(!isFree)
-//             query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
-//                           "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-//                           "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
-//                           "from Product where g_number=:g_number");
-//         else
-//         {
-//             query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
-//                           "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-//                           "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
-//                           "from Product where g_number=:g_number and idShipment is null and idSetter is null");
-//         }
-//     }
-//     else
-//     {
-//         if(!isFree)
-//             query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
-//                           "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-//                           "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
-//                           "from Product p "
-//                           "join "
-//                           "(select idProduct, max(DateStatus) dateStatus, max(idStatus) as idStatus "
-//                           "from ProductStatus group by idProduct "
-//                           "having max(idStatus)=:idStatus "
-//                           ") ms on ms.idProduct=p.id where g_number=:g_number"
-//                           );
-//         else
-//             query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
-//                           "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-//                           "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
-//                           "from Product p "
-//                           "join "
-//                           "(select idProduct, max(DateStatus) dateStatus, max(idStatus) as idStatus "
-//                           "from ProductStatus group by idProduct "
-//                           "having max(idStatus)=:idStatus "
-//                           ") ms on ms.idProduct=p.id where g_number=:g_number and idShipment is null and idSetter is null"
-//                           );
-
-//         query.bindValue(":idStatus", status);
-//     }
-//     query.bindValue(":g_number", number);
-
-//     query.exec();
-//     if(query.next())
-//     {
-//         prod.id = query.value(0).toInt();
-//         prod.idShipment = query.value(1).toInt();
-//         prod.idSetterOut = query.value(2).toInt();
-//         prod.idType = query.value(3).toInt();
-//         prod.name = query.value(4).toString();
-//         prod.number = query.value(5).toString();
-//         prod.number2 = query.value(6).toString();
-//         prod.dateRegister = query.value(7).toDateTime();
-//         prod.redaction1 = query.value(8).toString();
-//         prod.redaction2 = query.value(9).toString();
-//         prod.redactionPS = query.value(10).toString();
-//         prod.questList = query.value(11).toString();
-//         prod.isAvr = query.value(12).toBool();
-//         prod.isAkb = query.value(13).toBool();
-//         prod.isCooler = query.value(14).toBool();
-//         prod.isSkm = query.value(15).toBool();
-//         prod.numberBI = query.value(16).toString();
-//         prod.numberUSIKP = query.value(17).toString();
-//         prod.shunt = query.value(18).toString();
-//         prod.isZip = query.value(19).toBool();
-//         prod.garantMonth = query.value(20).toInt();
-//         prod.EndGarant = query.value(21).toDateTime();
-//         prod.dateOn = query.value(22).toDateTime();
-//         LoadStatus(prod);
-//     }
-//     return prod;
-// }
 
 //------------------------------------------------------------------------------------------------------
 // Добавление новой отгрузки
@@ -1927,138 +1304,37 @@ Shipment RepoMSSQL::GetShipment(int id)
 // }
 
 //------------------------------------------------------------------------------------------------------
-// получение модуля по номеру
+// Загрузка списка отгрузок
 //------------------------------------------------------------------------------------------------------
-// Modul RepoMSSQL::GetModul(QString number, int status, bool isFree)
+// void RepoMSSQL::LoadShipment(QList<Shipment> &listShip, bool /*isFinish*/)
 // {
-//     Modul mod;
+//     listShip.clear();
 //     QSqlQuery query;
 
-//     if(number.isEmpty())
-//         return mod;
-
-//     if(status == Status::NONE)
-//     {
-//         if(!isFree)
-//             query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
-//                           "m_zip,m_garantMonth,m_endGarant,m_dateOn "
-//                           "from Modules where m_number=:number");
-//         else
-//             query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
-//                           "m_zip,m_garantMonth,m_endGarant,m_dateOn "
-//                           "from Modules where m_number=:number and idShipment is null and idProduct is null");
-//     }
-//     else
-//     {
-//         if(!isFree)
-//             query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
-//                           "m_zip,m_garantMonth,m_endGarant,m_dateOn "
-//                           "from Modules m "
-//                           "join "
-//                           "(select idModul, max(DateStatus) dateStatus, max(idStatus) as idStatus "
-//                           "from ModulStatus group by idModul "
-//                           "having max(idStatus)=:idStatus "
-//                           ") ms on ms.idModul=m.id where m_number=:number"
-//                           );
-//         else
-//             query.prepare("select id,idShipment,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,"
-//                           "m_zip,m_garantMonth,m_endGarant,m_dateOn "
-//                           "from Modules m "
-//                           "join "
-//                           "(select idModul, max(DateStatus) dateStatus, max(idStatus) as idStatus "
-//                           "from ModulStatus group by idModul "
-//                           "having max(idStatus)=:idStatus "
-//                           ") ms on ms.idModul=m.id where m_number=:number and idShipment is null and idProduct is null"
-//                           );
-
-//         query.bindValue(":idStatus", status);
-//     }
-
-//     query.bindValue(":number", number);
+//     query.prepare("select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
+//                   "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,id "
+//                   "from Shipment where c_dateOut is null");
 
 //     query.exec();
 //     while(query.next())
 //     {
-//         mod.id = query.value(0).toInt();
-//         mod.idShipment = query.value(1).toInt();
-//         mod.idProduct = query.value(2).toInt();
-//         mod.idType = query.value(3).toInt();
-//         mod.name = query.value(4).toString();
-//         mod.number = query.value(5).toString();
-//         mod.number2 = query.value(6).toString();
-//         mod.dateRegister = query.value(8).toDateTime();
-//         mod.isZip = query.value(9).toBool();
-//         mod.garantMonth = query.value(10).toInt();
-//         mod.EndGarant = query.value(11).toDateTime();
-//         mod.dateOn = query.value(12).toDateTime();
-//         LoadStatus(mod);
+//         Shipment ship;
+//         ship.number = query.value(0).toString();
+//         ship.objectInstall = query.value(1).toString();
+//         ship.dateRegister = query.value(2).toDateTime();
+//         ship.idOrganization = query.value(3).toInt();
+//         ship.questList = query.value(4).toString();
+//         ship.schet = query.value(5).toString();
+//         ship.cardOrder = query.value(6).toString();
+//         ship.numberUPD = query.value(7).toString();
+//         ship.buyer = query.value(8).toString();
+//         ship.dateUPD = query.value(9).toDateTime();
+//         ship.id = query.value(10).toInt();
+//         // ship.customer = query.value(11).toString();
+//         listShip.push_back(ship);
 //     }
 
-//     return mod;
 // }
-
-
-//------------------------------------------------------------------------------------------------------
-// получение платы по номеру
-//------------------------------------------------------------------------------------------------------
-// Plate RepoMSSQL::GetPlate(QString number)
-// {
-//     QSqlQuery query;
-//     Plate plate;
-
-//     if(!number.isEmpty())
-//     {
-//         query.prepare("select id,CreateDate,Number,NumberFW,NumberDoc,VNFT "
-//                       "from Plate where Number=:Number and idModul is null");
-
-//         query.bindValue(":Number", number);
-
-//         query.exec();
-//         if(query.next())
-//         {
-//             plate.id = query.value(0).toInt();
-//             plate.dateRegister = query.value(1).toDateTime();
-//             plate.number = query.value(2).toString();
-//             plate.number2 = query.value(3).toString();
-//             plate.numberDoc = query.value(4).toString();
-//             plate.VNFT = query.value(5).toString();
-//         }
-//     }
-//     return plate;
-// }
-
-//------------------------------------------------------------------------------------------------------
-// Загрузка списка отгрузок
-//------------------------------------------------------------------------------------------------------
-void RepoMSSQL::LoadShipment(QList<Shipment> &listShip, bool /*isFinish*/)
-{
-    listShip.clear();
-    QSqlQuery query;
-
-    query.prepare("select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
-                  "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,id "
-                  "from Shipment where c_dateOut is null");
-
-    query.exec();
-    while(query.next())
-    {
-        Shipment ship;
-        ship.number = query.value(0).toString();
-        ship.objectInstall = query.value(1).toString();
-        ship.dateRegister = query.value(2).toDateTime();
-        ship.idOrganization = query.value(3).toInt();
-        ship.questList = query.value(4).toString();
-        ship.schet = query.value(5).toString();
-        ship.cardOrder = query.value(6).toString();
-        ship.numberUPD = query.value(7).toString();
-        ship.buyer = query.value(8).toString();
-        ship.dateUPD = query.value(9).toDateTime();
-        ship.id = query.value(10).toInt();
-        // ship.customer = query.value(11).toString();
-        listShip.push_back(ship);
-    }
-
-}
 
 //------------------------------------------------------------------------------------------------------
 // Загрузка изделий для набора
@@ -2139,262 +1415,127 @@ bool RepoMSSQL::ItemsSyncSet(int idSet, TrackRecord<Items> *track)
     return res;
 }
 
-//------------------------------------------------------------------------------------------------------
-// Добавление статуса модулю
-//------------------------------------------------------------------------------------------------------
-// bool RepoMSSQL::AddStatus(Modul &modul, Status &status)
-// {
-//     bool res;
-//     QSqlQuery query;
-
-//     query.prepare("insert into ModulStatus (idModul,idStatus,DateStatus,Comment) "
-//                   "output inserted.id values(:idModul,:idStatus,:DateStatus,:Comment)");
-
-//     query.bindValue(":idModul", modul.id);
-//     query.bindValue(":idStatus", status.idStatus);
-//     query.bindValue(":DateStatus", status.dateStatus);
-//     query.bindValue(":Comment", status.Comment);
-
-//     res = query.exec();
-//     if(!res)
-//         qDebug() << "Ошибка при добавлении записи в ModulStatus";
-//     else
-//     {
-//         if(query.next())
-//             status.id = query.value(0).toInt();
-//     }
-
-//     return res;
-// }
-
-//------------------------------------------------------------------------------------------------------
-// Добавление статуса изделию
-//------------------------------------------------------------------------------------------------------
-// bool RepoMSSQL::AddStatus(Product &product, Status &status)
-// {
-//     bool res;
-//     QSqlQuery query;
-
-//     query.prepare("insert into ProductStatus (idProduct,idStatus,DateStatus,Comment) "
-//                   "output inserted.id values(:idProduct,:idStatus,:DateStatus,:Comment)");
-
-//     query.bindValue(":idProduct", product.id);
-//     query.bindValue(":idStatus", status.idStatus);
-//     query.bindValue(":DateStatus", status.dateStatus);
-//     query.bindValue(":Comment", status.Comment);
-
-//     res = query.exec();
-//     if(!res)
-//         qDebug() << "Ошибка при добавлении записи в ProductStatus";
-//     else
-//     {
-//         if(query.next())
-//             status.id = query.value(0).toInt();
-//     }
-
-//     return res;
-
-// }
-
-// bool RepoMSSQL::AddStatus(Plate &plate, Status &status)
-// {
-//     bool res;
-//     QSqlQuery query;
-
-//     query.prepare("insert into PlateStatus (idPlate,idStatus,DateStatus,Comment) "
-//                   "output inserted.id values(:idPlate,:idStatus,:DateStatus,:Comment)");
-
-//     query.bindValue(":idPlate", plate.id);
-//     query.bindValue(":idStatus", status.idStatus);
-//     query.bindValue(":DateStatus", status.dateStatus);
-//     query.bindValue(":Comment", status.Comment);
-
-//     res = query.exec();
-//     if(!res)
-//         qDebug() << "Ошибка при добавлении записи в PlateStatus";
-//     else
-//     {
-//         if(query.next())
-//             status.id = query.value(0).toInt();
-//     }
-//     return res;
-// }
-
-
-
-// bool RepoMSSQL::DelLastStatus(Modul &modul)
-// {
-//     bool res;
-//     QSqlQuery query;
-
-//     query.prepare("delete from ModulStatus where id = (select Top(1) id FROM ModulStatus where idModul=:idModul "
-//                   "order by DateStatus desc)");
-
-//     query.bindValue(":idModul", modul.id);
-
-//     res = query.exec();
-//     if(!res)
-//         qDebug() << "Ошибка при удалении записи в ModulStatus";
-
-//     return res;
-
-// }
-
-// bool RepoMSSQL::DelLastStatus(Product &product)
-// {
-//     bool res;
-//     QSqlQuery query;
-
-//     query.prepare("delete from ProductStatus where id = (select Top(1) id FROM ProductStatus where idProduct=:idProduct "
-//                   "order by DateStatus desc)");
-
-//     query.bindValue(":idProduct", product.id);
-
-//     res = query.exec();
-//     if(!res)
-//         qDebug() << "Ошибка при удалении записи в ProductStatus";
-
-//     return res;
-
-// }
-
-// bool RepoMSSQL::DelLastStatus(Plate &plate)
-// {
-//     bool res;
-//     QSqlQuery query;
-
-//     query.prepare("delete from PlateStatus where id = (select Top(1) id FROM PlateStatus where idPlate=:idPlate "
-//                   "order by DateStatus desc)");
-
-//     query.bindValue(":idPlate", plate.id);
-
-//     res = query.exec();
-//     if(!res)
-//         qDebug() << "Ошибка при удалении записи в PlateStatus";
-
-//     return res;
-// }
 
 //------------------------------------------------------------------------------------------------------
 // Загрузка списка отгрузок
 //------------------------------------------------------------------------------------------------------
-void RepoMSSQL::FindItems(QList<Shipment> &listShip, int /*isFinish*/, bool isFree)
-{
-    listShip.clear();
-    QSqlQuery query;
+// void RepoMSSQL::FindItems(QList<Shipment> &listShip, int /*isFinish*/, bool isFree)
+// {
+//     listShip.clear();
+//     QSqlQuery query;
 
-    if(isFree)
-        query.prepare("select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
-                  "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,id,c_customer "
-                  "from Shipment where c_dateOut is null");
-    else
-        query.prepare("select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
-                      "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,id,c_customer "
-                      "from Shipment where c_dateOut is not null");
+//     if(isFree)
+//         query.prepare("select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
+//                   "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,id,c_customer "
+//                   "from Shipment where c_dateOut is null");
+//     else
+//         query.prepare("select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
+//                       "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,id,c_customer "
+//                       "from Shipment where c_dateOut is not null");
 
-    query.exec();
-    while(query.next())
-    {
-        Shipment ship;
-        ship.number = query.value(0).toString();
-        ship.objectInstall = query.value(1).toString();
-        ship.dateRegister = query.value(2).toDateTime();
-        ship.idOrganization = query.value(3).toInt();
-        ship.questList = query.value(4).toString();
-        ship.schet = query.value(5).toString();
-        ship.cardOrder = query.value(6).toString();
-        ship.numberUPD = query.value(7).toString();
-        ship.buyer = query.value(8).toString();
-        ship.dateUPD = query.value(9).toDateTime();
-        ship.id = query.value(10).toInt();
-        ship.customer = query.value(11).toString();
-        listShip.push_back(ship);
-    }
-}
+//     query.exec();
+//     while(query.next())
+//     {
+//         Shipment ship;
+//         ship.number = query.value(0).toString();
+//         ship.objectInstall = query.value(1).toString();
+//         ship.dateRegister = query.value(2).toDateTime();
+//         ship.idOrganization = query.value(3).toInt();
+//         ship.questList = query.value(4).toString();
+//         ship.schet = query.value(5).toString();
+//         ship.cardOrder = query.value(6).toString();
+//         ship.numberUPD = query.value(7).toString();
+//         ship.buyer = query.value(8).toString();
+//         ship.dateUPD = query.value(9).toDateTime();
+//         ship.id = query.value(10).toInt();
+//         ship.customer = query.value(11).toString();
+//         listShip.push_back(ship);
+//     }
+// }
 
-void RepoMSSQL::FindItems(IndexType iType, QList<Items> &listItems, int status, bool isFree)
-{
-    listItems.clear();
-    QSqlQuery query;
+// void RepoMSSQL::FindItems(IndexType iType, QList<Items> &listItems, int status, bool isFree)
+// {
+//     listItems.clear();
+//     QSqlQuery query;
 
-    if(status == StatusItem::NONE)
-    {
-        if(!isFree)
-            query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-                          "dateOff,i.garantMonth,dateGarant,isZip "
-                          "from Items i join ItemType it on it.id=i.idType and it.indexType=:indexType order by nameItem");
-        else
-        {
-            query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-                          "dateOff,i.garantMonth,dateGarant,isZip "
-                          "from Items i "
-                          "join ItemType it on it.id=i.idType and it.indexType=:indexType "
-                          "where idShip is null and idSet is null "
-                          "order by nameItem");
-        }
+//     if(status == StatusItem::NONE)
+//     {
+//         if(!isFree)
+//             query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
+//                           "dateOff,i.garantMonth,dateGarant,isZip "
+//                           "from Items i join ItemType it on it.id=i.idType and it.indexType=:indexType order by nameItem");
+//         else
+//         {
+//             query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
+//                           "dateOff,i.garantMonth,dateGarant,isZip "
+//                           "from Items i "
+//                           "join ItemType it on it.id=i.idType and it.indexType=:indexType "
+//                           "where idShip is null and idSet is null "
+//                           "order by nameItem");
+//         }
 
-    }
-    else
-    {
-        if(!isFree)
-            query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-                          "dateOff,i.garantMonth,dateGarant,isZip "
-                          "from Items i "
-                          "join "
-                          "(select idItem, max(DateStatus) dateStatus, max(idStatus) as idStatus "
-                          "from ItemStatus group by idItem "
-                          "having max(idStatus)=:idStatus "
-                          ") ms on ms.idItem=i.id "
-                          "join ItemType it on it.id=i.idType and it.indexType=:indexType order by nameItem"
-                          );
-        else
-            query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-                          "dateOff,i.garantMonth,dateGarant,isZip"
-                          "from Items i "
-                          "join "
-                          "(select idItem, max(DateStatus) dateStatus, max(idStatus) as idStatus "
-                          "from ItemStatus group by idItem "
-                          "having max(idStatus)=:idStatus "
-                          ") ms on ms.idItem=i.id where idShip is null and idSet is null "
-                          "join ItemType it on it.id=i.idType and it.indexType=:indexType order by nameItem"
-                          );
+//     }
+//     else
+//     {
+//         if(!isFree)
+//             query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
+//                           "dateOff,i.garantMonth,dateGarant,isZip "
+//                           "from Items i "
+//                           "join "
+//                           "(select idItem, max(DateStatus) dateStatus, max(idStatus) as idStatus "
+//                           "from ItemStatus group by idItem "
+//                           "having max(idStatus)=:idStatus "
+//                           ") ms on ms.idItem=i.id "
+//                           "join ItemType it on it.id=i.idType and it.indexType=:indexType order by nameItem"
+//                           );
+//         else
+//             query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
+//                           "dateOff,i.garantMonth,dateGarant,isZip"
+//                           "from Items i "
+//                           "join "
+//                           "(select idItem, max(DateStatus) dateStatus, max(idStatus) as idStatus "
+//                           "from ItemStatus group by idItem "
+//                           "having max(idStatus)=:idStatus "
+//                           ") ms on ms.idItem=i.id where idShip is null and idSet is null "
+//                           "join ItemType it on it.id=i.idType and it.indexType=:indexType order by nameItem"
+//                           );
 
-        query.bindValue(":idStatus", status);
-    }
+//         query.bindValue(":idStatus", status);
+//     }
 
-    // QElapsedTimer t;
-    // t.start();
-    // qDebug() << t.elapsed() << "Start";
+//     // QElapsedTimer t;
+//     // t.start();
+//     // qDebug() << t.elapsed() << "Start";
 
 
-    query.bindValue(":indexType", iType);
-    query.exec();
-    while(query.next())
-    {
-        Items item;
+//     query.bindValue(":indexType", iType);
+//     query.exec();
+//     while(query.next())
+//     {
+//         Items item;
 
-        item.id = query.value(0).toInt();
-        item.idParent = query.value(1).toInt();
-        item.idShip = query.value(2).toInt();
-        item.idSet = query.value(3).toInt();
-        item.idType = query.value(4).toInt();
-        item.number = query.value(5).toString();
-        item.number2 = query.value(6).toString();
-        item.numberDoc = query.value(7).toString();
-        item.name = query.value(8).toString();
-        item.dateCreate = query.value(9).toDateTime();
-        item.dateOn = query.value(10).toDateTime();
-        item.dateOff = query.value(11).toDateTime();
-        item.garantMonth = query.value(12).toInt();
-        item.dateGarant = query.value(13).toDateTime();
-        item.isZip = query.value(14).toBool();
-        // item.LoadStatus(item);
-        listItems.push_back(item);
-    }
+//         item.id = query.value(0).toInt();
+//         item.idParent = query.value(1).toInt();
+//         item.idShip = query.value(2).toInt();
+//         item.idSet = query.value(3).toInt();
+//         item.idType = query.value(4).toInt();
+//         item.number = query.value(5).toString();
+//         item.number2 = query.value(6).toString();
+//         item.numberDoc = query.value(7).toString();
+//         item.name = query.value(8).toString();
+//         item.dateCreate = query.value(9).toDateTime();
+//         item.dateOn = query.value(10).toDateTime();
+//         item.dateOff = query.value(11).toDateTime();
+//         item.garantMonth = query.value(12).toInt();
+//         item.dateGarant = query.value(13).toDateTime();
+//         item.isZip = query.value(14).toBool();
+//         // item.LoadStatus(item);
+//         listItems.push_back(item);
+//     }
 
-    // qDebug() << t.elapsed() << "End";
+//     // qDebug() << t.elapsed() << "End";
 
-}
+// }
 
 bool RepoMSSQL::LoadChildItems(int idParent, QList<Items> &listItems) const
 {
@@ -2667,88 +1808,6 @@ int RepoMSSQL::LoadPartAll(size_t start, size_t count, const QString &number, QL
 }
 
 
-
-
-// size_t RepoMSSQL::LoadPart(size_t start, size_t count, ItemType::IndexType iType,
-//                          const QString &number, QList<Items> &listItems,
-//                          int status, bool isBusy, bool isParent)
-// {
-//     size_t res = 0;
-//     QSqlQuery query;
-
-//     QString sqlNumber = " number like :number";
-//     QString sqlBusy = " idShip is null and idSet is null";
-//     QString sqlParent = " idParent is null";
-
-//     QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-//                        "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus "
-//                        "from Items i join ItemType it on it.id=i.idType and it.indexType=:indexType "
-//                        "join (select idItem, max(DateStatus) dateStatus, max(idStatus) as idStatus "
-//                        "from ItemStatus group by idItem ",
-//                        "having max(idStatus)=:idStatus",
-//                        ") ms on ms.idItem=i.id join StatusDevice sd on sd.id=ms.idStatus"};
-
-//     if(status == Status::NONE)
-//         sql.removeAt(1);
-//         // sql.push_back(sqlStatus);
-
-//     QStringList slWhere;
-
-//     if(!number.isEmpty())
-//         slWhere.push_back(sqlNumber);
-
-//     if(!isBusy)
-//         slWhere.push_back(sqlBusy);
-
-//     if(!isParent)
-//         slWhere.push_back(sqlParent);
-
-//     sql.push_back(" where ");
-//     sql.push_back(slWhere.join(" and "));
-
-//     sql.push_back(" order by nameItem offset :start rows fetch next :count rows only");
-//     QString sql2 = sql.join("");
-//     query.prepare(sql2);
-//     query.bindValue(":indexType", iType);
-//     query.bindValue(":start", start);
-//     query.bindValue(":count", count);
-//     // if(!number.isEmpty())
-//         query.bindValue(":number", QString("%%1%").arg(number));
-
-//     // if(status != Status::NONE)
-//         query.bindValue(":idStatus", status);
-
-//     query.exec();
-//     while(query.next())
-//     {
-//         Items item;
-
-//         item.id = query.value(0).toInt();
-//         item.idParent = query.value(1).toInt();
-//         item.idShip = query.value(2).toInt();
-//         item.idSet = query.value(3).toInt();
-//         item.idType = query.value(4).toInt();
-//         item.number = query.value(5).toString();
-//         item.number2 = query.value(6).toString();
-//         item.numberDoc = query.value(7).toString();
-//         item.name = query.value(8).toString();
-//         item.dateCreate = query.value(9).toDateTime();
-//         item.dateOn = query.value(10).toDateTime();
-//         item.dateOff = query.value(11).toDateTime();
-//         item.garantMonth = query.value(12).toInt();
-//         item.dateGarant = query.value(13).toDateTime();
-//         item.isZip = query.value(14).toBool();
-//         item.VNFT = query.value(15).toString();
-//         item.currStatus = query.value(16).toString();
-//         // item.LoadStatus(item);
-//         listItems.push_back(item);
-//         ++res;
-//     }
-
-//     return res;
-// }
-
-
 bool RepoMSSQL::AddItem(Items &item) const
 {
     bool res;
@@ -2784,87 +1843,87 @@ bool RepoMSSQL::AddItem(Items &item) const
 
 
 
-void RepoMSSQL::FindItems(IndexType iType, const QString &number, QList<Items> &listItems, int status, bool isFree)
-{
-    listItems.clear();
-    QSqlQuery query;
+// void RepoMSSQL::FindItems(IndexType iType, const QString &number, QList<Items> &listItems, int status, bool isFree)
+// {
+//     listItems.clear();
+//     QSqlQuery query;
 
-    if(number.isEmpty())
-        return FindItems(iType, listItems, status, isFree);
+//     if(number.isEmpty())
+//         return FindItems(iType, listItems, status, isFree);
 
-    if(status == StatusItem::NONE)
-    {
-        if(!isFree)
-            query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-                          "dateOff,i.garantMonth,dateGarant,isZip "
-                          "from Items i join ItemType it on it.id=i.idType and it.indexType=:indexType "
-                          "where number like :number order by nameItem");
-        else
-        {
-            query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-                          "dateOff,i.garantMonth,dateGarant,isZip "
-                          "from Items i join ItemType it on it.id=i.idType and it.indexType=:indexType "
-                          "where number like :number and idShip is null and idSet is null order by nameItem");
-        }
-    }
-    else
-    {
-        // запрос с учетом статуса
-        if(!isFree)
-            query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-                          "dateOff,i.garantMonth,dateGarant,isZip "
-                          "from Items i "
-                          "join "
-                          "(select idItem, max(DateStatus) dateStatus, max(idStatus) as idStatus "
-                          "from ItemStatus group by idItem "
-                          "having max(idStatus)=:idStatus "
-                          ") ms on ms.idItem=i.id where number like :number "
-                          "join ItemType it on it.id=i.idType and it.indexType=:indexType order by nameItem"
-                          );
-        else
-            query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-                          "dateOff,i.garantMonth,dateGarant,isZip"
-                          "from Items i "
-                          "join "
-                          "(select idItem, max(DateStatus) dateStatus, max(idStatus) as idStatus "
-                          "from ItemStatus group by idItem "
-                          "having max(idStatus)=:idStatus "
-                          ") ms on ms.idItem=i.id join ItemType it on it.id=i.idType and it.indexType=:indexType "
-                          "where number like :number and idShip is null and idSet is null order by nameItem"
-                          );
+//     if(status == StatusItem::NONE)
+//     {
+//         if(!isFree)
+//             query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
+//                           "dateOff,i.garantMonth,dateGarant,isZip "
+//                           "from Items i join ItemType it on it.id=i.idType and it.indexType=:indexType "
+//                           "where number like :number order by nameItem");
+//         else
+//         {
+//             query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
+//                           "dateOff,i.garantMonth,dateGarant,isZip "
+//                           "from Items i join ItemType it on it.id=i.idType and it.indexType=:indexType "
+//                           "where number like :number and idShip is null and idSet is null order by nameItem");
+//         }
+//     }
+//     else
+//     {
+//         // запрос с учетом статуса
+//         if(!isFree)
+//             query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
+//                           "dateOff,i.garantMonth,dateGarant,isZip "
+//                           "from Items i "
+//                           "join "
+//                           "(select idItem, max(DateStatus) dateStatus, max(idStatus) as idStatus "
+//                           "from ItemStatus group by idItem "
+//                           "having max(idStatus)=:idStatus "
+//                           ") ms on ms.idItem=i.id where number like :number "
+//                           "join ItemType it on it.id=i.idType and it.indexType=:indexType order by nameItem"
+//                           );
+//         else
+//             query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
+//                           "dateOff,i.garantMonth,dateGarant,isZip"
+//                           "from Items i "
+//                           "join "
+//                           "(select idItem, max(DateStatus) dateStatus, max(idStatus) as idStatus "
+//                           "from ItemStatus group by idItem "
+//                           "having max(idStatus)=:idStatus "
+//                           ") ms on ms.idItem=i.id join ItemType it on it.id=i.idType and it.indexType=:indexType "
+//                           "where number like :number and idShip is null and idSet is null order by nameItem"
+//                           );
 
-        query.bindValue(":idStatus", status);
-    }
+//         query.bindValue(":idStatus", status);
+//     }
 
-    query.bindValue(":indexType", iType);
-    query.bindValue(":number", QString("%%1%").arg(number));
+//     query.bindValue(":indexType", iType);
+//     query.bindValue(":number", QString("%%1%").arg(number));
 
-    query.exec();
-    while(query.next())
-    {
-        Items item;
+//     query.exec();
+//     while(query.next())
+//     {
+//         Items item;
 
-        item.id = query.value(0).toInt();
-        item.idParent = query.value(1).toInt();
-        item.idShip = query.value(2).toInt();
-        item.idSet = query.value(3).toInt();
-        item.idType = query.value(4).toInt();
-        item.number = query.value(5).toString();
-        item.number2 = query.value(6).toString();
-        item.numberDoc = query.value(7).toString();
-        item.name = query.value(8).toString();
-        item.dateCreate = query.value(9).toDateTime();
-        item.dateOn = query.value(10).toDateTime();
-        item.dateOff = query.value(11).toDateTime();
-        item.garantMonth = query.value(12).toInt();
-        item.dateGarant = query.value(13).toDateTime();
-        item.isZip = query.value(14).toBool();
-        // item.LoadStatus(item);
-        // LoadStatus(prod);
-        listItems.push_back(item);
-    }
+//         item.id = query.value(0).toInt();
+//         item.idParent = query.value(1).toInt();
+//         item.idShip = query.value(2).toInt();
+//         item.idSet = query.value(3).toInt();
+//         item.idType = query.value(4).toInt();
+//         item.number = query.value(5).toString();
+//         item.number2 = query.value(6).toString();
+//         item.numberDoc = query.value(7).toString();
+//         item.name = query.value(8).toString();
+//         item.dateCreate = query.value(9).toDateTime();
+//         item.dateOn = query.value(10).toDateTime();
+//         item.dateOff = query.value(11).toDateTime();
+//         item.garantMonth = query.value(12).toInt();
+//         item.dateGarant = query.value(13).toDateTime();
+//         item.isZip = query.value(14).toBool();
+//         // item.LoadStatus(item);
+//         // LoadStatus(prod);
+//         listItems.push_back(item);
+//     }
 
-}
+// }
 
 void RepoMSSQL::LoadStatus(Items& item) const
 {
@@ -3100,90 +2159,6 @@ Organization RepoMSSQL::GetOrganization(int id)
 }
 
 
-//------------------------------------------------------------------------------------------------------
-// Загрузка модулей в отгрузке
-//------------------------------------------------------------------------------------------------------
-// void RepoMSSQL::LoadShipModule(QList<Modul> &listModul, int idShip)
-// {
-//     listModul.clear();
-//     QSqlQuery query;
-
-//     query.prepare("select id,idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,m_dateCreate,m_zip,"
-//                   "m_garantMonth,m_endGarant,m_dateOn "
-//                   "from Modules where idShipment=:idShipment");
-
-//     query.bindValue(":idShipment", idShip);
-
-//     query.exec();
-//     while(query.next())
-//     {
-//         Modul mod;
-//         mod.idShipment = idShip;
-//         mod.id = query.value(0).toInt();
-//         mod.idProduct = query.value(1).toInt();
-//         mod.idType = query.value(2).toInt();
-//         mod.name = query.value(3).toString();
-//         mod.number = query.value(4).toString();
-//         mod.number2 = query.value(5).toString();
-//         mod.dateRegister = query.value(7).toDateTime();
-//         mod.isZip = query.value(8).toBool();
-//         mod.garantMonth = query.value(9).toInt();
-//         mod.EndGarant = query.value(10).toDateTime();
-//         mod.dateOn = query.value(11).toDateTime();
-//         LoadStatus(mod);
-//         listModul.push_back(mod);
-//     }
-
-// }
-
-//------------------------------------------------------------------------------------------------------
-// Загрузка изделий в отгрузке
-//------------------------------------------------------------------------------------------------------
-// void RepoMSSQL::LoadShipProduct(QList<Product> &listProduct, int idShip)
-// {
-//     listProduct.clear();
-//     QSqlQuery query;
-
-//     query.prepare("select id,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
-//                   "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
-//                   "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant,g_dateOn "
-//                   "from Product where idShipment = :idShipment");
-
-//     query.bindValue(":idShipment", idShip);
-
-//     query.exec();
-//     while(query.next())
-//     {
-//         Product prod;
-//         prod.id = query.value(0).toInt();
-//         prod.idShipment = idShip;
-//         prod.idSetterOut = query.value(1).toInt();
-//         prod.idType = query.value(2).toInt();
-//         prod.name = query.value(3).toString();
-//         prod.number = query.value(4).toString();
-//         prod.number2 = query.value(5).toString();
-//         prod.dateRegister = query.value(6).toDateTime();
-//         prod.redaction1 = query.value(7).toString();
-//         prod.redaction2 = query.value(8).toString();
-//         prod.redactionPS = query.value(9).toString();
-//         prod.questList = query.value(10).toString();
-//         prod.isAvr = query.value(11).toBool();
-//         prod.isAkb = query.value(12).toBool();
-//         prod.isCooler = query.value(13).toBool();
-//         prod.isSkm = query.value(14).toBool();
-//         prod.numberBI = query.value(15).toString();
-//         prod.numberUSIKP = query.value(16).toString();
-//         prod.shunt = query.value(17).toString();
-//         prod.isZip = query.value(18).toBool();
-//         prod.garantMonth = query.value(19).toInt();
-//         prod.EndGarant = query.value(20).toDateTime();
-//         prod.dateOn = query.value(21).toDateTime();
-//         LoadStatus(prod);
-//         listProduct.push_back(prod);
-
-//     }
-
-// }
 
 bool RepoMSSQL::LoadClaim(const QString number, QList<Claim> &listClaim)
 {
@@ -3459,49 +2434,6 @@ void RepoMSSQL::LoadClaimType(QMap<int, QString> &listTypeClaim)
 //     return res;
 // }
 
-
-
-// bool RepoMSSQL::LoadClaimForModul(int ModulId, Claim &claim)
-// {
-//     bool res = false;
-//     QSqlQuery query;
-//     query.prepare("select c.id,Number,DateClaim,FromWho,TypeClaimId,idOrg,ObjectInstall,"
-//                   "Descript,TypeComplectId,VNFT,Quantity,TypeDeviceId,NumberModul,NumberNewModul,"
-//                   "NumberDevice,DateOut,Guarantee,Reason,DateRepair,DoRepair,FileAnswer,TextResult "
-//                   "from ClaimModule cm join Claim c on c.id=cm.idClaim where cm.idModul=:idModul");
-
-//     query.bindValue(":idModul", ModulId);
-
-//     query.exec();
-//     while(query.next())
-//     {
-//         claim.id = query.value(0).toInt();
-//         claim.number = query.value(1).toString();
-//         claim.dateRegister = query.value(2).toDateTime();
-//         claim.FromWho = query.value(3).toString();
-//         claim.idTypeClaim = query.value(4).toInt();
-//         claim.idOrg = query.value(5).toInt();
-//         claim.ObjectInstall = query.value(6).toString();
-//         claim.Descript = query.value(7).toString();
-//         claim.TypeComplectId = query.value(8).toInt();
-//         claim.VNFT = query.value(9).toString();
-//         claim.Quantity = query.value(10).toInt();
-//         claim.TypeDeviceId = query.value(11).toInt();
-//         claim.NumberModul = query.value(12).toString();
-//         claim.NumberNewModul = query.value(13).toString();
-//         claim.NumberDevice = query.value(14).toString();
-//         claim.DateOut = query.value(15).toDateTime();
-//         claim.IsGuarantee = query.value(16).toBool();
-//         claim.Reason = query.value(17).toString();
-//         claim.DateRepair = query.value(18).toDateTime();
-//         claim.DoRepair = query.value(19).toString();
-//         claim.FileAnswer = query.value(20).toString();
-//         claim.TextResult = query.value(21).toString();
-//         res = true;
-//     }
-//     return res;
-
-// }
 
 Claim RepoMSSQL::GetClaim(int id)
 {
