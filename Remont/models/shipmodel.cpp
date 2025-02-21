@@ -185,6 +185,14 @@ bool ShipModel::DeleteItem(int row)
 }
 
 
+void ShipModel::DeleteItemFromList(int row)
+{
+    beginRemoveRows(QModelIndex(), row, row);
+    listShip->DeleteItemFromList(row);
+    endRemoveRows();
+}
+
+
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------

@@ -41,6 +41,7 @@ private:
 
     // void SetStatusItems(Items *dev);
     void SetStatusItems(QList<Items>& items);
+    void SaveToBase();
 };
 
 #endif // SHIPWINDOW_H

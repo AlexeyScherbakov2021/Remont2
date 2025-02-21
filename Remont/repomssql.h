@@ -75,11 +75,8 @@ public:
     void LoadOrganization(QMap<int, QString> &listOrg);
     void LoadOrganization(QList<Organization> &listOrg);
 
-
     // void FindItems(const QString &number, QList<Shipment> &listShip, int status = 0, bool isFree = false);
     // void LoadShipment(QList<Shipment> &listShip, bool isFinish);
-
-
 
     bool AddItem(Claim &claim);
     bool UpdateItem(Claim &claim);

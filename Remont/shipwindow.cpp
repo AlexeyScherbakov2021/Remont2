@@ -49,8 +49,10 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
         ui->leSchet->setText(ship->schet);
         ui->leCustomer->setText(ship->customer);
         ui->deDateUPD->setDateTime(ship->dateUPD);
-
         ui->deDateOut->setDateTime(ship->dateRegister);
+
+        // qDebug() << ship->dateUPD << ship->dateUPD.toString("dd.MM.yyyy") << "Valid:"
+        //                 << ship->dateRegister.isValid() << "Null:" << ship->dateRegister.isNull();
 
         repo.LoadChildShip(*ship);
 
@@ -140,45 +142,6 @@ void ShipWindow::on_pbDelete_clicked()
 }
 
 
-//-----------------------------------------------------------------------------------
-// Кнопка Отгрузить
-//-----------------------------------------------------------------------------------
-void ShipWindow::on_pbFinish_clicked()
-{
-    int countProd = 0;
-
-
-    if(ship->childItems.size() == 0 && ship->listSetterOut.size() == 0)
-    {
-        QMessageBox::warning(this, "Предупреждение", "Не сформирован состав отгрузки.");
-        return;
-    }
-
-    if(ui->leNumUPD->text().isEmpty())
-    {
-        QMessageBox::warning(this, "Предупреждение", "Для отгрузки необходимо указать документ УПД.");
-        return;
-    }
-
-    ship->dateRegister = QDateTime::currentDateTime();
-
-    // установить статус Отгружен для всех устройств
-    for(auto &it : ship->listSetterOut)
-    {
-        SetStatusItems(it.childItems);
-        // for(auto &dev : it.childItems)
-        //     SetStatusItems(&dev);
-    }
-
-    SetStatusItems(ship->childItems);
-
-    // for(auto &it : ship->childItems)
-    // {
-    //     SetStatusItems(&it);
-    // }
-
-    accept();
-}
 
 //-----------------------------------------------------------------------------------
 // Событие закрытия окна
@@ -199,6 +162,7 @@ void ShipWindow::SetStatusItems(QList<Items> &items)
         SetStatusItems(dev.childItems);
     }
 }
+
 
 
 //-----------------------------------------------------------------------------------
@@ -246,16 +210,8 @@ void ShipWindow::on_tbAddSetter_clicked()
 }
 
 
-
-//-----------------------------------------------------------------------------------
-// Кнопка Сохоанить
-//-----------------------------------------------------------------------------------
-void ShipWindow::on_pbSave_clicked()
+void ShipWindow::SaveToBase()
 {
-    isEditing |= trackItem.listAdd.size() > 0 || trackItem.listDel.size() > 0
-                  || trackSet.listAdd.size() > 0 || trackSet.listDel.size() > 0;
-
-
     ui->deDateOut->minimumDateTime();
 
     ship->buyer = ui->leBuyer->text();
@@ -267,21 +223,71 @@ void ShipWindow::on_pbSave_clicked()
     ship->idOrganization = ui->cbCusomer->currentData().toInt();
     ship->org = repo.GetOrganization(ship->idOrganization);
 
-    if(ui->deDateOut->minimumDateTime() != ui->deDateUPD->dateTime())
+    // qDebug() << ui->deDateUPD->date().year() << ui->deDateUPD->date().month();
+
+    if(ui->deDateUPD->date().year() < 1900)
+        ship->dateUPD = QDateTime::fromString("00.00.0000","dd.MM.yyyy");
+    else
         ship->dateUPD = ui->deDateUPD->dateTime();
-    if(ui->deDateOut->minimumDateTime() != ui->deDateOut->dateTime())
+
+    if(ui->deDateOut->date().year() <  1900)
+        ship->dateRegister = QDateTime::fromString("00.00.0000","dd.MM.yyyy");
+    else
         ship->dateRegister = ui->deDateOut->dateTime();
 
     repo.UpdateItem(*ship);
-
     repo.ItemsSyncShip(ship->id, &trackItem);
     repo.SetsSyncShip(ship->id, &trackSet);
-
-    if(isEditing)
-        accept();
-    else
-        reject();
 }
 
+
+
+//-----------------------------------------------------------------------------------
+// Кнопка Сохоанить
+//-----------------------------------------------------------------------------------
+void ShipWindow::on_pbSave_clicked()
+{
+    isEditing |= trackItem.listAdd.size() > 0 || trackItem.listDel.size() > 0
+                  || trackSet.listAdd.size() > 0 || trackSet.listDel.size() > 0;
+
+    if(!isEditing)
+        reject();
+
+    SaveToBase();
+    accept();
+}
+
+//-----------------------------------------------------------------------------------
+// Кнопка Отгрузить
+//-----------------------------------------------------------------------------------
+void ShipWindow::on_pbFinish_clicked()
+{
+    int countProd = 0;
+
+    if(ship->childItems.size() == 0 && ship->listSetterOut.size() == 0)
+    {
+        QMessageBox::warning(this, "Предупреждение", "Не сформирован состав отгрузки.");
+        return;
+    }
+
+    if(ui->leNumUPD->text().isEmpty())
+    {
+        QMessageBox::warning(this, "Предупреждение", "Для отгрузки необходимо указать № реализации.");
+        return;
+    }
+
+    if(ui->deDateUPD->dateTime() == ui->deDateUPD->minimumDateTime())
+        ui->deDateUPD->setDateTime(QDateTime::currentDateTime());
+
+    // установить статус Отгружен для всех устройств
+    for(auto &it : ship->listSetterOut)
+    {
+        SetStatusItems(it.childItems);
+    }
+
+    SetStatusItems(ship->childItems);
+    SaveToBase();
+    accept();
+}
 
 

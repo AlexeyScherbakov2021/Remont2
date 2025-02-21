@@ -207,6 +207,10 @@ void ListShipWindow::on_tableView_doubleClicked(const QModelIndex &index)
     QScopedPointer<ShipWindow> win(new ShipWindow(ship));
     if(win->exec() == QDialog::Accepted)
     {
+        if(ship->dateUPD.date().year() > 1900)
+        {
+            model->DeleteItemFromList(index.row());
+        }
         // qDebug() << "Измение в строке" << ship->schet << ship->cardOrder;
     }
 }

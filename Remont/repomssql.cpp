@@ -305,7 +305,7 @@ int RepoMSSQL::LoadPart(size_t start, size_t count, const QString &number, QList
         sql << " and " << sqlNumber;
     }
 
-    sql << " order by c_dateUPD desc,c_schet  offset :start rows fetch next :count rows only";
+    sql << " order by c_dateUPD desc,c_schet offset :start rows fetch next :count rows only";
 
     QString sql2 = sql.join("");
     query.prepare(sql2);
@@ -1166,18 +1166,28 @@ bool RepoMSSQL::UpdateItem(Shipment &ship)
                   "c_questList=:c_questList,c_schet=:c_schet,c_cardOrder=:c_cardOrder,"
                   "c_numberUPD=:c_numberUPD,c_buyer=:c_buyer,c_dateUPD=:c_dateUPD,idOrganization=:idOrganization where id=:id");
 
+
+    // qDebug() << ship.dateRegister.date().year();
+
     query.bindValue(":c_number", ship.number);
     query.bindValue(":c_objectInstall", ship.objectInstall);
-    if(!ship.dateRegister.isNull())
+    // if(!ship.dateRegister.toString("dd.MM.yyyy").isEmpty())
+    if(ship.dateRegister.date().year() > 1900)
         query.bindValue(":c_dateOut", ship.dateRegister);
-    // query.bindValue(":c_customer", ship.customer);
+    else
+        query.bindValue(":c_dateOut", QVariant());
+
     query.bindValue(":c_questList", ship.questList);
     query.bindValue(":c_schet", ship.schet);
     query.bindValue(":c_cardOrder", ship.cardOrder);
     query.bindValue(":c_numberUPD", ship.numberUPD);
     query.bindValue(":c_buyer", ship.buyer);
-    if(!ship.dateUPD.isNull())
+    // if(!ship.dateUPD.toString("dd.MM.yyyy").isEmpty())
+    if(ship.dateUPD.date().year() > 1900)
         query.bindValue(":c_dateUPD", ship.dateUPD);
+    else
+        query.bindValue(":c_dateUPD", QVariant());
+
     if(ship.idOrganization > 0)
         query.bindValue(":idOrganization", ship.idOrganization);
     query.bindValue(":id", ship.id);
