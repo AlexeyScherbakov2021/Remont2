@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1034</width>
-    <height>598</height>
+    <width>981</width>
+    <height>599</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -51,71 +51,110 @@ background-color: LightGray;
 
 </string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
      <item>
       <widget class="QGroupBox" name="groupBox">
        <property name="title">
         <string>Состав отгрузки</string>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0">
+       <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="2">
-           <widget class="QToolButton" name="tbNumProd">
-            <property name="toolTip">
-             <string>Добавить изделие</string>
-            </property>
-            <property name="text">
-             <string>+</string>
-            </property>
-            <property name="icon">
-             <iconset resource="resource.qrc">
-              <normaloff>:/image/Add2.png</normaloff>:/image/Add2.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QToolButton" name="tbAddSetter">
-            <property name="toolTip">
-             <string>Добавить набор</string>
-            </property>
-            <property name="text">
-             <string>+</string>
-            </property>
-            <property name="icon">
-             <iconset resource="resource.qrc">
-              <normaloff>:/image/Add2.png</normaloff>:/image/Add2.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="leNumProd">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Набор</string>
-            </property>
-           </widget>
-          </item>
+         <layout class="QFormLayout" name="formLayout_2">
           <item row="0" column="0">
            <widget class="QLabel" name="label_4">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text">
              <string>Изделие</string>
             </property>
            </widget>
           </item>
+          <item row="0" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLineEdit" name="leNumProd">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="tbNumProd">
+              <property name="toolTip">
+               <string>Добавить изделие</string>
+              </property>
+              <property name="text">
+               <string>+</string>
+              </property>
+              <property name="icon">
+               <iconset resource="resource.qrc">
+                <normaloff>:/image/Add2.png</normaloff>:/image/Add2.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Набор</string>
+            </property>
+           </widget>
+          </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="leSetterOut"/>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLineEdit" name="leSetterOut">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="tbAddSetter">
+              <property name="toolTip">
+               <string>Добавить набор</string>
+              </property>
+              <property name="text">
+               <string>+</string>
+              </property>
+              <property name="icon">
+               <iconset resource="resource.qrc">
+                <normaloff>:/image/Add2.png</normaloff>:/image/Add2.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
@@ -125,6 +164,9 @@ background-color: LightGray;
            <spacer name="horizontalSpacer">
             <property name="orientation">
              <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Policy::Expanding</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -136,6 +178,12 @@ background-color: LightGray;
           </item>
           <item>
            <widget class="QPushButton" name="pbDelete">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
              <string>Удалить выделенную строку</string>
             </property>
@@ -152,9 +200,15 @@ background-color: LightGray;
         </item>
         <item>
          <widget class="TreeItemsForm" name="wTreeItems" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="minimumSize">
            <size>
-            <width>0</width>
+            <width>400</width>
             <height>0</height>
            </size>
           </property>
@@ -175,10 +229,16 @@ background-color: LightGray;
        <item row="0" column="1">
         <widget class="QLineEdit" name="leObjectInstall">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
          </property>
         </widget>
        </item>
@@ -198,14 +258,14 @@ background-color: LightGray;
           </sizepolicy>
          </property>
          <property name="specialValueText">
-          <string>--</string>
+          <string notr="true"/>
          </property>
          <property name="showGroupSeparator" stdset="0">
           <bool>false</bool>
          </property>
          <property name="dateTime">
           <datetime>
-           <hour>0</hour>
+           <hour>3</hour>
            <minute>0</minute>
            <second>0</second>
            <year>1800</year>
@@ -215,7 +275,7 @@ background-color: LightGray;
          </property>
          <property name="time">
           <time>
-           <hour>0</hour>
+           <hour>3</hour>
            <minute>0</minute>
            <second>0</second>
           </time>
@@ -229,7 +289,7 @@ background-color: LightGray;
          </property>
          <property name="minimumTime">
           <time>
-           <hour>0</hour>
+           <hour>3</hour>
            <minute>0</minute>
            <second>0</second>
           </time>
@@ -376,14 +436,14 @@ background-color: LightGray;
           </sizepolicy>
          </property>
          <property name="specialValueText">
-          <string>--</string>
+          <string/>
          </property>
          <property name="showGroupSeparator" stdset="0">
           <bool>false</bool>
          </property>
          <property name="dateTime">
           <datetime>
-           <hour>0</hour>
+           <hour>3</hour>
            <minute>0</minute>
            <second>0</second>
            <year>1800</year>
@@ -393,7 +453,7 @@ background-color: LightGray;
          </property>
          <property name="time">
           <time>
-           <hour>0</hour>
+           <hour>3</hour>
            <minute>0</minute>
            <second>0</second>
           </time>
@@ -405,9 +465,16 @@ background-color: LightGray;
            <day>1</day>
           </date>
          </property>
+         <property name="maximumTime">
+          <time>
+           <hour>7</hour>
+           <minute>59</minute>
+           <second>59</second>
+          </time>
+         </property>
          <property name="minimumTime">
           <time>
-           <hour>0</hour>
+           <hour>3</hour>
            <minute>0</minute>
            <second>0</second>
           </time>
@@ -598,8 +665,8 @@ background-color: LightGray;
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>707</x>
-     <y>551</y>
+     <x>666</x>
+     <y>574</y>
     </hint>
     <hint type="destinationlabel">
      <x>516</x>

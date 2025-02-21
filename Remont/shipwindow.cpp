@@ -1,10 +1,11 @@
 #include <QInputDialog>
 #include <QMessageBox>
+#include "scan.h"
 #include "selectdevicewindow.h"
 #include "setterdlg.h"
 #include "shipwindow.h"
 #include "ui_shipwindow.h"
-// #include <QtConcurrent>
+#include <QtConcurrent>
 // #include <QElapsedTimer>
 
 ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
@@ -21,23 +22,42 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
 
     // qDebug() << timer.elapsed() << "Start LoadOrganization";
 
-    // QFuture<bool> future =  QtConcurrent::run([repo]() { repo.LoadOrganization();});
+    QFuture<void> future =  QtConcurrent::run( [&] ()
+    {
+        RepoMSSQL repo2("thread");
+        repo2.LoadOrganization(listOrg);
+    });
 
-    repo.LoadOrganization(listOrg);
+    QFutureWatcher<void> *watcher = new QFutureWatcher<void>(this);
+    connect(watcher, &QFutureWatcher<void>::finished, watcher, [this, watcher] () {
+        int selectRow = -1;
+        for(auto it = listOrg.begin(); it != listOrg.end(); ++it )
+        {
+            ui->cbCusomer->addItem(*it, it.key());
+            if(it.key() == ship->idOrganization)
+            {
+                selectRow = ui->cbCusomer->count() - 1;
+            }
+        }
+        ui->cbCusomer->setCurrentIndex(selectRow);
+        watcher->deleteLater();
+    });
 
+    watcher->setFuture(future);
+    // repo.LoadOrganization(listOrg);
     // qDebug() << timer.elapsed() << "Finish LoadOrganization";
 
-    int selectRow = -1;
-    for(auto it = listOrg.begin(); it != listOrg.end(); ++it )
-    {
-        ui->cbCusomer->addItem(*it, it.key());
-        if(it.key() == ship->idOrganization)
-            selectRow = ui->cbCusomer->count() -1;
-    }
+    // int selectRow = -1;
+    // for(auto it = listOrg.begin(); it != listOrg.end(); ++it )
+    // {
+    //     ui->cbCusomer->addItem(*it, it.key());
+    //     if(it.key() == ship->idOrganization)
+    //         selectRow = ui->cbCusomer->count() -1;
+    // }
 
     // qDebug() << timer.elapsed() << "Full List";
 
-    ui->cbCusomer->setCurrentIndex(selectRow);
+    // ui->cbCusomer->setCurrentIndex(selectRow);
 
     if(ship->id != 0)
     {
@@ -46,13 +66,11 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
         ui->leCardOrder->setText(ship->cardOrder);
         ui->leNumUPD->setText(ship->numberUPD);
         ui->leObjectInstall->setText(ship->objectInstall);
+        ui->leObjectInstall->setCursorPosition(0);
         ui->leSchet->setText(ship->schet);
         ui->leCustomer->setText(ship->customer);
         ui->deDateUPD->setDateTime(ship->dateUPD);
         ui->deDateOut->setDateTime(ship->dateRegister);
-
-        // qDebug() << ship->dateUPD << ship->dateUPD.toString("dd.MM.yyyy") << "Valid:"
-        //                 << ship->dateRegister.isValid() << "Null:" << ship->dateRegister.isNull();
 
         repo.LoadChildShip(*ship);
 
@@ -73,11 +91,13 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
 
     connect(ui->leBuyer, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
     connect(ui->leCardOrder, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
-    // connect(ui->leNumModul, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
     connect(ui->leNumUPD, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
     connect(ui->leObjectInstall, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
     connect(ui->leSchet, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
     connect(ui->cbCusomer, SIGNAL(currentIndexChanged(int)), SLOT(slotIsEditing()));
+
+    connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
+
 }
 
 ShipWindow::~ShipWindow()
@@ -255,6 +275,24 @@ void ShipWindow::on_pbSave_clicked()
 
     SaveToBase();
     accept();
+}
+
+
+//-----------------------------------------------------------------------------------
+// Сканирование
+//-----------------------------------------------------------------------------------
+void ShipWindow::slotReadScan(QString s)
+{
+    if(isActiveWindow())
+    {
+        RepoMSSQL repo;
+        Items dev = repo.GetItem2(s, {StatusItem::CORRECT, StatusItem::CORRECT_OSO});
+        if(dev.id != 0)
+        {
+            trackItem.AddRecord(dev.id, dev);
+            ui->wTreeItems->AddItem(&dev);
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------------

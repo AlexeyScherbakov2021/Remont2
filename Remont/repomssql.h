@@ -23,12 +23,15 @@ class RepoMSSQL
 {
 private:
     QSqlDatabase db;
+    QString instanceName;
     // void FindItems(QList<Shipment> &listShip, int status = 0, bool isFree = false);
     // void FindItems(IndexType iType, QList<Items> &listItems, int status = 0, bool isFree = false);
 
 public:
-    RepoMSSQL();
+    RepoMSSQL(const QString& threadName = QSqlDatabase::defaultConnection);
+    ~RepoMSSQL();
     bool ConnectDb();
+
 
     // Items
     bool LoadChildItems(int idParent, QList<Items> &listItems) const;
@@ -43,7 +46,7 @@ public:
     bool UpdateItem(Items &item);
     bool DeleteItem(int id) const;
     Items GetItem(int id) const;
-    Items GetItem2(QString number, QVector<StatusItem>& listStatus, bool isBusy = false, bool isParent = false) const;
+    Items GetItem2(QString number, const QVector<StatusItem>& listStatus, bool isBusy = false, bool isParent = false) const;
     void LoadItemsType(QList<ItemType> &listType, IndexType indexType) const;
 
     void LoadStatus(Items& item) const;

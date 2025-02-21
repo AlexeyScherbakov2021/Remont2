@@ -12,21 +12,25 @@
 
 class Product;
 
-RepoMSSQL::RepoMSSQL()
+RepoMSSQL::RepoMSSQL(const QString& threadName) : instanceName(threadName)
 {
 
-    if(!QSqlDatabase::contains(db.defaultConnection))
+    if(!QSqlDatabase::contains(threadName))
     {
-        db = QSqlDatabase::addDatabase("QODBC");
+        db = QSqlDatabase::addDatabase("QODBC", threadName);
         ConnectDb();
-
     }
 }
 
-// RepoMSSQL::~RepoMSSQL()
-// {
-//     db.close();
-// }
+RepoMSSQL::~RepoMSSQL()
+{
+    if(db.connectionName() != QSqlDatabase::defaultConnection && !db.connectionName().isEmpty())
+    {
+        qDebug() << "BaseClose" << db.connectionName();
+        db.close();
+        QSqlDatabase::removeDatabase(instanceName);
+    }
+}
 
 bool RepoMSSQL::ConnectDb()
 {
@@ -54,8 +58,6 @@ bool RepoMSSQL::ConnectDb()
         std::terminate();
         return false;
     }
-
-
     // qDebug() << "Содединение с базой успешно.";
     return true;
 }
@@ -64,7 +66,7 @@ bool RepoMSSQL::ConnectDb()
 bool RepoMSSQL::UpdateItem(Items &item)
 {
     bool res;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("update Items set idParent=:idParent,idShip=:idShip,idSet=:idSet,idType=:idType,"
                   "number=:number,number2=:number2,numberDoc=:numberDoc,nameItem=:nameItem,dateCreate=:dateCreate,"
@@ -100,7 +102,7 @@ bool RepoMSSQL::UpdateItem(Items &item)
 bool RepoMSSQL::DeleteItem(int id) const
 {
     bool res;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("delete from Items where id=:id");
     query.bindValue(":id", id);
@@ -118,7 +120,7 @@ Items RepoMSSQL::GetItem(int id) const
 {
     Items item;
 
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
                   "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,it.indexType,it.VNFT,it.garantMonth "
@@ -158,12 +160,12 @@ Items RepoMSSQL::GetItem(int id) const
 
 
 
-Items RepoMSSQL::GetItem2( QString number, QVector<StatusItem>& listStatus, bool isBusy, bool isParent) const
+Items RepoMSSQL::GetItem2( QString number, const QVector<StatusItem>& listStatus, bool isBusy, bool isParent) const
 {
     Items item;
 
     QStringList slStatus;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     QStringList slWhere;
     QString sqlNumber = " number like :number";
@@ -243,7 +245,7 @@ Items RepoMSSQL::GetItem2( QString number, QVector<StatusItem>& listStatus, bool
 void RepoMSSQL::LoadItemsType(QList<ItemType> &listType, IndexType indexType) const
 {
     listType.clear();
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("select id,typeName,garantMonth,VNFT from ItemType where indexType=:indexType");
     query.bindValue(":indexType", indexType);
 
@@ -266,7 +268,7 @@ void RepoMSSQL::LoadItemsType(QList<ItemType> &listType, IndexType indexType) co
 bool RepoMSSQL::DeleteShipment(int id)
 {
     bool res;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("delete from Shipment where id=:id");
     query.bindValue(":id", id);
@@ -284,7 +286,7 @@ bool RepoMSSQL::DeleteShipment(int id)
 int RepoMSSQL::LoadPart(size_t start, size_t count, const QString &number, QList<Shipment> &listItems, bool isShip) const
 {
     int res = 0;
-    QSqlQuery query;
+    QSqlQuery query(db);
     // QStringList slWhere;
 
     QString sqlNumber = " c_schet like :c_schet";
@@ -350,7 +352,7 @@ void RepoMSSQL::LoadChildShip(Shipment &ship)
 {
     ship.listSetterOut.clear();
 
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("select id,idShipment,s_name,s_orderNum,dateCreate "
                   "from SetterOut where idShipment = :idShipment");
 
@@ -415,7 +417,7 @@ bool RepoMSSQL::ItemsSyncShip(int idShip, TrackRecord<Items> *track)
 
     QSqlDatabase::database().transaction();
 
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("update Items set idShip=null where id=:id");
     for(auto &it: track->listDel)
     {
@@ -451,7 +453,7 @@ bool RepoMSSQL::SetsSyncShip(int idShip, TrackRecord<SetterOut> *track)
 
     QSqlDatabase::database().transaction();
 
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("update SetterOut set idShipment=null where id=:id");
     for(auto &it: track->listDel)
     {
@@ -484,7 +486,7 @@ bool RepoMSSQL::SetsSyncShip(int idShip, TrackRecord<SetterOut> *track)
 bool RepoMSSQL::DeleteSetter(int id)
 {
     bool res;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("delete from SetterOut where id=:id");
     query.bindValue(":id", id);
@@ -504,7 +506,7 @@ bool RepoMSSQL::DeleteSetter(int id)
 bool RepoMSSQL::DeleteClaim(int id)
 {
     bool res;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("delete from Claim where id=:id");
     query.bindValue(":id", id);
@@ -524,7 +526,7 @@ bool RepoMSSQL::DeleteClaim(int id)
 // void RepoMSSQL::FindItems(const QString &serialNumber, QList<Product> &listProduct, int status, bool isFree)
 // {
 //     listProduct.clear();
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 
 //     if(serialNumber.isEmpty())
 //         return FindItems(listProduct, status, isFree);
@@ -614,7 +616,7 @@ bool RepoMSSQL::DeleteClaim(int id)
 // void RepoMSSQL::FindItems(QList<Product> &listProduct, int status, bool isFree)
 // {
 //     listProduct.clear();
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 
 
 //     if(status == Status::NONE)
@@ -698,7 +700,7 @@ bool RepoMSSQL::DeleteClaim(int id)
 // void RepoMSSQL::FindItems(QList<Modul> &listModul, int status, bool isFree)
 // {
 //     listModul.clear();
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 
 //     if(status == Status::NONE)
 //     {
@@ -765,7 +767,7 @@ bool RepoMSSQL::DeleteClaim(int id)
 // void RepoMSSQL::FindItems(const QString &serialNumber, QList<Modul> &listModul, int status, bool isFree)
 // {
 //     listModul.clear();
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 
 //     if(serialNumber.isEmpty())
 //         return FindItems(listModul, status, isFree);
@@ -840,7 +842,7 @@ bool RepoMSSQL::DeleteClaim(int id)
 // {
 //     prod.listStatus.clear();
 
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 //     query.prepare("select ms.id,idProduct,idStatus,DateStatus,Comment,sd.nameStatus,sd.typeStatus "
 //                   "from ProductStatus ms "
 //                   "join StatusDevice sd on sd.id=ms.idStatus "
@@ -871,7 +873,7 @@ bool RepoMSSQL::DeleteClaim(int id)
 // {
 //     mod.listStatus.clear();
 
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 //     query.prepare("select ms.id,idModul,idStatus,DateStatus,Comment,sd.nameStatus,sd.typeStatus "
 //                   "from ModulStatus ms "
 //                   "join StatusDevice sd on sd.id=ms.idStatus "
@@ -899,7 +901,7 @@ bool RepoMSSQL::DeleteClaim(int id)
 // {
 //     plate.listStatus.clear();
 
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 //     query.prepare("select ps.id,idPlate,idStatus,DateStatus,Comment,sd.nameStatus,sd.typeStatus "
 //                   "from PlateStatus ps "
 //                   "join StatusDevice sd on sd.id=ps.idStatus "
@@ -927,7 +929,7 @@ bool RepoMSSQL::DeleteClaim(int id)
 int RepoMSSQL::GetTypeStatus(int idStatus)
 {
     int typeStat = 0;
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("select typeStatus from StatusDevice where id=:id");
     query.bindValue(":id", idStatus);
 
@@ -941,7 +943,7 @@ int RepoMSSQL::GetTypeStatus(int idStatus)
 const QString RepoMSSQL::GetNameStatus(int idStatus)
 {
     QString nameStatus = 0;
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("select NameStatus from StatusDevice where id=:id");
     query.bindValue(":id", idStatus);
 
@@ -958,7 +960,7 @@ const QString RepoMSSQL::GetNameStatus(int idStatus)
 //------------------------------------------------------------------------------------------------------
 // void RepoMSSQL::FindItems(const QString &number, QList<Plate> &listPlate, int /*status*/, bool isFree)
 // {
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 //     listPlate.clear();
 
 //     // if(number.isEmpty())
@@ -1002,7 +1004,7 @@ const QString RepoMSSQL::GetNameStatus(int idStatus)
 // bool RepoMSSQL::LinkPlate(int idPlate, int idModul)
 // {
 //     bool res;
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 
 //     query.prepare("update Plate set idModul=:idModul where id=:id");
 
@@ -1023,7 +1025,7 @@ const QString RepoMSSQL::GetNameStatus(int idStatus)
 //------------------------------------------------------------------------------------------------------
 SetterOut RepoMSSQL::GetSetter(int id)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     SetterOut setter;
 
     query.prepare("select idShipment,s_name,s_orderNum "
@@ -1050,7 +1052,7 @@ SetterOut RepoMSSQL::GetSetter(int id)
 bool RepoMSSQL::AddItem(Shipment &ship)
 {
     bool res;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("insert into Shipment (c_number,c_objectInstall,c_dateOut,c_questList,c_schet,"
                   "c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,idOrganization) "
@@ -1084,7 +1086,7 @@ bool RepoMSSQL::AddItem(Shipment &ship)
 bool RepoMSSQL::AddItem(SetterOut &setter)
 {
     bool res;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("insert into SetterOut (idShipment,s_name,s_OrderNum,dateCreate) "
                   "output inserted.id values(:idShipment,:s_name,:s_OrderNum,:dateCreate)");
@@ -1110,7 +1112,7 @@ bool RepoMSSQL::AddItem(SetterOut &setter)
 bool RepoMSSQL::AddItem(Claim &claim)
 {
     bool res;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("insert into Claim (Number,DateClaim,FromWho,TypeClaimId,ObjectInstall,"
                   "Descript,TypeComplectId,VNFT,Quantity,TypeDeviceId,NumberModul,NumberNewModul,"
@@ -1160,7 +1162,7 @@ bool RepoMSSQL::AddItem(Claim &claim)
 bool RepoMSSQL::UpdateItem(Shipment &ship)
 {
     bool res;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("update Shipment set c_number=:c_number,c_objectInstall=:c_objectInstall,c_dateOut=:c_dateOut,"
                   "c_questList=:c_questList,c_schet=:c_schet,c_cardOrder=:c_cardOrder,"
@@ -1200,14 +1202,13 @@ bool RepoMSSQL::UpdateItem(Shipment &ship)
 }
 
 
-
 //------------------------------------------------------------------------------------------------------
 // Обновление набора
 //------------------------------------------------------------------------------------------------------
 bool RepoMSSQL::UpdateItem(SetterOut &setter)
 {
     bool res;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("update SetterOut set idShipment=:idShipment,s_name=:s_name,s_orderNum=:s_orderNum,"
                   "dateCreate=:dateCreate where id=:id");
@@ -1228,10 +1229,13 @@ bool RepoMSSQL::UpdateItem(SetterOut &setter)
 
 
 
+//------------------------------------------------------------------------------------------------------
+// Обновление рекламации
+//------------------------------------------------------------------------------------------------------
 bool RepoMSSQL::UpdateItem(Claim &claim)
 {
     bool res;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("update Claim set Number=:Number,DateClaim=:DateClaim,FromWho=:FromWho,TypeClaimId=:TypeClaimId,"
                   "ObjectInstall=:ObjectInstall,Descript=:Descript,"
@@ -1278,7 +1282,7 @@ bool RepoMSSQL::UpdateItem(Claim &claim)
 //------------------------------------------------------------------------------------------------------
 Shipment RepoMSSQL::GetShipment(int id)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     Shipment ship;
 
     query.prepare("select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
@@ -1319,7 +1323,7 @@ Shipment RepoMSSQL::GetShipment(int id)
 // void RepoMSSQL::LoadShipment(QList<Shipment> &listShip, bool /*isFinish*/)
 // {
 //     listShip.clear();
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 
 //     query.prepare("select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
 //                   "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,id "
@@ -1352,7 +1356,7 @@ Shipment RepoMSSQL::GetShipment(int id)
 void RepoMSSQL::LoadChildSetter(SetterOut &setter)
 {
     setter.childItems.clear();
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,"
                   "dateCreate,dateOn,dateOff,i.garantMonth,dateGarant,isZip,it.indexType,it.VNFT,it.typeName "
                   "from Items i join itemType it on it.id=i.idType "
@@ -1399,7 +1403,7 @@ bool RepoMSSQL::ItemsSyncSet(int idSet, TrackRecord<Items> *track)
 
     QSqlDatabase::database().transaction();
 
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("update Items set idSet=null where id=:id");
     for(auto &it: track->listDel)
     {
@@ -1432,7 +1436,7 @@ bool RepoMSSQL::ItemsSyncSet(int idSet, TrackRecord<Items> *track)
 // void RepoMSSQL::FindItems(QList<Shipment> &listShip, int /*isFinish*/, bool isFree)
 // {
 //     listShip.clear();
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 
 //     if(isFree)
 //         query.prepare("select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
@@ -1466,7 +1470,7 @@ bool RepoMSSQL::ItemsSyncSet(int idSet, TrackRecord<Items> *track)
 // void RepoMSSQL::FindItems(IndexType iType, QList<Items> &listItems, int status, bool isFree)
 // {
 //     listItems.clear();
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 
 //     if(status == StatusItem::NONE)
 //     {
@@ -1551,7 +1555,7 @@ bool RepoMSSQL::LoadChildItems(int idParent, QList<Items> &listItems) const
 {
     bool res;
     listItems.clear();
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
                     "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus,it.indexType,it.VNFT,it.garantMonth,"
                     "ist.dateStatus,ist.idStatus,ist.comment "
@@ -1615,7 +1619,7 @@ int RepoMSSQL::LoadPart(size_t start, size_t count, IndexType iType,
 {
     int res = 0;
     QStringList slStatus;
-    QSqlQuery query;
+    QSqlQuery query(db);
     QStringList slWhere;
 
 
@@ -1720,7 +1724,7 @@ int RepoMSSQL::LoadPartAll(size_t start, size_t count, const QString &number, QL
 {
     int res = 0;
     QStringList slStatus;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     QStringList slWhere;
     QString sqlNumber = " number like :number";
@@ -1821,7 +1825,7 @@ int RepoMSSQL::LoadPartAll(size_t start, size_t count, const QString &number, QL
 bool RepoMSSQL::AddItem(Items &item) const
 {
     bool res;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("insert into Items (idType,number,number2,numberDoc,nameItem,dateCreate,garantMonth,isZip) "
                   "output inserted.id values(:idType,:number,:number2,:numberDoc,:nameItem,:dateCreate,:garantMonth,:isZip)");
@@ -1856,7 +1860,7 @@ bool RepoMSSQL::AddItem(Items &item) const
 // void RepoMSSQL::FindItems(IndexType iType, const QString &number, QList<Items> &listItems, int status, bool isFree)
 // {
 //     listItems.clear();
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 
 //     if(number.isEmpty())
 //         return FindItems(iType, listItems, status, isFree);
@@ -1939,7 +1943,7 @@ void RepoMSSQL::LoadStatus(Items& item) const
 {
     item.listStatus.clear();
 
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("select ist.id,idItem,idStatus,DateStatus,Comment,sd.nameStatus,sd.typeStatus "
                   "from ItemStatus ist "
                   "join StatusDevice sd on sd.id=ist.idStatus "
@@ -1968,7 +1972,7 @@ void RepoMSSQL::LoadStatus(Items& item) const
 bool RepoMSSQL::AddStatus(Items &item, Status &status) const
 {
     bool res;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("insert into ItemStatus (idItem,idStatus,DateStatus,Comment) "
                   "output inserted.id values(:idItem,:idStatus,:DateStatus,:Comment)");
@@ -1993,7 +1997,7 @@ bool RepoMSSQL::AddStatus(Items &item, Status &status) const
 bool RepoMSSQL::DelLastStatus(Items &item) const
 {
     bool res;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("delete from ItemStatus where id = (select Top(1) id FROM ItemStatus where idItem=:idItem "
                   "order by DateStatus desc)");
@@ -2010,7 +2014,7 @@ bool RepoMSSQL::DelLastStatus(Items &item) const
 void RepoMSSQL::LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) const
 {
     listType.clear();
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("select id,typeName,garantMonth,VNFT from ItemType where indexType=:indexType");
     query.bindValue(":indexType", indexType);
 
@@ -2033,7 +2037,7 @@ void RepoMSSQL::LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) c
 int RepoMSSQL::LoadPart(size_t start, size_t count, const QString &number, QList<SetterOut> &listItems, bool isFree) const
 {
     int res = 0;
-    QSqlQuery query;
+    QSqlQuery query(db);
     QStringList slWhere;
 
     QString sqlNumber = " s_orderNum like :s_orderNum";
@@ -2084,10 +2088,10 @@ int RepoMSSQL::LoadPart(size_t start, size_t count, const QString &number, QList
 //------------------------------------------------------------------------------------------------------
 void RepoMSSQL::LoadOrganization(QMap<int, QString> &listOrg)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     listOrg.clear();
 
-    query.prepare("select id,OrgName,INN,KPP from Organization where INN is not null or KPP is not null order by OrgName");
+    query.prepare("select id,OrgName,INN,KPP from Organization where INN is not null or KPP is not null");
     query.exec();
     while(query.next())
     {
@@ -2106,7 +2110,7 @@ void RepoMSSQL::LoadOrganization(QMap<int, QString> &listOrg)
 
 void RepoMSSQL::LoadOrganization(QList<Organization> &listOrg)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     listOrg.clear();
 
     query.prepare("select id,OrgName,INN,KPP from Organization where INN is not null or KPP is not null order by OrgName");
@@ -2128,7 +2132,7 @@ void RepoMSSQL::LoadOrganization(QList<Organization> &listOrg)
 void RepoMSSQL::LoadShipSetter(QList<SetterOut> &listSetter, int idShip)
 {
     listSetter.clear();
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("select id,s_name,s_orderNum "
                   "from SetterOut where idShipment=:idShipment");
@@ -2153,7 +2157,7 @@ void RepoMSSQL::LoadShipSetter(QList<SetterOut> &listSetter, int idShip)
 Organization RepoMSSQL::GetOrganization(int id)
 {
     Organization org;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     query.prepare("select id,OrgName,INN,KPP from Organization where id=:id");
     query.bindValue(":id", id);
@@ -2174,7 +2178,7 @@ bool RepoMSSQL::LoadClaim(const QString number, QList<Claim> &listClaim)
 {
     bool res;
     listClaim.clear();
-    QSqlQuery query;
+    QSqlQuery query(db);
     QString sql = "select c.id,Number,DateClaim,FromWho,TypeClaimId,idOrg,ObjectInstall,"
                   "Descript,DateOut,o.orgName "
                   "from Claim c "
@@ -2228,7 +2232,7 @@ bool RepoMSSQL::LoadClaim(const QString number, QList<Claim> &listClaim)
 void RepoMSSQL::LoadClaimType(QMap<int, QString> &listTypeClaim)
 {
     listTypeClaim.clear();
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("select id,NameType from ClaimType");
 
     query.exec();
@@ -2244,7 +2248,7 @@ void RepoMSSQL::LoadClaimType(QMap<int, QString> &listTypeClaim)
 // void RepoMSSQL::LoadClaimModules(int idClaim, QList<Modul> &listModul)
 // {
 //     listModul.clear();
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 
 //     query.prepare("select m.id,m.idShipment,m.idProduct,m_modTypeId,m_name,m_number,m_numberFW,m_dateEnd,"
 //                   "m_dateCreate,m_zip,m_garantMonth,m_endGarant "
@@ -2279,7 +2283,7 @@ void RepoMSSQL::LoadClaimType(QMap<int, QString> &listTypeClaim)
 // void RepoMSSQL::LoadClaimProducts(int idClaim, QList<Product> &listProduct)
 // {
 //     listProduct.clear();
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 //     query.prepare("select id,idShipment,idSetter,g_ProductTypeId,g_name,g_number,g_numberBox,g_dateRegister,"
 //                   "g_redaction1,g_redaction2,g_redactionPS,g_questList,g_avr,g_akb,g_cooler,g_skm,g_numberBI,"
 //                   "g_numberUSIKP,g_shunt,g_zip,g_garantMonth,g_endGarant "
@@ -2327,7 +2331,7 @@ void RepoMSSQL::LoadClaimType(QMap<int, QString> &listTypeClaim)
 // bool RepoMSSQL::AddModulToClaim(int idModul, int idClaim)
 // {
 //     bool res;
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 
 //     query.prepare("insert into ClaimModule (idClaim,idModul) values(:idClaim,:idModul)");
 
@@ -2346,7 +2350,7 @@ void RepoMSSQL::LoadClaimType(QMap<int, QString> &listTypeClaim)
 // bool RepoMSSQL::DelModulFromClaim(int idModul, int idClaim)
 // {
 //     bool res;
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 
 //     query.prepare("delete from ClaimModule where idClaim=:idClaim and idModul=:idModul");
 
@@ -2368,7 +2372,7 @@ void RepoMSSQL::LoadClaimType(QMap<int, QString> &listTypeClaim)
 // bool RepoMSSQL::AddProductToClaim(int idProd, int idClaim)
 // {
 //     bool res;
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 
 //     query.prepare("insert into ClaimProduct (idClaim,idProduct) values(:idClaim,:idProduct)");
 
@@ -2387,7 +2391,7 @@ void RepoMSSQL::LoadClaimType(QMap<int, QString> &listTypeClaim)
 // bool RepoMSSQL::DelProductToClaim(int idProd, int idClaim)
 // {
 //     bool res;
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 
 //     query.prepare("delete from ClaimProduct where idClaim=:idClaim and idProduct=:idProduct");
 
@@ -2406,7 +2410,7 @@ void RepoMSSQL::LoadClaimType(QMap<int, QString> &listTypeClaim)
 // bool RepoMSSQL::LoadClaimForProduct(int ProdId, Claim &claim)
 // {
 //     bool res = false;
-//     QSqlQuery query;
+//     QSqlQuery query(db);
 //     query.prepare("select c.id,Number,DateClaim,FromWho,TypeClaimId,idOrg,ObjectInstall,"
 //                   "Descript,TypeComplectId,VNFT,Quantity,TypeDeviceId,NumberModul,NumberNewModul,"
 //                   "NumberDevice,DateOut,Guarantee,Reason,DateRepair,DoRepair,FileAnswer,TextResult "
@@ -2447,7 +2451,7 @@ void RepoMSSQL::LoadClaimType(QMap<int, QString> &listTypeClaim)
 
 Claim RepoMSSQL::GetClaim(int id)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     Claim claim;
 
     query.prepare("select id,Number,DateClaim,FromWho,TypeClaimId,idOrg,ObjectInstall,"
@@ -2493,7 +2497,7 @@ Claim RepoMSSQL::GetClaim(int id)
 void RepoMSSQL::LoadRemontReason(QMap<int, QString> &listReason)
 {
     listReason.clear();
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("select id,name from RemontReason");
 
     query.exec();
@@ -2506,7 +2510,7 @@ void RepoMSSQL::LoadRemontReason(QMap<int, QString> &listReason)
 QString RepoMSSQL::GetRemontReason(int id)
 {
     QString s;
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("select name from RemontReason where id=:id");
     query.bindValue(":id", id);
 
@@ -2526,7 +2530,7 @@ QString RepoMSSQL::GetRemontReason(int id)
 bool RepoMSSQL::AddRemont(Remont &remont, ev::DeviceKind kindDevice)
 {
     bool res;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     if(kindDevice == ev::PRODUCT)
     {
@@ -2568,7 +2572,7 @@ bool RepoMSSQL::AddRemont(Remont &remont, ev::DeviceKind kindDevice)
 bool RepoMSSQL::UpdateRemont(Remont &remont, ev::DeviceKind kindDevice)
 {
     bool res;
-    QSqlQuery query;
+    QSqlQuery query(db);
 
 
     if(kindDevice == ev::PRODUCT)
@@ -2603,7 +2607,7 @@ bool RepoMSSQL::UpdateRemont(Remont &remont, ev::DeviceKind kindDevice)
 void RepoMSSQL::LoadRemont(QList<Remont> &list, int idParent, ev::DeviceKind kindDevice)
 {
     list.clear();
-    QSqlQuery query;
+    QSqlQuery query(db);
 
     if(kindDevice == ev::PRODUCT)
     {
@@ -2643,7 +2647,7 @@ void RepoMSSQL::LoadRemont(QList<Remont> &list, int idParent, ev::DeviceKind kin
 //------------------------------------------------------------------------------------------------------
 Remont RepoMSSQL::GetCurrentRemont(int idParent, ev::DeviceKind kindDevice)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     Remont rem;
 
     if(kindDevice == ev::PRODUCT)
@@ -2681,7 +2685,7 @@ Remont RepoMSSQL::GetCurrentRemont(int idParent, ev::DeviceKind kindDevice)
 
 int RepoMSSQL::GetCountRegisterPlate(QString numDoc, int idType)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     int res = 0;
 
     query.prepare("select count(*) from Items where NumberDoc=:NumberDoc and idType=:idType");
@@ -2699,7 +2703,7 @@ int RepoMSSQL::GetCountRegisterPlate(QString numDoc, int idType)
 int32_t RepoMSSQL::GetNextNumber(uint year)
 {
     int32_t res = -1;
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.exec(QString("select next value for GenSerial%1").arg(year));
     if(query.next())
         res = query.value(0).toInt();
@@ -2708,14 +2712,14 @@ int32_t RepoMSSQL::GetNextNumber(uint year)
 
 void RepoMSSQL::CreateGenerator(uint year)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.exec(QString("CREATE SEQUENCE GenSerial%1 as int START WITH 1 INCREMENT BY 1").arg(year));
 
 }
 
 void RepoMSSQL::RestartSerialNumber(uint year)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.exec(QString("ALTER SEQUENCE GenSerial%1 restart").arg(year));
 }
 
@@ -2724,7 +2728,7 @@ int RepoMSSQL::GetCurrentNumber(uint year)
     qDebug() << year;
 
     int res = -1;
-    QSqlQuery query;
+    QSqlQuery query(db);
     QString sql = QString("select current_value from sys.sequences where name = 'GenSerial%1'").arg(year);
     query.exec(sql);
     if(query.next())

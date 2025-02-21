@@ -24,10 +24,10 @@ private slots:
     void on_tbNumProd_clicked();
     void on_pbDelete_clicked();
     void on_pbFinish_clicked();
-    // void on_ShipWindow_finished(int result);
     void slotIsEditing();
     void on_tbAddSetter_clicked();
     void on_pbSave_clicked();
+    void slotReadScan(QString s);
 
 private:
     Ui::ShipWindow *ui;
@@ -39,7 +39,6 @@ private:
     TrackRecord<Items> trackItem;
     TrackRecord<SetterOut> trackSet;
 
-    // void SetStatusItems(Items *dev);
     void SetStatusItems(QList<Items>& items);
     void SaveToBase();
 };
