@@ -15,14 +15,15 @@ SelectDeviceWindow::SelectDeviceWindow(IndexType _type, QWidget *parent)
     ui->cbType->setModel(&typeModel);
 
     ui->tableView->setModel(model);
-    ui->tableView->setColumnWidth(0, 80);
-    ui->tableView->setColumnWidth(1, 200);
-    ui->tableView->setColumnWidth(2, 200);
-    ui->tableView->setColumnWidth(4, 80);
-    ui->tableView->setColumnWidth(5, 20);
-    ui->tableView->setColumnWidth(6, 150);
+    ui->tableView->setColumnWidth(0, 30);       // icon
+    ui->tableView->setColumnWidth(1, 100);      // Номер
+    ui->tableView->setColumnWidth(2, 200);      // тип
+    ui->tableView->setColumnWidth(3, 200);      // внфт
+    ui->tableView->setColumnWidth(4, 150);      // наименование
+    ui->tableView->setColumnWidth(5, 80);       // дата регистрации
+    ui->tableView->setColumnWidth(6, 80);       // статус
 
-    // connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
+    connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
 }
 
@@ -180,13 +181,14 @@ void SelectDeviceWindow::slotTypeChanged(int row)
 
 }
 
-// void SelectDeviceWindow::slotReadScan(QString s)
-// {
-//     if(isActiveWindow())
-//     {
-
-//     }
-// }
+void SelectDeviceWindow::slotReadScan(QString s)
+{
+    if(isActiveWindow())
+    {
+        ui->leSearch->setText(s);
+        on_tbSearch_clicked();
+    }
+}
 
 
 

@@ -25,6 +25,7 @@ SOURCES += \
     logwindow.cpp \
     main.cpp \
     mainwindow.cpp \
+    models/claimmodel.cpp \
     models/devicemodel.cpp \
     models/entity.cpp \
     models/listclaim.cpp \
@@ -76,6 +77,7 @@ HEADERS += \
     models/Items.h \
     models/ItemsType.h \
     models/claim.h \
+    models/claimmodel.h \
     models/devicemodel.h \
     models/entity.h \
     mainwindow.h \
@@ -149,7 +151,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     resource.qrc
 
-VERSION = 1.0.0.5
+VERSION = 1.1.0.0
 QMAKE_TARGET_COMPANY = NGK
 QMAKE_TARGET_PRODUCT = Remont
 QMAKE_TARGET_DESCRIPTION = Programm Remont

@@ -9,18 +9,26 @@ ClaimWindow::ClaimWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    claims.Load();
+    // claims.Load();
 
-    QStringList header;
-    claims.GetHeader(header);
+    model = new ClaimModel(this);
+    model->prepareLoad("");
+    ui->twClaim->setModel(model);
+    ui->twClaim->setColumnWidth(0,70);
+    ui->twClaim->setColumnWidth(1,70);
+    ui->twClaim->setColumnWidth(2,300);
+    ui->twClaim->setColumnWidth(3,300);
 
-    ui->twClaim->setHorizontalHeaderLabels(header);
+    // QStringList header;
+    // claims.GetHeader(header);
 
-    for(int row = 0; row < claims.getRowCount(); ++row)
-        AddLineToWidget(row);
+    // ui->twClaim->setHorizontalHeaderLabels(header);
 
-    ui->twClaim->resizeColumnsToContents();
-    ui->twClaim->resizeRowsToContents();
+    // for(int row = 0; row < claims.getRowCount(); ++row)
+    //     AddLineToWidget(row);
+
+    // ui->twClaim->resizeColumnsToContents();
+    // ui->twClaim->resizeRowsToContents();
 
     // ui->pbSelect->setVisible(isSelected);
 }
@@ -41,8 +49,8 @@ void ClaimWindow::on_pbAdd_clicked()
     ClaimDetail *win = new ClaimDetail(&claim, this);
     if(win->exec() == QDialog::Accepted)
     {
-        if(claims.AddItem(claim))
-            AddLineToWidget(claims.getRowCount() - 1);
+        // if(claims.AddItem(claim))
+        //     AddLineToWidget(claims.getRowCount() - 1);
             // AddLineScreen(&claim);
         // ui->twClaim->resizeColumnsToContents();
         // ui->twClaim->resizeRowToContents(row);
@@ -59,43 +67,43 @@ void ClaimWindow::on_pbAdd_clicked()
 //----------------------------------------------------------------------------------------
 int ClaimWindow::AddLineScreen(const Claim *claim)
 {
-    int row = ui->twClaim->rowCount();
-    ui->twClaim->insertRow(row);
+    // int row = ui->twClaim->rowCount();
+    // ui->twClaim->insertRow(row);
 
-    QTableWidgetItem *item = new QTableWidgetItem();
-    item->setText(claim->number);
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    ui->twClaim->setItem(row, 0, item);
+    // QTableWidgetItem *item = new QTableWidgetItem();
+    // item->setText(claim->number);
+    // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    // ui->twClaim->setItem(row, 0, item);
 
-    item = new QTableWidgetItem();
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setText(claim->dateRegister.toString("dd.MM.yyyy"));
-    ui->twClaim->setItem(row, 1, item);
+    // item = new QTableWidgetItem();
+    // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    // item->setText(claim->dateRegister.toString("dd.MM.yyyy"));
+    // ui->twClaim->setItem(row, 1, item);
 
-    item = new QTableWidgetItem();
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setText(claim->FromWho);
-    ui->twClaim->setItem(row, 2, item);
+    // item = new QTableWidgetItem();
+    // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    // item->setText(claim->FromWho);
+    // ui->twClaim->setItem(row, 2, item);
 
-    item = new QTableWidgetItem();
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setText(claim->TypeClaimString);
-    ui->twClaim->setItem(row, 3, item);
+    // item = new QTableWidgetItem();
+    // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    // item->setText(claim->TypeClaimString);
+    // ui->twClaim->setItem(row, 3, item);
 
-    item = new QTableWidgetItem();
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setText(claim->nameOrganization);
-    ui->twClaim->setItem(row, 4, item);
+    // item = new QTableWidgetItem();
+    // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    // item->setText(claim->nameOrganization);
+    // ui->twClaim->setItem(row, 4, item);
 
-    item = new QTableWidgetItem();
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setText(claim->ObjectInstall);
-    ui->twClaim->setItem(row, 5, item);
+    // item = new QTableWidgetItem();
+    // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    // item->setText(claim->ObjectInstall);
+    // ui->twClaim->setItem(row, 5, item);
 
-    item = new QTableWidgetItem();
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setText(claim->Descript);
-    ui->twClaim->setItem(row, 6, item);
+    // item = new QTableWidgetItem();
+    // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    // item->setText(claim->Descript);
+    // ui->twClaim->setItem(row, 6, item);
 
     // item = new QTableWidgetItem();
     // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
@@ -127,12 +135,12 @@ int ClaimWindow::AddLineScreen(const Claim *claim)
     // item->setText(claim->NumberDevice);
     // ui->twClaim->setItem(row, 12, item);
 
-    item = new QTableWidgetItem();
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setText(claim->DateOut.toString("dd.MM.yyyy"));
-    ui->twClaim->setItem(row, 7, item);
+    // item = new QTableWidgetItem();
+    // item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    // item->setText(claim->DateOut.toString("dd.MM.yyyy"));
+    // ui->twClaim->setItem(row, 7, item);
 
-    return row;
+    return 0;
 }
 
 //----------------------------------------------------------------------------------------
@@ -140,17 +148,17 @@ int ClaimWindow::AddLineScreen(const Claim *claim)
 //----------------------------------------------------------------------------------------
 void ClaimWindow::on_pbDelete_clicked()
 {
-    int row = ui->twClaim->currentRow();
-    if(row < 0 )
-        return;
+    // int row = ui->twClaim->currentRow();
+    // if(row < 0 )
+    //     return;
 
-    Claim* claim = claims.GetItemAtRow(row);
-    if(QMessageBox::warning(this, "Предупреждение",
-                             QString("Удалить рекламацию № %1 ?").arg(claim->number), QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes)
-        return;
+    // Claim* claim = claims.GetItemAtRow(row);
+    // if(QMessageBox::warning(this, "Предупреждение",
+    //                          QString("Удалить рекламацию № %1 ?").arg(claim->number), QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes)
+    //     return;
 
-    if(claims.DeleteItem(row))
-        ui->twClaim->removeRow(row);
+    // if(claims.DeleteItem(row))
+    //     ui->twClaim->removeRow(row);
 
     // if(repo.DeleteClaim(claims.listItems[row].id))
     // {
@@ -165,20 +173,23 @@ void ClaimWindow::on_pbDelete_clicked()
 //----------------------------------------------------------------------------------------
 void ClaimWindow::on_pbEdit_clicked()
 {
-    int row = ui->twClaim->currentRow();
+    int row = ui->twClaim->currentIndex().row();
+
+
+    // int row = ui->twClaim->currentRow();
     if(row < 0 )
         return;
 
-    Claim claim = claims.GetItem(row);
+    Claim *claim = model->GetItem(row);
     // Claim *claim = &claims.listItems[row];
 
-    ClaimDetail *win = new ClaimDetail(&claim, this);
+    ClaimDetail *win = new ClaimDetail(claim, this);
     if(win->exec() == QDialog::Accepted)
     {
-        if(claims.UpdateItem(claim))
-        {
-            qDebug() << "on_pbEdit_clicked успешно";
-        }
+    //     if(claims.UpdateItem(claim))
+    //     {
+    //         qDebug() << "on_pbEdit_clicked успешно";
+    //     }
     //     if(repo.UpdateItem(*claim))
     //     {
     //         QTableWidgetItem *item = ui->twClaim->item(row, 0);
@@ -218,27 +229,31 @@ void ClaimWindow::on_pbEdit_clicked()
 //----------------------------------------------------------------------------------------
 // Кнопка Изменить рекламацию двойной клик
 //----------------------------------------------------------------------------------------
-void ClaimWindow::on_twClaim_cellDoubleClicked(int /*row*/, int /*column*/)
+void ClaimWindow::on_twClaim_doubleClicked(const QModelIndex &index)
 {
+    on_pbEdit_clicked();
+}
+// void ClaimWindow::on_twClaim_cellDoubleClicked(int /*row*/, int /*column*/)
+// {
     // if(isSelected)
     //     on_pbSelect_clicked();
     // else
-        on_pbEdit_clicked();
-}
+        // on_pbEdit_clicked();
+// }
 
 
 void ClaimWindow::AddLineToWidget(int row )
 {
     // int row = claims.getRowCount();
-    ui->twClaim->insertRow(row);
+    // ui->twClaim->insertRow(row);
 
-    for(int col = 0; col < claims.getColumnCount(); ++col)
-    {
-        QTableWidgetItem *item = new QTableWidgetItem();
+    // for(int col = 0; col < claims.getColumnCount(); ++col)
+    // {
+    //     QTableWidgetItem *item = new QTableWidgetItem();
 
-        item->setText(claims.getData(row, col).toString());
-        ui->twClaim->setItem(row, col, item);
-    }
+    //     item->setText(claims.getData(row, col).toString());
+    //     ui->twClaim->setItem(row, col, item);
+    // }
 }
 
 
@@ -255,4 +270,6 @@ void ClaimWindow::AddLineToWidget(int row )
 
 //     accept();
 // }
+
+
 

@@ -82,14 +82,14 @@ ListModul::ListModul() : ListDevice(IndexType::Modul) {}
 // }
 
 
-void ListModul::GetHeader(QStringList &headers)
-{
-    headers << "Номер" << "№ прошивки" << "Обозначение" << "Дата регистрации" << "Документ" << "В модуле" << "Статус";
-}
+// void ListModul::GetHeader(QStringList &headers)
+// {
+//     headers << "Номер" << "№ прошивки" << "Обозначение" << "Дата регистрации" << "Документ" << "В модуле" << "Статус";
+// }
 
 
-void ListModul::setData(int /*row*/, int /*col*/, const QVariant /*value*/, int /*role*/) const
-{
-}
+// void ListModul::setData(int /*row*/, int /*col*/, const QVariant /*value*/, int /*role*/) const
+// {
+// }
 
 

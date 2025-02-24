@@ -34,6 +34,8 @@ public:
         return 0;
     }
 
+    virtual void AddItemToList(T* item) = 0;
+
     // void FindItems(const QString &number, int status = 0, bool isFree = false)
     // {
     //     repo.FindItems(typeDev, number, items, status, isFree);

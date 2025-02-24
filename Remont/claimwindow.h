@@ -6,6 +6,7 @@
 #include <QSqlQueryModel>
 #include <QStandardItemModel>
 #include <models/claim.h>
+#include <models/claimmodel.h>
 #include <models/devicemodel.h>
 #include <models/listclaim.h>
 
@@ -25,8 +26,10 @@ private slots:
     void on_pbAdd_clicked();
     void on_pbDelete_clicked();
     void on_pbEdit_clicked();
-    void on_twClaim_cellDoubleClicked(int row, int column);
+    // void on_twClaim_cellDoubleClicked(int row, int column);
     // void on_pbSelect_clicked();
+
+    void on_twClaim_doubleClicked(const QModelIndex &index);
 
 private:
     Ui::ClaimWindow *ui;
@@ -36,6 +39,7 @@ private:
 
     RepoMSSQL repo;
     // bool isSelected;
+    ClaimModel *model;
 
     int AddLineScreen(const Claim *claim);
 };

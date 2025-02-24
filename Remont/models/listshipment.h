@@ -30,6 +30,7 @@ public:
     void setItem(int row, Shipment *ship);
     void GetHeader(QStringList &headers) override;
     int LoadPart(int, int, const QString &, bool);
+    void AddItemToList(Shipment* item) override;
 
 };
 

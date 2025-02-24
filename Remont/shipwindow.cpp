@@ -176,10 +176,12 @@ void ShipWindow::on_pbDelete_clicked()
 
 void ShipWindow::SetStatusItems(QList<Items> &items)
 {
+    QDateTime dateShip = ui->deDateUPD->dateTime();
     for(auto &dev : items)
     {
-        dev.AddStatus(dev, {StatusItem::SHIPPED});
+        dev.AddStatus(dev, {StatusItem::SHIPPED}, dateShip);
         SetStatusItems(dev.childItems);
+        dev.dateGarant = dateShip.addMonths(dev.garantMonth);
     }
 }
 
@@ -230,6 +232,9 @@ void ShipWindow::on_tbAddSetter_clicked()
 }
 
 
+//-----------------------------------------------------------------------------------
+// сохранить в базу данных
+//-----------------------------------------------------------------------------------
 void ShipWindow::SaveToBase()
 {
     ui->deDateOut->minimumDateTime();
@@ -263,7 +268,7 @@ void ShipWindow::SaveToBase()
 
 
 //-----------------------------------------------------------------------------------
-// Кнопка Сохоанить
+// Кнопка Сохранить
 //-----------------------------------------------------------------------------------
 void ShipWindow::on_pbSave_clicked()
 {

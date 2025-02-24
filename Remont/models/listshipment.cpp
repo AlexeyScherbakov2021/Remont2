@@ -195,3 +195,8 @@ int ListShipment::LoadPart(int start, int count, const QString &number, bool isS
 {
     return repo.LoadPart(start, count, number, items, isShip);
 }
+
+void ListShipment::AddItemToList(Shipment *item)
+{
+
+}

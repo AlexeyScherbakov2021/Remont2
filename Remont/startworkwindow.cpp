@@ -1,3 +1,4 @@
+#include "selectdevicewindow.h"
 #include "startworkwindow.h"
 #include "ui_startworkwindow.h"
 
@@ -9,6 +10,8 @@ StartWorkWindow::StartWorkWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    // listDev.LoadPart2(0, -1, "", {StatusItem::SHIPPED}, true);
+
     // products.FindItems("", Status::SHIPPED);
 
     // for(auto &it : products.items)
@@ -19,6 +22,9 @@ StartWorkWindow::StartWorkWindow(QWidget *parent)
     //     ui->lwProduct->addItem(item);
     // }
     ui->deDate->setDateTime(QDateTime::currentDateTime());
+    ui->lwProduct->setColumnWidth(0, 400);
+    ui->lwProduct->setColumnWidth(1, 150);
+
 }
 
 StartWorkWindow::~StartWorkWindow()
@@ -32,8 +38,10 @@ StartWorkWindow::~StartWorkWindow()
 //----------------------------------------------------------------------------
 void StartWorkWindow::on_pbProdToWork_clicked()
 {
-    auto item = ui->lwProduct->currentItem();
-    if(item == nullptr)
+    // auto item = ui->lwProduct->currentItem();
+    // if(item == nullptr)
+    //     return;
+    if(listDev.size() == 0)
         return;
 
     if(ui->leDoc->text().isEmpty())
@@ -42,27 +50,88 @@ void StartWorkWindow::on_pbProdToWork_clicked()
         return;
     }
 
+    QDateTime dateOn = ui->deDate->dateTime();
 
-    int id = item->data(Qt::UserRole).toInt();
-    Items prod = products.GetItem(id);
-    // qDebug() << ui->deDate->dateTime() << prod.garantMonth;
-    prod.dateOn = ui->deDate->dateTime();
-    prod.dateGarant = prod.dateOn.addMonths(prod.garantMonth);
-    // qDebug() << prod.EndGarant;
-    // repo.LoadChildProduct(prod);
-    prod.AddStatus(prod, StatusItem::WORK, ui->deDate->dateTime(), ui->leDoc->text());
+    for(auto &it : listDev)
+    {
+        it.dateOn = dateOn;
+        it.dateGarant = dateOn.addMonths(it.garantMonth);
+        repo.UpdateItem(it);
+        it.AddStatus(it, StatusItem::WORK, dateOn, ui->leDoc->text());
+    }
 
-    // for(auto &it : prod.listModules)
-    // {
-    //     it.dateOn = ui->deDate->dateTime();
-    //     it.EndGarant = it.dateOn.addMonths(it.garantMonth);
-    //     repo.UpdateItem(it);
-    //     it.AddStatus(it,Status::WORK, ui->deDate->dateTime(), ui->leDoc->text());
-    // }
+    QString statusName = listDev.first().getNameLastStatus();
+    for(int row = 0; row < ui->lwProduct->rowCount(); ++row)
+    {
+        QTableWidgetItem *item = ui->lwProduct->item(row, 1);
+        item->setText(statusName);
 
-    repo.UpdateItem(prod);
+        item = new QTableWidgetItem();
+        item->setText(dateOn.toString("dd.MM.yyyy"));
+        ui->lwProduct->setItem(row, 2, item);
+    }
 
-    delete item;
+    ui->tbDelete->setEnabled(false);
+    ui->tbSearch->setEnabled(false);
 }
 
+
+
+//----------------------------------------------------------------------------
+// Поиск оборудования
+//----------------------------------------------------------------------------
+void StartWorkWindow::on_tbSearch_clicked()
+{
+    SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
+    win->AddSelectedType(IndexType::Modul);
+
+    Items *dev = win->SelectDevice(true, {StatusItem::SHIPPED}, ui->leSearch->text(), true);
+    if(dev != nullptr && dev->id > 0)
+    {
+        repo.LoadStatus(*dev);
+        int row = ui->lwProduct->rowCount();
+        ui->lwProduct->insertRow(row);
+        QString nameType, nameIcon;
+        dev->GetInfo(nameType, nameIcon);
+
+        QTableWidgetItem *item = new QTableWidgetItem();
+        item->setText(dev->GetDefaultName());
+        item->setIcon(QIcon(nameIcon));
+        item->setData(Qt::UserRole, dev->id);
+        ui->lwProduct->setItem(row, 0, item);
+
+        item = new QTableWidgetItem();
+        item->setText(dev->getNameLastStatus());
+        ui->lwProduct->setItem(row, 1, item);
+
+        listDev.push_back(*dev);
+    }
+}
+
+
+//----------------------------------------------------------------------------
+// Кнопка Удалить оборудование
+//----------------------------------------------------------------------------
+void StartWorkWindow::on_tbDelete_clicked()
+{
+    int row = ui->lwProduct->currentRow();
+    if(row < 0)
+        return;
+
+    ui->lwProduct->removeRow(row);
+    listDev.removeAt(row);
+
+    // auto ranges = ui->lwProduct->selectedRanges();
+
+    // for(auto &it : ranges)
+    // {
+    //     for(int row = it.topRow(); row <= it.bottomRow(); ++row)
+    //     {
+    //         int id = ui->lwProduct->item(row, 0)->data(Qt::UserRole).toInt();
+    //         listDev.removeIf([id] (Items dev) { return dev.id == id; } );
+
+    //     }
+    //     ranges.removeAll;
+    // }
+}
 

@@ -29,11 +29,11 @@ public:
 
     void FindItemsExclude(const QString &number, QList<Items> &listExclude, int status = 0)
     {
-        ListDevice::FindItems(number, status, true);
-        for(auto it : listExclude)
-        {
-            items.removeIf([it](const Items p) { return p.id == it.id;});
-        }
+        // ListDevice::FindItems(number, status, true);
+        // for(auto it : listExclude)
+        // {
+        //     items.removeIf([it](const Items p) { return p.id == it.id;});
+        // }
     }
 
     void setData(int row, int col, const QVariant value, int role) const override;

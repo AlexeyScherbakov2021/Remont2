@@ -36,7 +36,7 @@ private slots:
     void on_pbSelect_clicked();
     void on_tableView_doubleClicked(const QModelIndex &index);
     void slotTypeChanged(int index);
-    // void slotReadScan(QString s);
+    void slotReadScan(QString s);
 
 private:
     Ui::SelectDeviceWindow *ui;

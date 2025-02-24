@@ -35,10 +35,10 @@ public:
 
     // Items
     bool LoadChildItems(int idParent, QList<Items> &listItems) const;
-    int LoadPart(size_t start, size_t count, IndexType iType, const QString &number,
+    int LoadPart(int start, int count, IndexType iType, const QString &number,
                     QList<Items> &listItems, const QVector<StatusItem>& listStatus, bool isBusy = false, bool isParent = false) const;
 
-    int LoadPartAll(size_t start, size_t count, const QString &number,
+    int LoadPartAll(int start, int count, const QString &number,
                     QList<Items> &listItems, QVector<StatusItem>& listStatus, bool isBusy = false, bool isParent = false) const;
 
     bool AddItem(Items &item) const;
@@ -56,7 +56,7 @@ public:
     void LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) const;       //=============
 
     // SetterOut
-    int LoadPart(size_t start, size_t count, const QString &number, QList<SetterOut> &listItems, bool isBusy = false) const;
+    int LoadPart(int start, int count, const QString &number, QList<SetterOut> &listItems, bool isBusy = false) const;
     bool AddItem(SetterOut &setter);
     bool UpdateItem(SetterOut &setter);
     bool DeleteSetter(int id);
@@ -68,10 +68,22 @@ public:
     bool AddItem(Shipment &ship);
     bool UpdateItem(Shipment &ship);
     bool DeleteShipment(int id);
-    int LoadPart(size_t start, size_t count, const QString &number, QList<Shipment> &listItems, bool isShip = false) const;
+    int LoadPart(int start, int count, const QString &number, QList<Shipment> &listItems, bool isShip = false) const;
     void LoadChildShip(Shipment &ship);
     bool ItemsSyncShip(int idShip, TrackRecord<Items> *track);
     bool SetsSyncShip(int idShip, TrackRecord<SetterOut> *track);
+    Shipment GetShipment(int id);
+
+    //Claim
+    bool LoadClaim(const QString number, QList<Claim> &listClaim);
+    void LoadClaimType(QMap<int, QString> &listTypeClaim);
+    Claim GetClaim(int id);
+    bool AddItem(Claim &claim);
+    bool UpdateItem(Claim &claim);
+    bool DeleteClaim(int id);
+    int LoadPart(int start, int count, const QString &number, QList<Claim> &listItems) const;
+    void LoadChildClaim(Claim &claim);
+
 
     // Organization
     Organization GetOrganization(int id);
@@ -81,10 +93,6 @@ public:
     // void FindItems(const QString &number, QList<Shipment> &listShip, int status = 0, bool isFree = false);
     // void LoadShipment(QList<Shipment> &listShip, bool isFinish);
 
-    bool AddItem(Claim &claim);
-    bool UpdateItem(Claim &claim);
-    bool DeleteClaim(int id);
-    Shipment GetShipment(int id);
 
     int GetTypeStatus(int idStatus);
     const QString GetNameStatus(int id);
@@ -92,9 +100,6 @@ public:
     // bool LinkPlate(int idPlate, int idModul);
     void LoadShipSetter(QList<SetterOut> &listSetter, int idShip);
 
-    bool LoadClaim(const QString number, QList<Claim> &listClaim);
-    void LoadClaimType(QMap<int, QString> &listTypeClaim);
-    Claim GetClaim(int id);
 
     void LoadRemontReason(QMap<int, QString> &listReason);
     QString GetRemontReason(int id);

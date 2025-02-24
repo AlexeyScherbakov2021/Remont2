@@ -31,6 +31,7 @@ private:
     QMap<int, QString> listTypeClaim;
     QMap<int, QString> listTypeModule;
     QMap<int, QString> listTypeProduct;
+    QList<Organization> listOrg;
 
 
     TrackRecord<Items> trackProduct;
@@ -38,7 +39,7 @@ private:
 
     RepoMSSQL repo;
 
-    void ClaimToScreen(Claim *claim);
+    void ClaimToScreen(/*Claim *claim*/);
     void AddModulToTableScreen(const Items &modul);
     void AddProductToTableScreen(const Items &prod);
 

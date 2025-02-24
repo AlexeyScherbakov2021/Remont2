@@ -3,6 +3,7 @@
 #include "ui_claimdetail.h"
 #include <qmessagebox.h>
 #include <models/organization.h>
+#include <QtConcurrent>
 
 ClaimDetail::ClaimDetail(Claim *cl, QWidget *parent)
     : QDialog(parent)
@@ -17,12 +18,12 @@ ClaimDetail::ClaimDetail(Claim *cl, QWidget *parent)
     // repo.LoadClaimProducts(claim->id, claim->listProduct);
     // repo.LoadClaimModules(claim->id, claim->listModul);
 
-    ClaimToScreen(claim);
+    ClaimToScreen();
 
     ui->tableWidget->resizeColumnsToContents();
     ui->tableWidget->resizeRowsToContents();
 
-    if(cl->dateRegister.isNull())
+    if(cl->dateCreate.isNull())
         ui->deDateClaim->setDateTime(QDateTime::currentDateTime());
 
     connect(ui->leNumber, SIGNAL(editingFinished()), SLOT(slotEnabledWidget()));
@@ -43,13 +44,14 @@ ClaimDetail::~ClaimDetail()
 void ClaimDetail::on_pbOK_clicked()
 {
     claim->number = ui->leNumber->text();
-    claim->dateRegister = ui->deDateClaim->dateTime();
-    claim->FromWho = ui->leFromWho->text();
+    claim->dateCreate = ui->deDateClaim->dateTime();
+    // claim->FromWho = ui->leFromWho->text();
     claim->ObjectInstall = ui->leObjectInst->text();
     claim->idTypeClaim = ui->cbTypeClaim->currentData(Qt::UserRole).toInt();
     int orgIndex = ui->cbOrg->currentData().toInt();
     claim->idOrg = orgIndex;
     claim->nameOrganization = ui->cbOrg->currentText();
+    claim->TypeClaimString = ui->cbTypeClaim->currentText();
 
     if(claim->id == 0)
         repo.AddItem(*claim);
@@ -106,32 +108,55 @@ void ClaimDetail::on_pbOK_clicked()
 //-----------------------------------------------------------------------------------------
 // Отображение данных на экран
 //-----------------------------------------------------------------------------------------
-void ClaimDetail::ClaimToScreen(Claim *claim)
+void ClaimDetail::ClaimToScreen(/*Claim *claim*/)
 {
     ui->leNumber->setText(claim->number);
-    ui->deDateClaim->setDateTime(claim->dateRegister);
-    ui->leFromWho->setText(claim->FromWho);
+    ui->deDateClaim->setDateTime(claim->dateCreate);
+    // ui->leFromWho->setText(claim->FromWho);
     ui->leObjectInst->setText(claim->ObjectInstall);
     ui->cbTypeClaim->setCurrentText(listTypeClaim[claim->idTypeClaim]);
 
-    QList<Organization> listOrg;
-    repo.LoadOrganization(listOrg);
 
-    int indexOrg = -1;
-    for(auto &it : listOrg)
-    {
-        if(it.id == claim->idOrg)
-            indexOrg = ui->cbOrg->count();
-        ui->cbOrg->addItem(it.getFullName(), it.id);
-    }
+    QFuture<void> future =  QtConcurrent::run( [&] ()
+        {
+             RepoMSSQL repo2("thread");
+             repo2.LoadOrganization(listOrg);
+        });
 
-    ui->cbOrg->setCurrentIndex(indexOrg);
+    QFutureWatcher<void> *watcher = new QFutureWatcher<void>(this);
+    connect(watcher, &QFutureWatcher<void>::finished, watcher, [this, watcher] () {
+        int selectRow = -1;
+        for(auto it = listOrg.begin(); it != listOrg.end(); ++it )
+        {
+            ui->cbOrg->addItem((*it).orgName, (*it).id);
+            if((*it).id == claim->idOrg)
+            {
+                selectRow = ui->cbOrg->count() - 1;
+            }
+        }
+        ui->cbOrg->setCurrentIndex(selectRow);
+        watcher->deleteLater();
+    });
 
-    for(auto &it : claim->listModul)
-        AddModulToTableScreen(it);
+    watcher->setFuture(future);
 
-    for(auto &it : claim->listProduct)
-        AddProductToTableScreen(it);
+    // repo.LoadOrganization(listOrg);
+
+    // int indexOrg = -1;
+    // for(auto &it : listOrg)
+    // {
+    //     if(it.id == claim->idOrg)
+    //         indexOrg = ui->cbOrg->count();
+    //     ui->cbOrg->addItem(it.getFullName(), it.id);
+    // }
+
+    // ui->cbOrg->setCurrentIndex(indexOrg);
+
+    // for(auto &it : claim->listModul)
+    //     AddModulToTableScreen(it);
+
+    // for(auto &it : claim->listProduct)
+    //     AddProductToTableScreen(it);
 }
 
 

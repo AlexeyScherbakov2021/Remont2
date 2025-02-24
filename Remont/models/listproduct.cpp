@@ -75,10 +75,10 @@ ListProduct::ListProduct() : ListDevice(IndexType::Product) {}
 // }
 
 
-void ListProduct::GetHeader(QStringList &headers)
-{
-    headers << "Номер" << "№ прошивки" << "Обозначение" << "Дата регистрации" << "Документ" << "В модуле" << "Статус";
-}
+// void ListProduct::GetHeader(QStringList &headers)
+// {
+//     headers << "Номер" << "№ прошивки" << "Обозначение" << "Дата регистрации" << "Документ" << "В модуле" << "Статус";
+// }
 
 
 void ListProduct::setData(int /*row*/, int /*col*/, const QVariant /*value*/, int /*role*/) const

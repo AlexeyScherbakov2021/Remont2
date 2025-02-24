@@ -70,10 +70,10 @@ bool ListDevice::UpdateItem(Items &item)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void ListDevice::FindItems(const QString &/*number*/, int /*status*/, bool /*isFree*/)
-{
-    // repo.FindItems(typeDev, number, items, status, isFree);
-}
+// void ListDevice::FindItems(const QString &/*number*/, int /*status*/, bool /*isFree*/)
+// {
+//     // repo.FindItems(typeDev, number, items, status, isFree);
+// }
 
 //-----------------------------------------------------------------------------
 //
@@ -115,17 +115,20 @@ QVariant ListDevice::getData(int row, int col, int role) const
             var = item.number;
             break;
         case 2:
-            var = item.VNFT;
+            var = item.type.typeName;
             break;
         case 3:
-            var = item.name;
+            var = item.type.VNFT;
             break;
         case 4:
-            var = item.dateCreate.toString("dd.MM.yyyy");
+            var = item.name;
             break;
         case 5:
-            var = item.numberDoc;
+            var = item.dateCreate.toString("dd.MM.yyyy");
             break;
+        // case 6:
+        //     var = item.numberDoc;
+        //     break;
         case 6:
             var = item.currStatus;
             break;
@@ -158,7 +161,7 @@ void ListDevice::setData(int, int, const QVariant, int) const
 //-----------------------------------------------------------------------------
 void ListDevice::GetHeader(QStringList &headers)
 {
-    headers << "Тип" << "Номер" << "Обозначение" << "Наименование" << "Дата регистрации" << "Документ" << "Статус";
+    headers << "" << "Номер" << "Тип" << "Обозначение" << "Наименование" << "Дата рег." << "Статус";
 }
 
 
@@ -182,4 +185,9 @@ Items* ListDevice::GetItemAtRow(int row)
         return &items[row];
 
     return nullptr;
+}
+
+void ListDevice::AddItemToList(Items *item)
+{
+    items.push_back(*item);
 }

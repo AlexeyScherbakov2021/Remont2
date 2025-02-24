@@ -7,8 +7,14 @@
 
 class ListClaim : public ListEntity<Claim>
 {
+    friend class ClaimModel;
+
 public:
     ListClaim();
+
+    void setItem(int row, Claim *clain);
+    int LoadPart(int, int, const QString &);
+
 
     bool AddItem(Claim &item) override;
     int GetRowFromId(int id) override;
@@ -23,14 +29,15 @@ public:
     void GetHeader(QStringList &headers) override;
     // int LoadPart2(int start, int count, const QString &number, QVector<int> vStatus, bool isBusy, bool isParent) override;
 
-    bool Load(const QString Number = "");
-    int getColumnCount();
-    int getRowCount();
+    // bool Load(const QString Number = "");
+    // int getColumnCount();
+    // int getRowCount();
 
     Claim* GetItemAtRow(int row) override;
+    void AddItemToList(Claim* item) override;
 
 private:
-    QStringList headers;
+    // QStringList headers;
 
 };
 

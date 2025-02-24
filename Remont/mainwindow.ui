@@ -121,7 +121,7 @@ background-color: LightGray;
      <rect>
       <x>20</x>
       <y>70</y>
-      <width>170</width>
+      <width>182</width>
       <height>40</height>
      </rect>
     </property>
@@ -134,7 +134,7 @@ background-color: LightGray;
      <rect>
       <x>20</x>
       <y>173</y>
-      <width>170</width>
+      <width>182</width>
       <height>40</height>
      </rect>
     </property>
@@ -147,7 +147,7 @@ background-color: LightGray;
      <rect>
       <x>20</x>
       <y>20</y>
-      <width>170</width>
+      <width>182</width>
       <height>40</height>
      </rect>
     </property>
@@ -160,7 +160,7 @@ background-color: LightGray;
      <rect>
       <x>20</x>
       <y>230</y>
-      <width>170</width>
+      <width>182</width>
       <height>40</height>
      </rect>
     </property>
@@ -173,12 +173,12 @@ background-color: LightGray;
      <rect>
       <x>20</x>
       <y>120</y>
-      <width>170</width>
+      <width>182</width>
       <height>40</height>
      </rect>
     </property>
     <property name="text">
-     <string>Установка устройств</string>
+     <string>Комплектование устройства</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pbStartWork">
@@ -186,7 +186,7 @@ background-color: LightGray;
      <rect>
       <x>20</x>
       <y>290</y>
-      <width>170</width>
+      <width>182</width>
       <height>40</height>
      </rect>
     </property>
@@ -300,7 +300,7 @@ background-color: LightGray;
      <normaloff>:/image/product_link.png</normaloff>:/image/product_link.png</iconset>
    </property>
    <property name="text">
-    <string>Установка модулей</string>
+    <string>Комплектование устройств</string>
    </property>
   </action>
   <action name="aControlOTK">

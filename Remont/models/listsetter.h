@@ -27,6 +27,8 @@ public:
     void setItem(int row, SetterOut *setter);
     void GetHeader(QStringList &headers) override;
     int LoadPart(int, int, const QString &, bool);
+    void AddItemToList(SetterOut* item) override;
+
 };
 
 #endif // LISTSETTER_H

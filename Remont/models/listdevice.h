@@ -31,7 +31,7 @@ public:
     void DeleteItemFromList(int row) override;
     virtual bool DeleteItem(int row) override;
     virtual bool UpdateItem(Items &item) override;
-    void FindItems(const QString &number, int status = 0, bool isFree = false);
+    // void FindItems(const QString &number, int status = 0, bool isFree = false);
     Items GetItem(int id) override;
     virtual bool LoadChild(Items &item) override;
     virtual QVariant getData(int row, int col, int role) const override;
@@ -40,6 +40,7 @@ public:
     int LoadPart2(int start, int count, const QString &number, QVector<StatusItem> vStatus, bool isBusy = false, bool isParent = false) override;
     Items* GetItemAtRow(int row) override;
 
+    void AddItemToList(Items* item) override;
     // size_t LoadPart(int start, int count, const QString &number, int status = 0, bool isBusy = false, bool isParent = false)
     // {
     //     return repo.LoadPart(start, count, typeDev, number, items, status, isBusy, isParent);

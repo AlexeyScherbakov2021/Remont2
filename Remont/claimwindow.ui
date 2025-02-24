@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>909</width>
-    <height>549</height>
+    <width>1105</width>
+    <height>632</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -67,7 +67,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QTableWidget" name="twClaim">
+    <widget class="QTableView" name="twClaim">
      <property name="editTriggers">
       <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
      </property>
@@ -80,76 +80,12 @@
      <property name="selectionBehavior">
       <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
      </property>
-     <column>
-      <property name="text">
-       <string>№</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Дата поступления</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>От кого получена</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Тип рекламации</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Организация</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Объект установки</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Описание</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Тип комплектующих</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>ВНФТ</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Тип оборудования</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>№ модуля</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>№ модуля замены</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>№ оборудования</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Дата отгрузки</string>
-      </property>
-     </column>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>24</number>
+     </attribute>
     </widget>
    </item>
    <item alignment="Qt::AlignmentFlag::AlignHCenter">

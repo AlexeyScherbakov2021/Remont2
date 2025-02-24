@@ -22,11 +22,16 @@ public:
 private slots:
     void on_pbProdToWork_clicked();
 
+    void on_tbSearch_clicked();
+
+    void on_tbDelete_clicked();
+
 private:
     Ui::StartWorkWindow *ui;
     RepoMSSQL repo;
-    ListProduct products;
-    ListModul modules;
+    // ListProduct products;
+    // ListModul modules;
+    QList<Items> listDev;
 };
 
 #endif // STARTWORKWINDOW_H

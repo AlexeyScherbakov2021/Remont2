@@ -56,10 +56,10 @@ void ComplectProductWindow::on_tbSearchModul_clicked()
         win = new SelectDeviceWindow(IndexType::Plate, this);
     }
 
-    Items child = *win->SelectDevice(true, stat, ui->leNumModSearch->text(), false, false);
-    if(win->result() == QDialog::Accepted)
+    Items *child = win->SelectDevice(true, stat, ui->leNumModSearch->text(), false, false);
+    if(child != nullptr && win->result() == QDialog::Accepted)
     {
-        addModulToScreen(child);
+        addModulToScreen(*child);
     }
 }
 
@@ -74,9 +74,10 @@ void ComplectProductWindow::on_tbProdSearch_clicked()
     QScopedPointer<SelectDeviceWindow> win (new SelectDeviceWindow(IndexType::Product, this));
     // win->setAttribute(Qt::WA_DeleteOnClose);
     win->AddSelectedType(IndexType::Modul);
-    dev = *win->SelectDevice(true, stat, ui->leNumProdSearch->text(), false, false);
-    if(win->result() == QDialog::Accepted)
+    Items *res = win->SelectDevice(true, stat, ui->leNumProdSearch->text(), false, false);
+    if(res != nullptr && win->result() == QDialog::Accepted)
     {
+        dev = *res;
         repo.LoadChildItems(dev.id, dev.childItems);
         LoadProductToScreen(dev);
     }
@@ -113,7 +114,7 @@ void ComplectProductWindow::LoadProductToScreen(Items &dev)
 //----------------------------------------------------------------------------------------------
 void ComplectProductWindow::addModulToScreen(Items &mod)
 {
-    if(trackModul.AddRecord(mod.id, mod))
+    if(mod.id > 0 && trackModul.AddRecord(mod.id, mod))
     {
         ShowLineChild(mod);
     }

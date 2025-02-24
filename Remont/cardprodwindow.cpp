@@ -14,41 +14,62 @@ CardProdWindow::CardProdWindow(Items *device, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::CardProdWindow)
 {
+    Shipment ship;
+    SetterOut setter;
+
     ui->setupUi(this);
     setWindowTitle("Карточка \"" + device->GetDefaultName() + "\"");
 
-    Items *prod;
-    Items product;
+    QString nameType, iconType;
+    device->GetInfo(nameType, iconType);
+
+    if(device->idShip > 0)
+        ship = repo.GetShipment(device->idShip);
+    if(device->idSet > 0)
+        setter = repo.GetSetter(device->idSet);
+    if(setter.idShip > 0)
+        ship = repo.GetShipment(device->idShip);
+
+    // Items *prod;
+    // Items product;
     QList<Remont> listRemont;
 
-    if(device->type.indexType == IndexType::Modul)
-    {
-        Items *mod = static_cast<Items*>(device);
-        // product = repo.GetItem(mod->idProduct);
-        prod = &product;
-        mod->LoadStatus(*mod);
-        LoadHistoryToForm(mod->listStatus);
-        repo.LoadRemont(listRemont, mod->id, ev::MODUL);
-    }
-    if(device->type.indexType == IndexType::Product)
-    {
-        prod = static_cast<Items*>(device);
+    // if(device->type.indexType == IndexType::Modul)
+    // {
+    //     Items *mod = static_cast<Items*>(device);
+    //     // product = repo.GetItem(mod->idProduct);
+    //     prod = &product;
+    //     mod->LoadStatus(*mod);
+    //     LoadHistoryToForm(mod->listStatus);
+    //     repo.LoadRemont(listRemont, mod->id, ev::MODUL);
+    // }
+    // if(device->type.indexType == IndexType::Product)
+    // {
         // repo.LoadChildProduct(*prod);
-        prod->LoadStatus(*prod);
-        loadInclude(prod);
-        LoadHistoryToForm(prod->listStatus);
-        repo.LoadRemont(listRemont, prod->id, ev::PRODUCT);
-    }
-    LoadRemontToForm(listRemont);
+    device->LoadStatus(*device);
+    // LoadInclude(device);
+    LoadHistoryToForm(device->listStatus);
+        // repo.LoadRemont(listRemont, device->id, ev::PRODUCT);
+    // }
+    // LoadRemontToForm(listRemont);
 
     ui->lbGarant->setText(device->dateGarant.toString("dd.MM.yyyy"));
     ui->lbDateCreate->setText(device->dateCreate.toString("dd.MM.yyyy"));
     ui->lbNumber->setText(device->number);
     ui->lbDateOn->setText(device->dateOn.toString("dd.MM.yyyy"));
-    // qDebug() << device->dateRegister << device->EndGarant;
+
+    ui->lbCardOrder->setText(setter.numberDoc);
+    ui->lbGarantMon->setText(QString::number(device->garantMonth));
+    ui->lbDateUPD->setText(ship.dateUPD.toString("dd.MM.yyyy"));
+    ui->lbNumberUPD->setText(ship.numberUPD);
+    ui->lbIcon->setPixmap(QPixmap(iconType));
+    ui->lbName->setText(device->name);
+    ui->lbNumber2->setText(device->number2);
+    ui->lbType->setText(device->type.typeName);
+    ui->lbVNFT->setText(device->type.VNFT);
 
     number = device->number;
-    loadShipmentToForm(prod);
+    // loadShipmentToForm(device);
 
 
 }

@@ -10,14 +10,16 @@ class Claim : public IEntity
 {
 public:
     int idTypeClaim;
-    QString reason;
-    QString remark;
+    // QString reason;
+    // QString remark;
 
-    QString FromWho;
+    // QString FromWho;
     int idOrg;
     QString nameOrganization;
     QString ObjectInstall;
     QString Descript;
+    QString TypeClaimString;
+    // QDateTime DateOut;
     // int TypeComplectId;
     // QString VNFT;
     // int Quantity;
@@ -25,17 +27,15 @@ public:
     // QString NumberModul;
     // QString NumberNewModul;
     // QString NumberDevice;
-    QDateTime DateOut;
     // bool IsGuarantee;
     // QString Reason;
     // QDateTime DateRepair;
     // QString DoRepair;
     // QString FileAnswer;
     // QString TextResult;
-    QString TypeClaimString;
     // QString TypeComplectString;
     // QString TypeDeviceString;
-    QDateTime dateRegister;
+    // QDateTime dateRegister;
 
 
     QList<Items> listModul;

@@ -89,7 +89,7 @@ void SetterEditDlg::on_tbSearch_clicked()
     win->AddSelectedType(IndexType::Plate);
     QVector<StatusItem> stat {StatusItem::CORRECT, StatusItem::CORRECT_OSO };
     Items* dev = win->SelectDevice(true, stat, ui->leSearch->text());
-    if(dev->id != 0)
+    if(dev != nullptr && dev->id != 0)
     {
         if(track.AddRecord(dev->id, *dev))
         {

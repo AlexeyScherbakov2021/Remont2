@@ -86,7 +86,6 @@ SetterOut ListSetter::GetItem(int id)
 //-------------------------------------------------------------------------
 SetterOut* ListSetter::GetItemAtRow(int row)
 {
-
     if(row < items.size())
         return &items[row];
     return nullptr;
@@ -174,4 +173,9 @@ void ListSetter::GetHeader(QStringList &headers)
 int ListSetter::LoadPart(int start, int count, const QString &number, bool isFree)
 {
     return repo.LoadPart(start, count, number, items, isFree);
+}
+
+void ListSetter::AddItemToList(SetterOut *item)
+{
+
 }
