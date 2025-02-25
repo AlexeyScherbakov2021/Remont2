@@ -29,19 +29,18 @@ private:
     // explicit ClaimDetail(QWidget *parent = nullptr);
     Claim *claim;
     QMap<int, QString> listTypeClaim;
-    QMap<int, QString> listTypeModule;
-    QMap<int, QString> listTypeProduct;
+    // QMap<int, QString> listTypeModule;
+    // QMap<int, QString> listTypeProduct;
     QList<Organization> listOrg;
 
-
     TrackRecord<Items> trackProduct;
-    TrackRecord<Items> trackModul;
+    // TrackRecord<Items> trackModul;
 
     RepoMSSQL repo;
 
     void ClaimToScreen(/*Claim *claim*/);
-    void AddModulToTableScreen(const Items &modul);
-    void AddProductToTableScreen(const Items &prod);
+    // void AddModulToTableScreen(const Items &modul);
+    void AddProductToTableScreen(const Items *prod);
 
 };
 

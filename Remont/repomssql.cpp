@@ -582,18 +582,21 @@ int RepoMSSQL::LoadPart(int start, int count, const QString &number, QList<Claim
 //------------------------------------------------------------------------------------------------------
 // Загрузка списков продукции
 //------------------------------------------------------------------------------------------------------
-void RepoMSSQL::LoadChildClaim(Claim &claim)
+bool RepoMSSQL::LoadChildClaim(Claim &claim)
 {
+    bool res;
     claim.childItems.clear();
     QSqlQuery query(db);
     query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,"
                   "dateCreate,dateOn,dateOff,i.garantMonth,dateGarant,isZip,it.indexType,it.VNFT,it.typeName "
-                  "from Items i join itemType it on it.id=i.idType "
-                  "where idSet = :idSet");
+                  "from ClaimItems ci "
+                  "join Items i on i.id=ci.idItem "
+                  "join itemType it on it.id=i.idType "
+                  "where ci.idClaim=:idClaim");
 
-    query.bindValue(":idSet", claim.id);
+    query.bindValue(":idClaim", claim.id);
 
-    query.exec();
+    res = query.exec();
     while(query.next())
     {
         Items prod;
@@ -620,6 +623,8 @@ void RepoMSSQL::LoadChildClaim(Claim &claim)
         LoadStatus(prod);
         claim.childItems.push_back(prod);
     }
+
+    return res;
 }
 
 
@@ -2478,43 +2483,43 @@ void RepoMSSQL::LoadClaimType(QMap<int, QString> &listTypeClaim)
 //------------------------------------------------------------------------------------------------------
 // Добавление изделия в рекламацию
 //------------------------------------------------------------------------------------------------------
-// bool RepoMSSQL::AddProductToClaim(int idProd, int idClaim)
-// {
-//     bool res;
-//     QSqlQuery query(db);
+bool RepoMSSQL::AddItemToClaim(int idItem, int idClaim)
+{
+    bool res;
+    QSqlQuery query(db);
 
-//     query.prepare("insert into ClaimProduct (idClaim,idProduct) values(:idClaim,:idProduct)");
+    query.prepare("insert into ClaimItems (idClaim,idItem) values(:idClaim,:idItem)");
 
-//     query.bindValue(":idClaim", idClaim);
-//     query.bindValue(":idProduct", idProd);
+    query.bindValue(":idClaim", idClaim);
+    query.bindValue(":idItem", idItem);
 
-//     res = query.exec();
+    res = query.exec();
 
-//     if(!res)
-//         qDebug() << "Ошибка при добавлении записи в AddProductToClaim";
+    if(!res)
+        qDebug() << "Ошибка при добавлении записи в AddItemToClaim";
 
-//     return res;
+    return res;
 
-// }
+}
 
-// bool RepoMSSQL::DelProductToClaim(int idProd, int idClaim)
-// {
-//     bool res;
-//     QSqlQuery query(db);
+bool RepoMSSQL::DelItemFromClaim(int idItem, int idClaim)
+{
+    bool res;
+    QSqlQuery query(db);
 
-//     query.prepare("delete from ClaimProduct where idClaim=:idClaim and idProduct=:idProduct");
+    query.prepare("delete from ClaimItems where idClaim=:idClaim and idItem=:idItem");
 
-//     query.bindValue(":idClaim", idClaim);
-//     query.bindValue(":idProduct", idProd);
+    query.bindValue(":idClaim", idClaim);
+    query.bindValue(":idItem", idItem);
 
-//     res = query.exec();
+    res = query.exec();
 
-//     if(!res)
-//         qDebug() << "Ошибка при удалении записи в DelProductToClaim";
+    if(!res)
+        qDebug() << "Ошибка при удалении записи в DelItemFromClaim";
 
-//     return res;
+    return res;
 
-// }
+}
 
 // bool RepoMSSQL::LoadClaimForProduct(int ProdId, Claim &claim)
 // {

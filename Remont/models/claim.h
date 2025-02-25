@@ -38,8 +38,8 @@ public:
     // QDateTime dateRegister;
 
 
-    QList<Items> listModul;
-    QList<Items> listProduct;
+    // QList<Items> listModul;
+    // QList<Items> listProduct;
 
     Claim() {}
 

@@ -82,8 +82,9 @@ public:
     bool UpdateItem(Claim &claim);
     bool DeleteClaim(int id);
     int LoadPart(int start, int count, const QString &number, QList<Claim> &listItems) const;
-    void LoadChildClaim(Claim &claim);
-
+    bool LoadChildClaim(Claim &claim);
+    bool AddItemToClaim(int idItem, int idClaim);
+    bool DelItemFromClaim(int idItem, int idClaim);
 
     // Organization
     Organization GetOrganization(int id);

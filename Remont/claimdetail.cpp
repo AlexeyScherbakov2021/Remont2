@@ -15,13 +15,13 @@ ClaimDetail::ClaimDetail(Claim *cl, QWidget *parent)
     for(auto it = listTypeClaim.cbegin(); it != listTypeClaim.cend(); ++it)
         ui->cbTypeClaim->addItem(*it, it.key());
 
-    // repo.LoadClaimProducts(claim->id, claim->listProduct);
-    // repo.LoadClaimModules(claim->id, claim->listModul);
-
+    repo.LoadChildClaim(*claim);
     ClaimToScreen();
 
-    ui->tableWidget->resizeColumnsToContents();
-    ui->tableWidget->resizeRowsToContents();
+    ui->tableWidget->setColumnWidth(0, 30);
+    ui->tableWidget->setColumnWidth(1, 100);
+    ui->tableWidget->setColumnWidth(2, 400);
+    ui->tableWidget->setColumnWidth(3, 70);
 
     if(cl->dateCreate.isNull())
         ui->deDateClaim->setDateTime(QDateTime::currentDateTime());
@@ -45,7 +45,6 @@ void ClaimDetail::on_pbOK_clicked()
 {
     claim->number = ui->leNumber->text();
     claim->dateCreate = ui->deDateClaim->dateTime();
-    // claim->FromWho = ui->leFromWho->text();
     claim->ObjectInstall = ui->leObjectInst->text();
     claim->idTypeClaim = ui->cbTypeClaim->currentData(Qt::UserRole).toInt();
     int orgIndex = ui->cbOrg->currentData().toInt();
@@ -55,15 +54,16 @@ void ClaimDetail::on_pbOK_clicked()
 
     if(claim->id == 0)
         repo.AddItem(*claim);
-
+    else
+        repo.UpdateItem(*claim);
 
     // Добавленные изделия
     QList<Items> listAddProduct;
     trackProduct.getListAdd(listAddProduct);
     for(auto it : listAddProduct)
     {
-        // if(repo.AddProductToClaim(it.id, claim->id))
-        //     it.AddStatus(it, Status::FAULTY_ON_OBJECT);
+        if(repo.AddItemToClaim(it.id, claim->id))
+            it.AddStatus(it, StatusItem::FAULTY_ON_OBJECT);
     }
 
     // Удаленные изделия
@@ -71,35 +71,8 @@ void ClaimDetail::on_pbOK_clicked()
     trackProduct.getListDel(listDelProduct);
     for(auto it : listDelProduct)
     {
-        // if(repo.DelProductToClaim(it.id, claim->id))
-        //     it.DeleteLastStatus(it);
-    }
-
-    // Добавленные модули
-    QList<Items> listAddModul;
-    trackModul.getListAdd(listAddModul);
-    for(auto it : listAddModul)
-    {
-        // if(repo.AddModulToClaim(it.id, claim->id))
-        //     it.AddStatus(it, Status::FAULTY_ON_OBJECT);
-
-        // установить статус изделия, если модуль входит в его состав
-        // if(!trackProduct.listAdd.contains(it.idProduct))
-        // {
-        //     Product prod = repo.GetProduct(it.idProduct);
-        //     if(prod.id != 0)
-        //         prod.AddStatus(prod, Status::FAULTY_ON_OBJECT);
-        // }
-    }
-
-    // Удаленные модули
-    QList<Items> listDelModul;
-    trackModul.getListDel(listDelModul);
-    for(auto it : listDelModul)
-    {
-        // if(repo.DelModulFromClaim(it.id, claim->id))
-        //     it.DeleteLastStatus(it);
-
+        if(repo.DelItemFromClaim(it.id, claim->id))
+            it.DeleteLastStatus(it);
     }
 
     accept();
@@ -112,10 +85,8 @@ void ClaimDetail::ClaimToScreen(/*Claim *claim*/)
 {
     ui->leNumber->setText(claim->number);
     ui->deDateClaim->setDateTime(claim->dateCreate);
-    // ui->leFromWho->setText(claim->FromWho);
     ui->leObjectInst->setText(claim->ObjectInstall);
     ui->cbTypeClaim->setCurrentText(listTypeClaim[claim->idTypeClaim]);
-
 
     QFuture<void> future =  QtConcurrent::run( [&] ()
         {
@@ -140,85 +111,39 @@ void ClaimDetail::ClaimToScreen(/*Claim *claim*/)
 
     watcher->setFuture(future);
 
-    // repo.LoadOrganization(listOrg);
-
-    // int indexOrg = -1;
-    // for(auto &it : listOrg)
-    // {
-    //     if(it.id == claim->idOrg)
-    //         indexOrg = ui->cbOrg->count();
-    //     ui->cbOrg->addItem(it.getFullName(), it.id);
-    // }
-
-    // ui->cbOrg->setCurrentIndex(indexOrg);
-
-    // for(auto &it : claim->listModul)
-    //     AddModulToTableScreen(it);
-
-    // for(auto &it : claim->listProduct)
-    //     AddProductToTableScreen(it);
+    for(auto &it : claim->childItems)
+        AddProductToTableScreen(&it);
 }
 
 
-//-----------------------------------------------------------------------------------------
-// Добавление модуля в таблицу экрана
-//-----------------------------------------------------------------------------------------
-void ClaimDetail::AddModulToTableScreen(const Items &modul)
-{
-    int row = ui->tableWidget->rowCount();
-    ui->tableWidget->insertRow(row);
-
-    QTableWidgetItem *item = new QTableWidgetItem();
-    item->setData(Qt::UserRole, modul.id);
-    item->setData(Qt::UserRole + 1, ev::MODUL);
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setText("Модуль");
-    ui->tableWidget->setItem(row, 0, item);
-
-    item = new QTableWidgetItem();
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setText(modul.number);
-    ui->tableWidget->setItem(row, 1, item);
-
-    item = new QTableWidgetItem();
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setText(modul.name);
-    ui->tableWidget->setItem(row, 2, item);
-
-    item = new QTableWidgetItem();
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setText(modul.dateGarant.toString("dd.MM.yyyy"));
-    ui->tableWidget->setItem(row, 3, item);
-}
 
 //-----------------------------------------------------------------------------------------
 // Добавление изделия в таблицу экрана
 //-----------------------------------------------------------------------------------------
-void ClaimDetail::AddProductToTableScreen(const Items &prod)
+void ClaimDetail::AddProductToTableScreen(const Items *prod)
 {
     int row = ui->tableWidget->rowCount();
     ui->tableWidget->insertRow(row);
 
+    QString typeName, iconName;
+    prod->GetInfo(typeName, iconName);
+
     QTableWidgetItem *item = new QTableWidgetItem();
-    item->setData(Qt::UserRole, prod.id);
-    item->setData(Qt::UserRole + 1, ev::PRODUCT);
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setText("Изделие");
+    item->setData(Qt::UserRole, prod->id);
+    item->setToolTip(typeName);
+    item->setIcon(QIcon(iconName));
     ui->tableWidget->setItem(row, 0, item);
 
     item = new QTableWidgetItem();
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setText(prod.number);
+    item->setText(prod->number);
     ui->tableWidget->setItem(row, 1, item);
 
     item = new QTableWidgetItem();
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setText(prod.name);
+    item->setText(prod->type.typeName + " " + prod->type.VNFT);
     ui->tableWidget->setItem(row, 2, item);
 
     item = new QTableWidgetItem();
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    item->setText(prod.dateGarant.toString("dd.MM.yyyy"));
+    item->setText(prod->dateGarant.toString("dd.MM.yyyy"));
     ui->tableWidget->setItem(row, 3, item);
 }
 
@@ -228,48 +153,15 @@ void ClaimDetail::AddProductToTableScreen(const Items &prod)
 //-----------------------------------------------------------------------------------------
 void ClaimDetail::on_tbAddDevice_clicked()
 {
-    // SelectDeviceWindow *win = new SelectDeviceWindow(this);
-
-    // QVector<Status::Stat> listStatus = {Status::WORK, Status::SHIPPED};
-    // Items *dev = win->SelectDevice(false, "", listStatus);
-    // if(dev != nullptr)
-    // {
-    //     if(dev->type.indexType == ItemType::Product)
-    //     {
-    //         Items* prod = static_cast<Items*>(dev);
-    //         // if(trackProduct.AddRecord(prod->id, *prod))
-    //         //     AddProductToTableScreen(*prod);
-    //         // listAddProduct.insert(prod->id, *prod);
-    //     }
-    //     else if(dev->type.indexType == ItemType::Modul)
-    //     {
-    //         Items *modul = static_cast<Items*>(dev);
-    //         // if(trackModul.AddRecord(modul->id, *modul))
-    //         // {
-    //         //     AddModulToTableScreen(*modul);
-    //         //     if(modul->idParent > 0)
-    //         //     {
-    //         //         Items prod = repo.GetProduct(modul->idParent);
-    //         //         if(!trackProduct.listAdd.contains(prod.id))
-    //         //         {
-    //         //             if( QMessageBox::question(this, "Запрос",
-    //         //                                       QString("Добавить в ремонт изделие \"%1 (%2)\", в составе которого есть модуль?").arg(prod.number).arg(prod.nameItem),
-    //         //                                       QMessageBox::Yes | QMessageBox::No, QMessageBox::No) ==  QMessageBox::Yes)
-    //         //             {
-    //         //                 // установить статус изделия, если модуль входит в его состав
-    //         //                 if(trackProduct.AddRecord(prod.id, prod))
-    //         //                     AddProductToTableScreen(prod);
-    //         //             }
-    //         //         }
-    //         //     }
-    //         // }
-    //     }
-
-    //     ui->tableWidget->resizeColumnsToContents();
-    //     ui->tableWidget->resizeRowsToContents();
-    // }
+    SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
+    win->AddSelectedType(IndexType::Modul);
+    Items *dev = win->SelectDevice(true, {StatusItem::WORK, StatusItem::SHIPPED}, "", true, true);
+    if(dev != nullptr && dev->id > 0)
+    {
+        AddProductToTableScreen(dev);
+        trackProduct.AddRecord(dev->id, *dev);
+    }
 }
-
 
 //-----------------------------------------------------------------------------------------
 // Кнопка удаления устройства
@@ -280,29 +172,22 @@ void ClaimDetail::on_tbDeleteDevice_clicked()
     if(item == nullptr)
         return;
 
-    // int id = item->data(Qt::UserRole).toInt();
-    int type = item->data(Qt::UserRole + 1).toInt();
 
-    if(type == ev::PRODUCT)
+    int id = item->data(Qt::UserRole).toInt();
+    Items dev;
+    for(auto &it : claim->childItems)
     {
-        // Product prod = repo.GetProduct(id);
-        // trackProduct.DelRecord(id, prod);
-        // auto prod_iter = std::find_if(claim->listProduct.cbegin(), claim->listProduct.cend(), [id] (Product p) { return p.id == id;});
-        // if(prod_iter != claim->listProduct.cend())
-        // {
-        //     if(!(*prod_iter).getIsRepair())
-        //         trackProduct.DelRecord(id, *prod_iter);
-        // }
-    }
-    else
-    {
-        // Modul  mod = repo.GetModul(id);
-        // trackModul.DelRecord(id, mod);
-        // auto mod_iter = std::find_if(claim->listModul.cbegin(), claim->listModul.cend(), [id] (Modul m) { return m.id == id;});
-        // if(mod_iter != claim->listModul.cend())
-        //     trackModul.DelRecord(id, *mod_iter);
+        if(it.id == id)
+        {
+            Status stat = it.listStatus.last();
+            if(stat.idStatus != StatusItem::FAULTY_ON_OBJECT)
+                return;
+            dev = it;
+            break;
+        }
     }
 
+    trackProduct.DelRecord(id, dev);
     ui->tableWidget->removeRow(ui->tableWidget->currentRow());
 }
 
