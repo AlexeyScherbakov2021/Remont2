@@ -1,5 +1,6 @@
 #include "claimwindow.h"
 #include "remontwindow.h"
+#include "scan.h"
 #include "selectdevicewindow.h"
 #include "ui_remontwindow.h"
 #include <QMessageBox>
@@ -12,6 +13,7 @@ RemontWindow::RemontWindow(QWidget *parent)
     ui->setupUi(this);
 
     ui->deDate->setDateTime(QDateTime::currentDateTime());
+    connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
 }
 
@@ -98,6 +100,15 @@ void RemontWindow::on_tbNumber_clicked()
         ui->lbOrgName->setText(claim.nameOrganization);
         ui->lbClaim->setText(claim.number + " (" + claim.dateCreate.toString("dd.MM.yyyy") + ")");
         ui->leNumber->clear();
+    }
+}
+
+void RemontWindow::slotReadScan(QString s)
+{
+    if(isActiveWindow())
+    {
+        ui->leNumber->setText(s);
+        on_tbNumber_clicked();
     }
 }
 

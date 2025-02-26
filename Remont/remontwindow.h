@@ -23,10 +23,8 @@ public:
 
 private slots:
     void on_pbOK_clicked();
-
-    // void on_tbClaim_clicked();
-
     void on_tbNumber_clicked();
+    void slotReadScan(QString s);
 
 private:
     Ui::RemontWindow *ui;

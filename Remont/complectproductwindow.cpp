@@ -213,7 +213,7 @@ void ComplectProductWindow::slotReadScan(QString s)
 {
     if(isActiveWindow())
     {
-        QVector<StatusItem> stat = {StatusItem::CREATE};
+        QVector<StatusItem> stat = {StatusItem::CREATE, StatusItem::FAULTY};
         Items item = repo.GetItem2(s, stat);
 
         if(item.id > 0)

@@ -1,5 +1,6 @@
 #include "acceptremontwindow.h"
 #include "complectproductwindow.h"
+#include "scan.h"
 #include "selectdevicewindow.h"
 #include "ui_acceptremontwindow.h"
 // #include <models/product.h>
@@ -15,6 +16,7 @@ AcceptRemontWindow::AcceptRemontWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->deDate->setDateTime(QDateTime::currentDateTime());
+    connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
 }
 
@@ -96,6 +98,15 @@ void AcceptRemontWindow::on_tbNumber_clicked()
         ui->lbOrgName->setText(claim.nameOrganization);
         ui->lbClaim->setText(claim.number + " (" + claim.dateCreate.toString("dd.MM.yyyy") + ")");
         ui->leNumber->clear();
+    }
+}
+
+void AcceptRemontWindow::slotReadScan(QString s)
+{
+    if(isActiveWindow())
+    {
+        ui->leNumber->setText(s);
+        on_tbNumber_clicked();
     }
 }
 

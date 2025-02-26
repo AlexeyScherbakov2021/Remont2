@@ -23,8 +23,9 @@ public:
 
     void AddItem(IEntity* item);
     int GetCurrentRootItem(IndexType& type);
-    bool DeleteSelectedItem(bool isConfirm = true);
+    int DeleteSelectedItem(bool isConfirm = true);
     void SetSelectItem(int id, IndexType typeIndex);
+    int GetSelectedId();
 
 private:
     Ui::TreeItemsForm *ui;

@@ -39,7 +39,7 @@ private:
     int countUse = 0;
     QVector<ItemType> listTypeModule;
 
-    void addLineModul(Items &mod);
+    // void addLineModul(Items &mod);
     QMetaObject::Connection conn;
     void UpdateUseCount();
 

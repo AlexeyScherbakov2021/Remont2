@@ -46,20 +46,13 @@ CreateModulWindow::~CreateModulWindow()
 //---------------------------------------------------------------------------------
 void CreateModulWindow::on_tbDeleteModul_clicked()
 {
-    QTreeWidgetItem *item = ui->twModul->currentItem();
+    int id = ui->wTree->DeleteSelectedItem();
 
-    if(item == nullptr)
+    if(id == 0)
         return;
-
-    if(item->parent() != nullptr)
-        item = item->parent();
-
-
-    int id = item->data(0, Qt::UserRole).toInt();
 
     if(repo.DeleteItem(id))
     {
-        delete ui->twModul->currentItem();
         --countUse;
         UpdateUseCount();
     }
@@ -89,14 +82,14 @@ void CreateModulWindow::UpdateUseCount()
 //---------------------------------------------------------------------------------
 // Добавление строки в список модулей
 //---------------------------------------------------------------------------------
-void CreateModulWindow::addLineModul(Items &mod)
-{
-    QTreeWidgetItem *item = new QTreeWidgetItem();
-    item->setText(0, mod.number);
-    item->setData(0, Qt::UserRole, mod.id);
-    ui->twModul->addTopLevelItem(item);
-    item->setExpanded(true);
-}
+// void CreateModulWindow::addLineModul(Items &mod)
+// {
+//     QTreeWidgetItem *item = new QTreeWidgetItem();
+//     item->setText(0, mod.number);
+//     item->setData(0, Qt::UserRole, mod.id);
+//     ui->twModul->addTopLevelItem(item);
+//     item->setExpanded(true);
+// }
 
 
 //---------------------------------------------------------------------------------
@@ -129,7 +122,7 @@ void CreateModulWindow::on_pbRegModul_clicked()
     {
         mod.AddStatus(mod, StatusItem::CREATE);
 
-        addLineModul(mod);
+        // addLineModul(mod);
 
         ui->leNumModul->clear();
         ui->leNumModul->setFocus();
@@ -143,6 +136,8 @@ void CreateModulWindow::on_pbRegModul_clicked()
             ComplectProductWindow *win = new ComplectProductWindow(this, &mod);
             win->exec();
         }
+
+        ui->wTree->AddItem(&mod);
 
     }
     else

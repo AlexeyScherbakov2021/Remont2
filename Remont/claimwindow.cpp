@@ -49,6 +49,7 @@ void ClaimWindow::on_pbAdd_clicked()
     ClaimDetail *win = new ClaimDetail(&claim, this);
     if(win->exec() == QDialog::Accepted)
     {
+        model->AddItem(&claim);
         // if(claims.AddItem(claim))
         //     AddLineToWidget(claims.getRowCount() - 1);
             // AddLineScreen(&claim);

@@ -24,8 +24,8 @@ public:
 
 private slots:
     void on_tbNumber_clicked();
-
     void on_pbEndRemont_clicked();
+    void slotReadScan(QString s);
 
 private:
     Ui::EndRemontWindow *ui;

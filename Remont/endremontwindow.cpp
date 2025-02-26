@@ -1,4 +1,5 @@
 #include "endremontwindow.h"
+#include "scan.h"
 #include "selectdevicewindow.h"
 #include "ui_endremontwindow.h"
 #include <models/claim.h>
@@ -22,6 +23,7 @@ EndRemontWindow::EndRemontWindow(QWidget *parent)
     }
 
     ui->cbReason->setCurrentIndex(0);
+    connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
 }
 
@@ -148,5 +150,14 @@ void EndRemontWindow::on_pbEndRemont_clicked()
     // ui->ptRemark->clear();
     // ui->lbClaim->clear();
 
+}
+
+void EndRemontWindow::slotReadScan(QString s)
+{
+    if(isActiveWindow())
+    {
+        ui->leNumber->setText(s);
+        on_tbNumber_clicked();
+    }
 }
 

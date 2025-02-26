@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>734</width>
-    <height>508</height>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -87,6 +87,9 @@ background-color: LightGray;
          <property name="orientation">
           <enum>Qt::Orientation::Horizontal</enum>
          </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Expanding</enum>
+         </property>
          <property name="sizeHint" stdset="0">
           <size>
            <width>40</width>
@@ -107,39 +110,17 @@ background-color: LightGray;
      <property name="horizontalSpacing">
       <number>8</number>
      </property>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Рекламация</string>
+        <string>Устройство</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1" colspan="2">
-      <widget class="QLabel" name="lbDevice">
-       <property name="font">
-        <font>
-         <bold>true</bold>
-        </font>
-       </property>
+     <item row="12" column="1" colspan="2">
+      <widget class="QCheckBox" name="cbScrap">
        <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_12">
-       <property name="text">
-        <string>Организация</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="1" colspan="3">
-      <widget class="QLineEdit" name="leAction"/>
-     </item>
-     <item row="10" column="0">
-      <widget class="QLabel" name="label_9">
-       <property name="text">
-        <string>Дефект</string>
+        <string>Ремонт выполнить не удалось. Утилизировать</string>
        </property>
       </widget>
      </item>
@@ -155,8 +136,44 @@ background-color: LightGray;
        </property>
       </widget>
      </item>
-     <item row="10" column="1" colspan="3">
-      <widget class="QLineEdit" name="leDefect"/>
+     <item row="9" column="1" colspan="3">
+      <widget class="QLineEdit" name="leAction"/>
+     </item>
+     <item row="11" column="0">
+      <widget class="QLabel" name="label_10">
+       <property name="text">
+        <string>Комментарий</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Причина</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Тип</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" colspan="2">
+      <widget class="QLabel" name="lbDevice">
+       <property name="font">
+        <font>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1" colspan="2">
+      <widget class="QComboBox" name="cbReason"/>
      </item>
      <item row="1" column="1" colspan="2">
       <widget class="QLabel" name="lbNumber">
@@ -170,20 +187,6 @@ background-color: LightGray;
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_11">
-       <property name="text">
-        <string>Обозначение</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>Серийный №</string>
-       </property>
-      </widget>
-     </item>
      <item row="9" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
@@ -191,18 +194,17 @@ background-color: LightGray;
        </property>
       </widget>
      </item>
-     <item row="11" column="1" colspan="3">
-      <widget class="QPlainTextEdit" name="ptRemark"/>
-     </item>
-     <item row="5" column="1" colspan="2">
-      <widget class="QLabel" name="lbClaim">
-       <property name="font">
-        <font>
-         <bold>true</bold>
-        </font>
-       </property>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_11">
        <property name="text">
-        <string/>
+        <string>Обозначение</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_12">
+       <property name="text">
+        <string>Организация</string>
        </property>
       </widget>
      </item>
@@ -216,50 +218,8 @@ background-color: LightGray;
        </property>
       </widget>
      </item>
-     <item row="12" column="1" colspan="2">
-      <widget class="QCheckBox" name="cbScrap">
-       <property name="text">
-        <string>Ремонт выполнить не удалось. Утилизировать</string>
-       </property>
-      </widget>
-     </item>
-     <item row="11" column="0">
-      <widget class="QLabel" name="label_10">
-       <property name="text">
-        <string>Комментарий</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Дата окончания</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="1" colspan="2">
-      <widget class="QComboBox" name="cbReason"/>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>Тип</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_8">
-       <property name="text">
-        <string>Причина</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Устройство</string>
-       </property>
-      </widget>
+     <item row="10" column="1" colspan="3">
+      <widget class="QLineEdit" name="leDefect"/>
      </item>
      <item row="6" column="1" colspan="2">
       <widget class="QLabel" name="lbOrgName">
@@ -273,6 +233,35 @@ background-color: LightGray;
        </property>
       </widget>
      </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Рекламация</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1" colspan="2">
+      <widget class="QLabel" name="lbClaim">
+       <property name="font">
+        <font>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="1" colspan="3">
+      <widget class="QPlainTextEdit" name="ptRemark"/>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Дата окончания</string>
+       </property>
+      </widget>
+     </item>
      <item row="3" column="1" colspan="2">
       <widget class="QLabel" name="lbVNFT">
        <property name="font">
@@ -282,6 +271,20 @@ background-color: LightGray;
        </property>
        <property name="text">
         <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>Дефект</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Серийный №</string>
        </property>
       </widget>
      </item>

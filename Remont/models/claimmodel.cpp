@@ -201,6 +201,11 @@ void ClaimModel::AddItem(Claim *item)
         insertRows(row, 1);
 }
 
+void ClaimModel::AddItemToList(Claim *item)
+{
+    listClaim->AddItemToList(item);
+}
+
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------

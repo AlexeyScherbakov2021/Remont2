@@ -11,6 +11,9 @@ SetterEditDlg::SetterEditDlg(SetterOut* _setter, QWidget *parent)
     ui->setupUi(this);
     setWindowTitle("Набор " + setter->numberDoc + setter->name);
 
+    if(setter->id == 0)
+        setter->dateCreate = QDateTime::currentDateTime();
+
     ui->leOrder->setText(setter->numberDoc);
     ui->leName->setText(setter->name);
     ui->deDate->setDateTime(setter->dateCreate);

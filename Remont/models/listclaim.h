@@ -36,8 +36,6 @@ public:
     Claim* GetItemAtRow(int row) override;
     void AddItemToList(Claim* item) override;
 
-private:
-    // QStringList headers;
 
 };
 

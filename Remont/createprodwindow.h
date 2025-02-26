@@ -41,7 +41,7 @@ private:
     QVector<ItemType> listTypeProduct;
     QMetaObject::Connection conn;
     void UpdateUseCount();
-    void addLineContent(Items &prod);
+    // void addLineContent(Items &prod);
 
 
     QList<Items> listAddingPlate;

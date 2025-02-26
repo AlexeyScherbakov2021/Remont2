@@ -23,6 +23,7 @@
 #include "modvnftwindow.h"
 #include "createmodwindow.h"
 #include "setterdlg.h"
+#include "shipwindow.h"
 #include <models/listdevice.h>
 #include <models/ItemsType.h>
 
@@ -465,5 +466,13 @@ void MainWindow::on_aSetter_triggered()
     SetterDlg *win = new SetterDlg(false, this);
     win->setAttribute(Qt::WA_DeleteOnClose);
     win->show();
+}
+
+
+void MainWindow::on_aNewShip_triggered()
+{
+    Shipment ship;
+    QScopedPointer<ShipWindow> win(new ShipWindow(&ship));
+    win->exec();
 }
 

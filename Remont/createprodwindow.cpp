@@ -61,15 +61,15 @@ void CreateProductWindow::UpdateUseCount()
 
 }
 
-void CreateProductWindow::addLineContent(Items &prod)
-{
-    QTreeWidgetItem *item = new QTreeWidgetItem();
-    item->setText(0, prod.number);
-    item->setData(0, Qt::UserRole, prod.id);
-    ui->twProduct->addTopLevelItem(item);
-    item->setExpanded(true);
+// void CreateProductWindow::addLineContent(Items &prod)
+// {
+//     QTreeWidgetItem *item = new QTreeWidgetItem();
+//     item->setText(0, prod.number);
+//     item->setData(0, Qt::UserRole, prod.id);
+//     ui->twProduct->addTopLevelItem(item);
+//     item->setExpanded(true);
 
-}
+// }
 
 
 //---------------------------------------------------------------------------------
@@ -77,24 +77,16 @@ void CreateProductWindow::addLineContent(Items &prod)
 //---------------------------------------------------------------------------------
 void CreateProductWindow::on_tbDeleteProduct_clicked()
 {
-    QTreeWidgetItem *item = ui->twProduct->currentItem();
+    int id = ui->wTree->DeleteSelectedItem();
 
-    if(item == nullptr)
+    if(id == 0)
         return;
-
-    if(item->parent() != nullptr)
-        item = item->parent();
-
-
-    int id = item->data(0, Qt::UserRole).toInt();
 
     if(repo.DeleteItem(id))
     {
-        delete ui->twProduct->currentItem();
         --countUse;
         UpdateUseCount();
     }
-
 }
 
 //---------------------------------------------------------------------------------
@@ -127,7 +119,8 @@ void CreateProductWindow::on_pbRegProduct_clicked()
     {
         prod.AddStatus(prod, StatusItem::CREATE);
 
-        addLineContent(prod);
+
+        // addLineContent(prod);
 
         // QString s = ui->cbProduct->currentText();
         // QListWidgetItem *item = new QListWidgetItem(ui->leNumProduct->text() + " (" + s + ")");
@@ -146,6 +139,8 @@ void CreateProductWindow::on_pbRegProduct_clicked()
             win->exec();
 
         }
+
+        ui->wTree->AddItem(&prod);
 
     }
     else

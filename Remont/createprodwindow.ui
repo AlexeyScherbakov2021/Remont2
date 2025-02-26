@@ -93,6 +93,61 @@ border: 1px solid #999999;
         <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="3,2">
          <item>
           <layout class="QGridLayout" name="gridLayout_2">
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_17">
+             <property name="text">
+              <string>Накладная</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_18">
+             <property name="text">
+              <string>Количество</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="label_23">
+             <property name="text">
+              <string>Наименование</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="label_4">
+             <property name="baseSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Гарантия (мес.)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="2">
+            <widget class="QLabel" name="lbGarantProd">
+             <property name="baseSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="2">
+            <widget class="QLineEdit" name="leNumProduct"/>
+           </item>
            <item row="13" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
             <widget class="QPushButton" name="pbRegProduct">
              <property name="enabled">
@@ -119,13 +174,57 @@ border: 1px solid #999999;
              </property>
             </widget>
            </item>
-           <item row="11" column="2">
-            <widget class="QCheckBox" name="chComplectation">
-             <property name="text">
-              <string>Добавить модули и платы сейчас</string>
+           <item row="1" column="2">
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <property name="spacing">
+              <number>0</number>
              </property>
-             <property name="checked">
-              <bool>false</bool>
+             <item>
+              <widget class="QLineEdit" name="leNumberDocP"/>
+             </item>
+             <item>
+              <widget class="QToolButton" name="tbDocP">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/image/search.png</normaloff>:/image/search.png</iconset>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="0" column="2">
+            <widget class="QDateEdit" name="deCreateDateP">
+             <property name="calendarPopup">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QLabel" name="lbPlanP">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>22</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Shape::Box</enum>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_16">
+             <property name="text">
+              <string>№ накладной</string>
              </property>
             </widget>
            </item>
@@ -149,10 +248,30 @@ border: 1px solid #999999;
              </property>
             </spacer>
            </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_17">
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_8">
              <property name="text">
-              <string>Накладная</string>
+              <string>Обозначение</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="2">
+            <widget class="QLineEdit" name="leNameProd"/>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_19">
+             <property name="text">
+              <string>План</string>
+             </property>
+            </widget>
+           </item>
+           <item row="11" column="2">
+            <widget class="QCheckBox" name="chComplectation">
+             <property name="text">
+              <string>Добавить модули и платы сейчас</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -181,10 +300,19 @@ border: 1px solid #999999;
              </property>
             </widget>
            </item>
-           <item row="7" column="0">
-            <widget class="QLabel" name="label_23">
+           <item row="2" column="2">
+            <widget class="QLabel" name="lbDocNameP">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>22</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Shape::Box</enum>
+             </property>
              <property name="text">
-              <string>Наименование</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -204,87 +332,12 @@ border: 1px solid #999999;
              </property>
             </widget>
            </item>
-           <item row="6" column="2">
-            <widget class="QLabel" name="lbGarantProd">
-             <property name="baseSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <bold>true</bold>
-              </font>
-             </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_15">
              <property name="text">
-              <string/>
+              <string>Дата рег.</string>
              </property>
             </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QDateEdit" name="deCreateDateP">
-             <property name="calendarPopup">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="0">
-            <widget class="QLabel" name="label_4">
-             <property name="baseSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Гарантия (мес.)</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="label_19">
-             <property name="text">
-              <string>План</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QLabel" name="lbDocNameP">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>22</height>
-              </size>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::Shape::Box</enum>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QLineEdit" name="leNumberDocP"/>
-             </item>
-             <item>
-              <widget class="QToolButton" name="tbDocP">
-               <property name="text">
-                <string>...</string>
-               </property>
-               <property name="icon">
-                <iconset resource="resource.qrc">
-                 <normaloff>:/image/search.png</normaloff>:/image/search.png</iconset>
-               </property>
-              </widget>
-             </item>
-            </layout>
            </item>
            <item row="12" column="2">
             <spacer name="verticalSpacer_2">
@@ -299,63 +352,13 @@ border: 1px solid #999999;
              </property>
             </spacer>
            </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_18">
-             <property name="text">
-              <string>Количество</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_16">
-             <property name="text">
-              <string>№ накладной</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2">
-            <widget class="QLabel" name="lbPlanP">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>22</height>
-              </size>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::Shape::Box</enum>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_15">
-             <property name="text">
-              <string>Дата рег.</string>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0">
-            <widget class="QLabel" name="label_8">
-             <property name="text">
-              <string>Обозначение</string>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="2">
-            <widget class="QLineEdit" name="leNumProduct"/>
-           </item>
-           <item row="7" column="2">
-            <widget class="QLineEdit" name="leNameProd"/>
-           </item>
           </layout>
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="leftMargin">
+            <number>20</number>
+           </property>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
@@ -385,15 +388,19 @@ border: 1px solid #999999;
             </layout>
            </item>
            <item>
-            <widget class="QTreeWidget" name="twProduct">
-             <attribute name="headerVisible">
-              <bool>false</bool>
-             </attribute>
-             <column>
-              <property name="text">
-               <string notr="true">1</string>
-              </property>
-             </column>
+            <widget class="TreeItemsForm" name="wTree" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
             </widget>
            </item>
           </layout>
@@ -432,11 +439,18 @@ border: 1px solid #999999;
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TreeItemsForm</class>
+   <extends>QWidget</extends>
+   <header>treeitemsform.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>cbProduct</tabstop>
   <tabstop>tbDeleteProduct</tabstop>
   <tabstop>pbClose</tabstop>
-  <tabstop>twProduct</tabstop>
   <tabstop>tabWidget</tabstop>
  </tabstops>
  <resources>

@@ -50,7 +50,7 @@ CardProdWindow::CardProdWindow(Items *device, QWidget *parent)
     if(device->idSet > 0)
         setter = repo.GetSetter(device->idSet);
     if(setter.idShip > 0)
-        ship = repo.GetShipment(device->idShip);
+        ship = repo.GetShipment(setter.idShip);
 
     if(ship.id > 0)
     {

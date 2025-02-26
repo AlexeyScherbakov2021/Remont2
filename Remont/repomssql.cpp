@@ -1142,10 +1142,10 @@ SetterOut RepoMSSQL::GetSetter(int id)
     query.exec();
     if(query.next())
     {
-        // setter.id = id;
-        // setter.idShipment = query.value(0).toInt();
-        // setter.name = query.value(1).toString();
-        // setter.orderNumber = query.value(2).toString();
+        setter.id = id;
+        setter.idShip = query.value(0).toInt();
+        setter.name = query.value(1).toString();
+        setter.number = query.value(2).toString();
     }
 
     return setter;
@@ -1221,10 +1221,10 @@ bool RepoMSSQL::AddItem(Claim &claim)
     QSqlQuery query(db);
 
     query.prepare("insert into Claim (Number,dateClaim,typeClaimId,idOrg,ObjectInstall) "
-                  "output inserted.id values(:Number,:DateClaim,:TypeClaimId,:ObjectInstall)");
+                  "output inserted.id values(:Number,:dateClaim,:TypeClaimId,:idOrg,:ObjectInstall)");
 
     query.bindValue(":Number", claim.number);
-    query.bindValue(":DateClaim", claim.dateCreate);
+    query.bindValue(":dateClaim", claim.dateCreate);
     query.bindValue(":TypeClaimId", claim.idTypeClaim);
     query.bindValue(":ObjectInstall", claim.ObjectInstall);
     query.bindValue(":idOrg", claim.idOrg);

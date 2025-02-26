@@ -90,7 +90,7 @@ border: 1px solid #999999;
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,0">
+        <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="3,2">
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
@@ -333,6 +333,9 @@ border: 1px solid #999999;
            <property name="spacing">
             <number>0</number>
            </property>
+           <property name="leftMargin">
+            <number>20</number>
+           </property>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_3">
              <item>
@@ -368,15 +371,13 @@ border: 1px solid #999999;
             </layout>
            </item>
            <item>
-            <widget class="QTreeWidget" name="twModul">
-             <attribute name="headerVisible">
-              <bool>false</bool>
-             </attribute>
-             <column>
-              <property name="text">
-               <string/>
-              </property>
-             </column>
+            <widget class="TreeItemsForm" name="wTree" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
             </widget>
            </item>
           </layout>
@@ -415,10 +416,17 @@ border: 1px solid #999999;
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TreeItemsForm</class>
+   <extends>QWidget</extends>
+   <header>treeitemsform.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>tbDeleteModul</tabstop>
   <tabstop>pbClose</tabstop>
-  <tabstop>twModul</tabstop>
   <tabstop>tabWidget</tabstop>
  </tabstops>
  <resources>

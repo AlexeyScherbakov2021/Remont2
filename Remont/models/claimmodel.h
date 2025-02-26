@@ -51,6 +51,7 @@ public:
 
     void createList();
     void AddItem(Claim* item);
+    void AddItemToList(Claim* item);
     void UpdateItem(int row);
     void setBaseOff();
 

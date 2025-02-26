@@ -47,6 +47,8 @@ void SetterDlg::on_pbNew_clicked()
     if(win->exec() == QDialog::Accepted)
     {
         model->AddItem(&setter);
+        RepoMSSQL repo;
+        repo.ItemsSyncSet(setter.id, &win->track);
     }
 }
 

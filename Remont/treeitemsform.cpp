@@ -80,32 +80,39 @@ int TreeItemsForm::GetCurrentRootItem(IndexType &type)
 //--------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------
-bool TreeItemsForm::DeleteSelectedItem(bool isConfirm)
+int TreeItemsForm::DeleteSelectedItem(bool isConfirm)
 {
+    int id = 0;
     auto selItem = ui->treeWidget->currentItem();
     if(selItem != nullptr)
     {
         while(selItem->parent() != nullptr)
             selItem = selItem->parent();
 
-        if(isConfirm)
-        {
-            if(QMessageBox::warning(this, "Предупреждение", QString("Удалить %1 %2 ?").arg(selItem->toolTip(0)).arg(selItem->text(0)),
-                                     QMessageBox::Yes | QMessageBox::No, QMessageBox::No) != QMessageBox::Yes)
-                return false;
-        }
-
-        delete selItem;
-        return true;
+        // if(isConfirm)
+        // {
+            if( isConfirm && QMessageBox::warning(this, "Предупреждение", QString("Удалить %1 %2 ?").arg(selItem->toolTip(0)).arg(selItem->text(0)),
+                                     QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
+            {
+                id = selItem->data(0, Qt::UserRole).toInt();
+                delete selItem;
+            }
+        // }
     }
 
-    return false;
+    return id;
 }
 
 void TreeItemsForm::SetSelectItem(int id, IndexType typeIndex)
 {
     QTreeWidgetItem* root = ui->treeWidget->topLevelItem(0);
     SetSelectItemRec(id, typeIndex, root);
+}
+
+int TreeItemsForm::GetSelectedId()
+{
+    auto selItem = ui->treeWidget->currentItem();
+    return selItem->data(0, Qt::UserRole).toInt();
 }
 
 bool TreeItemsForm::SetSelectItemRec(int id, IndexType typeIndex, QTreeWidgetItem* item)
