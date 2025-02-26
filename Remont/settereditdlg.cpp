@@ -36,7 +36,7 @@ SetterEditDlg::~SetterEditDlg()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-void SetterEditDlg::AddLineToWidget(Items *item, int row)
+void SetterEditDlg::AddLineToWidget(Items *item, int /*row*/)
 {
     QString nameType, nameIcon;
     QListWidgetItem *line = new QListWidgetItem();

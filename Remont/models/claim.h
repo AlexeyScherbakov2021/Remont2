@@ -9,37 +9,16 @@
 class Claim : public IEntity
 {
 public:
-    int idTypeClaim;
     // QString reason;
     // QString remark;
 
     // QString FromWho;
-    int idOrg;
+    int idOrg = 0;
+    int idTypeClaim = 0;
     QString nameOrganization;
     QString ObjectInstall;
-    QString Descript;
     QString TypeClaimString;
-    // QDateTime DateOut;
-    // int TypeComplectId;
-    // QString VNFT;
-    // int Quantity;
-    // int TypeDeviceId;
-    // QString NumberModul;
-    // QString NumberNewModul;
-    // QString NumberDevice;
-    // bool IsGuarantee;
-    // QString Reason;
-    // QDateTime DateRepair;
-    // QString DoRepair;
-    // QString FileAnswer;
-    // QString TextResult;
-    // QString TypeComplectString;
-    // QString TypeDeviceString;
-    // QDateTime dateRegister;
-
-
-    // QList<Items> listModul;
-    // QList<Items> listProduct;
+    bool isClosed = false;
 
     Claim() {}
 

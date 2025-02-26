@@ -2,9 +2,11 @@
 #define SHIPWINDOW_H
 
 #include <QDialog>
+#include <QFutureWatcher>
 #include <QTreeWidgetItem>
 // #include <models/product.h>
 #include <models/shipment.h>
+#include <QtConcurrent>
 
 namespace Ui {
 class ShipWindow;
@@ -38,9 +40,11 @@ private:
     QMap<int, QString> listOrg;
     TrackRecord<Items> trackItem;
     TrackRecord<SetterOut> trackSet;
+    QFutureWatcher<void> *watcher;
 
     void SetStatusItems(QList<Items>& items);
     void SaveToBase();
+
 };
 
 #endif // SHIPWINDOW_H

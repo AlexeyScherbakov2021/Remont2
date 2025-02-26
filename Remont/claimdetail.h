@@ -3,6 +3,7 @@
 
 #include "repomssql.h"
 #include <QDialog>
+#include <QFutureWatcher>
 #include <models/claim.h>
 #include <infrastructure/trackrecord.h>
 
@@ -26,6 +27,7 @@ private slots:
 
 private:
     Ui::ClaimDetail *ui;
+    QFutureWatcher<void> *watcher;
     // explicit ClaimDetail(QWidget *parent = nullptr);
     Claim *claim;
     QMap<int, QString> listTypeClaim;

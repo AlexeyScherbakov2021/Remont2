@@ -175,7 +175,7 @@ int ListSetter::LoadPart(int start, int count, const QString &number, bool isFre
     return repo.LoadPart(start, count, number, items, isFree);
 }
 
-void ListSetter::AddItemToList(SetterOut *item)
+void ListSetter::AddItemToList(SetterOut */*item*/)
 {
 
 }

@@ -60,7 +60,7 @@ int ShipModel::columnCount(const QModelIndex &parent) const
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-bool ShipModel::canFetchMore(const QModelIndex &parent) const
+bool ShipModel::canFetchMore(const QModelIndex &/*parent*/) const
 {
     return isFetch;
 }
@@ -68,7 +68,7 @@ bool ShipModel::canFetchMore(const QModelIndex &parent) const
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-void ShipModel::fetchMore(const QModelIndex &parent)
+void ShipModel::fetchMore(const QModelIndex &/*parent*/)
 {
     if(!isBaseOff)
     {
@@ -209,6 +209,17 @@ void ShipModel::AddItem(Shipment *item)
     int row = listShip->items.size();
     if(listShip->AddItem(*item))
         insertRows(row, 1);
+}
+
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
+void ShipModel::AddItemToList(Shipment *item)
+{
+    int row = listShip->items.size();
+    listShip->AddItemToList(item);
+    insertRows(row, 1);
+
 }
 
 //------------------------------------------------------------------------------------------------

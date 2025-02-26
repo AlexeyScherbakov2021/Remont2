@@ -33,9 +33,8 @@ private:
     // Modul *modul;
     // RemontEntity *remontEntity;
     RepoMSSQL repo;
+    Items device;
     // QList<RemontStepStatus> listStatus;
-    int idProd = 0;
-    int idMod = 0;
     Claim claim;
 
 };

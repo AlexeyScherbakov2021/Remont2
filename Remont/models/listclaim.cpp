@@ -201,7 +201,7 @@ int ListClaim::LoadPart(int start, int count, const QString &number)
 //-------------------------------------------------------------------------
 //
 //-------------------------------------------------------------------------
-void ListClaim::AddItemToList(Claim *item)
+void ListClaim::AddItemToList(Claim */*item*/)
 {
 
 }

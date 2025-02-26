@@ -66,7 +66,7 @@ int SetterModel::columnCount(const QModelIndex &parent) const
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-bool SetterModel::canFetchMore(const QModelIndex &parent) const
+bool SetterModel::canFetchMore(const QModelIndex &/*parent*/) const
 {
     return isFetch;
 }
@@ -74,7 +74,7 @@ bool SetterModel::canFetchMore(const QModelIndex &parent) const
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-void SetterModel::fetchMore(const QModelIndex &parent)
+void SetterModel::fetchMore(const QModelIndex &/*parent*/)
 {
     if(!isBaseOff)
     {

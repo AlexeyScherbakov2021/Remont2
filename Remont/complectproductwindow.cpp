@@ -16,6 +16,7 @@ ComplectProductWindow::ComplectProductWindow(QWidget *parent, Items *_item)
     if(_item != nullptr)
     {
         dev = *_item;
+        repo.LoadChildItems(dev.id, dev.childItems);
         ui->leNumProdSearch->setVisible(false);
         ui->tbProdSearch->setVisible(false);
         ui->labelSearchProd->setVisible(false);
@@ -132,6 +133,13 @@ void ComplectProductWindow::ShowLineChild(Items& child)
     child.GetInfo(nameType, iconName);
     item->setText(child.number + " (" + child.type.typeName + " " + child.VNFT + ")");
     item->setIcon(QIcon(iconName));
+
+    if(child.listStatus.last().idStatus == StatusItem::FAULTY_ON_OBJECT)
+    {
+        item->setForeground(QBrush(Qt::red));
+        item->setText(child.number + " (" + child.type.typeName + " " + child.VNFT + ") требуется замена");
+    }
+
     QVariant var;
     var.setValue(child);
     item->setData(Qt::UserRole, var);

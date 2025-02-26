@@ -9,8 +9,8 @@ class Remont
 {
 public:
     int id;
-    int idParent;
-    int idReclamation;
+    int idItem;
+    int idClaim;
     int idReason;
     QString action;
     QString defect;

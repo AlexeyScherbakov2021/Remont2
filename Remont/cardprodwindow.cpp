@@ -22,36 +22,12 @@ CardProdWindow::CardProdWindow(Items *device, QWidget *parent)
 
     QString nameType, iconType;
     device->GetInfo(nameType, iconType);
-
-    if(device->idShip > 0)
-        ship = repo.GetShipment(device->idShip);
-    if(device->idSet > 0)
-        setter = repo.GetSetter(device->idSet);
-    if(setter.idShip > 0)
-        ship = repo.GetShipment(device->idShip);
-
-    // Items *prod;
-    // Items product;
-    QList<Remont> listRemont;
-
-    // if(device->type.indexType == IndexType::Modul)
-    // {
-    //     Items *mod = static_cast<Items*>(device);
-    //     // product = repo.GetItem(mod->idProduct);
-    //     prod = &product;
-    //     mod->LoadStatus(*mod);
-    //     LoadHistoryToForm(mod->listStatus);
-    //     repo.LoadRemont(listRemont, mod->id, ev::MODUL);
-    // }
-    // if(device->type.indexType == IndexType::Product)
-    // {
-        // repo.LoadChildProduct(*prod);
     device->LoadStatus(*device);
-    // LoadInclude(device);
+
+    LoadRemontToForm(device->id);
+
+    loadInclude(device);
     LoadHistoryToForm(device->listStatus);
-        // repo.LoadRemont(listRemont, device->id, ev::PRODUCT);
-    // }
-    // LoadRemontToForm(listRemont);
 
     ui->lbGarant->setText(device->dateGarant.toString("dd.MM.yyyy"));
     ui->lbDateCreate->setText(device->dateCreate.toString("dd.MM.yyyy"));
@@ -67,6 +43,26 @@ CardProdWindow::CardProdWindow(Items *device, QWidget *parent)
     ui->lbNumber2->setText(device->number2);
     ui->lbType->setText(device->type.typeName);
     ui->lbVNFT->setText(device->type.VNFT);
+
+
+    if(device->idShip > 0)
+        ship = repo.GetShipment(device->idShip);
+    if(device->idSet > 0)
+        setter = repo.GetSetter(device->idSet);
+    if(setter.idShip > 0)
+        ship = repo.GetShipment(device->idShip);
+
+    if(ship.id > 0)
+    {
+        ui->lbSchet->setText(ship.schet);
+        ui->lbObjectInstall->setText(ship.objectInstall);
+        ui->lbNumberUPD->setText(ship.numberUPD);
+        ui->lbDateUPD->setText(ship.dateUPD.toString("dd.MM.yyyy"));
+
+    }
+    if(setter.id > 0)
+        ui->lbCardOrder->setText(setter.number);
+
 
     number = device->number;
     // loadShipmentToForm(device);
@@ -111,15 +107,17 @@ void CardProdWindow::LoadHistoryToForm(QList<Status> &listStatus)
 //-------------------------------------------------------------------------------------------------------
 // Загрузка ремонтов на форму экрана
 //-------------------------------------------------------------------------------------------------------
-void CardProdWindow::LoadRemontToForm(QList<Remont> &listRemont)
+void CardProdWindow::LoadRemontToForm(int idItem)
 {
-    // ui->twRemont->setRowCount(0);
+    QList<Remont> listRemont;
+    repo.LoadRemont(listRemont, idItem);
+
     ui->twRemont->setRowCount(listRemont.size());
 
     int row = 0;
     for(auto &it : listRemont)
     {
-        Claim claim = repo.GetClaim(it.idReclamation);
+        Claim claim = repo.GetClaim(it.idClaim);
         QString reason = repo.GetRemontReason(it.idReason);
 
         QTableWidgetItem *item = new QTableWidgetItem();
@@ -158,15 +156,15 @@ void CardProdWindow::LoadRemontToForm(QList<Remont> &listRemont)
 //-------------------------------------------------------------------------------------------------------
 // Загрузка набора для выбраннного изделия или модуля
 //-------------------------------------------------------------------------------------------------------
-void CardProdWindow::loadShipmentToForm(const Items *prod)
-{
-    SetterOut setter ;//= repo.GetSetter(prod->idSetterOut);
+// void CardProdWindow::loadShipmentToForm(const Items *prod)
+// {
+//     SetterOut setter ;//= repo.GetSetter(prod->idSetterOut);
     // Shipment ship = repo.GetShipment(setter.idShipment);
 
-    if(setter.id <= 0)
-        return;
+    // if(setter.id <= 0)
+    //     return;
 
-    repo.LoadChildSetter(setter);
+    // repo.LoadChildSetter(setter);
     // for(auto &it: setter.listItems)
     // {
     //     repo.LoadChildProduct(it);
@@ -179,11 +177,11 @@ void CardProdWindow::loadShipmentToForm(const Items *prod)
     // ui->lbDateUPD->setText(ship.dateUPD.toString("dd.MM.yyyy"));
     // ui->lbNumberUPD->setText(ship.numberUPD);
 
-    QTreeWidgetItem *top = new QTreeWidgetItem();
-    top->setText(0, setter.name);
-    top->setIcon(0, QIcon("://image/setter.png"));
-    ui->treeWidget->addTopLevelItem(top);
-    top->setExpanded(true);
+    // QTreeWidgetItem *top = new QTreeWidgetItem();
+    // top->setText(0, setter.name);
+    // top->setIcon(0, QIcon("://image/setter.png"));
+    // ui->treeWidget->addTopLevelItem(top);
+    // top->setExpanded(true);
     // for(auto const &it : setter.listItems)
     // {
     //     QTreeWidgetItem *child = new QTreeWidgetItem();
@@ -219,19 +217,19 @@ void CardProdWindow::loadShipmentToForm(const Items *prod)
     //     //     child->addChild(modItem);
     //     // }
     // }
-}
+// }
 
 //-------------------------------------------------------------------------------------------------------
 // Загрузка состава изделия
 //-------------------------------------------------------------------------------------------------------
-void CardProdWindow::loadInclude(const Items */*prod*/)
+void CardProdWindow::loadInclude(const Items *item)
 {
-    // for(auto const &mod : prod->listModules)
-    // {
-    //     QListWidgetItem *modItem = new QListWidgetItem();
-    //     modItem->setText(mod.name + "(" + mod.number + ")");
-    //     ui->lwInclude->addItem(modItem);
-    // }
+    Items dev = *item;
+    while(dev.idParent > 0)
+        dev = repo.GetItem(dev.idParent);
+
+    ui->treeContent->AddItem(&dev);
+    ui->treeContent->SetSelectItem(item->id, item->type.indexType);
 }
 
 

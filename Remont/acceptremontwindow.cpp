@@ -7,34 +7,14 @@
 
 #include <QMessageBox>
 
+#include <models/remont.h>
+
 AcceptRemontWindow::AcceptRemontWindow(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::AcceptRemontWindow)
 {
     ui->setupUi(this);
-
-    // claims.Load();
-
-    // auto newEnd = std::remove_if(claims.listItems.begin(), claims.listItems.end(), [](Claim claim) { return !claim.DateOut.isNull();});
-
-    // claims.listItems.erase(newEnd, claims.listItems.end());
-
-    // for(auto &it : claims.listItems)
-    // {
-    //     // repo.LoadClaimProducts(it.id, it.listProduct);
-    //     // repo.LoadClaimModules(it.id, it.listModul);
-    //     // ui->cbClaim->addItem(it.Number, it.id);
-    // }
-
     ui->deDate->setDateTime(QDateTime::currentDateTime());
-
-    // QMap<int, QString> listReason;
-    // repo.LoadRemontReason(listReason);
-
-    // for(auto it = listReason.cbegin(); it != listReason.cend(); ++it)
-    // {
-    //     ui->cbReason->addItem(*it, it.key());
-    // }
 
 }
 
@@ -49,15 +29,15 @@ AcceptRemontWindow::~AcceptRemontWindow()
 //-------------------------------------------------------------------------------------------------
 void AcceptRemontWindow::on_pbExchange_clicked()
 {
-    if(idMod == 0 || idParentProd == 0)
+    if(device.idParent == 0)
     {
         QMessageBox::critical(this, "Предупреждение", "Заменить можно только модуль в составе изделия.");
         return;
     }
 
-    // Items prod = repo.GetProduct(idParentProd);
-    // ComplectProductWindow *win = new ComplectProductWindow(this, &prod);
-    // win->exec();
+    Items prod = repo.GetItem(device.idParent);
+    ComplectProductWindow *win = new ComplectProductWindow(this, &prod);
+    win->exec();
 }
 
 
@@ -66,49 +46,29 @@ void AcceptRemontWindow::on_pbExchange_clicked()
 //------------------------------------------------------------------------
 void AcceptRemontWindow::on_pbApply_clicked()
 {
-    if(idProd != 0)
-    {
-        Items prod;
-        prod.id = idProd;
-        // status.idDevice = idProd;
-        prod.AddStatus(prod, StatusItem::FAULTY_ON_OSO);
-    }
+    if(device.id == 0)
+        return;
 
-    if(idMod != 0)
-    {
-        Items mod;
-        mod.id = idMod;
-        // status.idDevice = idMod;
-        mod.AddStatus(mod, StatusItem::FAULTY_ON_OSO);;
-    }
+    device.AddStatus(device, StatusItem::FAULTY_ON_OSO, ui->deDate->dateTime());
 
-    idProd = idMod = 0;
+    QMessageBox::information(this, "Сообщение", QString("%1 №%2 %3 принят в ОСО.")
+                .arg(device.type.typeName).arg(device.number).arg(device.type.VNFT));
 
-    QMessageBox::information(this, "Сообщение", QString("%1 #%2 %3 принят в ОСО.")
-                .arg(ui->lbDevice->text()).arg(ui->lbNumber->text()).arg(ui->lbName->text()));
+    // Добавление в ремонт
+
+    Remont remont;
+    remont.idClaim = claim.id;
+    remont.idItem = device.id;
+    remont.startDate = ui->deDate->dateTime();
+    repo.AddRemont(remont);
 
     ui->lbDevice->clear();
     ui->lbNumber->clear();
-    ui->lbName->clear();
+    ui->lbVNFT->clear();
     ui->lbClaim->clear();
-
-    // RemontM remont;
-    // remont.workDate = QDateTime::currentDateTime();
-    // remont.reclamtionId = ui->cbClaim->currentData().toInt();
-    // remont.reasonId = ui->cbReason->currentData().toInt();
-    // remont.action = ui->leAction->text();
-    // remont.defect = ui->leDefect->text();
-
-    // if(type == TypeDevice::Product)
-    // {
-    //     repo.AddStatusProduct(status);
-    //     // repo.AddRemontP(remont);
-    // }
-    // else
-    // {
-    //     repo.AddStatusModul(status);
-    //     // repo.AddRemontM(remont);
-    // }
+    ui->lbOrgName->clear();
+    ui->lbTypeName->clear();
+    device.id = 0;
 
 }
 
@@ -118,44 +78,24 @@ void AcceptRemontWindow::on_pbApply_clicked()
 //-------------------------------------------------------------------------------------------------
 void AcceptRemontWindow::on_tbNumber_clicked()
 {
-    idMod =idProd = 0;
+    SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
+    win->AddSelectedType(IndexType::Modul);
+    Items *dev = win->SelectDevice(true, {StatusItem::FAULTY_ON_OBJECT}, ui->leNumber->text(), true, true );
+    if(dev != nullptr && dev->id > 0)
+    {
+        device = *dev;
+        claim = repo.GetClaimForItem(dev->id);
 
-    // SelectDeviceWindow *win = new SelectDeviceWindow(this, ui->leNumber->text(),Status::FAULTY_ON_OBJECT);
-    // SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    // Items *dev = win->SelectDevice(true, ui->leNumber->text(), Status::FAULTY_ON_OBJECT);
-
-    // if(dev != nullptr)
-    // {
-    //     Claim claim;
-    //     // modul = dynamic_cast<Modul*> (dev);
-    //     // if(dev->typeDevice == ev::MODUL)
-    //     if(dev->type.indexType == ItemType::Modul)
-    //     // if(win->modul->id != 0)
-    //     {
-    //         Items *modul = static_cast<Items*> (dev);
-    //         // if(repo.LoadClaimForModul(modul->id, claim))
-    //         //     ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
-
-    //         ui->lbNumber->setText(modul->number);
-    //         ui->lbName->setText(modul->name);
-    //         ui->lbDevice->setText("Модуль");
-    //         idMod = modul->id;
-    //         idParentProd = modul->idParent;
-    //     }
-
-    //     // prod = dynamic_cast<Product*> (dev);
-    //     if(dev->type.indexType == ItemType::Product )
-    //     {
-    //         Items *prod = static_cast<Items*> (dev);
-    //         // if(repo.LoadClaimForProduct(prod->id, claim))
-    //         //     ui->lbClaim->setText("№" + claim.number + " от " + claim.dateRegister.toString("dd.MM.yyyy"));
-
-    //         ui->lbNumber->setText(prod->number);
-    //         ui->lbName->setText(prod->name);
-    //         ui->lbDevice->setText("Изделие");
-    //         idProd = prod->id;
-    //     }
-    //     ui->leNumber->clear();
-    // }
+        QString nameType, iconName;
+        dev->GetInfo(nameType, iconName);
+        ui->lbNumber->setText(dev->number);
+        ui->lbVNFT->setText(dev->type.VNFT);
+        ui->lbTypeName->setText(dev->type.typeName);
+        ui->lbDevice->setToolTip(nameType);
+        ui->lbDevice->setPixmap(QPixmap(iconName));
+        ui->lbOrgName->setText(claim.nameOrganization);
+        ui->lbClaim->setText(claim.number + " (" + claim.dateCreate.toString("dd.MM.yyyy") + ")");
+        ui->leNumber->clear();
+    }
 }
 

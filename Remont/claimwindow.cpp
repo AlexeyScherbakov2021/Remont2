@@ -65,7 +65,7 @@ void ClaimWindow::on_pbAdd_clicked()
 //----------------------------------------------------------------------------------------
 // Добавить рекламацию строку в таблицу
 //----------------------------------------------------------------------------------------
-int ClaimWindow::AddLineScreen(const Claim *claim)
+int ClaimWindow::AddLineScreen(const Claim */*claim*/)
 {
     // int row = ui->twClaim->rowCount();
     // ui->twClaim->insertRow(row);
@@ -229,7 +229,7 @@ void ClaimWindow::on_pbEdit_clicked()
 //----------------------------------------------------------------------------------------
 // Кнопка Изменить рекламацию двойной клик
 //----------------------------------------------------------------------------------------
-void ClaimWindow::on_twClaim_doubleClicked(const QModelIndex &index)
+void ClaimWindow::on_twClaim_doubleClicked(const QModelIndex &/*index*/)
 {
     on_pbEdit_clicked();
 }
@@ -242,7 +242,7 @@ void ClaimWindow::on_twClaim_doubleClicked(const QModelIndex &index)
 // }
 
 
-void ClaimWindow::AddLineToWidget(int row )
+void ClaimWindow::AddLineToWidget(int /*row*/ )
 {
     // int row = claims.getRowCount();
     // ui->twClaim->insertRow(row);

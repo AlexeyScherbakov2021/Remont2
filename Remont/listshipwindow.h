@@ -32,11 +32,7 @@ private:
     Ui::ListShipWindow *ui;
     RepoMSSQL repo;
     ListShipment Ship;
-
     bool isShip;
-    // void addRowWidget(Shipment &ship, int row = -1);
-    // void setRowWidget(Shipment &ship, int row);
-
     ShipModel *model;
 };
 

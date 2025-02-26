@@ -167,7 +167,7 @@ background-color: LightGray;
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Вложенные устройства</string>
+      <string>Комплектация</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>

@@ -81,7 +81,6 @@ HEADERS += \
     models/devicemodel.h \
     models/entity.h \
     mainwindow.h \
-    models/enumvariable.h \
     models/listclaim.h \
     models/listdevice.h \
     models/listentity.h \

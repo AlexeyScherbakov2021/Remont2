@@ -17,7 +17,7 @@ public:
 public:
     void GetHeader(QStringList& headers) override;
     // void Load() override;
-    // QVariant getData(int row, int col, int role) const override;
+    QVariant getData(int row, int col, int role) const override;
     // bool DeleteItem(int row) override;
 
 
@@ -27,7 +27,7 @@ public:
     // Items GetItem(int id) override;
 
 
-    void FindItemsExclude(const QString &number, QList<Items> &listExclude, int status = 0)
+    void FindItemsExclude(const QString &/*number*/, QList<Items> &/*listExclude*/, int /*status = 0*/)
     {
         // ListDevice::FindItems(number, status, true);
         // for(auto it : listExclude)

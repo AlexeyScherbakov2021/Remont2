@@ -35,6 +35,7 @@ ClaimDetail::ClaimDetail(Claim *cl, QWidget *parent)
 ClaimDetail::~ClaimDetail()
 {
     delete ui;
+    delete watcher;
 }
 
 
@@ -88,14 +89,15 @@ void ClaimDetail::ClaimToScreen(/*Claim *claim*/)
     ui->leObjectInst->setText(claim->ObjectInstall);
     ui->cbTypeClaim->setCurrentText(listTypeClaim[claim->idTypeClaim]);
 
-    QFuture<void> future =  QtConcurrent::run( [&] ()
+    QFuture<void> future =  QtConcurrent::run( [&] (QPromise<void> &promise)
         {
-             RepoMSSQL repo2("thread");
-             repo2.LoadOrganization(listOrg);
+            RepoMSSQL repo2("thread");
+            repo2.LoadOrganizationAsync(listOrg, promise);
+             // repo2.LoadOrganization(listOrg);
         });
 
-    QFutureWatcher<void> *watcher = new QFutureWatcher<void>(this);
-    connect(watcher, &QFutureWatcher<void>::finished, watcher, [this, watcher] () {
+    watcher = new QFutureWatcher<void>(this);
+    connect(watcher, &QFutureWatcher<void>::finished, watcher, [this] () {
         int selectRow = -1;
         for(auto it = listOrg.begin(); it != listOrg.end(); ++it )
         {
@@ -106,7 +108,7 @@ void ClaimDetail::ClaimToScreen(/*Claim *claim*/)
             }
         }
         ui->cbOrg->setCurrentIndex(selectRow);
-        watcher->deleteLater();
+        // watcher->deleteLater();
     });
 
     watcher->setFuture(future);

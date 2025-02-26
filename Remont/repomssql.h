@@ -5,6 +5,8 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QDebug>
+#include <QFutureInterface>
+#include <QPromise>
 #include <models/ItemsType.h>
 #include <models/enumvariable.h>
 // #include <infrastructure/IStatus.h>
@@ -24,8 +26,6 @@ class RepoMSSQL
 private:
     QSqlDatabase db;
     QString instanceName;
-    // void FindItems(QList<Shipment> &listShip, int status = 0, bool isFree = false);
-    // void FindItems(IndexType iType, QList<Items> &listItems, int status = 0, bool isFree = false);
 
 public:
     RepoMSSQL(const QString& threadName = QSqlDatabase::defaultConnection);
@@ -42,17 +42,14 @@ public:
                     QList<Items> &listItems, QVector<StatusItem>& listStatus, bool isBusy = false, bool isParent = false) const;
 
     bool AddItem(Items &item) const;
-    // void FindItems(IndexType iType, const QString &number, QList<Items> &listItems, int status = 0, bool isFree = false);
     bool UpdateItem(Items &item);
     bool DeleteItem(int id) const;
     Items GetItem(int id) const;
     Items GetItem2(QString number, const QVector<StatusItem>& listStatus, bool isBusy = false, bool isParent = false) const;
     void LoadItemsType(QList<ItemType> &listType, IndexType indexType) const;
-
     void LoadStatus(Items& item) const;
     bool AddStatus(Items &item, Status &status) const;
     bool DelLastStatus(Items &item) const;
-
     void LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) const;       //=============
 
     // SetterOut
@@ -85,29 +82,28 @@ public:
     bool LoadChildClaim(Claim &claim);
     bool AddItemToClaim(int idItem, int idClaim);
     bool DelItemFromClaim(int idItem, int idClaim);
+    Claim GetClaimForItem(int idItem);
+
+    // Remont
+    void LoadRemontReason(QMap<int, QString> &listReason);
+    QString GetRemontReason(int id);
+    bool AddRemont(Remont &remont);
+    bool UpdateRemont(Remont &remont);
+    void LoadRemont(QList<Remont> &list, int idItem);
+    Remont GetRemontForItem(int id);
+
 
     // Organization
     Organization GetOrganization(int id);
     void LoadOrganization(QMap<int, QString> &listOrg);
+    void LoadOrganizationAsync(QMap<int, QString> &listOrg, QPromise<void> &promise);
     void LoadOrganization(QList<Organization> &listOrg);
-
-    // void FindItems(const QString &number, QList<Shipment> &listShip, int status = 0, bool isFree = false);
-    // void LoadShipment(QList<Shipment> &listShip, bool isFinish);
-
+    void LoadOrganizationAsync(QList<Organization> &listOrg, QPromise<void> &promise);
 
     int GetTypeStatus(int idStatus);
     const QString GetNameStatus(int id);
 
-    // bool LinkPlate(int idPlate, int idModul);
     void LoadShipSetter(QList<SetterOut> &listSetter, int idShip);
-
-
-    void LoadRemontReason(QMap<int, QString> &listReason);
-    QString GetRemontReason(int id);
-    bool AddRemont(Remont &remont, ev::DeviceKind kindDevice);
-    bool UpdateRemont(Remont &remont, ev::DeviceKind kindDevice);
-    void LoadRemont(QList<Remont> &list, int idParent, ev::DeviceKind kindDevice);
-    Remont GetCurrentRemont(int id, ev::DeviceKind kindDevice);
 
     int GetCountRegisterPlate(QString numDoc, int idType);
 

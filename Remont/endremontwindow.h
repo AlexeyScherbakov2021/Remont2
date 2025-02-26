@@ -8,6 +8,7 @@
 // #include <models/product.h>
 // #include <models/modul.h>
 #include <models/Items.h>
+#include <models/claim.h>
 
 namespace Ui {
 class EndRemontWindow;
@@ -30,8 +31,8 @@ private:
     Ui::EndRemontWindow *ui;
     // int idProd = 0;
     // int idMod = 0;
-    Items product;
-    Items modul;
+    Items device;
+    Claim claim;
     RepoMSSQL repo;
 
 };

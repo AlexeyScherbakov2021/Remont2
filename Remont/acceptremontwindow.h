@@ -27,11 +27,11 @@ private slots:
 private:
     Ui::AcceptRemontWindow *ui;
     RepoMSSQL repo;
+    Claim claim;
+    Items device;
     // QList<Claim> listClaim;
     // ListClaim claims;
-    int idProd = 0;
-    int idMod = 0;
-    int idParentProd = 0;
+    // int idParentProd = 0;
 
 };
 

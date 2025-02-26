@@ -65,6 +65,9 @@ void TreeItemsForm::AddItem(IEntity *dev)
 int TreeItemsForm::GetCurrentRootItem(IndexType &type)
 {
     auto selItem = ui->treeWidget->currentItem();
+    if(selItem == nullptr)
+        return -1;
+
     while(selItem->parent() != nullptr)
         selItem = selItem->parent();
 
@@ -95,6 +98,36 @@ bool TreeItemsForm::DeleteSelectedItem(bool isConfirm)
         delete selItem;
         return true;
     }
+
+    return false;
+}
+
+void TreeItemsForm::SetSelectItem(int id, IndexType typeIndex)
+{
+    QTreeWidgetItem* root = ui->treeWidget->topLevelItem(0);
+    SetSelectItemRec(id, typeIndex, root);
+}
+
+bool TreeItemsForm::SetSelectItemRec(int id, IndexType typeIndex, QTreeWidgetItem* item)
+{
+    int _id = item->data(0, Qt::UserRole).toInt();
+    int _type = item->data(0, Qt::UserRole + 1).toInt();
+    if(_id == id && typeIndex == _type)
+    {
+        QFont font;
+        font.setBold(true);
+        item->setFont(0, font);
+        return true;
+    }
+
+    for(int index = 0; index < item->childCount(); ++index)
+    {
+        QTreeWidgetItem* child = item->child(index);
+        if( SetSelectItemRec(id, typeIndex, child))
+            return true;
+    }
+
+    return false;
 }
 
 
@@ -108,6 +141,8 @@ void TreeItemsForm::AddChildTree(QTreeWidgetItem *root, Items* dev)
 
     QTreeWidgetItem *child = new QTreeWidgetItem();
     child->setText(0, dev->GetDefaultName());
+    child->setData(0, Qt::UserRole, dev->id);
+    child->setData(0, Qt::UserRole + 1, dev->type.indexType);
     child->setIcon(0, QIcon(nameIcon));
     child->setToolTip(0, nameType);
     root->addChild(child);

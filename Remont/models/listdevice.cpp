@@ -126,9 +126,6 @@ QVariant ListDevice::getData(int row, int col, int role) const
         case 5:
             var = item.dateCreate.toString("dd.MM.yyyy");
             break;
-        // case 6:
-        //     var = item.numberDoc;
-        //     break;
         case 6:
             var = item.currStatus;
             break;

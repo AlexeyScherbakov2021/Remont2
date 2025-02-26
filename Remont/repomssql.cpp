@@ -26,7 +26,7 @@ RepoMSSQL::~RepoMSSQL()
 {
     if(db.connectionName() != QSqlDatabase::defaultConnection && !db.connectionName().isEmpty())
     {
-        qDebug() << "BaseClose" << db.connectionName();
+        // qDebug() << "BaseClose" << db.connectionName();
         db.close();
         QSqlDatabase::removeDatabase(instanceName);
     }
@@ -531,10 +531,10 @@ int RepoMSSQL::LoadPart(int start, int count, const QString &number, QList<Claim
     QString sqlNumber = " Number like :Number";
 
     QStringList sql = {"select c.id,Number,DateClaim,TypeClaimId,idOrg,ObjectInstall,"
-                       "Descript,o.orgName,ct.NameType "
+                       "o.orgName,ct.NameType,isClosed "
                        "from Claim c "
                        "join ClaimType ct on ct.id=c.TypeClaimId "
-                       "left join Organization o on o.id=c.idOrg " };
+                       "left join Organization o on o.id=c.idOrg" };
 
 
     if(!number.isEmpty())
@@ -546,7 +546,7 @@ int RepoMSSQL::LoadPart(int start, int count, const QString &number, QList<Claim
         sql.push_back(slWhere.join(" and "));
     }
 
-    sql.push_back(" order by DateOut desc,Number offset :start rows fetch next :count rows only");
+    sql.push_back(" order by DateClaim desc,Number offset :start rows fetch next :count rows only");
     QString sql2 = sql.join("");
     query.prepare(sql2);
     query.bindValue(":start", start);
@@ -562,14 +562,12 @@ int RepoMSSQL::LoadPart(int start, int count, const QString &number, QList<Claim
         claim.id = query.value(0).toInt();
         claim.number = query.value(1).toString();
         claim.dateCreate = query.value(2).toDateTime();
-        // claim.FromWho = query.value(3).toString();
         claim.idTypeClaim = query.value(3).toInt();
         claim.idOrg = query.value(4).toInt();
         claim.ObjectInstall = query.value(5).toString();
-        claim.Descript = query.value(6).toString();
-        // claim.DateOut = query.value(8).toDateTime();
-        claim.nameOrganization = query.value(7).toString();
-        claim.TypeClaimString = query.value(8).toString();
+        claim.nameOrganization = query.value(6).toString();
+        claim.TypeClaimString = query.value(7).toString();
+        claim.isClosed = query.value(8).toBool();
         listItems.push_back(claim);
         ++res;
     }
@@ -1222,34 +1220,14 @@ bool RepoMSSQL::AddItem(Claim &claim)
     bool res;
     QSqlQuery query(db);
 
-    query.prepare("insert into Claim (Number,DateClaim,TypeClaimId,ObjectInstall,"
-                  "Descript,TypeComplectId,VNFT,Quantity,TypeDeviceId,NumberModul,NumberNewModul,"
-                  "NumberDevice,Guarantee,Reason,DateRepair,DoRepair,FileAnswer,TextResult) "
-                  "output inserted.id values(:Number,:DateClaim,:TypeClaimId,:ObjectInstall,"
-                  ":Descript,:TypeComplectId,:VNFT,:Quantity,:TypeDeviceId,:NumberModul,:NumberNewModul,"
-                  ":NumberDevice,:Guarantee,:Reason,:DateRepair,:DoRepair,:FileAnswer,:TextResult)");
+    query.prepare("insert into Claim (Number,dateClaim,typeClaimId,idOrg,ObjectInstall) "
+                  "output inserted.id values(:Number,:DateClaim,:TypeClaimId,:ObjectInstall)");
 
     query.bindValue(":Number", claim.number);
     query.bindValue(":DateClaim", claim.dateCreate);
-    // query.bindValue(":FromWho", claim.FromWho);
     query.bindValue(":TypeClaimId", claim.idTypeClaim);
-    // query.bindValue(":idOrg", claim.idOrg);
     query.bindValue(":ObjectInstall", claim.ObjectInstall);
-    query.bindValue(":Descript", claim.Descript);
-    // query.bindValue(":TypeComplectId", claim.TypeComplectId);
-    // query.bindValue(":VNFT", claim.VNFT);
-    // query.bindValue(":Quantity", claim.Quantity);
-    // query.bindValue(":TypeDeviceId", claim.TypeDeviceId);
-    // query.bindValue(":NumberModul", claim.NumberModul);
-    // query.bindValue(":NumberNewModul", claim.NumberNewModul);
-    // query.bindValue(":NumberDevice", claim.NumberDevice);
-    // query.bindValue(":DateOut", claim.DateOut);
-    // query.bindValue(":Guarantee", claim.IsGuarantee);
-    // query.bindValue(":Reason", claim.Reason);
-    // query.bindValue(":DateRepair", claim.DateRepair);
-    // query.bindValue(":DoRepair", claim.DoRepair);
-    // query.bindValue(":FileAnswer", claim.FileAnswer);
-    // query.bindValue(":TextResult", claim.TextResult);
+    query.bindValue(":idOrg", claim.idOrg);
 
     res = query.exec();
 
@@ -1346,36 +1324,17 @@ bool RepoMSSQL::UpdateItem(Claim &claim)
     QSqlQuery query(db);
 
     query.prepare("update Claim set Number=:Number,DateClaim=:DateClaim,TypeClaimId=:TypeClaimId,"
-                  "ObjectInstall=:ObjectInstall,Descript=:Descript,"
-                  "TypeComplectId=:TypeComplectId,VNFT=:VNFT,Quantity=:Quantity,TypeDeviceId=:TypeDeviceId,"
-                  "NumberModul=:NumberModul,NumberNewModul=:NumberNewModul,NumberDevice=:NumberDevice,"
-                  "Guarantee=:Guarantee,Reason=:Reason,DateRepair=:DateRepair,DoRepair=:DoRepair,"
-                  "FileAnswer=:FileAnswer,TextResult=:TextResult,idOrg=:idOrg "
+                  "ObjectInstall=:ObjectInstall,idOrg=:idOrg,isClosed=:isClosed "
                   "where id=:id");
 
     query.bindValue(":id", claim.id);
     query.bindValue(":Number", claim.number);
     query.bindValue(":DateClaim", claim.dateCreate);
-    // query.bindValue(":FromWho", claim.FromWho);
     query.bindValue(":TypeClaimId", claim.idTypeClaim);
+    query.bindValue(":isClosed", claim.isClosed);
     if(claim.idOrg > 0)
         query.bindValue(":idOrg", claim.idOrg);
     query.bindValue(":ObjectInstall", claim.ObjectInstall);
-    query.bindValue(":Descript", claim.Descript);
-    // query.bindValue(":TypeComplectId", claim.TypeComplectId);
-    // query.bindValue(":VNFT", claim.VNFT);
-    // query.bindValue(":Quantity", claim.Quantity);
-    // query.bindValue(":TypeDeviceId", claim.TypeDeviceId);
-    // query.bindValue(":NumberModul", claim.NumberModul);
-    // query.bindValue(":NumberNewModul", claim.NumberNewModul);
-    // query.bindValue(":NumberDevice", claim.NumberDevice);
-    // query.bindValue(":DateOut", claim.DateOut);
-    // query.bindValue(":Guarantee", claim.IsGuarantee);
-    // query.bindValue(":Reason", claim.Reason);
-    // query.bindValue(":DateRepair", claim.DateRepair);
-    // query.bindValue(":DoRepair", claim.DoRepair);
-    // query.bindValue(":FileAnswer", claim.FileAnswer);
-    // query.bindValue(":TextResult", claim.TextResult);
     res = query.exec();
 
     if(!res)
@@ -2222,6 +2181,28 @@ void RepoMSSQL::LoadOrganization(QMap<int, QString> &listOrg)
     }
 }
 
+void RepoMSSQL::LoadOrganizationAsync(QMap<int, QString> &listOrg, QPromise<void> &promise)
+{
+    QSqlQuery query(db);
+    listOrg.clear();
+
+    query.prepare("select id,OrgName,INN,KPP from Organization where INN is not null or KPP is not null");
+    query.exec();
+    while(query.next() && !promise.isCanceled())
+    {
+        int id = query.value(0).toInt();
+        QString name = query.value(1).toString();
+        QString INN = query.value(2).toString();
+        QString KPP = query.value(3).toString();
+        if(!INN.isEmpty())
+        {
+            name += " (ИНН " + INN;
+            name += " КПП " + KPP + ")";
+        }
+        listOrg.insert(id, name);
+    }
+}
+
 void RepoMSSQL::LoadOrganization(QList<Organization> &listOrg)
 {
     QSqlQuery query(db);
@@ -2230,6 +2211,24 @@ void RepoMSSQL::LoadOrganization(QList<Organization> &listOrg)
     query.prepare("select id,OrgName,INN,KPP from Organization where INN is not null or KPP is not null order by OrgName");
     query.exec();
     while(query.next())
+    {
+        Organization org;
+        org.id = query.value(0).toInt();
+        org.orgName = query.value(1).toString();
+        org.INN = query.value(2).toString();
+        org.KPP = query.value(3).toString();
+        listOrg.push_back(org);
+    }
+}
+
+void RepoMSSQL::LoadOrganizationAsync(QList<Organization> &listOrg, QPromise<void> &promise)
+{
+    QSqlQuery query(db);
+    listOrg.clear();
+
+    query.prepare("select id,OrgName,INN,KPP from Organization where INN is not null or KPP is not null order by OrgName");
+    query.exec();
+    while(query.next() && !promise.isCanceled())
     {
         Organization org;
         org.id = query.value(0).toInt();
@@ -2293,8 +2292,7 @@ bool RepoMSSQL::LoadClaim(const QString number, QList<Claim> &listClaim)
     bool res;
     listClaim.clear();
     QSqlQuery query(db);
-    QString sql = "select c.id,Number,DateClaim,TypeClaimId,idOrg,ObjectInstall,"
-                  "Descript,o.orgName "
+    QString sql = "select c.id,c.Number,dateClaim,typeClaimId,c.idOrg,ObjectInstall,o.orgName,isClosed "
                   "from Claim c "
                   "join ClaimType ct on ct.id=c.TypeClaimId "
                   "left join Organization o on o.id=c.idOrg";
@@ -2312,28 +2310,11 @@ bool RepoMSSQL::LoadClaim(const QString number, QList<Claim> &listClaim)
         claim.id = query.value(0).toInt();
         claim.number = query.value(1).toString();
         claim.dateCreate = query.value(2).toDateTime();
-        // claim.FromWho = query.value(3).toString();
-        claim.idTypeClaim = query.value(4).toInt();
-        claim.idOrg = query.value(5).toInt();
-        claim.ObjectInstall = query.value(6).toString();
-        claim.Descript = query.value(7).toString();
-        // claim.TypeComplectId = query.value(8).toInt();
-        // claim.VNFT = query.value(9).toString();
-        // claim.Quantity = query.value(10).toInt();
-        // claim.TypeDeviceId = query.value(11).toInt();
-        // claim.NumberModul = query.value(12).toString();
-        // claim.NumberNewModul = query.value(13).toString();
-        // claim.NumberDevice = query.value(14).toString();
-        // claim.DateOut = query.value(8).toDateTime();
-        // claim.IsGuarantee = query.value(16).toBool();
-        // claim.Reason = query.value(17).toString();
-        // claim.DateRepair = query.value(18).toDateTime();
-        // claim.DoRepair = query.value(19).toString();
-        // claim.FileAnswer = query.value(20).toString();
-        // claim.TextResult = query.value(21).toString();
-        // claim.TypeClaimString = query.value(22).toString();
-        claim.nameOrganization = query.value(9).toString();
-        // claim.TypeDeviceString = query.value(24).toString();
+        claim.idTypeClaim = query.value(3).toInt();
+        claim.idOrg = query.value(4).toInt();
+        claim.ObjectInstall = query.value(5).toString();
+        claim.nameOrganization = query.value(6).toString();
+        claim.isClosed = query.value(7).toBool();
         listClaim.push_back(claim);
     }
 
@@ -2521,6 +2502,39 @@ bool RepoMSSQL::DelItemFromClaim(int idItem, int idClaim)
 
 }
 
+Claim RepoMSSQL::GetClaimForItem(int idItem)
+{
+    QSqlQuery query(db);
+    Claim claim;
+
+    query.prepare("select c.id,Number,dateClaim,typeClaimId,idOrg,ObjectInstall,o.OrgName,isClosed "
+                  "from ClaimItems ci "
+                  "join Claim c on c.id=ci.idClaim and c.isClosed=0 "
+                  "join Organization o on o.id=c.idOrg "
+                  "where idItem=:idItem");
+
+    query.bindValue(":idItem", idItem);
+
+    query.exec();
+    if(query.next())
+    {
+        claim.id = query.value(0).toInt();
+        claim.number = query.value(1).toString();
+        claim.dateCreate = query.value(2).toDateTime();
+        claim.idTypeClaim = query.value(3).toInt();
+        claim.idOrg = query.value(4).toInt();
+        claim.ObjectInstall = query.value(5).toString();
+        claim.nameOrganization = query.value(6).toString();
+        claim.isClosed = query.value(7).toBool();
+    }
+
+    // if(!res)
+    //     qDebug() << "Ошибка в GetClaimForItem";
+
+    return claim;
+
+}
+
 // bool RepoMSSQL::LoadClaimForProduct(int ProdId, Claim &claim)
 // {
 //     bool res = false;
@@ -2568,10 +2582,10 @@ Claim RepoMSSQL::GetClaim(int id)
     QSqlQuery query(db);
     Claim claim;
 
-    query.prepare("select id,Number,DateClaim,TypeClaimId,idOrg,ObjectInstall,"
-                  "Descript,TypeComplectId,VNFT,Quantity,TypeDeviceId,NumberModul,NumberNewModul,"
-                  "NumberDevice,Guarantee,Reason,DateRepair,DoRepair,FileAnswer,TextResult "
-                  "from Claim where id=:id");
+    query.prepare("select c.id,Number,dateClaim,typeClaimId,idOrg,ObjectInstall,o.orgName,isClosed "
+                  "from Claim c "
+                  "join Organization o on o.id=c.idOrg "
+                  "where c.id=:id");
 
     query.bindValue(":id", id);
 
@@ -2581,28 +2595,14 @@ Claim RepoMSSQL::GetClaim(int id)
         claim.id = query.value(0).toInt();
         claim.number = query.value(1).toString();
         claim.dateCreate = query.value(2).toDateTime();
-        // claim.FromWho = query.value(3).toString();
-        claim.idTypeClaim = query.value(4).toInt();
-        claim.idOrg = query.value(5).toInt();
-        claim.ObjectInstall = query.value(6).toString();
-        claim.Descript = query.value(7).toString();
-        // claim.TypeComplectId = query.value(8).toInt();
-        // claim.VNFT = query.value(9).toString();
-        // claim.Quantity = query.value(10).toInt();
-        claim.idTypeClaim = query.value(11).toInt();
-        // claim.NumberModul = query.value(12).toString();
-        // claim.NumberNewModul = query.value(13).toString();
-        // claim.NumberDevice = query.value(14).toString();
-        // claim.DateOut = query.value(15).toDateTime();
-        // claim.IsGuarantee = query.value(16).toBool();
-        // claim.Reason = query.value(17).toString();
-        // claim.DateRepair = query.value(18).toDateTime();
-        // claim.DoRepair = query.value(19).toString();
-        // claim.FileAnswer = query.value(20).toString();
-        // claim.TextResult = query.value(21).toString();
+        claim.idTypeClaim = query.value(3).toInt();
+        claim.idOrg = query.value(4).toInt();
+        claim.ObjectInstall = query.value(5).toString();
+        claim.nameOrganization = query.value(6).toString();
+        claim.isClosed = query.value(7).toBool();
+
     }
     return claim;
-
 }
 
 //------------------------------------------------------------------------------------------------------
@@ -2621,6 +2621,10 @@ void RepoMSSQL::LoadRemontReason(QMap<int, QString> &listReason)
     }
 }
 
+
+//------------------------------------------------------------------------------------------------------
+// Загрузка причины ремонта
+//------------------------------------------------------------------------------------------------------
 QString RepoMSSQL::GetRemontReason(int id)
 {
     QString s;
@@ -2641,30 +2645,17 @@ QString RepoMSSQL::GetRemontReason(int id)
 //------------------------------------------------------------------------------------------------------
 // Добавление ремонта
 //------------------------------------------------------------------------------------------------------
-bool RepoMSSQL::AddRemont(Remont &remont, ev::DeviceKind kindDevice)
+bool RepoMSSQL::AddRemont(Remont &remont)
 {
     bool res;
     QSqlQuery query(db);
 
-    if(kindDevice == ev::PRODUCT)
-    {
-        query.prepare("insert into RemontP (idProduct,idReclamation,StartDate) "
-                  "output inserted.id values(:idProduct,:idReclamation,:StartDate)");
-        query.bindValue(":idProduct", remont.idParent);
+    query.prepare("insert into Remont (idItem,idClaim,dateStart) "
+              "output inserted.id values(:idItem,:idClaim,:dateStart)");
+    query.bindValue(":idItem", remont.idItem);
 
-    }
-    else if(kindDevice == ev::MODUL)
-    {
-        query.prepare("insert into RemontM (idModul,idReclamation,StartDate) "
-                      "output inserted.id values(:idModul,:idReclamation,:StartDate)");
-
-        query.bindValue(":idModul", remont.idParent);
-    }
-    else
-        return false;
-
-    query.bindValue(":idReclamation", remont.idReclamation);
-    query.bindValue(":StartDate", remont.startDate);
+    query.bindValue(":idClaim", remont.idClaim);
+    query.bindValue(":dateStart", remont.startDate);
 
     res = query.exec();
 
@@ -2683,22 +2674,12 @@ bool RepoMSSQL::AddRemont(Remont &remont, ev::DeviceKind kindDevice)
 //------------------------------------------------------------------------------------------------------
 // Обновление ремонта
 //------------------------------------------------------------------------------------------------------
-bool RepoMSSQL::UpdateRemont(Remont &remont, ev::DeviceKind kindDevice)
+bool RepoMSSQL::UpdateRemont(Remont &remont)
 {
     bool res;
     QSqlQuery query(db);
-
-
-    if(kindDevice == ev::PRODUCT)
-    {
-        query.prepare("update RemontP set idReason=:idReason,Action=:Action,Defect=:Defect,Remark=:Remark,endDate=:endDate "
+        query.prepare("update Remont set idReason=:idReason,Action=:Action,Defect=:Defect,Remark=:Remark,endDate=:endDate "
                   "where id=:id");
-    }
-    else if(kindDevice == ev::MODUL)
-        query.prepare("update RemontM set idReason=:idReason,Action=:Action,Defect=:Defect,Remark=:Remark,endDate=:endDate "
-                      "where id=:id");
-    else
-        return false;
 
     query.bindValue(":id", remont.id);
     query.bindValue(":idReason", remont.idReason);
@@ -2718,34 +2699,22 @@ bool RepoMSSQL::UpdateRemont(Remont &remont, ev::DeviceKind kindDevice)
 //------------------------------------------------------------------------------------------------------
 // Загрузка ремонтов для id
 //------------------------------------------------------------------------------------------------------
-void RepoMSSQL::LoadRemont(QList<Remont> &list, int idParent, ev::DeviceKind kindDevice)
+void RepoMSSQL::LoadRemont(QList<Remont> &list, int idItem)
 {
     list.clear();
     QSqlQuery query(db);
 
-    if(kindDevice == ev::PRODUCT)
-    {
-        query.prepare("select id,idProduct,idReclamation,idReason,StartDate,Action,Defect,Remark,endDate "
-                  "from RemontP where idProduct=:idProduct");
-        query.bindValue(":idProduct", idParent);
-    }
-    else if(kindDevice == ev::MODUL)
-    {
-        query.prepare("select id,idModul,idReclamation,idReason,StartDate,Action,Defect,Remark,endDate "
-                      "from RemontM where idModul=:idModul");
-        query.bindValue(":idModul", idParent);
-
-    }
-    else
-        return;
+    query.prepare("select id,idItem,idClaim,idReason,dateStart,Action,Defect,Remark,endDate "
+                  "from Remont where idItem=:idItem");
+    query.bindValue(":idItem", idItem);
 
     query.exec();
     while(query.next())
     {
         Remont rem;
         rem.id = query.value(0).toInt();
-        rem.idParent = query.value(1).toInt();
-        rem.idReclamation = query.value(2).toInt();
+        rem.idItem = query.value(1).toInt();
+        rem.idClaim = query.value(2).toInt();
         rem.idReason = query.value(3).toInt();
         rem.startDate = query.value(4).toDateTime();
         rem.action = query.value(5).toString();
@@ -2759,33 +2728,21 @@ void RepoMSSQL::LoadRemont(QList<Remont> &list, int idParent, ev::DeviceKind kin
 //------------------------------------------------------------------------------------------------------
 // Загрузка ремонта для id
 //------------------------------------------------------------------------------------------------------
-Remont RepoMSSQL::GetCurrentRemont(int idParent, ev::DeviceKind kindDevice)
+Remont RepoMSSQL::GetRemontForItem(int idItem)
 {
     QSqlQuery query(db);
     Remont rem;
 
-    if(kindDevice == ev::PRODUCT)
-    {
-        query.prepare("select id,idProduct,idReclamation,idReason,StartDate,Action,Defect,Remark,endDate "
-                      "from RemontP where endDate is null and idProduct=:idProduct");
-        query.bindValue(":idProduct", idParent);
-    }
-    else if(kindDevice == ev::MODUL)
-    {
-        query.prepare("select id,idModul,idReclamation,idReason,StartDate,Action,Defect,Remark,endDate "
-                      "from RemontM where endDate is null and idModul=:idModul");
-        query.bindValue(":idModul", idParent);
-
-    }
-    else
-        return rem;
+    query.prepare("select id,idItem,idClaim,idReason,dateStart,Action,Defect,Remark,endDate "
+                      "from Remont where endDate is null and idItem=:idItem");
+    query.bindValue(":idItem", idItem);
 
     query.exec();
     if(query.next())
     {
         rem.id = query.value(0).toInt();
-        rem.idParent = query.value(1).toInt();
-        rem.idReclamation = query.value(2).toInt();
+        rem.idItem = query.value(1).toInt();
+        rem.idClaim = query.value(2).toInt();
         rem.idReason = query.value(3).toInt();
         rem.startDate = query.value(4).toDateTime();
         rem.action = query.value(5).toString();
@@ -2797,6 +2754,9 @@ Remont RepoMSSQL::GetCurrentRemont(int idParent, ev::DeviceKind kindDevice)
 }
 
 
+//------------------------------------------------------------------------------------------------------
+// Получение количества зарагестрированных плат по накладной
+//------------------------------------------------------------------------------------------------------
 int RepoMSSQL::GetCountRegisterPlate(QString numDoc, int idType)
 {
     QSqlQuery query(db);

@@ -44,6 +44,7 @@ public:
     void createList();
 
     void AddItem(Shipment* item);
+    void AddItemToList(Shipment* item);
     void UpdateItem(int row);
     // void UpdateItemModel(int row);
     void setBaseOff();

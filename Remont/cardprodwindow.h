@@ -27,11 +27,11 @@ private:
 
     // RemontEntity *remontEntity;
 
-    void loadShipmentToForm(const Items *prod);
+    // void loadShipmentToForm(const Items *prod);
     void loadInclude(const Items *prod);
     // void AddRowRemont(RemontM &rem);
     void LoadHistoryToForm(QList<Status> &listStatus);
-    void LoadRemontToForm(QList<Remont> &listRemmont);
+    void LoadRemontToForm(int idItem);
 };
 
 #endif // CARDPRODWINDOW_H

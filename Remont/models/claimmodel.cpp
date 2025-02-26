@@ -57,13 +57,13 @@ int ClaimModel::columnCount(const QModelIndex &parent) const
 //     // FIXME: Implement me!
 // }
 
-bool ClaimModel::canFetchMore(const QModelIndex &parent) const
+bool ClaimModel::canFetchMore(const QModelIndex &/*parent*/) const
 {
     // FIXME: Implement me!
     return isFetch;
 }
 
-void ClaimModel::fetchMore(const QModelIndex &parent)
+void ClaimModel::fetchMore(const QModelIndex &/*parent*/)
 {
     if(!isBaseOff)
     {

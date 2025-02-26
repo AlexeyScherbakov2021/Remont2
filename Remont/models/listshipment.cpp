@@ -198,5 +198,6 @@ int ListShipment::LoadPart(int start, int count, const QString &number, bool isS
 
 void ListShipment::AddItemToList(Shipment *item)
 {
+    items.push_back(*item);
 
 }

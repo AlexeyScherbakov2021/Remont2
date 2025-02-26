@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>468</width>
-    <height>291</height>
+    <width>539</width>
+    <height>397</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -89,6 +89,9 @@ background-color: LightGray;
       <string>Данные устройства</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
+      <property name="horizontalSpacing">
+       <number>10</number>
+      </property>
       <property name="verticalSpacing">
        <number>10</number>
       </property>
@@ -130,15 +133,15 @@ background-color: LightGray;
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="3" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Наименование</string>
+         <string>Обозначение</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QLabel" name="lbName">
+      <item row="3" column="1">
+       <widget class="QLabel" name="lbVNFT">
         <property name="font">
          <font>
           <bold>true</bold>
@@ -149,15 +152,15 @@ background-color: LightGray;
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label">
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>Рекламация</string>
+         <string>Тип</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QLabel" name="lbClaim">
+      <item row="2" column="1">
+       <widget class="QLabel" name="lbTypeName">
         <property name="font">
          <font>
           <bold>true</bold>
@@ -169,19 +172,57 @@ background-color: LightGray;
        </widget>
       </item>
       <item row="4" column="0">
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="label">
         <property name="text">
-         <string>Дата</string>
+         <string>Рекламация</string>
         </property>
        </widget>
       </item>
       <item row="4" column="1">
+       <widget class="QLabel" name="lbClaim">
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Организация</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
        <widget class="QDateEdit" name="deDate">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
         <property name="timeSpec">
          <enum>Qt::TimeSpec::LocalTime</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Дата</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLabel" name="lbOrgName">
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>
@@ -273,7 +314,6 @@ background-color: LightGray;
  </widget>
  <tabstops>
   <tabstop>leNumber</tabstop>
-  <tabstop>deDate</tabstop>
   <tabstop>pbExchange</tabstop>
   <tabstop>pbApply</tabstop>
   <tabstop>tbNumber</tabstop>

@@ -80,6 +80,11 @@ color: black
           </item>
           <item row="3" column="1">
            <widget class="QLabel" name="lbVNFT">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -122,6 +127,11 @@ color: black
           </item>
           <item row="2" column="1">
            <widget class="QLabel" name="lbType">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -136,6 +146,11 @@ color: black
           </item>
           <item row="5" column="1">
            <widget class="QLabel" name="lbNumber2">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -157,6 +172,11 @@ color: black
           </item>
           <item row="8" column="1">
            <widget class="QLabel" name="lbNumDoc">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -186,6 +206,11 @@ color: black
           </item>
           <item row="9" column="1">
            <widget class="QLabel" name="lbName">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -200,6 +225,11 @@ color: black
           </item>
           <item row="10" column="1">
            <widget class="QLabel" name="lbGarantMon">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -409,7 +439,7 @@ color: black
           <item row="1" column="0">
            <widget class="QLabel" name="label_22">
             <property name="text">
-             <string>TextLabel</string>
+             <string>счет</string>
             </property>
            </widget>
           </item>
@@ -432,6 +462,21 @@ color: black
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QTableWidget" name="twRemont">
+         <property name="editTriggers">
+          <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+         </property>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="verticalHeaderDefaultSectionSize">
+          <number>24</number>
+         </attribute>
          <column>
           <property name="text">
            <string>Рекламация</string>
@@ -477,23 +522,7 @@ color: black
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QListWidget" name="lwInclude"/>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_3">
-      <attribute name="title">
-       <string>В составе набора</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_5">
-       <item>
-        <widget class="QTreeWidget" name="treeWidget">
-         <column>
-          <property name="text">
-           <string>Набор оборудования</string>
-          </property>
-         </column>
-        </widget>
+        <widget class="TreeItemsForm" name="treeContent" native="true"/>
        </item>
       </layout>
      </widget>
@@ -504,6 +533,9 @@ color: black
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
         <widget class="QTableWidget" name="twHistory">
+         <property name="editTriggers">
+          <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+         </property>
          <property name="alternatingRowColors">
           <bool>true</bool>
          </property>
@@ -513,6 +545,15 @@ color: black
          <property name="selectionBehavior">
           <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
          </property>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="verticalHeaderCascadingSectionResizes">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="verticalHeaderDefaultSectionSize">
+          <number>26</number>
+         </attribute>
          <column>
           <property name="text">
            <string>Дата</string>
@@ -536,6 +577,14 @@ color: black
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TreeItemsForm</class>
+   <extends>QWidget</extends>
+   <header>treeitemsform.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="resource.qrc"/>
  </resources>

@@ -5,31 +5,26 @@
 #include "setterdlg.h"
 #include "shipwindow.h"
 #include "ui_shipwindow.h"
-#include <QtConcurrent>
 // #include <QElapsedTimer>
 
 ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::ShipWindow), ship(shipment)
 {
-    // QElapsedTimer timer;
-
-    // timer.start();
 
     ui->setupUi(this);
 
-    ui->pbFinish->setVisible(shipment->dateUPD.isNull());
-
-    // qDebug() << timer.elapsed() << "Start LoadOrganization";
-
-    QFuture<void> future =  QtConcurrent::run( [&] ()
+    QFuture<void> future =  QtConcurrent::run( [&] (QPromise<void> &promise)
     {
+        // qDebug() << "LoadOrgAsync";
         RepoMSSQL repo2("thread");
-        repo2.LoadOrganization(listOrg);
+        repo2.LoadOrganizationAsync(listOrg, promise);
+        // qDebug() << "LoadOrgAsync finish";
     });
 
-    QFutureWatcher<void> *watcher = new QFutureWatcher<void>(this);
-    connect(watcher, &QFutureWatcher<void>::finished, watcher, [this, watcher] () {
+
+    watcher = new QFutureWatcher<void>(this);
+    connect(watcher, &QFutureWatcher<void>::finished, watcher, [this] () {
         int selectRow = -1;
         for(auto it = listOrg.begin(); it != listOrg.end(); ++it )
         {
@@ -40,24 +35,10 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
             }
         }
         ui->cbCusomer->setCurrentIndex(selectRow);
-        watcher->deleteLater();
+        // watcher->deleteLater();
     });
 
     watcher->setFuture(future);
-    // repo.LoadOrganization(listOrg);
-    // qDebug() << timer.elapsed() << "Finish LoadOrganization";
-
-    // int selectRow = -1;
-    // for(auto it = listOrg.begin(); it != listOrg.end(); ++it )
-    // {
-    //     ui->cbCusomer->addItem(*it, it.key());
-    //     if(it.key() == ship->idOrganization)
-    //         selectRow = ui->cbCusomer->count() -1;
-    // }
-
-    // qDebug() << timer.elapsed() << "Full List";
-
-    // ui->cbCusomer->setCurrentIndex(selectRow);
 
     if(ship->id != 0)
     {
@@ -86,7 +67,16 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
     }
     else
     {
-        ui->deDateUPD->setDateTime(QDateTime::currentDateTime());
+        ui->deDateOut->setDateTime(QDateTime::currentDateTime());
+    }
+
+    if(!shipment->dateUPD.isNull())
+    {
+        ui->tbAddSetter->setEnabled(false);
+        ui->tbNumProd->setEnabled(false);
+        ui->pbDelete->setEnabled(false);
+        ui->pbSave->setVisible(false);
+        ui->pbFinish->setVisible(false);
     }
 
     connect(ui->leBuyer, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
@@ -100,11 +90,17 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
 
 }
 
+
 ShipWindow::~ShipWindow()
 {
     delete ui;
+    watcher->cancel();
+    watcher->waitForFinished();
+    delete watcher;
     // qDebug() << "destructor ShipWindow";
 }
+
+
 
 
 //-----------------------------------------------------------------------------------
@@ -136,6 +132,8 @@ void ShipWindow::on_pbDelete_clicked()
 {
     IndexType type;
     int id = ui->wTreeItems->GetCurrentRootItem(type);
+    if(id <= 0)
+        return;
 
     if(!ui->wTreeItems->DeleteSelectedItem())
         return;
@@ -164,7 +162,7 @@ void ShipWindow::on_pbDelete_clicked()
 
 
 //-----------------------------------------------------------------------------------
-// Событие закрытия окна
+//
 //-----------------------------------------------------------------------------------
 // void ShipWindow::SetStatusItems(Items *dev)
 // {
@@ -260,10 +258,14 @@ void ShipWindow::SaveToBase()
     else
         ship->dateRegister = ui->deDateOut->dateTime();
 
-    repo.UpdateItem(*ship);
+    if(ship->id == 0)
+        repo.AddItem(*ship);
+    else
+        repo.UpdateItem(*ship);
     repo.ItemsSyncShip(ship->id, &trackItem);
     repo.SetsSyncShip(ship->id, &trackSet);
 }
+
 
 
 
@@ -305,8 +307,6 @@ void ShipWindow::slotReadScan(QString s)
 //-----------------------------------------------------------------------------------
 void ShipWindow::on_pbFinish_clicked()
 {
-    int countProd = 0;
-
     if(ship->childItems.size() == 0 && ship->listSetterOut.size() == 0)
     {
         QMessageBox::warning(this, "Предупреждение", "Не сформирован состав отгрузки.");
