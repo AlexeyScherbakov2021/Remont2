@@ -34,6 +34,7 @@ private:
     Items device;
     Claim claim;
     RepoMSSQL repo;
+    void AddDevice(Items *item);
 
 };
 

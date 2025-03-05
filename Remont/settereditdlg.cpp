@@ -1,6 +1,7 @@
 #include "selectdevicewindow.h"
 #include "settereditdlg.h"
 #include "ui_settereditdlg.h"
+#include "scan.h"
 
 #include <QMessageBox>
 
@@ -26,6 +27,9 @@ SetterEditDlg::SetterEditDlg(SetterOut* _setter, QWidget *parent)
         AddLineToWidget(&it, row);
         ++row;
     }
+
+    connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
+
 }
 
 //-----------------------------------------------------------------------------
@@ -69,7 +73,7 @@ void SetterEditDlg::on_tbDelete_clicked()
             {
                 if(it.id == id)
                 {
-                    track.DelRecord(id, it);
+                    track.DelRecord(/*id,*/ it);
                     listItems.remove(row);
                     delete item;
                     break;
@@ -94,7 +98,7 @@ void SetterEditDlg::on_tbSearch_clicked()
     Items* dev = win->SelectDevice(true, stat, ui->leSearch->text());
     if(dev != nullptr && dev->id != 0)
     {
-        if(track.AddRecord(dev->id, *dev))
+        if(track.AddRecord(/*dev->id,*/ *dev))
         {
             AddLineToWidget(dev, ui->listWidget->count());
             listItems.push_back(*dev);
@@ -114,5 +118,27 @@ void SetterEditDlg::on_pbOk_clicked()
     setter->dateCreate = ui->deDate->dateTime();
     setter->numberDoc = ui->leOrder->text();
     accept();
+}
+
+
+//-----------------------------------------------------------------------------
+// Поиск сканером
+//-----------------------------------------------------------------------------
+void SetterEditDlg::slotReadScan(QString s)
+{
+    if(isActiveWindow())
+    {
+        RepoMSSQL repo;
+        Items item = repo.GetItem2(s, { StatusItem::CORRECT, StatusItem::CORRECT_OSO});
+
+        if(item.id != 0)
+        {
+            if(track.AddRecord(/*item.id,*/ item))
+            {
+                AddLineToWidget(&item, ui->listWidget->count());
+                listItems.push_back(item);
+            }
+        }
+    }
 }
 

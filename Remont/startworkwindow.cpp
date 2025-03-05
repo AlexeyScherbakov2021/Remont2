@@ -1,3 +1,4 @@
+#include "scan.h"
 #include "selectdevicewindow.h"
 #include "startworkwindow.h"
 #include "ui_startworkwindow.h"
@@ -24,6 +25,7 @@ StartWorkWindow::StartWorkWindow(QWidget *parent)
     ui->deDate->setDateTime(QDateTime::currentDateTime());
     ui->lwProduct->setColumnWidth(0, 400);
     ui->lwProduct->setColumnWidth(1, 150);
+    connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
 }
 
@@ -54,10 +56,11 @@ void StartWorkWindow::on_pbProdToWork_clicked()
 
     for(auto &it : listDev)
     {
-        it.dateOn = dateOn;
-        it.dateGarant = dateOn.addMonths(it.garantMonth);
-        repo.UpdateItem(it);
-        it.AddStatus(it, StatusItem::WORK, dateOn, ui->leDoc->text());
+        SetStatusAllDevice(&it, dateOn);
+        // it.dateOn = dateOn;
+        // it.dateGarant = dateOn.addMonths(it.garantMonth);
+        // repo.UpdateItem(it);
+        // it.AddStatus(it, StatusItem::WORK, dateOn, ui->leDoc->text());
     }
 
     QString statusName = listDev.first().getNameLastStatus();
@@ -75,6 +78,16 @@ void StartWorkWindow::on_pbProdToWork_clicked()
     ui->tbSearch->setEnabled(false);
 }
 
+void StartWorkWindow::SetStatusAllDevice(Items *item, QDateTime& dateOn)
+{
+    item->dateOn = dateOn;
+    item->dateGarant = dateOn.addMonths(item->garantMonth);
+    repo.UpdateItem(*item);
+    item->AddStatus(*item, StatusItem::WORK, dateOn, ui->leDoc->text());
+    repo.LoadChildItems(item->id, item->childItems);
+    for(auto &it : item->childItems)
+        SetStatusAllDevice(&it, dateOn);
+}
 
 
 //----------------------------------------------------------------------------
@@ -88,24 +101,48 @@ void StartWorkWindow::on_tbSearch_clicked()
     Items *dev = win->SelectDevice(true, {StatusItem::SHIPPED}, ui->leSearch->text(), true);
     if(dev != nullptr && dev->id > 0)
     {
-        repo.LoadStatus(*dev);
-        int row = ui->lwProduct->rowCount();
-        ui->lwProduct->insertRow(row);
-        QString nameType, nameIcon;
-        dev->GetInfo(nameType, nameIcon);
+        AddDevice(dev);
+        // repo.LoadStatus(*dev);
+        // int row = ui->lwProduct->rowCount();
+        // ui->lwProduct->insertRow(row);
+        // QString nameType, nameIcon;
+        // dev->GetInfo(nameType, nameIcon);
 
-        QTableWidgetItem *item = new QTableWidgetItem();
-        item->setText(dev->GetDefaultName());
-        item->setIcon(QIcon(nameIcon));
-        item->setData(Qt::UserRole, dev->id);
-        ui->lwProduct->setItem(row, 0, item);
+        // QTableWidgetItem *item = new QTableWidgetItem();
+        // item->setText(dev->GetDefaultName());
+        // item->setIcon(QIcon(nameIcon));
+        // item->setData(Qt::UserRole, dev->id);
+        // ui->lwProduct->setItem(row, 0, item);
 
-        item = new QTableWidgetItem();
-        item->setText(dev->getNameLastStatus());
-        ui->lwProduct->setItem(row, 1, item);
+        // item = new QTableWidgetItem();
+        // item->setText(dev->getNameLastStatus());
+        // ui->lwProduct->setItem(row, 1, item);
 
-        listDev.push_back(*dev);
+        // listDev.push_back(*dev);
     }
+}
+
+
+
+void StartWorkWindow::AddDevice(Items* dev)
+{
+    repo.LoadStatus(*dev);
+    int row = ui->lwProduct->rowCount();
+    ui->lwProduct->insertRow(row);
+    QString nameType, nameIcon;
+    dev->GetInfo(nameType, nameIcon);
+
+    QTableWidgetItem *item = new QTableWidgetItem();
+    item->setText(dev->GetDefaultName());
+    item->setIcon(QIcon(nameIcon));
+    item->setData(Qt::UserRole, dev->id);
+    ui->lwProduct->setItem(row, 0, item);
+
+    item = new QTableWidgetItem();
+    item->setText(dev->getNameLastStatus());
+    ui->lwProduct->setItem(row, 1, item);
+
+    listDev.push_back(*dev);
 }
 
 
@@ -133,5 +170,20 @@ void StartWorkWindow::on_tbDelete_clicked()
     //     }
     //     ranges.removeAll;
     // }
+}
+
+void StartWorkWindow::slotReadScan(QString s)
+{
+    if(isActiveWindow())
+    {
+        RepoMSSQL repo;
+        Items item = repo.GetItem2(s, { StatusItem::SHIPPED}, true);
+
+        if(item.id != 0)
+        {
+            ui->leSearch->setText(s);
+            AddDevice(&item);
+        }
+    }
 }
 

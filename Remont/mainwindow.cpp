@@ -29,11 +29,16 @@
 
 #include <QSettings>
 
+#include <infrastructure/users.h>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    Users& user = Users::getInstance();
+    user.LoadRoles(107);
 
     QSettings setting("HKEY_CURRENT_USER\\Software\\Remont2", QSettings::NativeFormat);
     QString port = setting.value("COMport").toString();
@@ -64,17 +69,6 @@ void MainWindow::on_pbClaim_clicked()
 void MainWindow::on_pbCard_clicked()
 {
     ui->aCardDevice->trigger();
-
-    // SelectDeviceWindow *win = new SelectDeviceWindow(ItemType::Product, this);
-    // win->AddSelectedType(ItemType::Modul);
-    // win->AddSelectedType(ItemType::Plate);
-    // QVector<int> stat;
-    // Items *dev = win->SelectDevice(false, stat, "", true, true);
-    // if(dev != nullptr)
-    // {
-    //     CardProdWindow *winCard = new CardProdWindow(dev, this);
-    //     winCard->show();
-    // }
 }
 
 
@@ -94,9 +88,6 @@ void MainWindow::on_pbApplyRemont_clicked()
 void MainWindow::on_pbRegister_clicked()
 {
     ui->aRegProduct->trigger();
-    // CreateProductWindow *win = new CreateProductWindow(this);
-    // win->setAttribute(Qt::WA_DeleteOnClose);
-    // win->show();
 }
 
 
@@ -106,10 +97,6 @@ void MainWindow::on_pbRegister_clicked()
 void MainWindow::on_pbOTK_clicked()
 {
     ui->aControlOTK->trigger();
-
-    // OTKWindow *win = new OTKWindow(this);
-    // win->setAttribute(Qt::WA_DeleteOnClose);
-    // win->show();
 }
 
 
@@ -119,8 +106,6 @@ void MainWindow::on_pbOTK_clicked()
 void MainWindow::on_pbCreatePlate_clicked()
 {
     ui->aRegPlate->trigger();
-    // PlateWindow *win = new PlateWindow(this);
-    // win->show();
 }
 
 
@@ -131,8 +116,6 @@ void MainWindow::on_pbShip_clicked()
 {
     ui->aShipBefore->trigger();
 
-    // ListShipWindow *win = new ListShipWindow(this);
-    // win->show();
 }
 
 
@@ -143,8 +126,6 @@ void MainWindow::on_pbComplect_clicked()
 {
     ui->aInstallModul->trigger();
 
-    // ComplectProductWindow *win = new ComplectProductWindow(this);
-    // win->show();
 }
 
 
@@ -164,9 +145,6 @@ void MainWindow::on_pbStartRemont_clicked()
 void MainWindow::on_pbStartWork_clicked()
 {
     ui->aStartWork->trigger();
-
-    // StartWorkWindow *win = new StartWorkWindow(this);
-    // win->show();
 }
 
 
@@ -176,9 +154,6 @@ void MainWindow::on_pbStartWork_clicked()
 void MainWindow::on_pbEndRemont_clicked()
 {
     ui->aEndRepair->trigger();
-
-    // EndRemontWindow *win = new EndRemontWindow(this);
-    // win->show();
 }
 
 

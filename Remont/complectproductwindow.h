@@ -41,7 +41,7 @@ private:
 
     void LoadProductToScreen(Items &prod);
     void addModulToScreen(Items &mod);
-    void ShowLineChild(Items& child);
+    // void ShowLineChild(Items& child);
 
 };
 

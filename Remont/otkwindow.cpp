@@ -154,7 +154,6 @@ void OTKWindow::slotReadScan(QString s)
     if(isActiveWindow())
     {
         RepoMSSQL repo;
-
         Items item = repo.GetItem2(s, stat);
 
         if(item.id != 0)

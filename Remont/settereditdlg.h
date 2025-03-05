@@ -25,6 +25,7 @@ private slots:
     void on_tbDelete_clicked();
     void on_tbSearch_clicked();
     void on_pbOk_clicked();
+    void slotReadScan(QString s);
 
 private:
     Ui::SetterEditDlg *ui;

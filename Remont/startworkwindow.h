@@ -21,10 +21,9 @@ public:
 
 private slots:
     void on_pbProdToWork_clicked();
-
     void on_tbSearch_clicked();
-
     void on_tbDelete_clicked();
+    void slotReadScan(QString s);
 
 private:
     Ui::StartWorkWindow *ui;
@@ -32,6 +31,8 @@ private:
     // ListProduct products;
     // ListModul modules;
     QList<Items> listDev;
+    void AddDevice(Items* dev);
+    void SetStatusAllDevice(Items* item, QDateTime& dateOn);
 };
 
 #endif // STARTWORKWINDOW_H

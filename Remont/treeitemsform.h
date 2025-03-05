@@ -21,8 +21,8 @@ public:
     explicit TreeItemsForm(QWidget *parent = nullptr);
     ~TreeItemsForm();
 
-    void AddItem(IEntity* item);
-    int GetCurrentRootItem(IndexType& type);
+    void AddItem(IEntity* item, bool isRootVisible = true);
+    int GetCurrentRootItemId(IndexType& type);
     int DeleteSelectedItem(bool isConfirm = true);
     void SetSelectItem(int id, IndexType typeIndex);
     int GetSelectedId();

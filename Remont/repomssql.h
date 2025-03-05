@@ -95,8 +95,9 @@ public:
 
     // Organization
     Organization GetOrganization(int id);
-    void LoadOrganization(QMap<int, QString> &listOrg);
-    void LoadOrganizationAsync(QMap<int, QString> &listOrg, QPromise<void> &promise);
+    // void LoadOrganization(QMap<int, QString> &listOrg);
+    // void LoadOrganizationAsync(QMap<int, QString> &listOrg, QPromise<void> &promise);
+
     void LoadOrganization(QList<Organization> &listOrg);
     void LoadOrganizationAsync(QList<Organization> &listOrg, QPromise<void> &promise);
 
@@ -111,6 +112,9 @@ public:
     void CreateGenerator(uint year);
     void RestartSerialNumber(uint year);
     int GetCurrentNumber(uint year);
+
+    // User Role
+    bool LoadRolesUser(int idUser, QList<int> &roles);
 };
 
 #endif

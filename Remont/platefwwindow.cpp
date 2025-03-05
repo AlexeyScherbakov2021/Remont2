@@ -16,13 +16,13 @@ PlateFWWindow::PlateFWWindow(QWidget *parent)
     // model->setFunction((PlateModel::pLoadItems)&PlateFWWindow::LoadItems);
     ui->tableView->setModel(model);
 
-    ui->tableView->setColumnWidth(0, 80);
-    ui->tableView->setColumnWidth(1, 200);
+    ui->tableView->setColumnWidth(0, 30);
+    ui->tableView->setColumnWidth(1, 80);
     ui->tableView->setColumnWidth(2, 200);
+    ui->tableView->setColumnWidth(3, 200);
     ui->tableView->setColumnWidth(4, 80);
     ui->tableView->setColumnWidth(5, 20);
     ui->tableView->setColumnWidth(6, 150);
-
 
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 }

@@ -103,11 +103,14 @@ void ComplectProductWindow::LoadProductToScreen(Items &dev)
     ui->imageDev->setPixmap(QPixmap(nameIcon));
     ui->imageDev->setToolTip(nameType);
 
-    ui->lwInnerModule->clear();
-    for(auto &it : dev.childItems)
-    {
-        ShowLineChild(it);
-    }
+    // ui->lwInnerModule->clear();
+    // for(auto &it : dev.childItems)
+    // {
+    //     ShowLineChild(it);
+    // }
+
+    ui->wTree->AddItem(&dev, false);
+
 }
 
 //----------------------------------------------------------------------------------------------
@@ -115,57 +118,69 @@ void ComplectProductWindow::LoadProductToScreen(Items &dev)
 //----------------------------------------------------------------------------------------------
 void ComplectProductWindow::addModulToScreen(Items &mod)
 {
-    if(mod.id > 0 && trackModul.AddRecord(mod.id, mod))
+    if(mod.id > 0 && trackModul.AddRecord(/*mod.id,*/ mod))
     {
-        ShowLineChild(mod);
+        // ShowLineChild(mod);
+        ui->wTree->AddItem(&mod);
     }
 }
 
 //----------------------------------------------------------------------------------------------
 // Отображение строки вложенного устройства
 //----------------------------------------------------------------------------------------------
-void ComplectProductWindow::ShowLineChild(Items& child)
-{
-    QString nameType;
-    QString iconName;
-    QListWidgetItem *item = new QListWidgetItem;
+// void ComplectProductWindow::ShowLineChild(Items& child)
+// {
+//     QString nameType;
+//     QString iconName;
+//     QListWidgetItem *item = new QListWidgetItem;
 
-    child.GetInfo(nameType, iconName);
-    item->setText(child.number + " (" + child.type.typeName + " " + child.VNFT + ")");
-    item->setIcon(QIcon(iconName));
+//     child.GetInfo(nameType, iconName);
+//     item->setText(child.number + " (" + child.type.typeName + " " + child.VNFT + ")");
+//     item->setIcon(QIcon(iconName));
 
-    if(child.listStatus.last().idStatus == StatusItem::FAULTY_ON_OBJECT)
-    {
-        item->setForeground(QBrush(Qt::red));
-        item->setText(child.number + " (" + child.type.typeName + " " + child.VNFT + ") требуется замена");
-    }
+//     if(child.listStatus.last().idStatus == StatusItem::FAULTY_ON_OBJECT)
+//     {
+//         item->setForeground(QBrush(Qt::red));
+//         item->setText(child.number + " (" + child.type.typeName + " " + child.VNFT + ") требуется замена");
+//     }
 
-    QVariant var;
-    var.setValue(child);
-    item->setData(Qt::UserRole, var);
-    ui->lwInnerModule->addItem(item);
+//     QVariant var;
+//     var.setValue(child);
+//     item->setData(Qt::UserRole, var);
+//     ui->lwInnerModule->addItem(item);
 
-}
+// }
 
 //----------------------------------------------------------------------------------------------
 // Удаление модуля из изделие
 //----------------------------------------------------------------------------------------------
 void ComplectProductWindow::on_pbDeleteModul_clicked()
 {
-    if(ui->lwInnerModule->currentRow() < 0)
+    int id = ui->wTree->DeleteSelectedItem(true);
+
+    if(id == 0)
         return;
 
-    QVariant var = ui->lwInnerModule->item(ui->lwInnerModule->currentRow())->data(Qt::UserRole);
-    Items mod = var.value<Items>();
+    Items mod = repo.GetItem(id);
+    Q_ASSERT(mod.id != 0);
+    trackModul.DelRecord(/*mod.id,*/ mod);
 
-    trackModul.DelRecord(mod.id, mod);
 
-    QListWidgetItem *item = new QListWidgetItem;
-    item->setText(mod.number + " (" + mod.name + ")");
-    var.setValue(mod);
-    item->setData(Qt::UserRole, var);
+    // if(ui->lwInnerModule->currentRow() < 0)
+    //     return;
 
-    delete ui->lwInnerModule->item(ui->lwInnerModule->currentRow());
+    // QVariant var = ui->lwInnerModule->item(ui->lwInnerModule->currentRow())->data(Qt::UserRole);
+    // Items mod = var.value<Items>();
+
+    // trackModul.DelRecord(/*mod.id,*/ mod);
+
+    // QListWidgetItem *item = new QListWidgetItem;
+    // item->setText(mod.number + " (" + mod.name + ")");
+    // var.setValue(mod);
+    // item->setData(Qt::UserRole, var);
+
+    // delete ui->lwInnerModule->item(ui->lwInnerModule->currentRow());
+
 
 }
 

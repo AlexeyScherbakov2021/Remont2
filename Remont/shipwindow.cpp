@@ -18,6 +18,7 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
     {
         // qDebug() << "LoadOrgAsync";
         RepoMSSQL repo2("thread");
+        // repo2.LoadOrganizationAsync(listOrg, promise);
         repo2.LoadOrganizationAsync(listOrg, promise);
         // qDebug() << "LoadOrgAsync finish";
     });
@@ -26,14 +27,22 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
     watcher = new QFutureWatcher<void>(this);
     connect(watcher, &QFutureWatcher<void>::finished, watcher, [this] () {
         int selectRow = -1;
-        for(auto it = listOrg.begin(); it != listOrg.end(); ++it )
+        for(auto &it : listOrg)
         {
-            ui->cbCusomer->addItem(*it, it.key());
-            if(it.key() == ship->idOrganization)
-            {
+            ui->cbCusomer->addItem(it.orgName + "  (ИНН " + it.INN + " КПП" + it.KPP + ")", it.id);
+            if(it.id == ship->idOrganization)
                 selectRow = ui->cbCusomer->count() - 1;
-            }
         }
+
+
+        // for(auto it = listOrg2.begin(); it != listOrg2.end(); ++it )
+        // {
+        //     ui->cbCusomer->addItem(*it, it.key());
+        //     if(it.key() == ship->idOrganization)
+        //     {
+        //         selectRow = ui->cbCusomer->count() - 1;
+        //     }
+        // }
         ui->cbCusomer->setCurrentIndex(selectRow);
         // watcher->deleteLater();
     });
@@ -117,7 +126,7 @@ void ShipWindow::on_tbNumProd_clicked()
     if(dev != nullptr)
     {
         // qDebug() << dev->number;
-        trackItem.AddRecord(dev->id, *dev);
+        trackItem.AddRecord(/*dev->id,*/ *dev);
         ui->wTreeItems->AddItem(dev);
     }
 
@@ -131,7 +140,7 @@ void ShipWindow::on_tbNumProd_clicked()
 void ShipWindow::on_pbDelete_clicked()
 {
     IndexType type;
-    int id = ui->wTreeItems->GetCurrentRootItem(type);
+    int id = ui->wTreeItems->GetCurrentRootItemId(type);
     if(id <= 0)
         return;
 
@@ -143,7 +152,7 @@ void ShipWindow::on_pbDelete_clicked()
         for(auto &it : ship->listSetterOut)
             if(it.id == id)
             {
-                trackSet.DelRecord(id, it);
+                trackSet.DelRecord(/*id,*/ it);
                 break;
             }
     }
@@ -152,7 +161,7 @@ void ShipWindow::on_pbDelete_clicked()
         for(auto &it : ship->childItems)
             if(it.id == id)
             {
-                trackItem.DelRecord(id, it);
+                trackItem.DelRecord(/*id, */it);
                 break;
             }
     }
@@ -178,8 +187,9 @@ void ShipWindow::SetStatusItems(QList<Items> &items)
     for(auto &dev : items)
     {
         dev.AddStatus(dev, {StatusItem::SHIPPED}, dateShip);
-        SetStatusItems(dev.childItems);
         dev.dateGarant = dateShip.addMonths(dev.garantMonth);
+        repo.UpdateItem(dev);
+        SetStatusItems(dev.childItems);
     }
 }
 
@@ -224,7 +234,7 @@ void ShipWindow::on_tbAddSetter_clicked()
     QScopedPointer<SetterDlg> win (new SetterDlg(true, true));
     if(win->exec() == QDialog::Accepted && win->selectSetter != nullptr)
     {
-        trackSet.AddRecord(win->selectSetter->id, *win->selectSetter);
+        trackSet.AddRecord(/*win->selectSetter->id,*/ *win->selectSetter);
         ui->wTreeItems->AddItem(win->selectSetter);
     }
 }
@@ -262,10 +272,10 @@ void ShipWindow::SaveToBase()
         repo.AddItem(*ship);
     else
         repo.UpdateItem(*ship);
+
     repo.ItemsSyncShip(ship->id, &trackItem);
     repo.SetsSyncShip(ship->id, &trackSet);
 }
-
 
 
 
@@ -296,31 +306,64 @@ void ShipWindow::slotReadScan(QString s)
         Items dev = repo.GetItem2(s, {StatusItem::CORRECT, StatusItem::CORRECT_OSO});
         if(dev.id != 0)
         {
-            trackItem.AddRecord(dev.id, dev);
+            trackItem.AddRecord(/*dev.id,*/ dev);
             ui->wTreeItems->AddItem(&dev);
         }
     }
 }
 
 //-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void ShipWindow::SyncTrack()
+{
+    QList<Items> list;
+
+    trackItem.getListDel(list);
+    for(auto &it : list)
+    {
+        ship->childItems.removeIf([&it](const Items &item) { return item.id == it.id; });
+    }
+
+    trackItem.getListAdd(list);
+    ship->childItems.append(list);
+
+    QList<SetterOut> listSet;
+
+    trackSet.getListDel(listSet);
+    for(auto &it : listSet)
+    {
+        ship->listSetterOut.removeIf([&it](const SetterOut &item) { return item.id == it.id; });
+    }
+
+    trackSet.getListAdd(listSet);
+    ship->listSetterOut.append(listSet);
+
+}
+
+
+//-----------------------------------------------------------------------------------
 // Кнопка Отгрузить
 //-----------------------------------------------------------------------------------
 void ShipWindow::on_pbFinish_clicked()
 {
-    if(ship->childItems.size() == 0 && ship->listSetterOut.size() == 0)
-    {
-        QMessageBox::warning(this, "Предупреждение", "Не сформирован состав отгрузки.");
-        return;
-    }
-
     if(ui->leNumUPD->text().isEmpty())
     {
         QMessageBox::warning(this, "Предупреждение", "Для отгрузки необходимо указать № реализации.");
         return;
     }
 
-    if(ui->deDateUPD->dateTime() == ui->deDateUPD->minimumDateTime())
+    SyncTrack();
+
+    if(ship->childItems.size() == 0 && ship->listSetterOut.size() == 0)
+    {
+        QMessageBox::warning(this, "Предупреждение", "Не сформирован состав отгрузки.");
+        return;
+    }
+
+     if(ui->deDateUPD->dateTime() == ui->deDateUPD->minimumDateTime())
         ui->deDateUPD->setDateTime(QDateTime::currentDateTime());
+
 
     // установить статус Отгружен для всех устройств
     for(auto &it : ship->listSetterOut)

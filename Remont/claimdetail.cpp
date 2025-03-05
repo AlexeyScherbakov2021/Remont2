@@ -99,14 +99,21 @@ void ClaimDetail::ClaimToScreen(/*Claim *claim*/)
     watcher = new QFutureWatcher<void>(this);
     connect(watcher, &QFutureWatcher<void>::finished, watcher, [this] () {
         int selectRow = -1;
-        for(auto it = listOrg.begin(); it != listOrg.end(); ++it )
+        for(auto &it : listOrg)
         {
-            ui->cbOrg->addItem((*it).orgName, (*it).id);
-            if((*it).id == claim->idOrg)
-            {
+            ui->cbOrg->addItem(it.orgName + "  (ИНН " + it.INN + " КПП" + it.KPP + ")", it.id);
+            if(it.id == claim->idOrg)
                 selectRow = ui->cbOrg->count() - 1;
-            }
         }
+
+        // for(auto it = listOrg.begin(); it != listOrg.end(); ++it )
+        // {
+        //     ui->cbOrg->addItem((*it).orgName, (*it).id);
+        //     if((*it).id == claim->idOrg)
+        //     {
+        //         selectRow = ui->cbOrg->count() - 1;
+        //     }
+        // }
         ui->cbOrg->setCurrentIndex(selectRow);
         // watcher->deleteLater();
     });
@@ -161,7 +168,7 @@ void ClaimDetail::on_tbAddDevice_clicked()
     if(dev != nullptr && dev->id > 0)
     {
         AddProductToTableScreen(dev);
-        trackProduct.AddRecord(dev->id, *dev);
+        trackProduct.AddRecord(/*dev->id,*/ *dev);
     }
 }
 
@@ -189,7 +196,7 @@ void ClaimDetail::on_tbDeleteDevice_clicked()
         }
     }
 
-    trackProduct.DelRecord(id, dev);
+    trackProduct.DelRecord(/*id,*/ dev);
     ui->tableWidget->removeRow(ui->tableWidget->currentRow());
 }
 

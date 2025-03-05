@@ -30,6 +30,8 @@ private:
     RepoMSSQL repo;
     Claim claim;
     Items device;
+
+    void AddDevice(Items *item);
     // QList<Claim> listClaim;
     // ListClaim claims;
     // int idParentProd = 0;

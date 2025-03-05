@@ -43,19 +43,20 @@ void EndRemontWindow::on_tbNumber_clicked()
     Items *dev = win->SelectDevice(true, {StatusItem::REMONT}, ui->leNumber->text(), true, true );
     if(dev != nullptr && dev->id > 0)
     {
-        device = *dev;
-        claim = repo.GetClaimForItem(dev->id);
+        AddDevice(dev);
+        // device = *dev;
+        // claim = repo.GetClaimForItem(dev->id);
 
-        QString nameType, iconName;
-        dev->GetInfo(nameType, iconName);
-        ui->lbNumber->setText(dev->number);
-        ui->lbVNFT->setText(dev->type.VNFT);
-        ui->lbTypeName->setText(dev->type.typeName);
-        ui->lbDevice->setToolTip(nameType);
-        ui->lbDevice->setPixmap(QPixmap(iconName));
-        ui->lbOrgName->setText(claim.nameOrganization);
-        ui->lbClaim->setText(claim.number + " (" + claim.dateCreate.toString("dd.MM.yyyy") + ")");
-        ui->leNumber->clear();
+        // QString nameType, iconName;
+        // dev->GetInfo(nameType, iconName);
+        // ui->lbNumber->setText(dev->number);
+        // ui->lbVNFT->setText(dev->type.VNFT);
+        // ui->lbTypeName->setText(dev->type.typeName);
+        // ui->lbDevice->setToolTip(nameType);
+        // ui->lbDevice->setPixmap(QPixmap(iconName));
+        // ui->lbOrgName->setText(claim.nameOrganization);
+        // ui->lbClaim->setText(claim.number + " (" + claim.dateCreate.toString("dd.MM.yyyy") + ")");
+        // ui->leNumber->clear();
     }
 }
 
@@ -157,7 +158,30 @@ void EndRemontWindow::slotReadScan(QString s)
     if(isActiveWindow())
     {
         ui->leNumber->setText(s);
-        on_tbNumber_clicked();
+        Items item = repo.GetItem2(s, {StatusItem::REMONT}, true, true);
+        if(item.id > 0)
+        {
+            AddDevice(&item);
+        }
+        // on_tbNumber_clicked();
     }
 }
 
+
+void EndRemontWindow::AddDevice(Items *dev)
+{
+    device = *dev;
+    claim = repo.GetClaimForItem(dev->id);
+
+    QString nameType, iconName;
+    dev->GetInfo(nameType, iconName);
+    ui->lbNumber->setText(dev->number);
+    ui->lbVNFT->setText(dev->type.VNFT);
+    ui->lbTypeName->setText(dev->type.typeName);
+    ui->lbDevice->setToolTip(nameType);
+    ui->lbDevice->setPixmap(QPixmap(iconName));
+    ui->lbOrgName->setText(claim.nameOrganization);
+    ui->lbClaim->setText(claim.number + " (" + claim.dateCreate.toString("dd.MM.yyyy") + ")");
+    ui->leNumber->clear();
+
+}

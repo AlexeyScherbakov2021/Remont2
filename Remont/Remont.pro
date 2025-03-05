@@ -21,6 +21,7 @@ SOURCES += \
     infrastructure/IStatus.cpp \
     infrastructure/scaner.cpp \
     infrastructure/trackrecord.cpp \
+    infrastructure/users.cpp \
     listshipwindow.cpp \
     logwindow.cpp \
     main.cpp \
@@ -71,6 +72,7 @@ HEADERS += \
     infrastructure/general.h \
     infrastructure/scaner.h \
     infrastructure/trackrecord.h \
+    infrastructure/users.h \
     listshipwindow.h \
     logwindow.h \
     models/IDevice.h \

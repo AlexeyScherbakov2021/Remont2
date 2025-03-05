@@ -34,6 +34,8 @@ private:
     Items device;
     // QList<RemontStepStatus> listStatus;
     Claim claim;
+    void AddDevice(Items *item);
+
 
 };
 

@@ -204,6 +204,8 @@ void ClaimModel::AddItem(Claim *item)
 void ClaimModel::AddItemToList(Claim *item)
 {
     listClaim->AddItemToList(item);
+    int row = listClaim->items.size();
+    insertRows(row, 1);
 }
 
 //------------------------------------------------------------------------------------------------

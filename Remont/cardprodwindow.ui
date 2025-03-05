@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>795</width>
-    <height>459</height>
+    <width>995</width>
+    <height>568</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -445,6 +445,11 @@ color: black
           </item>
           <item row="1" column="1">
            <widget class="QLabel" name="lbSchet">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="text">
              <string/>
             </property>

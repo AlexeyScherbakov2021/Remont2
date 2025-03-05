@@ -16,6 +16,8 @@ CardProdWindow::CardProdWindow(Items *device, QWidget *parent)
 {
     Shipment ship;
     SetterOut setter;
+    Items root;
+    // int idParent = 0;
 
     ui->setupUi(this);
     setWindowTitle("Карточка \"" + device->GetDefaultName() + "\"");
@@ -29,31 +31,35 @@ CardProdWindow::CardProdWindow(Items *device, QWidget *parent)
     loadInclude(device);
     LoadHistoryToForm(device->listStatus);
 
+    root = *device;
+    while(root.idParent > 0)
+    {
+        root = repo.GetItem(root.idParent);
+    }
+
+    if(root.idShip > 0)
+        ship = repo.GetShipment(root.idShip);
+    if(root.idSet > 0)
+        setter = repo.GetSetter(root.idSet);
+    if(setter.idShip > 0)
+        ship = repo.GetShipment(setter.idShip);
+
     ui->lbGarant->setText(device->dateGarant.toString("dd.MM.yyyy"));
     ui->lbDateCreate->setText(device->dateCreate.toString("dd.MM.yyyy"));
     ui->lbNumber->setText(device->number);
     ui->lbDateOn->setText(device->dateOn.toString("dd.MM.yyyy"));
 
-    ui->lbCardOrder->setText(setter.numberDoc);
     ui->lbGarantMon->setText(QString::number(device->garantMonth));
-    ui->lbDateUPD->setText(ship.dateUPD.toString("dd.MM.yyyy"));
-    ui->lbNumberUPD->setText(ship.numberUPD);
     ui->lbIcon->setPixmap(QPixmap(iconType));
     ui->lbName->setText(device->name);
     ui->lbNumber2->setText(device->number2);
     ui->lbType->setText(device->type.typeName);
     ui->lbVNFT->setText(device->type.VNFT);
 
-
-    if(device->idShip > 0)
-        ship = repo.GetShipment(device->idShip);
-    if(device->idSet > 0)
-        setter = repo.GetSetter(device->idSet);
-    if(setter.idShip > 0)
-        ship = repo.GetShipment(setter.idShip);
-
     if(ship.id > 0)
     {
+        ui->lbDateUPD->setText(ship.dateUPD.toString("dd.MM.yyyy"));
+        ui->lbNumberUPD->setText(ship.numberUPD);
         ui->lbSchet->setText(ship.schet);
         ui->lbObjectInstall->setText(ship.objectInstall);
         ui->lbNumberUPD->setText(ship.numberUPD);
@@ -61,8 +67,10 @@ CardProdWindow::CardProdWindow(Items *device, QWidget *parent)
 
     }
     if(setter.id > 0)
+    {
         ui->lbCardOrder->setText(setter.number);
-
+        // ui->lbCardOrder->setText(setter.numberDoc);
+    }
 
     number = device->number;
     // loadShipmentToForm(device);

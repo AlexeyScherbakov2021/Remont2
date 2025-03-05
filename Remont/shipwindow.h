@@ -36,14 +36,16 @@ private:
     bool isEditing = false;
     RepoMSSQL repo;
     Shipment *ship;
-    QHash<int, int> listID;
-    QMap<int, QString> listOrg;
+    // QHash<int, int> listID;
+    // QMap<int, QString> listOrg;
+    QList<Organization> listOrg;
     TrackRecord<Items> trackItem;
     TrackRecord<SetterOut> trackSet;
     QFutureWatcher<void> *watcher;
 
     void SetStatusItems(QList<Items>& items);
     void SaveToBase();
+    void SyncTrack();
 
 };
 

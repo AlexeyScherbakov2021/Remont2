@@ -19,4 +19,25 @@ enum StatusItem : int {
 };
 
 
+enum RolesType : int {
+    None,
+    RegisterPlate,
+    FWPlate,
+    VNFTPlate,
+    RegisterProd,
+    RegisterModul,
+    ComplectDevice,
+    CheckOTK,
+    VNFTProd,
+    VNFTModul,
+    ComplectSetter,
+    ComplectShip,
+    StartWork,
+    EditClaim,
+    ApplyOSO,
+    ApplyRepair,
+    EndRepair,
+    CardDevice
+};
+
 #endif // GENERAL_H
