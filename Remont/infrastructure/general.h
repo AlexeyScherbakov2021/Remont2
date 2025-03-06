@@ -19,7 +19,7 @@ enum StatusItem : int {
 };
 
 
-enum RolesType : int {
+enum class RolesType : int {
     None,
     RegisterPlate,
     FWPlate,
@@ -37,7 +37,9 @@ enum RolesType : int {
     ApplyOSO,
     ApplyRepair,
     EndRepair,
-    CardDevice
+    CardDevice,
+    GenerateQR,
+
 };
 
 #endif // GENERAL_H

@@ -21,7 +21,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(int idUser, QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
@@ -56,18 +56,19 @@ private slots:
     void on_aShipping_triggered();
     void on_aLog_triggered();
     void on_aGenQR_triggered();
-    void on_aPRodVNFT_triggered();
+    void on_aProdVNFT_triggered();
     void on_aModVNFT_triggered();
     void on_aRegModul_triggered();
-
     void on_aSetter_triggered();
-
     void on_aNewShip_triggered();
+    void on_aRole_triggered();
 
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
     QMetaObject::Connection conn;
+
+    void SetRoleEnv(Users &user);
 
 };
 

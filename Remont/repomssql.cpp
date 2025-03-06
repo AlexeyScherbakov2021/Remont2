@@ -6,6 +6,8 @@
 #include <models/organization.h>
 #include<models/Items.h>
 
+#include <infrastructure/users.h>
+
 #include <QSqlDriver>
 #include <infrastructure/IStatus.h>
 #include "repomssql.h"
@@ -1912,6 +1914,9 @@ int RepoMSSQL::GetCountRegisterPlate(QString numDoc, int idType)
 }
 
 
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
 int32_t RepoMSSQL::GetNextNumber(uint year)
 {
     int32_t res = -1;
@@ -1922,6 +1927,9 @@ int32_t RepoMSSQL::GetNextNumber(uint year)
     return res;
 }
 
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
 void RepoMSSQL::CreateGenerator(uint year)
 {
     QSqlQuery query(db);
@@ -1929,12 +1937,18 @@ void RepoMSSQL::CreateGenerator(uint year)
 
 }
 
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
 void RepoMSSQL::RestartSerialNumber(uint year)
 {
     QSqlQuery query(db);
     query.exec(QString("ALTER SEQUENCE GenSerial%1 restart").arg(year));
 }
 
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
 int RepoMSSQL::GetCurrentNumber(uint year)
 {
     // qDebug() << year;
@@ -1955,7 +1969,10 @@ int RepoMSSQL::GetCurrentNumber(uint year)
 
 }
 
-bool RepoMSSQL::LoadRolesUser(int idUser, QList<int> &roles)
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
+bool RepoMSSQL::LoadRolesUser(int idUser, QSet<RolesType> &roles)
 {
     bool res;
     roles.clear();
@@ -1970,10 +1987,105 @@ bool RepoMSSQL::LoadRolesUser(int idUser, QList<int> &roles)
     res = query.exec();
     while(query.next())
     {
-        int role = query.value(3).toInt();
-        roles.push_back(role);
+        RolesType role = (RolesType)query.value(3).toInt();
+        roles.insert(role);
     }
     return res;
 
 }
+
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
+void RepoMSSQL::LoadRoles(QMap<RolesType, QString> &roles)
+{
+    roles.clear();
+    QSqlQuery query(db);
+
+    query.prepare("select id, nameRole from Roles");
+
+    query.exec();
+    while(query.next())
+    {
+        RolesType id = (RolesType)query.value(0).toInt();
+        roles[id] = query.value(1).toString();
+    }
+}
+
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
+void RepoMSSQL::LoadUsers(QList<Users> &listUsers)
+{
+    listUsers.clear();
+    QSqlQuery query(db);
+
+    query.prepare("select userID,UserName,UserFullName,UserPass from Users order by UserName");
+
+    query.exec();
+    while(query.next())
+    {
+        Users user;
+        user.id = query.value(0).toInt();
+        user.UserName = query.value(1).toString();
+        user.UserFullName = query.value(2).toString();
+        user.Pass = query.value(3).toString();
+        listUsers.push_back(user);
+    }
+}
+
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
+bool RepoMSSQL::SaveUserRoles(Users &user)
+{
+    bool res = false;
+    QSqlDatabase::database().transaction();
+
+    QSqlQuery query(db);
+
+    query.prepare("delete from RolesUser where idUser=:idUser");
+    query.bindValue(":idUser", user.id);
+    res = query.exec();
+    query.clear();
+
+    query.prepare("insert into RolesUser (idUser,idRole) values(:idUser,:idRole)");
+    query.bindValue(":idUser", user.id);
+    for(auto &it : user.listRoles)
+    {
+        query.bindValue(":idRole", (int)it);
+        res &= query.exec();
+    }
+
+    if(res)
+        QSqlDatabase::database().commit();
+    else
+        QSqlDatabase::database().rollback();
+
+    return res;
+}
+
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
+Users RepoMSSQL::LoadUser(int idUser)
+{
+    Users user;
+    QSqlQuery query(db);
+
+    query.prepare("select userID,UserName,UserFullName,UserPass from Users where userID=:userID");
+    query.bindValue(":userID", idUser);
+    query.exec();
+
+    if(query.next())
+    {
+        user.id = query.value(0).toInt();
+        user.UserName = query.value(1).toString();
+        user.UserFullName = query.value(2).toString();
+        user.Pass = query.value(3).toString();
+    }
+
+    return user;
+}
+
 

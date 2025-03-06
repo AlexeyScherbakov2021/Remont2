@@ -222,7 +222,7 @@ background-color: LightGray;
     <addaction name="aInstallModul"/>
     <addaction name="aControlOTK"/>
     <addaction name="separator"/>
-    <addaction name="aPRodVNFT"/>
+    <addaction name="aProdVNFT"/>
     <addaction name="aModVNFT"/>
    </widget>
    <widget class="QMenu" name="menu_3">
@@ -258,6 +258,7 @@ background-color: LightGray;
     <addaction name="aScaner"/>
     <addaction name="aLog"/>
     <addaction name="aGenQR"/>
+    <addaction name="aRole"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -339,6 +340,9 @@ background-color: LightGray;
    <property name="text">
     <string>Рекламации</string>
    </property>
+   <property name="visible">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="aGetOSO">
    <property name="icon">
@@ -374,6 +378,9 @@ background-color: LightGray;
    </property>
    <property name="text">
     <string>Замена модуля</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
    </property>
   </action>
   <action name="aCardDevice">
@@ -426,7 +433,7 @@ background-color: LightGray;
     <string>Генерация QR кода</string>
    </property>
   </action>
-  <action name="aPRodVNFT">
+  <action name="aProdVNFT">
    <property name="text">
     <string>Справочник ВНФТ изделий</string>
    </property>
@@ -444,6 +451,11 @@ background-color: LightGray;
   <action name="aSetter">
    <property name="text">
     <string>Наборы</string>
+   </property>
+  </action>
+  <action name="aRole">
+   <property name="text">
+    <string>Настройка доступа</string>
    </property>
   </action>
  </widget>

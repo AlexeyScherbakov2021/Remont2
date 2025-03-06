@@ -20,6 +20,7 @@ class Claim;
 class Remont;
 class Organization;
 class Items;
+class Users;
 
 class RepoMSSQL
 {
@@ -114,7 +115,11 @@ public:
     int GetCurrentNumber(uint year);
 
     // User Role
-    bool LoadRolesUser(int idUser, QList<int> &roles);
+    bool LoadRolesUser(int idUser, QSet<RolesType> &roles);
+    void LoadRoles(QMap<RolesType, QString> &roles);
+    void LoadUsers(QList<Users> &listUsers);
+    bool SaveUserRoles(Users &user);
+    Users LoadUser(int idUser);
 };
 
 #endif

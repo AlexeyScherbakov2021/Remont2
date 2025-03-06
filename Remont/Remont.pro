@@ -23,6 +23,7 @@ SOURCES += \
     infrastructure/trackrecord.cpp \
     infrastructure/users.cpp \
     listshipwindow.cpp \
+    logindlg.cpp \
     logwindow.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -56,7 +57,8 @@ SOURCES += \
     settereditdlg.cpp \
     shipwindow.cpp \
     startworkwindow.cpp \
-    treeitemsform.cpp
+    treeitemsform.cpp \
+    usersetdlg.cpp
 
 HEADERS += \
     Itemvnftwindow.h \
@@ -74,6 +76,7 @@ HEADERS += \
     infrastructure/trackrecord.h \
     infrastructure/users.h \
     listshipwindow.h \
+    logindlg.h \
     logwindow.h \
     models/IDevice.h \
     models/Items.h \
@@ -114,7 +117,8 @@ HEADERS += \
     settereditdlg.h \
     shipwindow.h \
     startworkwindow.h \
-    treeitemsform.h
+    treeitemsform.h \
+    usersetdlg.h
 
 FORMS += \
     Itemvnftwindow.ui \
@@ -127,6 +131,7 @@ FORMS += \
     createprodwindow.ui \
     endremontwindow.ui \
     listshipwindow.ui \
+    logindlg.ui \
     logwindow.ui \
     mainwindow.ui \
     otkactiondlg.ui \
@@ -142,7 +147,8 @@ FORMS += \
     settereditdlg.ui \
     shipwindow.ui \
     startworkwindow.ui \
-    treeitemsform.ui
+    treeitemsform.ui \
+    usersetdlg.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

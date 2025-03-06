@@ -9,14 +9,16 @@ class TrackRecord
 public:
 
     bool AddRecord(/*int key,*/ const T &item);
+    bool AddRecord(int key, const T &item);
     void DelRecord(/*int key,*/ const T &item);
+    void DelRecord(int key, const T &item);
 
     void getListAdd(QList<T> &list);
     void getListDel(QList<T> &list);
-    void clear();
 
     QMap<int, T> listAdd;
     QMap<int, T> listDel;
+    void clear();
 };
 
 
@@ -37,6 +39,23 @@ inline bool TrackRecord<T>::AddRecord(/*int key,*/ const T &item)
 }
 
 template<typename T>
+inline bool TrackRecord<T>::AddRecord(int key, const T &item)
+{
+    if(listDel.contains(key))
+        listDel.remove(key);
+    else
+    {
+        if(listAdd.contains(key))
+            return false;
+        else
+            listAdd.insert(key, item);
+    }
+
+    return true;
+}
+
+
+template<typename T>
 inline void TrackRecord<T>::DelRecord(/*int key,*/ const T &item)
 {
     if(listAdd.contains(item.id))
@@ -45,6 +64,17 @@ inline void TrackRecord<T>::DelRecord(/*int key,*/ const T &item)
         listDel.insert(item.id, item);
 
 }
+
+template<typename T>
+inline void TrackRecord<T>::DelRecord(int key, const T &item)
+{
+    if(listAdd.contains(key))
+        listAdd.remove(key);
+    else
+        listDel.insert(key, item);
+
+}
+
 
 template<typename T>
 inline void TrackRecord<T>::getListAdd(QList<T> &list)
