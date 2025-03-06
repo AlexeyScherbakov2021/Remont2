@@ -28,11 +28,10 @@
 #include "logindlg.h"
 #include <models/listdevice.h>
 #include <models/ItemsType.h>
+#include <infrastructure/users.h>
 
 #include <QLabel>
 #include <QSettings>
-
-#include <infrastructure/users.h>
 
 MainWindow::MainWindow(int idUser, QWidget *parent)
     : QMainWindow(parent)
@@ -57,14 +56,13 @@ MainWindow::MainWindow(int idUser, QWidget *parent)
     }
 
     SetRoleEnv(user);
-    ui->statusbar->addWidget(new QLabel("Login:"));
+    ui->statusbar->addWidget(new QLabel("Login: "));
     ui->statusbar->addWidget(new QLabel(user.UserFullName));
 
     QSettings setting("HKEY_CURRENT_USER\\Software\\Remont2", QSettings::NativeFormat);
     QString port = setting.value("COMport").toString();
     Scan::scan.open(port);
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
-
 }
 
 MainWindow::~MainWindow()
@@ -613,6 +611,9 @@ void MainWindow::SetRoleEnv(Users &user)
 }
 
 
+//----------------------------------------------------------------------------------------------
+//
+//----------------------------------------------------------------------------------------------
 void MainWindow::on_aRole_triggered()
 {
     UserSetDlg *win = new UserSetDlg(this);

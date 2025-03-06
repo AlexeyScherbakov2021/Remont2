@@ -63,9 +63,6 @@ void Scaner::slotRead()
         QString s(bytes);
         s = readLine + s;
         readLine.clear();
-        // s = s.removeLast();
-    // qDebug() << s;
-
         emit sigRead(s);
     }
     else
