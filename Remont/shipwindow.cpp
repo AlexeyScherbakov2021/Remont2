@@ -1,5 +1,7 @@
 #include <QInputDialog>
+#include <QMenu>
 #include <QMessageBox>
+#include "cardprodwindow.h"
 #include "scan.h"
 #include "selectdevicewindow.h"
 #include "setterdlg.h"
@@ -96,6 +98,9 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
     connect(ui->cbCusomer, SIGNAL(currentIndexChanged(int)), SLOT(slotIsEditing()));
 
     connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
+
+    ui->wTreeItems->addAction("Карточка устройства", this, SLOT(slotShowCard()));
+    ui->wTreeItems->setContextMenuPolicy(Qt::ActionsContextMenu);
 
 }
 
@@ -312,6 +317,17 @@ void ShipWindow::slotReadScan(QString s)
     }
 }
 
+void ShipWindow::slotShowCard()
+{
+    QPair<int, IndexType> pair = ui->wTreeItems->GetSelectedItem();
+    if(pair.first > 0 && pair.second <= IndexType::Plate)
+    {
+        Items dev = repo.GetItem(pair.first);
+        CardProdWindow *win = new CardProdWindow(&dev, this);
+        win->exec();
+    }
+}
+
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
@@ -375,5 +391,7 @@ void ShipWindow::on_pbFinish_clicked()
     SaveToBase();
     accept();
 }
+
+
 
 

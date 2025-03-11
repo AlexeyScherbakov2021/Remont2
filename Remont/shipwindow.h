@@ -30,6 +30,7 @@ private slots:
     void on_tbAddSetter_clicked();
     void on_pbSave_clicked();
     void slotReadScan(QString s);
+    void slotShowCard();
 
 private:
     Ui::ShipWindow *ui;

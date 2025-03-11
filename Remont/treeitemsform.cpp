@@ -76,7 +76,7 @@ void TreeItemsForm::AddChildTree(QTreeWidgetItem *root, Items* dev)
 
     QTreeWidgetItem *child = new QTreeWidgetItem();
 
-    if(dev->listStatus.last().idStatus == StatusItem::FAULTY_ON_OBJECT)
+    if(dev->listStatus.size() > 0 && dev->listStatus.last().idStatus == StatusItem::FAULTY_ON_OBJECT)
     {
         child->setForeground(0, QBrush(Qt::red));
         child->setText(0, dev->GetDefaultName() + " неисправен");
@@ -155,6 +155,21 @@ int TreeItemsForm::GetSelectedId()
 {
     auto selItem = ui->treeWidget->currentItem();
     return selItem->data(0, Qt::UserRole).toInt();
+}
+
+QPair<int,IndexType> TreeItemsForm::GetSelectedItem()
+{
+    QPair<int,IndexType> pair;
+    auto selItem = ui->treeWidget->currentItem();
+    pair.first = selItem->data(0, Qt::UserRole).toInt();
+    pair.second = (IndexType)selItem->data(0, Qt::UserRole + 1).toInt();
+    return pair;
+}
+
+void TreeItemsForm::ExecMenu(QMenu &menu, const QPoint &pos)
+{
+    qDebug() << "ExecMenu";
+    menu.exec(ui->treeWidget->viewport()->mapToGlobal(pos));
 }
 
 bool TreeItemsForm::SetSelectItemRec(int id, IndexType typeIndex, QTreeWidgetItem* item)

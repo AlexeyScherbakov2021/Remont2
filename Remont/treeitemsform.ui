@@ -37,6 +37,9 @@
      <property name="frameShape">
       <enum>QFrame::Shape::Box</enum>
      </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+     </property>
      <property name="iconSize">
       <size>
        <width>20</width>

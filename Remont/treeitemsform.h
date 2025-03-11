@@ -3,6 +3,7 @@
 
 #include "repomssql.h"
 
+#include <QMenu>
 #include <QTreeWidgetItem>
 #include <QWidget>
 
@@ -26,6 +27,8 @@ public:
     int DeleteSelectedItem(bool isConfirm = true);
     void SetSelectItem(int id, IndexType typeIndex);
     int GetSelectedId();
+    QPair<int,IndexType> GetSelectedItem();
+    void ExecMenu(QMenu &menu, const QPoint &pos);
 
 private:
     Ui::TreeItemsForm *ui;
