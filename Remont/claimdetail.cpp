@@ -45,7 +45,11 @@ ClaimDetail::~ClaimDetail()
 void ClaimDetail::on_pbOK_clicked()
 {
     claim->number = ui->leNumber->text();
-    claim->dateCreate = ui->deDateClaim->dateTime();
+
+    if(ui->deDateClaim->isNull())
+        claim->dateCreate = QDateTime::fromString("00.00.0000","dd.MM.yyyy");
+    else
+        claim->dateCreate = ui->deDateClaim->dateTime();
     claim->ObjectInstall = ui->leObjectInst->text();
     claim->idTypeClaim = ui->cbTypeClaim->currentData(Qt::UserRole).toInt();
     int orgIndex = ui->cbOrg->currentData().toInt();

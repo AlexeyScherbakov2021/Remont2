@@ -250,46 +250,55 @@ background-color: LightGray;
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QDateEdit" name="deDateOut">
+        <widget class="DateEdit" name="deDateOut">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>26</height>
+          </size>
+         </property>
          <property name="specialValueText">
-          <string notr="true"/>
+          <string notr="true">[введите дату]</string>
+         </property>
+         <property name="keyboardTracking">
+          <bool>false</bool>
          </property>
          <property name="showGroupSeparator" stdset="0">
           <bool>false</bool>
          </property>
          <property name="dateTime">
           <datetime>
-           <hour>9</hour>
+           <hour>12</hour>
            <minute>0</minute>
            <second>0</second>
-           <year>1800</year>
+           <year>1900</year>
            <month>1</month>
            <day>1</day>
           </datetime>
          </property>
          <property name="time">
           <time>
-           <hour>9</hour>
+           <hour>12</hour>
            <minute>0</minute>
            <second>0</second>
           </time>
          </property>
          <property name="minimumDate">
           <date>
-           <year>1800</year>
+           <year>1900</year>
            <month>1</month>
            <day>1</day>
           </date>
          </property>
          <property name="minimumTime">
           <time>
-           <hour>9</hour>
+           <hour>12</hour>
            <minute>0</minute>
            <second>0</second>
           </time>
@@ -302,7 +311,7 @@ background-color: LightGray;
          </property>
          <property name="date">
           <date>
-           <year>1800</year>
+           <year>1900</year>
            <month>1</month>
            <day>1</day>
           </date>
@@ -431,53 +440,62 @@ background-color: LightGray;
         </widget>
        </item>
        <item row="8" column="1">
-        <widget class="QDateEdit" name="deDateUPD">
+        <widget class="DateEdit" name="deDateUPD">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>26</height>
+          </size>
+         </property>
          <property name="specialValueText">
-          <string/>
+          <string>[введите дату]</string>
+         </property>
+         <property name="keyboardTracking">
+          <bool>false</bool>
          </property>
          <property name="showGroupSeparator" stdset="0">
           <bool>false</bool>
          </property>
          <property name="dateTime">
           <datetime>
-           <hour>9</hour>
+           <hour>12</hour>
            <minute>0</minute>
            <second>0</second>
-           <year>1800</year>
+           <year>1900</year>
            <month>1</month>
            <day>1</day>
           </datetime>
          </property>
          <property name="time">
           <time>
-           <hour>9</hour>
+           <hour>12</hour>
            <minute>0</minute>
            <second>0</second>
           </time>
          </property>
          <property name="minimumDate">
           <date>
-           <year>1800</year>
+           <year>1900</year>
            <month>1</month>
            <day>1</day>
           </date>
          </property>
          <property name="maximumTime">
           <time>
-           <hour>15</hour>
+           <hour>19</hour>
            <minute>59</minute>
            <second>59</second>
           </time>
          </property>
          <property name="minimumTime">
           <time>
-           <hour>9</hour>
+           <hour>12</hour>
            <minute>0</minute>
            <second>0</second>
           </time>
@@ -496,7 +514,7 @@ background-color: LightGray;
          </property>
          <property name="date">
           <date>
-           <year>1800</year>
+           <year>1900</year>
            <month>1</month>
            <day>1</day>
           </date>
@@ -647,6 +665,11 @@ background-color: LightGray;
    <extends>QWidget</extends>
    <header>treeitemsform.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DateEdit</class>
+   <extends>QDateEdit</extends>
+   <header>infrastructure/dateedit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -19,6 +19,7 @@ SOURCES += \
     createprodwindow.cpp \
     endremontwindow.cpp \
     infrastructure/IStatus.cpp \
+    infrastructure/dateedit.cpp \
     infrastructure/scaner.cpp \
     infrastructure/trackrecord.cpp \
     infrastructure/users.cpp \
@@ -71,6 +72,7 @@ HEADERS += \
     createprodwindow.h \
     endremontwindow.h \
     infrastructure/IStatus.h \
+    infrastructure/dateedit.h \
     infrastructure/general.h \
     infrastructure/scaner.h \
     infrastructure/trackrecord.h \

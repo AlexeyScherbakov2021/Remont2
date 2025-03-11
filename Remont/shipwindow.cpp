@@ -16,6 +16,8 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
 
     ui->setupUi(this);
 
+    ui->deDateOut->setNullDate(QDate(1900,1,1));
+
     QFuture<void> future =  QtConcurrent::run( [&] (QPromise<void> &promise)
     {
         // qDebug() << "LoadOrgAsync";
@@ -36,17 +38,7 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
                 selectRow = ui->cbCusomer->count() - 1;
         }
 
-
-        // for(auto it = listOrg2.begin(); it != listOrg2.end(); ++it )
-        // {
-        //     ui->cbCusomer->addItem(*it, it.key());
-        //     if(it.key() == ship->idOrganization)
-        //     {
-        //         selectRow = ui->cbCusomer->count() - 1;
-        //     }
-        // }
         ui->cbCusomer->setCurrentIndex(selectRow);
-        // watcher->deleteLater();
     });
 
     watcher->setFuture(future);
@@ -96,6 +88,7 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
     connect(ui->leObjectInstall, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
     connect(ui->leSchet, SIGNAL(textChanged(QString)), SLOT(slotIsEditing()));
     connect(ui->cbCusomer, SIGNAL(currentIndexChanged(int)), SLOT(slotIsEditing()));
+    connect(ui->deDateOut, SIGNAL(dateChanged(QDate)), SLOT(slotIsEditing()));
 
     connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
@@ -178,13 +171,6 @@ void ShipWindow::on_pbDelete_clicked()
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
-// void ShipWindow::SetStatusItems(Items *dev)
-// {
-//     dev->AddStatus(*dev, {StatusItem::SHIPPED});
-
-//     for(auto &it : dev->childItems)
-//         SetStatusItems(&it);
-// }
 
 void ShipWindow::SetStatusItems(QList<Items> &items)
 {
@@ -227,6 +213,7 @@ void ShipWindow::SetStatusItems(QList<Items> &items)
 //-----------------------------------------------------------------------------------
 void ShipWindow::slotIsEditing()
 {
+    // qDebug() << ui->deDateOut->date();
     isEditing = true;
 }
 
@@ -263,12 +250,18 @@ void ShipWindow::SaveToBase()
 
     // qDebug() << ui->deDateUPD->date().year() << ui->deDateUPD->date().month();
 
-    if(ui->deDateUPD->date().year() < 1900)
+    if(ui->deDateUPD->isNull())
         ship->dateUPD = QDateTime::fromString("00.00.0000","dd.MM.yyyy");
     else
         ship->dateUPD = ui->deDateUPD->dateTime();
 
-    if(ui->deDateOut->date().year() <  1900)
+    // if(ui->deDateUPD->date().year() < 1900)
+    //     ship->dateUPD = QDateTime::fromString("00.00.0000","dd.MM.yyyy");
+    // else
+    //     ship->dateUPD = ui->deDateUPD->dateTime();
+
+    // if(ui->deDateOut->date().year() <  1900)
+    if(ui->deDateOut->isNull())
         ship->dateRegister = QDateTime::fromString("00.00.0000","dd.MM.yyyy");
     else
         ship->dateRegister = ui->deDateOut->dateTime();
@@ -281,7 +274,6 @@ void ShipWindow::SaveToBase()
     repo.ItemsSyncShip(ship->id, &trackItem);
     repo.SetsSyncShip(ship->id, &trackSet);
 }
-
 
 
 //-----------------------------------------------------------------------------------
@@ -317,12 +309,16 @@ void ShipWindow::slotReadScan(QString s)
     }
 }
 
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
 void ShipWindow::slotShowCard()
 {
-    QPair<int, IndexType> pair = ui->wTreeItems->GetSelectedItem();
-    if(pair.first > 0 && pair.second <= IndexType::Plate)
+    auto [id, indexType] = ui->wTreeItems->GetSelectedItem();
+    // QPair<int, IndexType> pair = ui->wTreeItems->GetSelectedItem();
+    if(id > 0 && indexType <= IndexType::Plate)
     {
-        Items dev = repo.GetItem(pair.first);
+        Items dev = repo.GetItem(id);
         CardProdWindow *win = new CardProdWindow(&dev, this);
         win->exec();
     }

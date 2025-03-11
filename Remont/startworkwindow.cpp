@@ -11,17 +11,7 @@ StartWorkWindow::StartWorkWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // listDev.LoadPart2(0, -1, "", {StatusItem::SHIPPED}, true);
-
-    // products.FindItems("", Status::SHIPPED);
-
-    // for(auto &it : products.items)
-    // {
-    //     QListWidgetItem *item = new QListWidgetItem();
-    //     item->setText(it.name + " (" + it.number + ")");
-    //     item->setData(Qt::UserRole, it.id);
-    //     ui->lwProduct->addItem(item);
-    // }
+    ui->deDate->setNullDate(QDate(1900,1,1));
     ui->deDate->setDateTime(QDateTime::currentDateTime());
     ui->lwProduct->setColumnWidth(0, 400);
     ui->lwProduct->setColumnWidth(1, 150);
@@ -49,6 +39,12 @@ void StartWorkWindow::on_pbProdToWork_clicked()
     if(ui->leDoc->text().isEmpty())
     {
         QMessageBox::information(this, "Сообщение", "Укажите документ.");
+        return;
+    }
+
+    if(ui->deDate->isNull())
+    {
+        QMessageBox::information(this, "Сообщение", "Не указана дата.");
         return;
     }
 
