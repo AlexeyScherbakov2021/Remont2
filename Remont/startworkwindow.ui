@@ -64,7 +64,7 @@ background-color: LightGray;
      <item row="0" column="1">
       <widget class="DateEdit" name="deDate">
        <property name="specialValueText">
-        <string>[введите дату]</string>
+        <string>{введите дату}</string>
        </property>
        <property name="keyboardTracking">
         <bool>false</bool>

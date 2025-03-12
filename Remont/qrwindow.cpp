@@ -10,6 +10,8 @@
 #include <QPrinter>
 #include <QScreen>
 
+#include <qr/qrcodegen/qrcodegen.h>
+
 QRWindow::QRWindow(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::QRWindow)
@@ -27,7 +29,7 @@ QRWindow::~QRWindow()
 void QRWindow::on_pbGenerate_clicked()
 {
     listNumbers.clear();
-    QrCodeGenerator gen;
+    // QrCodeGenerator gen;
 
     uint year = ui->cbYear->currentText().toUInt();
     RepoMSSQL repo;
@@ -164,7 +166,7 @@ void QRWindow::paintStick(QPainter &painter, int x, int y, QString number)
     painter.setPen(QPen(Qt::black, 1));
     painter.drawRect(x, y, widthStick, heightStick);
     QrCodeGenerator gen;
-    QImage image = gen.generateQr(number, sizeQR, 0);
+    QImage image = gen.generateQr(number, sizeQR, 0, qrcodegen::QrCode::Ecc::HIGH);
     painter.drawImage(x + 20 , y + 20, image);
 
     // painter.setPen(Qt::black);

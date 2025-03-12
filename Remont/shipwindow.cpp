@@ -1,3 +1,4 @@
+#include <QClipboard>
 #include <QInputDialog>
 #include <QMenu>
 #include <QMessageBox>
@@ -93,6 +94,18 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
     connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
     ui->wTreeItems->addAction("Карточка устройства", this, SLOT(slotShowCard()));
+    ui->wTreeItems->addAction("Скопировать номер", this, [this] () {
+        auto [id, indexType] = ui->wTreeItems->GetSelectedItem();
+        if(indexType <= IndexType::Plate)
+        {
+            Items dev = repo.GetItem(id);
+            QClipboard *cpb = QApplication::clipboard();
+            cpb->setText(dev.number, QClipboard::Clipboard);
+            qDebug() <<  dev.number;
+        }
+    });
+
+
     ui->wTreeItems->setContextMenuPolicy(Qt::ActionsContextMenu);
 
 }
