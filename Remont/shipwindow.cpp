@@ -18,6 +18,7 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
     ui->setupUi(this);
 
     ui->deDateOut->setNullDate(QDate(1900,1,1));
+    ui->deDateUPD->setNullDate(QDate(1900,1,1));
 
     QFuture<void> future =  QtConcurrent::run( [&] (QPromise<void> &promise)
     {
@@ -54,6 +55,7 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
         ui->leObjectInstall->setCursorPosition(0);
         ui->leSchet->setText(ship->schet);
         ui->leCustomer->setText(ship->customer);
+        ui->leCustomer->setCursorPosition(0);
         ui->deDateUPD->setDateTime(ship->dateUPD);
         ui->deDateOut->setDateTime(ship->dateRegister);
 
@@ -73,6 +75,8 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
     {
         ui->deDateOut->setDateTime(QDateTime::currentDateTime());
     }
+
+    // qDebug() << shipment->dateUPD;
 
     if(!shipment->dateUPD.isNull())
     {
@@ -104,7 +108,6 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
             qDebug() <<  dev.number;
         }
     });
-
 
     ui->wTreeItems->setContextMenuPolicy(Qt::ActionsContextMenu);
 

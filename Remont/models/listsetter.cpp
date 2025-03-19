@@ -28,6 +28,7 @@ int ListSetter::GetRowFromId(int id)
         if(items[row].id == id)
             return row;
     }
+
     return -1;
 }
 
