@@ -116,7 +116,7 @@ void OTKWindow::on_tbDelCheckProd_clicked()
     if(dev.id > 0)
     {
         Q_ASSERT(dev.listStatus.size() != 0 || dev.listStatus.last().idStatus != StatusItem::CORRECT);
-        dev.DeleteLastStatus(dev);
+        dev.DeleteLastStatus(dev, StatusItem::CORRECT);
         delete ui->lwCheckedProd->currentItem();
         repo.LoadStatus(dev);
         model->AddItem(&dev);
@@ -139,7 +139,7 @@ void OTKWindow::on_tbDelBrokenProd_clicked()
     {
         Q_ASSERT(dev.listStatus.size() != 0 || dev.listStatus.last().idStatus != StatusItem::FAULTY);
 
-        dev.DeleteLastStatus(dev);
+        dev.DeleteLastStatus(dev, StatusItem::FAULTY);
         delete ui->lwBrokenProd->currentItem();
         repo.LoadStatus(dev);
         model->AddItem(&dev);

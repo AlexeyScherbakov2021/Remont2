@@ -1,4 +1,5 @@
 #include "acceptremontwindow.h"
+#include "changemoduldlg.h"
 #include "complectproductwindow.h"
 #include "scan.h"
 #include "selectdevicewindow.h"
@@ -37,9 +38,12 @@ void AcceptRemontWindow::on_pbExchange_clicked()
         return;
     }
 
-    Items prod = repo.GetItem(device.idParent);
-    ComplectProductWindow *win = new ComplectProductWindow(this, &prod);
-    win->exec();
+    // Items prod = repo.GetItem(device.idParent);
+    ChangeModulDlg *win = new ChangeModulDlg(&device, this);
+    if(win->exec() == QDialog::Accepted)
+    {
+        qInfo() << "Замена произошла";
+    }
 }
 
 

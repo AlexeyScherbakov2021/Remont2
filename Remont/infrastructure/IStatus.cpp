@@ -7,21 +7,21 @@ void StatusList::LoadStatus(Items& item)
     repo.LoadStatus(item);
 }
 
-bool StatusList::AddStatus(Items &item, StatusItem idStat, const QString &comment)
+bool StatusList::AddStatus(Items &item, StatusItem idStat, const QString &comment, int linkField)
 {
-    return AddStatus(item, idStat, QDateTime::currentDateTime(), comment );
+    return AddStatus(item, idStat, QDateTime::currentDateTime(), comment, linkField );
 }
 
-void StatusList::DeleteLastStatus(Items &item)
+void StatusList::DeleteLastStatus(Items &item, StatusItem status)
 {
     // Q_UNUSED(item);
     RepoMSSQL repo;
-    if(repo.DelLastStatus(item))
+    if(repo.DelLastStatus(item, status))
         item.listStatus.removeLast();
 }
 
 
-bool StatusList::AddStatus(Items &item, StatusItem idStat, const QDateTime &dateRegister,  const QString &comment)
+bool StatusList::AddStatus(Items &item, StatusItem idStat, const QDateTime &dateRegister,  const QString &comment, int linkField)
 {
     bool res;
     RepoMSSQL repo;
@@ -31,6 +31,7 @@ bool StatusList::AddStatus(Items &item, StatusItem idStat, const QDateTime &date
     status.dateStatus = dateRegister;
     status.Comment = comment;
     status.nameStatus = repo.GetNameStatus((int)idStat);
+    status.linkField = linkField;
     if(res = repo.AddStatus(item, status))
     {
         item.listStatus.push_back(status);

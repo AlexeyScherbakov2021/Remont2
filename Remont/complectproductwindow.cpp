@@ -212,7 +212,7 @@ void ComplectProductWindow::on_pbOK_clicked()
         Items mod = it;
         mod.idParent = 0;
         if(repo.UpdateItem(mod))
-            mod.DeleteLastStatus(mod);
+            mod.DeleteLastStatus(mod, StatusItem::INSTALL);
 
         mod.listStatus.removeIf( [] (auto n) { return n.idStatus == StatusItem::INSTALL; });
     }

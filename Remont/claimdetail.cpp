@@ -1,8 +1,10 @@
+#include "cardprodwindow.h"
 #include "claimdetail.h"
 #include "selectdevicewindow.h"
 #include "ui_claimdetail.h"
 #include <qmessagebox.h>
 #include <models/organization.h>
+#include <QClipboard>
 #include <QtConcurrent>
 
 ClaimDetail::ClaimDetail(Claim *cl, QWidget *parent)
@@ -28,6 +30,21 @@ ClaimDetail::ClaimDetail(Claim *cl, QWidget *parent)
 
     connect(ui->leNumber, SIGNAL(editingFinished()), SLOT(slotEnabledWidget()));
     connect(ui->tableWidget, SIGNAL(currentCellChanged(int,int,int,int)), SLOT(slotEnabledWidget()));
+
+    ui->tableWidget->addAction("Карточка устройства", this, SLOT(slotShowCard()));
+    ui->tableWidget->addAction("Скопировать номер", this, [this] () {
+        auto item = ui->tableWidget->item(ui->tableWidget->currentRow(), 0);
+        int id = item->data(Qt::UserRole).toInt();
+        // if(indexType <= IndexType::Plate)
+        // {
+            Items dev = repo.GetItem(id);
+            QClipboard *cpb = QApplication::clipboard();
+            cpb->setText(dev.number, QClipboard::Clipboard);
+            // qDebug() <<  dev.number;
+        // }
+    });
+
+    ui->tableWidget->setContextMenuPolicy(Qt::ActionsContextMenu);
 
     slotEnabledWidget();
 }
@@ -68,7 +85,17 @@ void ClaimDetail::on_pbOK_clicked()
     for(auto it : listAddProduct)
     {
         if(repo.AddItemToClaim(it.id, claim->id))
+        {
             it.AddStatus(it, StatusItem::FAULTY_ON_OBJECT);
+
+            // установка статуса для родителей
+            Items dev = it;
+            while(dev.idParent > 0)
+            {
+                dev = repo.GetItem(dev.idParent);
+                dev.AddStatus(dev, StatusItem::FAULTY_ON_OBJECT);
+            }
+        }
     }
 
     // Удаленные изделия
@@ -77,7 +104,17 @@ void ClaimDetail::on_pbOK_clicked()
     for(auto it : listDelProduct)
     {
         if(repo.DelItemFromClaim(it.id, claim->id))
-            it.DeleteLastStatus(it);
+        {
+            it.DeleteLastStatus(it, StatusItem::FAULTY_ON_OBJECT);
+
+            // удаление статуса для родителей
+            Items dev = it;
+            while(dev.idParent > 0)
+            {
+                dev = repo.GetItem(dev.idParent);
+                dev.DeleteLastStatus(dev, StatusItem::FAULTY_ON_OBJECT);
+            }
+        }
     }
 
     accept();
@@ -92,6 +129,8 @@ void ClaimDetail::ClaimToScreen(/*Claim *claim*/)
     ui->deDateClaim->setDateTime(claim->dateCreate);
     ui->leObjectInst->setText(claim->ObjectInstall);
     ui->cbTypeClaim->setCurrentText(listTypeClaim[claim->idTypeClaim]);
+
+    // repo.LoadOrganization(listOrg);
 
     QFuture<void> future =  QtConcurrent::run( [&] (QPromise<void> &promise)
         {
@@ -110,16 +149,7 @@ void ClaimDetail::ClaimToScreen(/*Claim *claim*/)
                 selectRow = ui->cbOrg->count() - 1;
         }
 
-        // for(auto it = listOrg.begin(); it != listOrg.end(); ++it )
-        // {
-        //     ui->cbOrg->addItem((*it).orgName, (*it).id);
-        //     if((*it).id == claim->idOrg)
-        //     {
-        //         selectRow = ui->cbOrg->count() - 1;
-        //     }
-        // }
         ui->cbOrg->setCurrentIndex(selectRow);
-        // watcher->deleteLater();
     });
 
     watcher->setFuture(future);
@@ -143,6 +173,7 @@ void ClaimDetail::AddProductToTableScreen(const Items *prod)
 
     QTableWidgetItem *item = new QTableWidgetItem();
     item->setData(Qt::UserRole, prod->id);
+    // item->setData(Qt::UserRole + 1, prod->type.indexType);
     item->setToolTip(typeName);
     item->setIcon(QIcon(iconName));
     ui->tableWidget->setItem(row, 0, item);
@@ -158,6 +189,7 @@ void ClaimDetail::AddProductToTableScreen(const Items *prod)
     item = new QTableWidgetItem();
     item->setText(prod->dateGarant.toString("dd.MM.yyyy"));
     ui->tableWidget->setItem(row, 3, item);
+
 }
 
 
@@ -235,5 +267,19 @@ void ClaimDetail::slotEnabledWidget()
         // }
     }
     ui->tbDeleteDevice->setEnabled(res);
+}
+
+void ClaimDetail::slotShowCard()
+{
+    auto item = ui->tableWidget->item(ui->tableWidget->currentRow(), 0);
+    int id = item->data(Qt::UserRole).toInt();
+    // IndexType indexType = item->data(Qt::UserRole + 1).toInt();
+
+    if(id > 0 /*&& indexType <= IndexType::Plate*/)
+    {
+        Items dev = repo.GetItem(id);
+        CardProdWindow *win = new CardProdWindow(&dev, this);
+        win->exec();
+    }
 }
 

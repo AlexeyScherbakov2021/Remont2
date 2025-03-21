@@ -15,7 +15,8 @@ enum StatusItem : int {
     FAULTY_ON_OSO,      // неисправен в ОСО
     REMONT,             // в ремонте
     CORRECT_OSO,        // исправен б/у в осо
-    END_WORK            // утилизирован
+    END_WORK,           // утилизирован
+    EXCHANGE             // Был заменен
 };
 
 

@@ -50,7 +50,7 @@ public:
     void LoadItemsType(QList<ItemType> &listType, IndexType indexType) const;
     void LoadStatus(Items& item) const;
     bool AddStatus(Items &item, Status &status) const;
-    bool DelLastStatus(Items &item) const;
+    bool DelLastStatus(Items &item, StatusItem status) const;
     void LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) const;       //=============
 
     // SetterOut
@@ -73,7 +73,7 @@ public:
     Shipment GetShipment(int id);
 
     //Claim
-    bool LoadClaim(const QString number, QList<Claim> &listClaim);
+    // bool LoadClaim(const QString number, QList<Claim> &listClaim);
     void LoadClaimType(QMap<int, QString> &listTypeClaim);
     Claim GetClaim(int id);
     bool AddItem(Claim &claim);
@@ -96,8 +96,6 @@ public:
 
     // Organization
     Organization GetOrganization(int id);
-    // void LoadOrganization(QMap<int, QString> &listOrg);
-    // void LoadOrganizationAsync(QMap<int, QString> &listOrg, QPromise<void> &promise);
 
     void LoadOrganization(QList<Organization> &listOrg);
     void LoadOrganizationAsync(QList<Organization> &listOrg, QPromise<void> &promise);

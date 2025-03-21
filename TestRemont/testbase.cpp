@@ -35,7 +35,7 @@ void TestBase::TestURAItem()
     Status stat2 = item.listStatus.last();
 
     // удаление последнего статуса
-    repo.DelLastStatus(item);
+    repo.DelLastStatus(item, StatusItem::FAULTY_ON_OSO);
     repo.LoadStatus(item);
 
     // удаление item

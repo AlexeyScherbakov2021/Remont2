@@ -540,7 +540,8 @@ int RepoMSSQL::LoadPart(int start, int count, const QString &number, QList<Claim
                        "o.orgName,ct.NameType,isClosed "
                        "from Claim c "
                        "join ClaimType ct on ct.id=c.TypeClaimId "
-                       "left join Organization o on o.id=c.idOrg" };
+                       "left join Organization o on o.id=c.idOrg "
+                       "where isDel<>1" };
 
 
     if(!number.isEmpty())
@@ -1157,7 +1158,6 @@ int RepoMSSQL::LoadPart(int start, int count, IndexType iType,
         item.type.indexType = (IndexType)query.value(17).toInt();
         item.type.VNFT = query.value(18).toString();
         item.type.garantMonth = query.value(19).toInt();
-        item.dateGarant = query.value(20).toDateTime();
         item.type.id = item.idType;
         item.VNFT = item.type.VNFT;
 
@@ -1350,13 +1350,16 @@ bool RepoMSSQL::AddStatus(Items &item, Status &status) const
     bool res;
     QSqlQuery query(db);
 
-    query.prepare("insert into ItemStatus (idItem,idStatus,DateStatus,Comment) "
-                  "output inserted.id values(:idItem,:idStatus,:DateStatus,:Comment)");
+    query.prepare("insert into ItemStatus (idItem,idStatus,DateStatus,Comment,linkField) "
+                  "output inserted.id values(:idItem,:idStatus,:DateStatus,:Comment,:linkField)");
 
     query.bindValue(":idItem", item.id);
     query.bindValue(":idStatus", status.idStatus);
     query.bindValue(":DateStatus", status.dateStatus);
     query.bindValue(":Comment", status.Comment);
+    QVariant var;
+    if(status.linkField > 0) var = status.linkField;
+    query.bindValue(":linkField", var);
 
     res = query.exec();
     if(!res)
@@ -1370,15 +1373,16 @@ bool RepoMSSQL::AddStatus(Items &item, Status &status) const
     return res;
 }
 
-bool RepoMSSQL::DelLastStatus(Items &item) const
+bool RepoMSSQL::DelLastStatus(Items &item, StatusItem status) const
 {
     bool res;
     QSqlQuery query(db);
 
-    query.prepare("delete from ItemStatus where id = (select Top(1) id FROM ItemStatus where idItem=:idItem "
+    query.prepare("delete from ItemStatus where idStatus=:idStatus and id = (select Top(1) id FROM ItemStatus where idItem=:idItem "
                   "order by DateStatus desc)");
 
     query.bindValue(":idItem", item.id);
+    query.bindValue(":idStatus", status);
 
     res = query.exec();
     if(!res)
@@ -1512,26 +1516,39 @@ void RepoMSSQL::LoadOrganization(QList<Organization> &listOrg)
     QSqlQuery query(db);
     listOrg.clear();
 
-    query.prepare("select id,OrgName,INN,KPP from Organization where INN is not null or KPP is not null order by OrgName");
+    QElapsedTimer tm;
+    tm.start();
+
+    query.prepare("select id,OrgName,INN,KPP from Organization order by OrgName"); //where INN is not null or KPP is not null
     query.exec();
+
+    qDebug() << "Select start." << tm.elapsed();
+
     while(query.next())
     {
         Organization org;
         org.id = query.value(0).toInt();
-        org.orgName = query.value(1).toString();
-        org.INN = query.value(2).toString();
-        org.KPP = query.value(3).toString();
+        // org.orgName = query.value(1).toString();
+        // org.INN = query.value(2).toString();
+        // org.KPP = query.value(3).toString();
         listOrg.push_back(org);
     }
+    qDebug() << "Select finish." << tm.elapsed();
+
 }
+
 
 void RepoMSSQL::LoadOrganizationAsync(QList<Organization> &listOrg, QPromise<void> &promise)
 {
+    QElapsedTimer tm;
+    tm.start();
+
     QSqlQuery query(db);
     listOrg.clear();
 
     query.prepare("select id,OrgName,INN,KPP from Organization where INN is not null or KPP is not null order by OrgName");
     query.exec();
+    qDebug() << "Select async start." << tm.elapsed();
     while(query.next() && !promise.isCanceled())
     {
         Organization org;
@@ -1541,6 +1558,8 @@ void RepoMSSQL::LoadOrganizationAsync(QList<Organization> &listOrg, QPromise<voi
         org.KPP = query.value(3).toString();
         listOrg.push_back(org);
     }
+
+    qDebug() << "Select async finish." << tm.elapsed();
 }
 
 //------------------------------------------------------------------------------------------------------
@@ -1591,39 +1610,39 @@ Organization RepoMSSQL::GetOrganization(int id)
 
 
 
-bool RepoMSSQL::LoadClaim(const QString number, QList<Claim> &listClaim)
-{
-    bool res;
-    listClaim.clear();
-    QSqlQuery query(db);
-    QString sql = "select c.id,c.Number,dateClaim,typeClaimId,c.idOrg,ObjectInstall,o.orgName,isClosed "
-                  "from Claim c "
-                  "join ClaimType ct on ct.id=c.TypeClaimId "
-                  "left join Organization o on o.id=c.idOrg";
+// bool RepoMSSQL::LoadClaim(const QString number, QList<Claim> &listClaim)
+// {
+//     bool res;
+//     listClaim.clear();
+//     QSqlQuery query(db);
+//     QString sql = "select c.id,c.Number,dateClaim,typeClaimId,c.idOrg,ObjectInstall,o.orgName,isClosed "
+//                   "from Claim c "
+//                   "join ClaimType ct on ct.id=c.TypeClaimId "
+//                   "left join Organization o on o.id=c.idOrg";
 
-    if(!number.isEmpty())
-        sql += " where Number like '%:number%'";
+//     if(!number.isEmpty())
+//         sql += " where Number like '%:number%'";
 
-    query.prepare(sql);
-    query.bindValue(":number", number);
+//     query.prepare(sql);
+//     query.bindValue(":number", number);
 
-    res = query.exec();
-    while(query.next())
-    {
-        Claim claim;
-        claim.id = query.value(0).toInt();
-        claim.number = query.value(1).toString();
-        claim.dateCreate = query.value(2).toDateTime();
-        claim.idTypeClaim = query.value(3).toInt();
-        claim.idOrg = query.value(4).toInt();
-        claim.ObjectInstall = query.value(5).toString();
-        claim.nameOrganization = query.value(6).toString();
-        claim.isClosed = query.value(7).toBool();
-        listClaim.push_back(claim);
-    }
+//     res = query.exec();
+//     while(query.next())
+//     {
+//         Claim claim;
+//         claim.id = query.value(0).toInt();
+//         claim.number = query.value(1).toString();
+//         claim.dateCreate = query.value(2).toDateTime();
+//         claim.idTypeClaim = query.value(3).toInt();
+//         claim.idOrg = query.value(4).toInt();
+//         claim.ObjectInstall = query.value(5).toString();
+//         claim.nameOrganization = query.value(6).toString();
+//         claim.isClosed = query.value(7).toBool();
+//         listClaim.push_back(claim);
+//     }
 
-    return res;
-}
+//     return res;
+// }
 
 //------------------------------------------------------------------------------------------------------
 // Загрузка типов рекламаций

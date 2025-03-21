@@ -55,7 +55,6 @@ void TreeItemsForm::AddItem(IEntity *dev, bool isRootVisible)
         item->setToolTip(0, nameType);
         ui->treeWidget->addTopLevelItem(item);
         item->setExpanded(true);
-
     }
 
     for(auto &it : dev->childItems)
@@ -76,10 +75,31 @@ void TreeItemsForm::AddChildTree(QTreeWidgetItem *root, Items* dev)
 
     QTreeWidgetItem *child = new QTreeWidgetItem();
 
-    if(dev->listStatus.size() > 0 && dev->listStatus.last().idStatus == StatusItem::FAULTY_ON_OBJECT)
+    if(dev->listStatus.size() > 0 )
     {
-        child->setForeground(0, QBrush(Qt::red));
-        child->setText(0, dev->GetDefaultName() + " неисправен");
+        switch(dev->listStatus.last().idStatus)
+        {
+        case StatusItem::FAULTY_ON_OBJECT:
+            child->setForeground(0, QBrush(Qt::red));
+            child->setText(0, dev->GetDefaultName() + " неисправен");
+            break;
+
+        case StatusItem::EXCHANGE:
+            child->setForeground(0, QBrush(Qt::lightGray));
+            child->setText(0, dev->GetDefaultName() + " был заменен");
+            break;
+        }
+
+        // if(dev->listStatus.last().idStatus == StatusItem::FAULTY_ON_OBJECT)
+        // {
+        //     child->setForeground(0, QBrush(Qt::red));
+        //     child->setText(0, dev->GetDefaultName() + " неисправен");
+        // }
+        // if(dev->listStatus.last().idStatus == StatusItem::EXCHANGE)
+        // {
+        //     child->setForeground(0, QBrush(Qt::lightGray));
+        //     child->setText(0, dev->GetDefaultName() + " был заменен");
+        // }
     }
     else
         child->setText(0, dev->GetDefaultName());
@@ -168,7 +188,7 @@ QPair<int,IndexType> TreeItemsForm::GetSelectedItem()
 
 void TreeItemsForm::ExecMenu(QMenu &menu, const QPoint &pos)
 {
-    qDebug() << "ExecMenu";
+    // qDebug() << "ExecMenu";
     menu.exec(ui->treeWidget->viewport()->mapToGlobal(pos));
 }
 

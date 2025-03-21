@@ -12,6 +12,7 @@ SOURCES += \
     Itemvnftwindow.cpp \
     acceptremontwindow.cpp \
     cardprodwindow.cpp \
+    changemoduldlg.cpp \
     claimdetail.cpp \
     claimwindow.cpp \
     complectproductwindow.cpp \
@@ -65,6 +66,7 @@ HEADERS += \
     Itemvnftwindow.h \
     acceptremontwindow.h \
     cardprodwindow.h \
+    changemoduldlg.h \
     claimdetail.h \
     claimwindow.h \
     complectproductwindow.h \
@@ -126,6 +128,7 @@ FORMS += \
     Itemvnftwindow.ui \
     acceptremontwindow.ui \
     cardprodwindow.ui \
+    changemoduldlg.ui \
     claimdetail.ui \
     claimwindow.ui \
     complectproductwindow.ui \
@@ -160,7 +163,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     resource.qrc
 
-VERSION = 1.1.0.0
+VERSION = 1.1.0.1
 QMAKE_TARGET_COMPANY = NGK
 QMAKE_TARGET_PRODUCT = Remont
 QMAKE_TARGET_DESCRIPTION = Programm Remont

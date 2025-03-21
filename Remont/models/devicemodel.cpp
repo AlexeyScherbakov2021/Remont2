@@ -82,7 +82,7 @@ void DeviceModel::fetchMore(const QModelIndex &/*parent*/)
 
     if(!isBaseOff)
     {
-        int resLoad = listDev->LoadPart2(startLoad, cntLoad, number, vStatus, isBusy, isParent);
+        int resLoad = listDev->LoadPart(startLoad, cntLoad, number, vStatus, isBusy, isParent);
 
         if(resLoad > 0)
         {
@@ -262,9 +262,6 @@ void DeviceModel::createList(IndexType type)
         listDev = std::make_unique<ListDevice>(IndexType::All);
         break;
 
-    case IndexType::ClaimType:
-        // listDev = std::make_unique<ListClaim>();
-        break;
     default:
         Q_ASSERT(false);
     }

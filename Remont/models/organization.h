@@ -7,13 +7,13 @@
 class Organization
 {
 public:
-    int id;
+    int id = 0;
     QString UID;
     QString orgName;
     QString INN;
     QString KPP;
 
-    Organization() : id(0) {}
+    // Organization() : id(0) {}
 
     const QString getFullName() const
     {

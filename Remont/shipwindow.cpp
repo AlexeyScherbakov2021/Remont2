@@ -105,7 +105,7 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
             Items dev = repo.GetItem(id);
             QClipboard *cpb = QApplication::clipboard();
             cpb->setText(dev.number, QClipboard::Clipboard);
-            qDebug() <<  dev.number;
+            // qDebug() <<  dev.number;
         }
     });
 

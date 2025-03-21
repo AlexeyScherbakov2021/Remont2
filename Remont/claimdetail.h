@@ -24,6 +24,7 @@ private slots:
     void on_tbAddDevice_clicked();
     void on_tbDeleteDevice_clicked();
     void slotEnabledWidget();
+    void slotShowCard();
 
 private:
     Ui::ClaimDetail *ui;
