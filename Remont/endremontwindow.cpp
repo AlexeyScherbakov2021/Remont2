@@ -44,19 +44,6 @@ void EndRemontWindow::on_tbNumber_clicked()
     if(dev != nullptr && dev->id > 0)
     {
         AddDevice(dev);
-        // device = *dev;
-        // claim = repo.GetClaimForItem(dev->id);
-
-        // QString nameType, iconName;
-        // dev->GetInfo(nameType, iconName);
-        // ui->lbNumber->setText(dev->number);
-        // ui->lbVNFT->setText(dev->type.VNFT);
-        // ui->lbTypeName->setText(dev->type.typeName);
-        // ui->lbDevice->setToolTip(nameType);
-        // ui->lbDevice->setPixmap(QPixmap(iconName));
-        // ui->lbOrgName->setText(claim.nameOrganization);
-        // ui->lbClaim->setText(claim.number + " (" + claim.dateCreate.toString("dd.MM.yyyy") + ")");
-        // ui->leNumber->clear();
     }
 }
 
@@ -91,25 +78,23 @@ void EndRemontWindow::on_pbEndRemont_clicked()
 
     device.AddStatus(device, stat, ui->deDate->dateTime());
 
-    //
-    Items parent = repo.GetItem(device.idParent);
-    while(parent.id > 0)
-    {
-        bool res = parent.TestChildGoodStatus();
-        if(res)
-        {
-            parent.AddStatus(parent, StatusItem::WORK);
-            Remont remParent = repo.GetRemontForItem(parent.id);
-            remParent.action = "";
-            remParent.defect = "Неисправные комплектующие";
-            remParent.endDate = ui->deDate->dateTime();
-            remParent.idReason = ui->cbReason->currentData(Qt::UserRole).toInt();
-            remParent.remark = "Все комплектующие исправны";
-            repo.UpdateRemont(remParent);
-        }
-        parent = repo.GetItem(parent.idParent);
-    } //while(parent.idParent > 0);
-
+    // Items parent = repo.GetItem(device.idParent);
+    // while(parent.id > 0)
+    // {
+    //     bool res = parent.TestChildGoodStatus();
+    //     if(res)
+    //     {
+    //         parent.AddStatus(parent, StatusItem::WORK);
+    //         Remont remParent = repo.GetRemontForItem(parent.id);
+    //         remParent.action = "";
+    //         remParent.defect = "Неисправные комплектующие";
+    //         remParent.endDate = ui->deDate->dateTime();
+    //         remParent.idReason = ui->cbReason->currentData(Qt::UserRole).toInt();
+    //         remParent.remark = "Все комплектующие исправны";
+    //         repo.UpdateRemont(remParent);
+    //     }
+    //     parent = repo.GetItem(parent.idParent);
+    // }
 
     QMessageBox::information(this, "Сообщение", QString("%1 №%2 %3 ремонт завершен.")
                 .arg(device.type.typeName).arg(device.number).arg(device.type.VNFT));

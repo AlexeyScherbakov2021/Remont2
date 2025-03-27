@@ -620,3 +620,12 @@ void MainWindow::on_aRole_triggered()
     win->exec();
 }
 
+//----------------------------------------------------------------------------------------------
+//
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aEnterWork_triggered()
+{
+    EnterWorkWindow *win = new EnterWorkWindow(this);
+    win->exec();
+}
+

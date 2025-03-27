@@ -5,6 +5,8 @@
 
 #include <QMessageBox>
 
+#include <models/remont.h>
+
 StartWorkWindow::StartWorkWindow(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::StartWorkWindow)
@@ -30,9 +32,6 @@ StartWorkWindow::~StartWorkWindow()
 //----------------------------------------------------------------------------
 void StartWorkWindow::on_pbProdToWork_clicked()
 {
-    // auto item = ui->lwProduct->currentItem();
-    // if(item == nullptr)
-    //     return;
     if(listDev.size() == 0)
         return;
 
@@ -88,37 +87,38 @@ void StartWorkWindow::SetStatusAllDevice(Items *item, QDateTime& dateOn)
         SetStatusAllDevice(&it, dateOn);
 }
 
+//----------------------------------------------------------------------------
+//
+//----------------------------------------------------------------------------
+void StartWorkWindow::SelectDevice()
+{
+    SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
+    win->AddSelectedType(IndexType::Modul);
+
+    // Items *dev = win->SelectDevice(true, {StatusItem::CORRECT_OSO}, ui->leSearch->text(), false, true);
+    Items *dev = win->SelectDevice(true, {StatusItem::SHIPPED}, ui->leSearch->text(), true);
+    if(dev != nullptr && dev->id > 0)
+    {
+        AddDevice(dev);
+    }
+}
+
 
 //----------------------------------------------------------------------------
 // Поиск оборудования
 //----------------------------------------------------------------------------
 void StartWorkWindow::on_tbSearch_clicked()
 {
-    SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
-    win->AddSelectedType(IndexType::Modul);
+    SelectDevice();
+    // SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
+    // win->AddSelectedType(IndexType::Modul);
 
-    Items *dev = win->SelectDevice(true, {StatusItem::SHIPPED}, ui->leSearch->text(), true);
-    if(dev != nullptr && dev->id > 0)
-    {
-        AddDevice(dev);
-        // repo.LoadStatus(*dev);
-        // int row = ui->lwProduct->rowCount();
-        // ui->lwProduct->insertRow(row);
-        // QString nameType, nameIcon;
-        // dev->GetInfo(nameType, nameIcon);
-
-        // QTableWidgetItem *item = new QTableWidgetItem();
-        // item->setText(dev->GetDefaultName());
-        // item->setIcon(QIcon(nameIcon));
-        // item->setData(Qt::UserRole, dev->id);
-        // ui->lwProduct->setItem(row, 0, item);
-
-        // item = new QTableWidgetItem();
-        // item->setText(dev->getNameLastStatus());
-        // ui->lwProduct->setItem(row, 1, item);
-
-        // listDev.push_back(*dev);
-    }
+    // // Items *dev = win->SelectDevice(true, {StatusItem::CORRECT_OSO}, ui->leSearch->text(), false, true);
+    // Items *dev = win->SelectDevice(true, {StatusItem::SHIPPED}, ui->leSearch->text(), true);
+    // if(dev != nullptr && dev->id > 0)
+    // {
+    //     AddDevice(dev);
+    // }
 }
 
 
@@ -157,18 +157,6 @@ void StartWorkWindow::on_tbDelete_clicked()
     ui->lwProduct->removeRow(row);
     listDev.removeAt(row);
 
-    // auto ranges = ui->lwProduct->selectedRanges();
-
-    // for(auto &it : ranges)
-    // {
-    //     for(int row = it.topRow(); row <= it.bottomRow(); ++row)
-    //     {
-    //         int id = ui->lwProduct->item(row, 0)->data(Qt::UserRole).toInt();
-    //         listDev.removeIf([id] (Items dev) { return dev.id == id; } );
-
-    //     }
-    //     ranges.removeAll;
-    // }
 }
 
 void StartWorkWindow::slotReadScan(QString s)
@@ -184,5 +172,70 @@ void StartWorkWindow::slotReadScan(QString s)
             AddDevice(&item);
         }
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+EnterWorkWindow::EnterWorkWindow(QWidget *parent) : StartWorkWindow(parent)
+{
+    setWindowTitle("Ввести в работу после ремонта");
+}
+
+
+void EnterWorkWindow::SelectDevice()
+{
+    SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
+    win->AddSelectedType(IndexType::Modul);
+
+    Items *dev = win->SelectDevice(true, {StatusItem::CORRECT_OSO}, ui->leSearch->text(), false, true);
+    // Items *dev = win->SelectDevice(true, {StatusItem::SHIPPED}, ui->leSearch->text(), true);
+    if(dev != nullptr && dev->id > 0)
+    {
+        AddDevice(dev);
+    }
+}
+
+
+
+void EnterWorkWindow::SetStatusAllDevice(Items *item, QDateTime &dateOn)
+{
+    if(item->listStatus.last().idStatus == StatusItem::WORK)
+        return;
+
+    item->dateOn = dateOn;
+    item->dateGarant = dateOn.addMonths(item->garantMonth);
+    repo.UpdateItem(*item);
+    item->AddStatus(*item, StatusItem::WORK, dateOn, ui->leDoc->text());
+
+    Items parent = repo.GetItem(item->idParent);
+    while(parent.id > 0)
+    {
+        bool res = parent.TestChildStatus(StatusItem::CORRECT_OSO);
+        if(res)
+        {
+            parent.AddStatus(parent, StatusItem::WORK);
+            Remont remParent = repo.GetRemontForItem(parent.id);
+            remParent.action = "";
+            remParent.defect = "Неисправные комплектующие";
+            remParent.endDate = ui->deDate->dateTime();
+            // remParent.idReason = ui->cbReason->currentData(Qt::UserRole).toInt();
+            remParent.remark = "Все комплектующие исправны";
+            repo.UpdateRemont(remParent);
+        }
+        parent = repo.GetItem(parent.idParent);
+    }
+
+
+    repo.LoadChildItems(item->id, item->childItems);
+    for(auto &it : item->childItems)
+        SetStatusAllDevice(&it, dateOn);
 }
 

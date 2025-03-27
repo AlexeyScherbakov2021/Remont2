@@ -120,6 +120,11 @@ void TreeItemsForm::AddChildTree(QTreeWidgetItem *root, Items* dev)
                 child->setText(0, dev->GetDefaultName() + " неиспр.комплектующие");
                 break;
 
+            case StatusItem::CORRECT_OSO:
+                child->setForeground(0, QBrush(Qt::lightGray));
+                child->setText(0, dev->GetDefaultName() + " отсутствует");
+                break;
+
             default:
                 child->setText(0, dev->GetDefaultName());
                 break;

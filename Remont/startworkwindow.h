@@ -25,14 +25,29 @@ private slots:
     void on_tbDelete_clicked();
     void slotReadScan(QString s);
 
-private:
+protected:
     Ui::StartWorkWindow *ui;
+    void AddDevice(Items* dev);
     RepoMSSQL repo;
+private:
     // ListProduct products;
     // ListModul modules;
     QList<Items> listDev;
-    void AddDevice(Items* dev);
-    void SetStatusAllDevice(Items* item, QDateTime& dateOn);
+    virtual void SelectDevice();
+    virtual void SetStatusAllDevice(Items* item, QDateTime& dateOn);
 };
+
+
+class EnterWorkWindow : public StartWorkWindow
+{
+    Q_OBJECT
+public:
+    EnterWorkWindow(QWidget *parent = nullptr);
+private:
+    void SelectDevice() override;
+    void SetStatusAllDevice(Items* item, QDateTime& dateOn) override;
+
+};
+
 
 #endif // STARTWORKWINDOW_H

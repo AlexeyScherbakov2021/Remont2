@@ -123,7 +123,7 @@ background-color: LightGray;
       <item row="6" column="0">
        <widget class="QPushButton" name="pbStartWork">
         <property name="text">
-         <string>Запуск в работу</string>
+         <string>Ввод в работу</string>
         </property>
        </widget>
       </item>
@@ -221,6 +221,7 @@ background-color: LightGray;
     <addaction name="aGetRepair"/>
     <addaction name="aEndRepair"/>
     <addaction name="aExchModul"/>
+    <addaction name="aEnterWork"/>
    </widget>
    <widget class="QMenu" name="menu_5">
     <property name="title">
@@ -379,7 +380,7 @@ background-color: LightGray;
      <normaloff>:/image/gear_in.png</normaloff>:/image/gear_in.png</iconset>
    </property>
    <property name="text">
-    <string>Ввести в работу</string>
+    <string>Ввод в работу</string>
    </property>
   </action>
   <action name="aScaner">
@@ -437,6 +438,11 @@ background-color: LightGray;
   <action name="aRole">
    <property name="text">
     <string>Настройка доступа</string>
+   </property>
+  </action>
+  <action name="aEnterWork">
+   <property name="text">
+    <string>Ввести в работу после ремонта</string>
    </property>
   </action>
  </widget>

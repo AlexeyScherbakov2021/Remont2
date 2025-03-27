@@ -86,7 +86,27 @@ public:
 
         for(auto &it : childItems)
         {
-            if(it.listStatus.size() > 0 && it.listStatus.last().typeStatus == 1)
+            if(it.listStatus.size() > 0 && it.listStatus.last().typeStatus == TypeStatus::REMONT_STATUS)
+            {
+                res = false;
+                break;
+            }
+        }
+        return res;
+    }
+
+    bool TestChildStatus(StatusItem status)
+    {
+        bool res = true;
+        if(childItems.size() == 0)
+        {
+            RepoMSSQL repo;
+            repo.LoadChildItems(id, childItems);
+        }
+
+        for(auto &it : childItems)
+        {
+            if(it.listStatus.size() > 0 && it.listStatus.last().idStatus == status)
             {
                 res = false;
                 break;
