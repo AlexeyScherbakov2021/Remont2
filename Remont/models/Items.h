@@ -55,7 +55,6 @@ public:
             break;
         case IndexType::All:
             nameType = "Любой";
-            // nameIcon = ":/image/network_adapter.png";
             break;
         case IndexType::ClaimType:
         default:
@@ -65,44 +64,43 @@ public:
         return type.indexType;
     }
 
+
+    void SetLastStatus(QString& currStatus, QString& commentStatus) const
+    {
+        if(listStatus.size() > 0)
+        {
+            currStatus = listStatus.last().nameStatus;
+            commentStatus = listStatus.last().Comment;
+        }
+    }
+
+
+    bool TestChildGoodStatus()
+    {
+        bool res = true;
+        if(childItems.size() == 0)
+        {
+            RepoMSSQL repo;
+            repo.LoadChildItems(id, childItems);
+        }
+
+        for(auto &it : childItems)
+        {
+            if(it.listStatus.size() > 0 && it.listStatus.last().typeStatus == 1)
+            {
+                res = false;
+                break;
+            }
+        }
+        return res;
+    }
+
     // bool operator==(const Items &other) const { return this->id == other.id; }
 
     // inline size_t qHash(const Items &key/*, uint seed*/){
     //     return qHash(key.id);
     // StatusList listStatus;
 };
-
-
-
-// class ItemsProduct : public Items
-// {
-// public:
-//     void GetInfo(QString &nameType, QString &nameIcon) override
-//     {
-//         nameType = "Изделие";
-//         nameIcon = ":/image/product.png";
-//     }
-// };
-
-// class ItemsModul : public Items
-// {
-// public:
-//     void GetInfo(QString &nameType, QString &nameIcon) override
-//     {
-//         nameType = "Модуль";
-//         nameIcon = "://image/modul.png";
-//     }
-// };
-
-// class ItemsPlate : public Items
-// {
-// public:
-//     void GetInfo(QString &nameType, QString &nameIcon) override
-//     {
-//         nameType = "Плата";
-//         nameIcon = "://image/network_adapter.png";
-//     }
-// };
 
 
 #endif // ITEMS_H

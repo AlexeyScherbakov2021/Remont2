@@ -35,7 +35,7 @@ private:
     Claim claim;
     RepoMSSQL repo;
     void AddDevice(Items *item);
-
+    // bool testChildGoodStatus(Items *dev);
 };
 
 #endif // ENDREMONTWINDOW_H

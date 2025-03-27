@@ -71,7 +71,6 @@ void EndRemontWindow::on_pbEndRemont_clicked()
     if(device.id == 0)
         return;
 
-
     // закрыть рекламацию, если все отремонтировано
     // claim.isClosed = true;
     // repo.UpdateItem(claim);
@@ -92,6 +91,26 @@ void EndRemontWindow::on_pbEndRemont_clicked()
 
     device.AddStatus(device, stat, ui->deDate->dateTime());
 
+    //
+    Items parent = repo.GetItem(device.idParent);
+    while(parent.id > 0)
+    {
+        bool res = parent.TestChildGoodStatus();
+        if(res)
+        {
+            parent.AddStatus(parent, StatusItem::WORK);
+            Remont remParent = repo.GetRemontForItem(parent.id);
+            remParent.action = "";
+            remParent.defect = "Неисправные комплектующие";
+            remParent.endDate = ui->deDate->dateTime();
+            remParent.idReason = ui->cbReason->currentData(Qt::UserRole).toInt();
+            remParent.remark = "Все комплектующие исправны";
+            repo.UpdateRemont(remParent);
+        }
+        parent = repo.GetItem(parent.idParent);
+    } //while(parent.idParent > 0);
+
+
     QMessageBox::information(this, "Сообщение", QString("%1 №%2 %3 ремонт завершен.")
                 .arg(device.type.typeName).arg(device.number).arg(device.type.VNFT));
 
@@ -103,55 +122,27 @@ void EndRemontWindow::on_pbEndRemont_clicked()
     ui->lbTypeName->clear();
     device.id = 0;
 
-
-    // if(product.id != 0)
-    // {
-    //     // Product prod;
-    //     // prod.id = idProd;
-    //     product.AddStatus(product, stat, ui->deDate->dateTime());
-    //     Remont rem = repo.GetCurrentRemont(product.id, ev::PRODUCT);
-    //     rem.action = ui->leAction->text();
-    //     rem.defect = ui->leDefect->text();
-    //     rem.endDate = ui->deDate->dateTime();
-    //     rem.remark = ui->ptRemark->document()->toPlainText();
-    //     rem.idReason = ui->cbReason->currentData(Qt::UserRole).toInt();
-    //     repo.UpdateRemont(rem, ev::PRODUCT);
-    // }
-
-    // if(modul.id != 0)
-    // {
-    //     // Modul mod;
-    //     // mod.id = idMod;
-    //     modul.AddStatus(modul, stat, ui->deDate->dateTime());
-    //     Remont rem = repo.GetCurrentRemont(modul.id, ev::MODUL);
-    //     rem.action = ui->leAction->text();
-    //     rem.defect = ui->leDefect->text();
-    //     rem.endDate = ui->deDate->dateTime();
-    //     rem.remark = ui->ptRemark->document()->toPlainText();
-    //     rem.idReason = ui->cbReason->currentData(Qt::UserRole).toInt();
-    //     repo.UpdateRemont(rem, ev::MODUL);
-
-    //     if(modul.idParent != 0)
-    //     {
-    //         // product = repo.GetProduct(modul.idParent);
-    //         product.AddStatus(product, StatusItem::WORK , ui->deDate->dateTime());
-    //     }
-
-    // }
-
-    // idProd = idMod = 0;
-
-    // QMessageBox::information(this, "Сообщение", QString("Для %1 #%2 %3 ремонт завершен.")
-    //             .arg(ui->lbDevice->text()).arg(ui->lbNumber->text()).arg(ui->lbName->text()));
-
-    // ui->lbNumber->clear();
-    // ui->lbName->clear();
-    // ui->lbDevice->clear();
-    // ui->leNumber->clear();
-    // ui->ptRemark->clear();
-    // ui->lbClaim->clear();
-
 }
+
+//---------------------------------------------------------------------------
+// проверка исправности вложенного оборудования
+//---------------------------------------------------------------------------
+// bool EndRemontWindow::testChildGoodStatus(Items *dev)
+// {
+//     bool res = true;
+//     repo.LoadChildItems(dev->id, dev->childItems);
+//     for(auto &it : dev->childItems)
+//     {
+//         if(it.listStatus.size() > 0 && it.listStatus.last().typeStatus == 1)
+//         {
+//             res = false;
+//             break;
+//         }
+//     }
+//     return res;
+// }
+
+
 
 void EndRemontWindow::slotReadScan(QString s)
 {

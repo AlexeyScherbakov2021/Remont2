@@ -3,6 +3,11 @@
 
 enum IndexType : int { Product, Modul, Plate, ClaimType, SetterType, ShipType, All = 100 };
 
+enum TypeStatus : int {
+    DEF_STATUS,
+    REMONT_STATUS
+};
+
 enum StatusItem : int {
     NONE,               // нет статуса
     CREATE,             // создан
@@ -16,7 +21,8 @@ enum StatusItem : int {
     REMONT,             // в ремонте
     CORRECT_OSO,        // исправен б/у в осо
     END_WORK,           // утилизирован
-    EXCHANGE             // Был заменен
+    EXCHANGE,           // Был заменен
+    FAULTY_CHILD        // Неисправны комплектующие
 };
 
 
@@ -42,5 +48,6 @@ enum class RolesType : int {
     GenerateQR,
 
 };
+
 
 #endif // GENERAL_H

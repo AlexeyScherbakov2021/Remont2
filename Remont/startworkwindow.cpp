@@ -53,10 +53,6 @@ void StartWorkWindow::on_pbProdToWork_clicked()
     for(auto &it : listDev)
     {
         SetStatusAllDevice(&it, dateOn);
-        // it.dateOn = dateOn;
-        // it.dateGarant = dateOn.addMonths(it.garantMonth);
-        // repo.UpdateItem(it);
-        // it.AddStatus(it, StatusItem::WORK, dateOn, ui->leDoc->text());
     }
 
     QString statusName = listDev.first().getNameLastStatus();
@@ -72,10 +68,17 @@ void StartWorkWindow::on_pbProdToWork_clicked()
 
     ui->tbDelete->setEnabled(false);
     ui->tbSearch->setEnabled(false);
+    ui->pbProdToWork->setEnabled(false);
 }
 
+//----------------------------------------------------------------------------
+//
+//----------------------------------------------------------------------------
 void StartWorkWindow::SetStatusAllDevice(Items *item, QDateTime& dateOn)
 {
+    if(item->listStatus.last().idStatus == StatusItem::WORK)
+        return;
+
     item->dateOn = dateOn;
     item->dateGarant = dateOn.addMonths(item->garantMonth);
     repo.UpdateItem(*item);

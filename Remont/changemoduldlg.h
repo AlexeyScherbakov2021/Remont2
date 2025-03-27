@@ -28,7 +28,7 @@ private:
     Items newDev;
     RepoMSSQL repo;
 
-    bool testChildGoodStatus(Items *dev);
+    // bool testChildGoodStatus(Items *dev);
 
 };
 

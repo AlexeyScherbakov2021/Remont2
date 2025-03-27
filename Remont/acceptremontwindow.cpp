@@ -42,7 +42,11 @@ void AcceptRemontWindow::on_pbExchange_clicked()
     ChangeModulDlg *win = new ChangeModulDlg(&device, this);
     if(win->exec() == QDialog::Accepted)
     {
-        qInfo() << "Замена произошла";
+        // qInfo() << "Замена произошла";
+        QMessageBox::information(this, "Сообщение", QString("%1 №%2 %3 земенен.")
+                .arg(device.type.typeName).arg(device.number).arg(device.type.VNFT));
+
+        accept();
     }
 }
 
@@ -55,10 +59,49 @@ void AcceptRemontWindow::on_pbApply_clicked()
     if(device.id == 0)
         return;
 
+
+    if(device.listStatus.last().idStatus == StatusItem::EXCHANGE)
+    {
+        device.idParent = 0;
+        repo.UpdateItem(device);
+    }
+
     device.AddStatus(device, StatusItem::FAULTY_ON_OSO, ui->deDate->dateTime());
 
     QMessageBox::information(this, "Сообщение", QString("%1 №%2 %3 принят в ОСО.")
                 .arg(device.type.typeName).arg(device.number).arg(device.type.VNFT));
+
+    // Добавление в ремонт изделия, если есть
+    Items parent = repo.GetItem(device.idParent);
+    while(parent.id > 0)
+    {
+        Remont remontParent = repo.GetRemontForItem(parent.id);
+        if(remontParent.id == 0)
+        {
+            // создаем в ремонте, если не было
+            remontParent.idClaim = claim.id;
+            remontParent.idItem = parent.id;
+            remontParent.startDate = ui->deDate->dateTime();
+            repo.AddRemont(remontParent);
+        }
+        parent = repo.GetItem(parent.idParent);
+    }
+
+
+
+    // if(device.idParent > 0)
+    // {
+    //     Items parent = repo.GetItem(device.idParent);
+    //     Remont remontParent = repo.GetRemontForItem(parent.id);
+    //     if(remontParent.id == 0)
+    //     {
+    //         // создаем в ремонте, если не было
+    //         remontParent.idClaim = claim.id;
+    //         remontParent.idItem = parent.id;
+    //         remontParent.startDate = ui->deDate->dateTime();
+    //         repo.AddRemont(remontParent);
+    //     }
+    // }
 
     // Добавление в ремонт
 
@@ -86,7 +129,7 @@ void AcceptRemontWindow::on_tbNumber_clicked()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
     win->AddSelectedType(IndexType::Modul);
-    Items *dev = win->SelectDevice(true, {StatusItem::FAULTY_ON_OBJECT}, ui->leNumber->text(), true, true );
+    Items *dev = win->SelectDevice(true, {StatusItem::FAULTY_ON_OBJECT, StatusItem::EXCHANGE}, ui->leNumber->text(), true, true );
     if(dev != nullptr && dev->id > 0)
     {
         AddDevice(dev);
@@ -136,6 +179,12 @@ void AcceptRemontWindow::AddDevice(Items *dev)
     ui->lbOrgName->setText(claim.nameOrganization);
     ui->lbClaim->setText(claim.number + " (" + claim.dateCreate.toString("dd.MM.yyyy") + ")");
     ui->leNumber->clear();
+
+    Q_ASSERT(dev->listStatus.size() > 0);
+    // if(dev->listStatus.last().idStatus == StatusItem::EXCHANGE)
+    bool isExch = !(dev->listStatus.last().idStatus == StatusItem::EXCHANGE) && dev->idParent > 0;
+
+    ui->pbExchange->setEnabled(isExch);
 
 }
 

@@ -7,11 +7,17 @@ void StatusList::LoadStatus(Items& item)
     repo.LoadStatus(item);
 }
 
+//---------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------
 bool StatusList::AddStatus(Items &item, StatusItem idStat, const QString &comment, int linkField)
 {
     return AddStatus(item, idStat, QDateTime::currentDateTime(), comment, linkField );
 }
 
+//---------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------
 void StatusList::DeleteLastStatus(Items &item, StatusItem status)
 {
     // Q_UNUSED(item);
@@ -21,6 +27,9 @@ void StatusList::DeleteLastStatus(Items &item, StatusItem status)
 }
 
 
+//---------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------
 bool StatusList::AddStatus(Items &item, StatusItem idStat, const QDateTime &dateRegister,  const QString &comment, int linkField)
 {
     bool res;
@@ -41,6 +50,9 @@ bool StatusList::AddStatus(Items &item, StatusItem idStat, const QDateTime &date
     return res;
 }
 
+//---------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------
 QString StatusList::getNameLastStatus() const
 {
     QString stat;
@@ -49,11 +61,17 @@ QString StatusList::getNameLastStatus() const
     return stat;
 }
 
+//---------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------
 QString StatusList::getLastComment() const
 {
     return listStatus.size() > 0 ? listStatus.last().Comment : "";
 }
 
+//---------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------
 bool StatusList::getIsRepair() const
 {
     bool res = false;
@@ -63,3 +81,21 @@ bool StatusList::getIsRepair() const
     }
     return res;
 }
+
+
+//---------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------
+// void StatusList::SetLastStatus(QString &currStatus, QString &commentStatus) const
+// {
+//     if(listStatus.size() > 0)
+//     {
+//         currStatus = listStatus.last().nameStatus;
+//         commentStatus = listStatus.last().Comment;
+//     }
+// }
+
+
+//---------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------

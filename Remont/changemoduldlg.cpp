@@ -18,7 +18,7 @@ ChangeModulDlg::ChangeModulDlg(Items* dev, QWidget *parent)
 
     Items parentDev = repo.GetItem(dev->idParent);
     ui->wTree->AddItem(&parentDev);
-
+    ui->wTree->SetSelectItem(dev->id, dev->type.indexType);
 }
 
 ChangeModulDlg::~ChangeModulDlg()
@@ -51,16 +51,18 @@ void ChangeModulDlg::on_pbOK_clicked()
 {
     brokenDev->AddStatus(*brokenDev, StatusItem::EXCHANGE, "", brokenDev->idParent);
     newDev.AddStatus(newDev, StatusItem::WORK);
+    newDev.idParent = brokenDev->idParent;
+    repo.UpdateItem(newDev);
 
     Items parent = repo.GetItem(brokenDev->idParent);
-    while(parent.idParent > 0)
-        parent = repo.GetItem(parent.idParent);
-
-    bool res = testChildGoodStatus(&parent);
-    if(res)
+    do
     {
-        parent.AddStatus(parent, StatusItem::WORK);
-    }
+        bool res = parent.TestChildGoodStatus();
+        if(res)
+            parent.AddStatus(parent, StatusItem::WORK);
+
+        parent = repo.GetItem(parent.idParent);
+    } while(parent.idParent > 0);
 
     accept();
 }
@@ -68,21 +70,21 @@ void ChangeModulDlg::on_pbOK_clicked()
 //---------------------------------------------------------------------------
 // проверка исправности вложенного оборудования
 //---------------------------------------------------------------------------
-bool ChangeModulDlg::testChildGoodStatus(Items *dev)
-{
-    bool res = true;
-    repo.LoadChildItems(dev->id, dev->childItems);
-    for(auto &it : dev->childItems)
-    {
-        if(it.listStatus.size() > 0 && it.listStatus.last().typeStatus == 1)
-        {
-            res = false;
-            break;
-        }
-        res = testChildGoodStatus(&it);
-        if(res == false)
-            break;
-    }
-    return res;
-}
+// bool ChangeModulDlg::testChildGoodStatus(Items *dev)
+// {
+//     bool res = true;
+//     repo.LoadChildItems(dev->id, dev->childItems);
+//     for(auto &it : dev->childItems)
+//     {
+//         if(it.listStatus.size() > 0 && it.listStatus.last().typeStatus == 1)
+//         {
+//             res = false;
+//             break;
+//         }
+//         // res = testChildGoodStatus(&it);
+//         // if(res == false)
+//         //     break;
+//     }
+//     return res;
+// }
 

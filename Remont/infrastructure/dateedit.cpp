@@ -26,7 +26,7 @@ QString DateEdit::textFromDateTime(const QDateTime &dt) const
 }
 
 
-QValidator::State DateEdit::validate(QString &input, int &pos) const
+QValidator::State DateEdit::validate(QString &input, int &/*pos*/) const
 {
     QValidator::State state;
     QDate date = QDate::fromString(input, displayFormat());

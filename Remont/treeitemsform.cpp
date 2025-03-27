@@ -34,11 +34,29 @@ void TreeItemsForm::AddItem(IEntity *dev, bool isRootVisible)
         IndexType type = dev->GetInfo(nameType, nameIcon);
         QStringList name;
 
+        item = new QTreeWidgetItem();
+
         if(type <= IndexType::Plate )
         {
             Items* devItem = (Items*)dev;
             name << devItem->GetDefaultName();
             repo.LoadChildItems(devItem->id, devItem->childItems);
+            if(devItem->listStatus.size() > 0 )
+            {
+                switch(devItem->listStatus.last().idStatus)
+                {
+                case StatusItem::FAULTY_ON_OBJECT:
+                    item->setForeground(0, QBrush(Qt::red));
+                    name << " неисправен";
+                    break;
+
+                case StatusItem::FAULTY_CHILD:
+                    item->setForeground(0, QBrush(Qt::darkGray));
+                    name << " неиспр.комплектующие";
+                    break;
+                }
+            }
+
         }
         else if(type == IndexType::SetterType)
         {
@@ -47,7 +65,6 @@ void TreeItemsForm::AddItem(IEntity *dev, bool isRootVisible)
             repo.LoadChildSetter(*setter);
         }
 
-        item = new QTreeWidgetItem();
         item->setText(0, name.join(" "));
         item->setIcon(0, QIcon(nameIcon));
         item->setData(0, Qt::UserRole, dev->id);
@@ -77,18 +94,39 @@ void TreeItemsForm::AddChildTree(QTreeWidgetItem *root, Items* dev)
 
     if(dev->listStatus.size() > 0 )
     {
-        switch(dev->listStatus.last().idStatus)
+        if(dev->listStatus.last().typeStatus == TypeStatus::REMONT_STATUS)
         {
-        case StatusItem::FAULTY_ON_OBJECT:
             child->setForeground(0, QBrush(Qt::red));
             child->setText(0, dev->GetDefaultName() + " неисправен");
-            break;
-
-        case StatusItem::EXCHANGE:
-            child->setForeground(0, QBrush(Qt::lightGray));
-            child->setText(0, dev->GetDefaultName() + " был заменен");
-            break;
         }
+        else
+        {
+            switch(dev->listStatus.last().idStatus)
+            {
+            // case StatusItem::FAULTY_ON_OBJECT:
+            // case StatusItem::FAULTY_ON_OSO:
+            // case StatusItem::REMONT:
+            //     child->setForeground(0, QBrush(Qt::red));
+            //     child->setText(0, dev->GetDefaultName() + " неисправен");
+            //     break;
+
+            case StatusItem::EXCHANGE:
+                child->setForeground(0, QBrush(Qt::lightGray));
+                child->setText(0, dev->GetDefaultName() + " был заменен");
+                break;
+
+            case StatusItem::FAULTY_CHILD:
+                child->setForeground(0, QBrush(Qt::darkGray));
+                child->setText(0, dev->GetDefaultName() + " неиспр.комплектующие");
+                break;
+
+            default:
+                child->setText(0, dev->GetDefaultName());
+                break;
+            }
+        }
+
+
 
         // if(dev->listStatus.last().idStatus == StatusItem::FAULTY_ON_OBJECT)
         // {
@@ -101,8 +139,8 @@ void TreeItemsForm::AddChildTree(QTreeWidgetItem *root, Items* dev)
         //     child->setText(0, dev->GetDefaultName() + " был заменен");
         // }
     }
-    else
-        child->setText(0, dev->GetDefaultName());
+    // else
+    //     child->setText(0, dev->GetDefaultName());
 
     child->setData(0, Qt::UserRole, dev->id);
     child->setData(0, Qt::UserRole + 1, dev->type.indexType);

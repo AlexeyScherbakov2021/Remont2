@@ -5,9 +5,7 @@
 #include <models/remont.h>
 #include <models/organization.h>
 #include<models/Items.h>
-
 #include <infrastructure/users.h>
-
 #include <QSqlDriver>
 #include <infrastructure/IStatus.h>
 #include "repomssql.h"
@@ -1012,7 +1010,7 @@ bool RepoMSSQL::LoadChildItems(int idParent, QList<Items> &listItems) const
     QSqlQuery query(db);
     query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
                     "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus,it.indexType,it.VNFT,it.garantMonth,"
-                    "ist.dateStatus,ist.idStatus,ist.comment "
+                    "ist.dateStatus,ist.idStatus,ist.comment,sd.TypeStatus "
                     "from Items i join ItemType it on it.id=i.idType "
                     "join (select idItem, max(DateStatus) dateStatus from ItemStatus group by idItem "
                     ") ms on ms.idItem=i.id "
@@ -1056,6 +1054,7 @@ bool RepoMSSQL::LoadChildItems(int idParent, QList<Items> &listItems) const
         status.dateStatus = query.value(20).toDateTime();
         status.idStatus = (StatusItem)query.value(21).toInt();
         status.Comment = query.value(22).toString();
+        status.typeStatus = query.value(23).toInt();
         status.nameStatus = item.currStatus;
         item.listStatus.push_back(status);
 
@@ -1084,7 +1083,7 @@ int RepoMSSQL::LoadPart(int start, int count, IndexType iType,
 
     QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
                        "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus,it.indexType,it.VNFT,it.garantMonth,"
-                       "ist.dateStatus,ist.idStatus,ist.comment "
+                       "ist.dateStatus,ist.idStatus,ist.comment,sd.TypeStatus "
                        "from Items i join ItemType it on it.id=i.idType and it.indexType=:indexType "
                        "join (select idItem, max(DateStatus) dateStatus from ItemStatus group by idItem "
                        ") ms on ms.idItem=i.id "
@@ -1165,6 +1164,7 @@ int RepoMSSQL::LoadPart(int start, int count, IndexType iType,
         status.dateStatus = query.value(20).toDateTime();
         status.idStatus = (StatusItem)query.value(21).toInt();
         status.Comment = query.value(22).toString();
+        status.typeStatus = query.value(23).toInt();
         status.idItem = item.id;
         status.nameStatus = item.currStatus;
         item.listStatus.push_back(status);
@@ -1190,7 +1190,7 @@ int RepoMSSQL::LoadPartAll(int start, int count, const QString &number, QList<It
 
     QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
                        "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus,it.indexType,it.VNFT,it.garantMonth,"
-                       "ist.dateStatus,ist.idStatus,ist.comment "
+                       "ist.dateStatus,ist.idStatus,ist.comment,sd.TypeStatus "
                        "from Items i join ItemType it on it.id=i.idType "
                        "join (select idItem, max(DateStatus) dateStatus from ItemStatus group by idItem "
                        ") ms on ms.idItem=i.id "
@@ -1268,6 +1268,7 @@ int RepoMSSQL::LoadPartAll(int start, int count, const QString &number, QList<It
         status.dateStatus = query.value(20).toDateTime();
         status.idStatus = (StatusItem)query.value(21).toInt();
         status.Comment = query.value(22).toString();
+        status.typeStatus = query.value(23).toInt();
         status.nameStatus = item.currStatus;
         item.listStatus.push_back(status);
 
@@ -1548,7 +1549,7 @@ void RepoMSSQL::LoadOrganizationAsync(QList<Organization> &listOrg, QPromise<voi
 
     query.prepare("select id,OrgName,INN,KPP from Organization where INN is not null or KPP is not null order by OrgName");
     query.exec();
-    qDebug() << "Select async start." << tm.elapsed();
+    // qDebug() << "Select async start." << tm.elapsed();
     while(query.next() && !promise.isCanceled())
     {
         Organization org;
@@ -1559,7 +1560,7 @@ void RepoMSSQL::LoadOrganizationAsync(QList<Organization> &listOrg, QPromise<voi
         listOrg.push_back(org);
     }
 
-    qDebug() << "Select async finish." << tm.elapsed();
+    // qDebug() << "Select async finish." << tm.elapsed();
 }
 
 //------------------------------------------------------------------------------------------------------

@@ -93,7 +93,8 @@ void ClaimDetail::on_pbOK_clicked()
             while(dev.idParent > 0)
             {
                 dev = repo.GetItem(dev.idParent);
-                dev.AddStatus(dev, StatusItem::FAULTY_ON_OBJECT);
+                if(dev.listStatus.last().typeStatus != TypeStatus::REMONT_STATUS)
+                    dev.AddStatus(dev, StatusItem::FAULTY_CHILD);
             }
         }
     }
