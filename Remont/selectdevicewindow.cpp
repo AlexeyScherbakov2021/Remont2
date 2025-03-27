@@ -1,6 +1,9 @@
+#include "cardprodwindow.h"
 #include "scan.h"
 #include "selectdevicewindow.h"
 #include "ui_selectdevicewindow.h"
+
+#include <QClipboard>
 
 
 
@@ -24,6 +27,27 @@ SelectDeviceWindow::SelectDeviceWindow(IndexType _type, QWidget *parent)
     ui->tableView->setColumnWidth(6, 80);       // статус
 
     connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
+
+
+    ui->tableView->addAction("Карточка устройства", this, [this] () {
+
+        Items* dev = model->GetItem(ui->tableView->currentIndex().row());
+        if(dev->id > 0 && dev->type.indexType <= IndexType::Plate)
+        {
+            CardProdWindow *win = new CardProdWindow(dev, this);
+            win->exec();
+        }
+
+    });
+    ui->tableView->addAction("Скопировать номер", this, [this] () {
+        Items* dev = model->GetItem(ui->tableView->currentIndex().row());
+        QClipboard *cpb = QApplication::clipboard();
+        cpb->setText(dev->number, QClipboard::Clipboard);
+    });
+
+    ui->tableView->setContextMenuPolicy(Qt::ActionsContextMenu);
+
+
 
 }
 

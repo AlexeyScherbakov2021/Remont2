@@ -1,9 +1,11 @@
+#include "cardprodwindow.h"
 #include "treeitemsform.h"
 #include "ui_treeitemsform.h"
 
 #include <models/Items.h>
 #include <models/setterout.h>
 
+#include <QClipboard>
 #include <QMessageBox>
 
 TreeItemsForm::TreeItemsForm(QWidget *parent)
@@ -11,6 +13,30 @@ TreeItemsForm::TreeItemsForm(QWidget *parent)
     , ui(new Ui::TreeItemsForm)
 {
     ui->setupUi(this);
+
+    ui->treeWidget->addAction("Карточка устройства", this, [this] () {
+
+        auto item = ui->treeWidget->currentItem();
+        int id = item->data(0, Qt::UserRole).toInt();
+        IndexType type = (IndexType)item->data(0, Qt::UserRole + 1).toInt();
+        if(id > 0 && type <= IndexType::Plate)
+        {
+            Items dev = repo.GetItem(id);
+            CardProdWindow *win = new CardProdWindow(&dev, this);
+            win->exec();
+        }
+
+    });
+    ui->treeWidget->addAction("Скопировать номер", this, [this] () {
+        auto item = ui->treeWidget->currentItem();
+        int id = item->data(0, Qt::UserRole).toInt();
+        Items dev = repo.GetItem(id);
+        QClipboard *cpb = QApplication::clipboard();
+        cpb->setText(dev.number, QClipboard::Clipboard);
+    });
+
+    ui->treeWidget->setContextMenuPolicy(Qt::ActionsContextMenu);
+
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -208,18 +234,27 @@ int TreeItemsForm::DeleteSelectedItem(bool isConfirm)
     return id;
 }
 
+//---------------------------------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------------------------------
 void TreeItemsForm::SetSelectItem(int id, IndexType typeIndex)
 {
     QTreeWidgetItem* root = ui->treeWidget->topLevelItem(0);
     SetSelectItemRec(id, typeIndex, root);
 }
 
+//---------------------------------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------------------------------
 int TreeItemsForm::GetSelectedId()
 {
     auto selItem = ui->treeWidget->currentItem();
     return selItem->data(0, Qt::UserRole).toInt();
 }
 
+//---------------------------------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------------------------------
 QPair<int,IndexType> TreeItemsForm::GetSelectedItem()
 {
     QPair<int,IndexType> pair;
@@ -229,12 +264,19 @@ QPair<int,IndexType> TreeItemsForm::GetSelectedItem()
     return pair;
 }
 
+//---------------------------------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------------------------------
 void TreeItemsForm::ExecMenu(QMenu &menu, const QPoint &pos)
 {
     // qDebug() << "ExecMenu";
     menu.exec(ui->treeWidget->viewport()->mapToGlobal(pos));
 }
 
+
+//---------------------------------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------------------------------
 bool TreeItemsForm::SetSelectItemRec(int id, IndexType typeIndex, QTreeWidgetItem* item)
 {
     int _id = item->data(0, Qt::UserRole).toInt();
