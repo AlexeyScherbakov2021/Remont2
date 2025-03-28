@@ -91,7 +91,7 @@ public:
     bool AddRemont(Remont &remont);
     bool UpdateRemont(Remont &remont);
     void LoadRemont(QList<Remont> &list, int idItem);
-    Remont GetRemontForItem(int id);
+    Remont GetRemontForItem(int id, int idClaim);
 
 
     // Organization

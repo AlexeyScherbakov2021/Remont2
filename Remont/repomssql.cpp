@@ -45,7 +45,7 @@ bool RepoMSSQL::ConnectDb()
 #else
     // qDebug() << "Рабочая версия.";
     // db.setDatabaseName("DRIVER={SQL Server};SERVER=SFP\\FPSQLN;DATABASE=FinGoodsTest2;");
-    db.setDatabaseName("DRIVER={SQL Server};SERVER=SFP\\FPSQLN;DATABASE=TrackProdTest;");
+    db.setDatabaseName("DRIVER={SQL Server};SERVER=SFP\\FPSQLN;DATABASE=TrackProd;");
     db.setUserName("fpLoginName");
     db.setPassword("ctcnhjt,s");
 
@@ -1888,14 +1888,15 @@ void RepoMSSQL::LoadRemont(QList<Remont> &list, int idItem)
 //------------------------------------------------------------------------------------------------------
 // Загрузка ремонта для id
 //------------------------------------------------------------------------------------------------------
-Remont RepoMSSQL::GetRemontForItem(int idItem)
+Remont RepoMSSQL::GetRemontForItem(int idItem, int idClaim)
 {
     QSqlQuery query(db);
     Remont rem;
 
     query.prepare("select id,idItem,idClaim,idReason,dateStart,Action,Defect,Remark,endDate "
-                      "from Remont where endDate is null and idItem=:idItem");
+                      "from Remont where endDate is null and idItem=:idItem and idClaim=:idClaim");
     query.bindValue(":idItem", idItem);
+    query.bindValue(":idClaim", idClaim);
 
     query.exec();
     if(query.next())

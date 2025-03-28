@@ -64,7 +64,7 @@ void EndRemontWindow::on_pbEndRemont_clicked()
 
     // внести изменения в таблицы ремонтов
 
-    Remont rem = repo.GetRemontForItem(device.id);
+    Remont rem = repo.GetRemontForItem(device.id, claim.id);
     Q_ASSERT(rem.id != 0);
     Q_ASSERT(ui->cbReason->currentData(Qt::UserRole) != QVariant());
 
@@ -77,24 +77,6 @@ void EndRemontWindow::on_pbEndRemont_clicked()
     repo.UpdateRemont(rem);
 
     device.AddStatus(device, stat, ui->deDate->dateTime());
-
-    // Items parent = repo.GetItem(device.idParent);
-    // while(parent.id > 0)
-    // {
-    //     bool res = parent.TestChildGoodStatus();
-    //     if(res)
-    //     {
-    //         parent.AddStatus(parent, StatusItem::WORK);
-    //         Remont remParent = repo.GetRemontForItem(parent.id);
-    //         remParent.action = "";
-    //         remParent.defect = "Неисправные комплектующие";
-    //         remParent.endDate = ui->deDate->dateTime();
-    //         remParent.idReason = ui->cbReason->currentData(Qt::UserRole).toInt();
-    //         remParent.remark = "Все комплектующие исправны";
-    //         repo.UpdateRemont(remParent);
-    //     }
-    //     parent = repo.GetItem(parent.idParent);
-    // }
 
     QMessageBox::information(this, "Сообщение", QString("%1 №%2 %3 ремонт завершен.")
                 .arg(device.type.typeName).arg(device.number).arg(device.type.VNFT));

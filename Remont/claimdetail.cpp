@@ -218,7 +218,6 @@ void ClaimDetail::on_tbDeleteDevice_clicked()
     if(item == nullptr)
         return;
 
-
     int id = item->data(Qt::UserRole).toInt();
     Items dev;
     for(auto &it : claim->childItems)
@@ -270,6 +269,9 @@ void ClaimDetail::slotEnabledWidget()
     ui->tbDeleteDevice->setEnabled(res);
 }
 
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
 void ClaimDetail::slotShowCard()
 {
     auto item = ui->tableWidget->item(ui->tableWidget->currentRow(), 0);

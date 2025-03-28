@@ -45,14 +45,14 @@ int main(int argc, char *argv[])
     if(res)
         a.installTranslator(&qtTranslator);
 
-    // LoginDlg *win = new LoginDlg();
-    // if(!win->exec() == QDialog::Accepted)
-    // {
-    //     return 0;
-    // }
+    LoginDlg *win = new LoginDlg();
+    if(!win->exec() == QDialog::Accepted)
+    {
+        return 0;
+    }
 
-    // MainWindow w(win->idUser);
-    MainWindow w(100500);
+    MainWindow w(win->idUser);
+    // MainWindow w(100500);
     w.show();
     return a.exec();
 }

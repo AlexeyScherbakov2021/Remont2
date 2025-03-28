@@ -5,6 +5,7 @@
 
 #include <QMessageBox>
 
+#include <models/claim.h>
 #include <models/remont.h>
 
 StartWorkWindow::StartWorkWindow(QWidget *parent)
@@ -210,9 +211,9 @@ void EnterWorkWindow::SetStatusAllDevice(Items *item, QDateTime &dateOn)
     if(item->listStatus.last().idStatus == StatusItem::WORK)
         return;
 
-    item->dateOn = dateOn;
-    item->dateGarant = dateOn.addMonths(item->garantMonth);
-    repo.UpdateItem(*item);
+    // item->dateOn = dateOn;
+    // item->dateGarant = dateOn.addMonths(item->garantMonth);
+    // repo.UpdateItem(*item);
     item->AddStatus(*item, StatusItem::WORK, dateOn, ui->leDoc->text());
 
     Items parent = repo.GetItem(item->idParent);
@@ -222,7 +223,10 @@ void EnterWorkWindow::SetStatusAllDevice(Items *item, QDateTime &dateOn)
         if(res)
         {
             parent.AddStatus(parent, StatusItem::WORK);
-            Remont remParent = repo.GetRemontForItem(parent.id);
+            Claim claim = repo.GetClaimForItem(parent.id);
+            Q_ASSERT(claim.id != 0);
+            Remont remParent = repo.GetRemontForItem(parent.id, claim.id);
+            Q_ASSERT(remParent.id != 0);
             remParent.action = "";
             remParent.defect = "Неисправные комплектующие";
             remParent.endDate = ui->deDate->dateTime();
@@ -234,8 +238,8 @@ void EnterWorkWindow::SetStatusAllDevice(Items *item, QDateTime &dateOn)
     }
 
 
-    repo.LoadChildItems(item->id, item->childItems);
-    for(auto &it : item->childItems)
-        SetStatusAllDevice(&it, dateOn);
+    // repo.LoadChildItems(item->id, item->childItems);
+    // for(auto &it : item->childItems)
+    //     SetStatusAllDevice(&it, dateOn);
 }
 

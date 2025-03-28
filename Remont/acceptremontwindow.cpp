@@ -75,7 +75,8 @@ void AcceptRemontWindow::on_pbApply_clicked()
     Items parent = repo.GetItem(device.idParent);
     while(parent.id > 0)
     {
-        Remont remontParent = repo.GetRemontForItem(parent.id);
+        Claim claim = repo.GetClaimForItem(parent.id);
+        Remont remontParent = repo.GetRemontForItem(parent.id, claim.id);
         if(remontParent.id == 0)
         {
             // создаем в ремонте, если не было

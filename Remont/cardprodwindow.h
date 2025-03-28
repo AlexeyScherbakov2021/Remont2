@@ -20,10 +20,14 @@ public:
     explicit CardProdWindow(Items *device, QWidget *parent = nullptr);
     ~CardProdWindow();
 
+private slots:
+    void on_pbToShip_clicked();
+
 private:
     Ui::CardProdWindow *ui;
     RepoMSSQL repo;
     QString number;
+    Shipment ship;
 
     // RemontEntity *remontEntity;
 

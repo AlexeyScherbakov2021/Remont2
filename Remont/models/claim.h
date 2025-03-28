@@ -29,6 +29,25 @@ public:
         return IndexType::ClaimType;
     }
 
+    bool CheckAndClose()
+    {
+        bool res = true;
+        RepoMSSQL repo;
+        repo.LoadChildClaim(*this);
+
+        for(auto &it : childItems)
+        {
+            repo.LoadStatus(it);
+            res &= (it.listStatus.last().idStatus != StatusItem::WORK || it.listStatus.last().typeStatus == TypeStatus::REMONT_STATUS);
+        }
+        if(res)
+        {
+            isClosed = true;
+            repo.UpdateItem(*this);
+        }
+
+        return res;
+    }
 
 };
 

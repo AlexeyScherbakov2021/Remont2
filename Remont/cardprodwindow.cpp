@@ -1,4 +1,5 @@
 #include "cardprodwindow.h"
+#include "shipwindow.h"
 #include "ui_cardprodwindow.h"
 #include <models/claim.h>
 #include <models/listproduct.h>
@@ -14,7 +15,6 @@ CardProdWindow::CardProdWindow(Items *device, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::CardProdWindow)
 {
-    Shipment ship;
     SetterOut setter;
     Items root;
     // int idParent = 0;
@@ -244,4 +244,11 @@ void CardProdWindow::loadInclude(const Items *item)
 //-------------------------------------------------------------------------------------------------------
 //
 //-------------------------------------------------------------------------------------------------------
+
+void CardProdWindow::on_pbToShip_clicked()
+{
+
+    ShipWindow *win = new ShipWindow(&ship, this);
+    win->exec();
+}
 

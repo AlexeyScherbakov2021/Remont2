@@ -47,8 +47,6 @@ SelectDeviceWindow::SelectDeviceWindow(IndexType _type, QWidget *parent)
 
     ui->tableView->setContextMenuPolicy(Qt::ActionsContextMenu);
 
-
-
 }
 
 
