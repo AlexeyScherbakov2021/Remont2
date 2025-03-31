@@ -20,7 +20,7 @@ public:
     ~AcceptRemontWindow();
 
 private slots:
-    void on_pbExchange_clicked();
+    // void on_pbExchange_clicked();
     void on_pbApply_clicked();
     void on_tbNumber_clicked();
     void slotReadScan(QString s);

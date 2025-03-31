@@ -36,6 +36,7 @@ private:
     // void AddRowRemont(RemontM &rem);
     void LoadHistoryToForm(QList<Status> &listStatus);
     void LoadRemontToForm(int idItem);
+    void LoadShipping();
 };
 
 #endif // CARDPRODWINDOW_H

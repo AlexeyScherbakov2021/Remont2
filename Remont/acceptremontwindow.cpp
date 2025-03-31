@@ -30,25 +30,25 @@ AcceptRemontWindow::~AcceptRemontWindow()
 //-------------------------------------------------------------------------------------------------
 // Кнопка Произвести замену
 //-------------------------------------------------------------------------------------------------
-void AcceptRemontWindow::on_pbExchange_clicked()
-{
-    if(device.idParent == 0)
-    {
-        QMessageBox::critical(this, "Предупреждение", "Заменить можно только модуль в составе изделия.");
-        return;
-    }
+// void AcceptRemontWindow::on_pbExchange_clicked()
+// {
+//     if(device.idParent == 0)
+//     {
+//         QMessageBox::critical(this, "Предупреждение", "Заменить можно только модуль в составе изделия.");
+//         return;
+//     }
 
-    // Items prod = repo.GetItem(device.idParent);
-    ChangeModulDlg *win = new ChangeModulDlg(&device, this);
-    if(win->exec() == QDialog::Accepted)
-    {
-        // qInfo() << "Замена произошла";
-        QMessageBox::information(this, "Сообщение", QString("%1 №%2 %3 земенен.")
-                .arg(device.type.typeName).arg(device.number).arg(device.type.VNFT));
+//     // Items prod = repo.GetItem(device.idParent);
+//     ChangeModulDlg *win = new ChangeModulDlg(&device, this);
+//     if(win->exec() == QDialog::Accepted)
+//     {
+//         // qInfo() << "Замена произошла";
+//         QMessageBox::information(this, "Сообщение", QString("%1 №%2 %3 земенен.")
+//                 .arg(device.type.typeName).arg(device.number).arg(device.type.VNFT));
 
-        accept();
-    }
-}
+//         accept();
+//     }
+// }
 
 
 //------------------------------------------------------------------------
@@ -185,7 +185,7 @@ void AcceptRemontWindow::AddDevice(Items *dev)
     // if(dev->listStatus.last().idStatus == StatusItem::EXCHANGE)
     bool isExch = !(dev->listStatus.last().idStatus == StatusItem::EXCHANGE) && dev->idParent > 0;
 
-    ui->pbExchange->setEnabled(isExch);
+    // ui->pbExchange->setEnabled(isExch);
 
 }
 

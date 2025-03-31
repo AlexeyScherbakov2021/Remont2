@@ -35,17 +35,18 @@ RepoMSSQL::~RepoMSSQL()
 bool RepoMSSQL::ConnectDb()
 {
 
-#ifdef QT_DEBUG1
-    qDebug() << "Отладочная версия.";
-    // db.setDatabaseName("DRIVER={SQL Server};SERVER=SCHERBAKOV-A\\SQLEXPRESS;DATABASE=FinGoods;Encrypt=yes;Trusted_Connection=yes");
-    db.setDatabaseName("DRIVER={SQL Server};SERVER=SCHERBAKOV-A\\SQLEXPRESS;DATABASE=FinGoods;");
-    db.setUserName("sa");
-    db.setPassword("gonduras");
+#ifdef WORKBASE
+    qDebug() << "Рабочая версия.";
+    // db.setUserName("sa");
+    // db.setPassword("gonduras");
+    db.setDatabaseName("DRIVER={SQL Server};SERVER=SFP\\FPSQLN;DATABASE=TrackProd;");
+    db.setUserName("fpLoginName");
+    db.setPassword("ctcnhjt,s");
+
 
 #else
-    // qDebug() << "Рабочая версия.";
-    // db.setDatabaseName("DRIVER={SQL Server};SERVER=SFP\\FPSQLN;DATABASE=FinGoodsTest2;");
-    db.setDatabaseName("DRIVER={SQL Server};SERVER=SFP\\FPSQLN;DATABASE=TrackProd;");
+    qDebug() << "Отладочная версия.";
+    db.setDatabaseName("DRIVER={SQL Server};SERVER=SFP\\FPSQLN;DATABASE=TrackProdTest;");
     db.setUserName("fpLoginName");
     db.setPassword("ctcnhjt,s");
 

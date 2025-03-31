@@ -245,23 +245,6 @@ background-color: LightGray;
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pbExchange">
-       <property name="text">
-        <string>Произвести замену</string>
-       </property>
-       <property name="icon">
-        <iconset resource="resource.qrc">
-         <normaloff>:/image/arrow_refresh_small.png</normaloff>:/image/arrow_refresh_small.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>24</width>
-         <height>24</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="pbApply">
        <property name="text">
         <string>Принять в ОСО</string>
@@ -314,7 +297,6 @@ background-color: LightGray;
  </widget>
  <tabstops>
   <tabstop>leNumber</tabstop>
-  <tabstop>pbExchange</tabstop>
   <tabstop>pbApply</tabstop>
   <tabstop>tbNumber</tabstop>
  </tabstops>

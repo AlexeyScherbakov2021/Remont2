@@ -26,6 +26,7 @@
 #include "shipwindow.h"
 #include "usersetdlg.h"
 #include "logindlg.h"
+#include "changemoduldlg.h"
 #include <models/listdevice.h>
 #include <models/ItemsType.h>
 #include <infrastructure/users.h>
@@ -627,5 +628,22 @@ void MainWindow::on_aEnterWork_triggered()
 {
     EnterWorkWindow *win = new EnterWorkWindow(this);
     win->exec();
+}
+
+
+//----------------------------------------------------------------------------------------------
+// произвести замену устройства
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aExchange_triggered()
+{
+    SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Modul, this);
+    win->AddSelectedType(IndexType::Product);
+    win->AddSelectedType(IndexType::Plate);
+    Items *dev = win->SelectDevice(false, {StatusItem::FAULTY_ON_OBJECT}, "", true, true);
+    if(dev != nullptr)
+    {
+        ChangeModulDlg *win = new ChangeModulDlg(dev, this);
+        win->exec();
+    }
 }
 

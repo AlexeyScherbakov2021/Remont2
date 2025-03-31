@@ -2,6 +2,8 @@
 #include "selectdevicewindow.h"
 #include "ui_changemoduldlg.h"
 
+#include <QMessageBox>
+
 ChangeModulDlg::ChangeModulDlg(Items* dev, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::ChangeModulDlg), brokenDev(dev)
@@ -63,6 +65,9 @@ void ChangeModulDlg::on_pbOK_clicked()
 
         parent = repo.GetItem(parent.idParent);
     } while(parent.idParent > 0);
+
+    QMessageBox::information(this, "Сообщение", QString("%1 №%2 %3 земенен.")
+            .arg(brokenDev->type.typeName).arg(brokenDev->number).arg(brokenDev->type.VNFT));
 
     accept();
 }

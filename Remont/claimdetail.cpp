@@ -204,8 +204,16 @@ void ClaimDetail::on_tbAddDevice_clicked()
     Items *dev = win->SelectDevice(true, {StatusItem::WORK, StatusItem::SHIPPED}, "", true, true);
     if(dev != nullptr && dev->id > 0)
     {
+        // проверка на вхождение в незакрытую рекламацию
+        Claim claim = repo.GetClaimForItem(dev->id);
+        if(claim.id > 0)
+        {
+            QMessageBox::warning(this, "Предупреждение", QString("Устройство № %1 находится в незакрытой рекламации № %2").arg(dev->number).arg(claim.number), QMessageBox::Ok);
+            return;
+        }
+
         AddProductToTableScreen(dev);
-        trackProduct.AddRecord(/*dev->id,*/ *dev);
+        trackProduct.AddRecord(*dev);
     }
 }
 

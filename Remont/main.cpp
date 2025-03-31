@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
     if(res)
         a.installTranslator(&qtTranslator);
 
+#ifdef WORKBASE
     LoginDlg *win = new LoginDlg();
     if(!win->exec() == QDialog::Accepted)
     {
@@ -52,7 +53,9 @@ int main(int argc, char *argv[])
     }
 
     MainWindow w(win->idUser);
-    // MainWindow w(100500);
+#else
+    MainWindow w(100500);
+#endif
     w.show();
     return a.exec();
 }

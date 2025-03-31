@@ -44,6 +44,8 @@ CardProdWindow::CardProdWindow(Items *device, QWidget *parent)
     if(setter.idShip > 0)
         ship = repo.GetShipment(setter.idShip);
 
+    ui->pbToShip->setEnabled(ship.id > 0);
+
     ui->lbGarant->setText(device->dateGarant.toString("dd.MM.yyyy"));
     ui->lbDateCreate->setText(device->dateCreate.toString("dd.MM.yyyy"));
     ui->lbNumber->setText(device->number);
@@ -56,21 +58,11 @@ CardProdWindow::CardProdWindow(Items *device, QWidget *parent)
     ui->lbType->setText(device->type.typeName);
     ui->lbVNFT->setText(device->type.VNFT);
 
-    if(ship.id > 0)
-    {
-        ui->lbDateUPD->setText(ship.dateUPD.toString("dd.MM.yyyy"));
-        ui->lbNumberUPD->setText(ship.numberUPD);
-        ui->lbSchet->setText(ship.schet);
-        ui->lbObjectInstall->setText(ship.objectInstall);
-        ui->lbNumberUPD->setText(ship.numberUPD);
-        ui->lbDateUPD->setText(ship.dateUPD.toString("dd.MM.yyyy"));
-
-    }
-    if(setter.id > 0)
-    {
-        ui->lbCardOrder->setText(setter.number);
-        // ui->lbCardOrder->setText(setter.numberDoc);
-    }
+    LoadShipping();
+    // if(setter.id > 0)
+    // {
+    //     ui->lbCardOrder->setText(setter.number);
+    // }
 
     number = device->number;
     // loadShipmentToForm(device);
@@ -157,6 +149,23 @@ void CardProdWindow::LoadRemontToForm(int idItem)
         ui->twRemont->setItem(row, 6, item);
 
         ++row;
+    }
+}
+
+//-------------------------------------------------------------------------------------------------------
+//
+//-------------------------------------------------------------------------------------------------------
+void CardProdWindow::LoadShipping()
+{
+    if(ship.id > 0)
+    {
+        ui->lbDateUPD->setText(ship.dateUPD.toString("dd.MM.yyyy"));
+        ui->lbNumberUPD->setText(ship.numberUPD);
+        ui->lbSchet->setText(ship.schet);
+        ui->lbObjectInstall->setText(ship.objectInstall);
+        ui->lbNumberUPD->setText(ship.numberUPD);
+        ui->lbDateUPD->setText(ship.dateUPD.toString("dd.MM.yyyy"));
+        ui->lbCardOrder->setText(ship.cardOrder);
     }
 }
 
@@ -247,8 +256,14 @@ void CardProdWindow::loadInclude(const Items *item)
 
 void CardProdWindow::on_pbToShip_clicked()
 {
+    if(ship.id == 0)
+        return;
 
     ShipWindow *win = new ShipWindow(&ship, this);
-    win->exec();
+    if(win->exec() == QDialog::Accepted)
+    {
+        LoadShipping();
+    }
+
 }
 

@@ -217,6 +217,7 @@ background-color: LightGray;
      <string>Ремонты</string>
     </property>
     <addaction name="aClaim"/>
+    <addaction name="aExchange"/>
     <addaction name="aGetOSO"/>
     <addaction name="aGetRepair"/>
     <addaction name="aEndRepair"/>
@@ -443,6 +444,11 @@ background-color: LightGray;
   <action name="aEnterWork">
    <property name="text">
     <string>Ввести в работу после ремонта</string>
+   </property>
+  </action>
+  <action name="aExchange">
+   <property name="text">
+    <string>Произвести замену</string>
    </property>
   </action>
  </widget>
