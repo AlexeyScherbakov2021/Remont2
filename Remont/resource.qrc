@@ -34,5 +34,6 @@
         <file>image/network_adapter.png</file>
         <file>image/edit.png</file>
         <file>image/Save.png</file>
+        <file>image/closed.png</file>
     </qresource>
 </RCC>

@@ -29,6 +29,8 @@ protected:
     Ui::StartWorkWindow *ui;
     void AddDevice(Items* dev);
     RepoMSSQL repo;
+    QSet<int> listAddId;
+
 private:
     // ListProduct products;
     // ListModul modules;

@@ -112,27 +112,44 @@ QVariant ListClaim::getData(int row, int col, int role) const
 {
     QVariant var;
 
-    if(role == Qt::DisplayRole && row < items.size())
+    if(row < items.size())
     {
         Claim claim = items.at(row);
 
-        switch(col)
+        if(role == Qt::DisplayRole)
         {
-        case 0:
-            var = claim.number;
-            break;
-        case 1:
-            var = claim.dateCreate.toString("dd.MM.yyyy");
-            break;
-        case 2:
-            var = claim.nameOrganization;
-            break;
-        case 3:
-            var = claim.ObjectInstall;
-            break;
-        case 4:
-            var = claim.TypeClaimString;
-            break;
+            switch(col)
+            {
+            case 0:
+                var = claim.number;
+                break;
+            case 1:
+                var = claim.dateCreate.toString("dd.MM.yyyy");
+                break;
+            case 2:
+                var = claim.nameOrganization;
+                break;
+            case 3:
+                var = claim.ObjectInstall;
+                break;
+            case 4:
+                var = claim.TypeClaimString;
+                break;
+            // case 5:
+            //     var = claim.isClosed;
+            //     break;
+            }
+        }
+
+        if(role == Qt::DecorationRole)
+        {
+            switch(col)
+            {
+            case 5:
+                if(claim.isClosed)
+                    var = QIcon("://image/closed.png");
+                break;
+            }
         }
     }
 
@@ -186,7 +203,7 @@ void ListClaim::setItem(int row, Claim *claim)
 //-------------------------------------------------------------------------
 void ListClaim::GetHeader(QStringList &_headers)
 {
-    _headers << "Номер" << "Дата" << "Организация" << "Объект установки" << "Тип";
+    _headers << "Номер" << "Дата" << "Организация" << "Объект установки" << "Тип" << "Закрыт";
 }
 
 //-------------------------------------------------------------------------

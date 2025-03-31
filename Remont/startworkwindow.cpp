@@ -95,12 +95,14 @@ void StartWorkWindow::SelectDevice()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
     win->AddSelectedType(IndexType::Modul);
+    win->ExcludeDevice(listAddId);
 
     // Items *dev = win->SelectDevice(true, {StatusItem::CORRECT_OSO}, ui->leSearch->text(), false, true);
     Items *dev = win->SelectDevice(true, {StatusItem::SHIPPED}, ui->leSearch->text(), true);
     if(dev != nullptr && dev->id > 0)
     {
         AddDevice(dev);
+        listAddId.insert(dev->id);
     }
 }
 
@@ -155,6 +157,9 @@ void StartWorkWindow::on_tbDelete_clicked()
     if(row < 0)
         return;
 
+    int id = ui->lwProduct->item(row, 0)->data(Qt::UserRole).toInt();
+    listAddId.remove(id);
+
     ui->lwProduct->removeRow(row);
     listDev.removeAt(row);
 
@@ -195,12 +200,14 @@ void EnterWorkWindow::SelectDevice()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
     win->AddSelectedType(IndexType::Modul);
+    win->ExcludeDevice(listAddId);
 
     Items *dev = win->SelectDevice(true, {StatusItem::CORRECT_OSO}, ui->leSearch->text(), false, LoadPartType::HAS_PARENT);
     // Items *dev = win->SelectDevice(true, {StatusItem::SHIPPED}, ui->leSearch->text(), true);
     if(dev != nullptr && dev->id > 0)
     {
         AddDevice(dev);
+        listAddId.insert(dev->id);
     }
 }
 
@@ -216,23 +223,40 @@ void EnterWorkWindow::SetStatusAllDevice(Items *item, QDateTime &dateOn)
     // repo.UpdateItem(*item);
     item->AddStatus(*item, StatusItem::WORK, dateOn, ui->leDoc->text());
 
+    Claim claim = repo.GetClaimForItem(item->id);
+    repo.LoadChildClaim(claim);
+    bool resClaim = true;
+    foreach (const Items it, claim.childItems)
+    {
+        resClaim &= it.listStatus.last().idStatus == StatusItem::WORK;
+    }
+    if(resClaim)
+    {
+        claim.isClosed = true;
+        repo.UpdateItem(claim);
+    }
+
+
     Items parent = repo.GetItem(item->idParent);
-    while(parent.id > 0)
+    while(parent.id > 0 && claim.id > 0)
     {
         bool res = parent.TestChildStatus(StatusItem::CORRECT_OSO);
         if(res)
         {
             parent.AddStatus(parent, StatusItem::WORK);
-            Claim claim = repo.GetClaimForItem(parent.id);
-            Q_ASSERT(claim.id != 0);
-            Remont remParent = repo.GetRemontForItem(parent.id, claim.id);
-            Q_ASSERT(remParent.id != 0);
-            remParent.action = "";
-            remParent.defect = "Неисправные комплектующие";
-            remParent.endDate = ui->deDate->dateTime();
-            // remParent.idReason = ui->cbReason->currentData(Qt::UserRole).toInt();
-            remParent.remark = "Все комплектующие исправны";
-            repo.UpdateRemont(remParent);
+            // Claim claim = repo.GetClaimForItem(parent.id);
+            // Q_ASSERT(claim.id != 0);
+            // if(claim.id > 0)
+            // {
+                Remont remParent = repo.GetRemontForItem(parent.id, claim.id);
+                Q_ASSERT(remParent.id != 0);
+                remParent.action = "";
+                remParent.defect = "Неисправные комплектующие";
+                remParent.endDate = ui->deDate->dateTime();
+                remParent.idReason = 2;
+                remParent.remark = "Комплектующие исправны";
+                repo.UpdateRemont(remParent);
+            // }
         }
         parent = repo.GetItem(parent.idParent);
     }
