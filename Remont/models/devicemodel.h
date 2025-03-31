@@ -2,6 +2,7 @@
 #define DEVICEMODEL_H
 
 #include "listplate.h"
+#include "modelproxy.h"
 // #include <QDebug>
 #include <QAbstractTableModel>
 #include <infrastructure/IStatus.h>
@@ -42,6 +43,7 @@ public:
     void prepareLoad(const QString _number, int _status, bool _isBusy, LoadPartType _hasParent);
     void prepareLoad2(const QString _number, QVector<StatusItem>& _status, bool _isBusy, LoadPartType _hasParent);
     Items* GetItem(int row);
+    Items* GetItem(QModelIndex *index);
     bool DeleteItem(int row);
     void DeleteItemFromListId(int id) ;
     void DeleteItemFromList(int row) ;

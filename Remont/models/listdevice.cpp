@@ -107,6 +107,11 @@ QVariant ListDevice::getData(int row, int col, int role) const
 
     auto item = items.at(row);
 
+    if(role == Qt::UserRole + 10)
+    {
+        var = item.id;
+    }
+
     if(role == Qt::DisplayRole)
     {
         switch(col)

@@ -47,6 +47,7 @@ void ComplectProductWindow::on_tbSearchModul_clicked()
     QVector<StatusItem> stat {StatusItem::CREATE, StatusItem::CORRECT, StatusItem::CORRECT_OSO};
     QPointer<SelectDeviceWindow> win;
 
+
     if(dev.type.indexType == IndexType::Product)
     {
         win = new SelectDeviceWindow(IndexType::Modul, this);
@@ -57,10 +58,13 @@ void ComplectProductWindow::on_tbSearchModul_clicked()
         win = new SelectDeviceWindow(IndexType::Plate, this);
     }
 
+    win->ExcludeDevice(listAddId);
+
     Items *child = win->SelectDevice(true, stat, ui->leNumModSearch->text(), false, LoadPartType::NO_HAS_PARENT);
     if(child != nullptr && win->result() == QDialog::Accepted)
     {
         addModulToScreen(*child);
+        listAddId.insert(child->id);
     }
 }
 
@@ -164,7 +168,7 @@ void ComplectProductWindow::on_pbDeleteModul_clicked()
     Items mod = repo.GetItem(id);
     Q_ASSERT(mod.id != 0);
     trackModul.DelRecord(/*mod.id,*/ mod);
-
+    listAddId.remove(mod.id);
 
     // if(ui->lwInnerModule->currentRow() < 0)
     //     return;

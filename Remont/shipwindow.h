@@ -43,6 +43,7 @@ private:
     TrackRecord<Items> trackItem;
     TrackRecord<SetterOut> trackSet;
     QFutureWatcher<void> *watcher;
+    QSet<int> listAddId;
 
     void SetStatusItems(QList<Items>& items);
     void SaveToBase();

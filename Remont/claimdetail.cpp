@@ -201,6 +201,7 @@ void ClaimDetail::on_tbAddDevice_clicked()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
     win->AddSelectedType(IndexType::Modul);
+    win->ExcludeDevice(listAddId);
     Items *dev = win->SelectDevice(true, {StatusItem::WORK, StatusItem::SHIPPED}, "", true, LoadPartType::HAS_PARENT);
     if(dev != nullptr && dev->id > 0)
     {
@@ -214,6 +215,7 @@ void ClaimDetail::on_tbAddDevice_clicked()
 
         AddProductToTableScreen(dev);
         trackProduct.AddRecord(*dev);
+        listAddId.insert(dev->id);
     }
 }
 
@@ -240,6 +242,7 @@ void ClaimDetail::on_tbDeleteDevice_clicked()
         }
     }
 
+    listAddId.remove(id);
     trackProduct.DelRecord(/*id,*/ dev);
     ui->tableWidget->removeRow(ui->tableWidget->currentRow());
 }

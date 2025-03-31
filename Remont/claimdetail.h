@@ -35,6 +35,7 @@ private:
     // QMap<int, QString> listTypeModule;
     // QMap<int, QString> listTypeProduct;
     QList<Organization> listOrg;
+    QSet<int> listAddId;
 
     TrackRecord<Items> trackProduct;
     // TrackRecord<Items> trackModul;

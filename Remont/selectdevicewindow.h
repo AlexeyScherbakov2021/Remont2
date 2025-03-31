@@ -2,6 +2,7 @@
 #define SELECTDEVICEWINDOW_H
 
 #include <QDialog>
+// #include <QSortFilterProxyModel>
 #include <QStandardItemModel>
 #include <QStringListModel>
 #include "repomssql.h"
@@ -11,6 +12,7 @@
 #include <models/shipment.h>
 #include <models/setterout.h>
 #include <models/devicemodel.h>
+#include <models/modelproxy.h>
 
 namespace Ui {
 class SelectDeviceWindow;
@@ -30,6 +32,7 @@ public:
 
     Items device;
     void AddSelectedType(IndexType _type);
+    void ExcludeDevice(QSet<int>& setId);
 
 private slots:
     void on_tbSearch_clicked();
@@ -46,13 +49,14 @@ private:
     void Search(QString searchNum);
 
     DeviceModel *model = nullptr;
+    ModelProxy *proxy;
     void startLoad();
 
     IndexType type;
     QVector<StatusItem> vStatus;
     bool isBusy = false;
     LoadPartType hasParent = LoadPartType::NO_HAS_PARENT;
-
+    QSet<int> setId;
 
     // QDialog interface
 // public slots:

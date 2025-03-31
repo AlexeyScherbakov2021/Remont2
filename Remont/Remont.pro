@@ -44,6 +44,7 @@ SOURCES += \
     models/listproduct.cpp \
     models/listsetter.cpp \
     models/listshipment.cpp \
+    models/modelproxy.cpp \
     models/settermodel.cpp \
     models/shipmodel.cpp \
     otkactiondlg.cpp \
@@ -102,6 +103,7 @@ HEADERS += \
     models/listproduct.h \
     models/listsetter.h \
     models/listshipment.h \
+    models/modelproxy.h \
     models/organization.h \
     models/remont.h \
     models/settermodel.h \

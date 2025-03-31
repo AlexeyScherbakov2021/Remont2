@@ -11,6 +11,7 @@ DeviceModel::DeviceModel(IndexType type, QObject *parent)
 {
     createList(type);
     listDev->GetHeader(headers);
+
 }
 
 DeviceModel::~DeviceModel()
@@ -211,6 +212,20 @@ Items *DeviceModel::GetItem(int row)
     else
         return nullptr;
 }
+
+Items *DeviceModel::GetItem(QModelIndex *index)
+{
+    if(index->isValid())
+    {
+        int row = index->row();
+        return &listDev->items[row];
+    }
+    else
+        return nullptr;
+
+}
+
+
 
 //------------------------------------------------------------------------------------------------
 //

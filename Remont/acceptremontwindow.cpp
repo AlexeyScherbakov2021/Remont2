@@ -183,7 +183,7 @@ void AcceptRemontWindow::AddDevice(Items *dev)
 
     Q_ASSERT(dev->listStatus.size() > 0);
     // if(dev->listStatus.last().idStatus == StatusItem::EXCHANGE)
-    bool isExch = !(dev->listStatus.last().idStatus == StatusItem::EXCHANGE) && dev->idParent > 0;
+    // bool isExch = !(dev->listStatus.last().idStatus == StatusItem::EXCHANGE) && dev->idParent > 0;
 
     // ui->pbExchange->setEnabled(isExch);
 

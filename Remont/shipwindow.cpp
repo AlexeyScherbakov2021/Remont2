@@ -134,6 +134,7 @@ void ShipWindow::on_tbNumProd_clicked()
     SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
     win->AddSelectedType(IndexType::Modul);
     win->AddSelectedType(IndexType::Plate);
+    win->ExcludeDevice(listAddId);
 
     Items *dev = win->SelectDevice(true, {StatusItem::CORRECT, StatusItem::CORRECT_OSO} );
 
@@ -142,6 +143,7 @@ void ShipWindow::on_tbNumProd_clicked()
         // qDebug() << dev->number;
         trackItem.AddRecord(/*dev->id,*/ *dev);
         ui->wTreeItems->AddItem(dev);
+        listAddId.insert(dev->id);
     }
 
 }
@@ -178,6 +180,7 @@ void ShipWindow::on_pbDelete_clicked()
                 trackItem.DelRecord(/*id, */it);
                 break;
             }
+        listAddId.remove(id);
     }
 
 }

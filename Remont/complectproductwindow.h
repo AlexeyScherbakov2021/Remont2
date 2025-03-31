@@ -38,6 +38,8 @@ private:
     ListModul Modules;
     TrackRecord<Items> trackModul;
     QMetaObject::Connection conn;
+    QSet<int> listAddId;
+
 
     void LoadProductToScreen(Items &prod);
     void addModulToScreen(Items &mod);

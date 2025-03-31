@@ -12,12 +12,14 @@ SelectDeviceWindow::SelectDeviceWindow(IndexType _type, QWidget *parent)
 {
     ui->setupUi(this);
 
+    proxy = new ModelProxy(this);
     model = new DeviceModel(type, this);
+    proxy->setSourceModel(model);
 
     AddSelectedType(type);
     ui->cbType->setModel(&typeModel);
 
-    ui->tableView->setModel(model);
+    ui->tableView->setModel(proxy);
     ui->tableView->setColumnWidth(0, 30);       // icon
     ui->tableView->setColumnWidth(1, 100);      // Номер
     ui->tableView->setColumnWidth(2, 200);      // тип
@@ -31,7 +33,9 @@ SelectDeviceWindow::SelectDeviceWindow(IndexType _type, QWidget *parent)
 
     ui->tableView->addAction("Карточка устройства", this, [this] () {
 
-        Items* dev = model->GetItem(ui->tableView->currentIndex().row());
+        QModelIndex index = ui->tableView->currentIndex();
+        index = proxy->mapToSource(index);
+        Items* dev = model->GetItem(&index);
         if(dev->id > 0 && dev->type.indexType <= IndexType::Plate)
         {
             CardProdWindow *win = new CardProdWindow(dev, this);
@@ -40,7 +44,9 @@ SelectDeviceWindow::SelectDeviceWindow(IndexType _type, QWidget *parent)
 
     });
     ui->tableView->addAction("Скопировать номер", this, [this] () {
-        Items* dev = model->GetItem(ui->tableView->currentIndex().row());
+        QModelIndex index = ui->tableView->currentIndex();
+        index = proxy->mapToSource(index);
+        Items* dev = model->GetItem(&index);
         QClipboard *cpb = QApplication::clipboard();
         cpb->setText(dev->number, QClipboard::Clipboard);
     });
@@ -94,6 +100,12 @@ void SelectDeviceWindow::AddSelectedType(IndexType _type)
     QStandardItem *item = new QStandardItem(QIcon(sIcon), name);
     item->setData(_type, Qt::UserRole);
     typeModel.setItem(row, 0, item);
+}
+
+void SelectDeviceWindow::ExcludeDevice(QSet<int>& _setId)
+{
+    setId = _setId;
+    proxy->AddExcludeListId(setId);
 }
 
 //---------------------------------------------------------------------------------------
@@ -178,8 +190,9 @@ void SelectDeviceWindow::on_tbSearch_clicked()
 void SelectDeviceWindow::on_pbSelect_clicked()
 {
     QModelIndex index = ui->tableView->currentIndex();
+    index = proxy->mapToSource(index);
 
-    device = *model->GetItem(index.row());
+    device = *model->GetItem(&index);
     accept();
 }
 
@@ -195,11 +208,14 @@ void SelectDeviceWindow::on_tableView_doubleClicked(const QModelIndex &/*index*/
 void SelectDeviceWindow::slotTypeChanged(int row)
 {
     QModelIndex index = typeModel.index(row, 0);
+
     IndexType type = (IndexType)typeModel.data(index, Qt::UserRole).toInt();
     delete model;
     model = new DeviceModel(type, this);
+    proxy->setSourceModel(model);
+    proxy->AddExcludeListId(setId);
     startLoad();
-    ui->tableView->setModel(model);
+    ui->tableView->setModel(proxy);
 
 }
 
