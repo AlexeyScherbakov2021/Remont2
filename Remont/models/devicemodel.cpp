@@ -82,7 +82,7 @@ void DeviceModel::fetchMore(const QModelIndex &/*parent*/)
 
     if(!isBaseOff)
     {
-        int resLoad = listDev->LoadPart(startLoad, cntLoad, number, vStatus, isBusy, isParent);
+        int resLoad = listDev->LoadPart(startLoad, cntLoad, number, vStatus, isBusy, hasParent);
 
         if(resLoad > 0)
         {
@@ -163,7 +163,7 @@ bool DeviceModel::removeRows(int row, int count, const QModelIndex &parent)
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-void DeviceModel::prepareLoad(const QString _number, int _status, bool _isBusy, bool _isParent)
+void DeviceModel::prepareLoad(const QString _number, int _status, bool _isBusy, LoadPartType _hasParent)
 {
     Q_ASSERT_X(listDev != nullptr, "", "not calling createList()");
 
@@ -172,7 +172,7 @@ void DeviceModel::prepareLoad(const QString _number, int _status, bool _isBusy, 
     listDev->items.clear();
     status = _status;
     isBusy = _isBusy;
-    isParent = _isParent;
+    hasParent = _hasParent;
     number = _number;
     isFetch = true;
     endResetModel();
@@ -182,7 +182,7 @@ void DeviceModel::prepareLoad(const QString _number, int _status, bool _isBusy, 
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
-void DeviceModel::prepareLoad2(const QString _number, QVector<StatusItem>& _status, bool _isBusy, bool _isParent)
+void DeviceModel::prepareLoad2(const QString _number, QVector<StatusItem>& _status, bool _isBusy, LoadPartType _hasParent)
 {
     // qDebug() << "prepareLoad2" ;
 
@@ -193,7 +193,7 @@ void DeviceModel::prepareLoad2(const QString _number, QVector<StatusItem>& _stat
     listDev->items.clear();
     vStatus = _status;
     isBusy = _isBusy;
-    isParent = _isParent;
+    hasParent = _hasParent;
     number = _number;
     isFetch = true;
     endResetModel();

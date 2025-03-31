@@ -1004,6 +1004,9 @@ bool RepoMSSQL::ItemsSyncSet(int idSet, TrackRecord<Items> *track)
 
 
 
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
 bool RepoMSSQL::LoadChildItems(int idParent, QList<Items> &listItems) const
 {
     bool res;
@@ -1067,9 +1070,12 @@ bool RepoMSSQL::LoadChildItems(int idParent, QList<Items> &listItems) const
 }
 
 
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
 int RepoMSSQL::LoadPart(int start, int count, IndexType iType,
                            const QString &number, QList<Items> &listItems,
-                           const QVector<StatusItem>& listStatus, bool isBusy, bool isParent) const
+                           const QVector<StatusItem>& listStatus, bool isBusy, LoadPartType hasParent) const
 {
     int res = 0;
     QStringList slStatus;
@@ -1079,7 +1085,8 @@ int RepoMSSQL::LoadPart(int start, int count, IndexType iType,
 
     QString sqlNumber = " number like :number";
     QString sqlBusy = " idShip is null and idSet is null";
-    QString sqlParent = " idParent is null";
+    QString sqlNoParent = " idParent is null";
+    QString sqlHasParent = " idParent is not null";
     QString sqlStatus = "ist.idStatus=:idStatus%1 ";
 
     QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
@@ -1098,8 +1105,11 @@ int RepoMSSQL::LoadPart(int start, int count, IndexType iType,
     if(!isBusy)
         slWhere.push_back(sqlBusy);
 
-    if(!isParent)
-        slWhere.push_back(sqlParent);
+    if(hasParent == LoadPartType::HAS_PARENT)
+        slWhere.push_back(sqlHasParent);
+    else if(hasParent == LoadPartType::NO_HAS_PARENT)
+        slWhere.push_back(sqlNoParent);
+
 
     if(slWhere.size() > 0)
     {
@@ -1177,7 +1187,11 @@ int RepoMSSQL::LoadPart(int start, int count, IndexType iType,
     return res;
 }
 
-int RepoMSSQL::LoadPartAll(int start, int count, const QString &number, QList<Items> &listItems, QVector<StatusItem> &listStatus, bool isBusy, bool isParent) const
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
+int RepoMSSQL::LoadPartAll(int start, int count, const QString &number, QList<Items> &listItems, QVector<StatusItem> &listStatus,
+                           bool isBusy, LoadPartType hasParent) const
 {
     int res = 0;
     QStringList slStatus;
@@ -1186,7 +1200,8 @@ int RepoMSSQL::LoadPartAll(int start, int count, const QString &number, QList<It
     QStringList slWhere;
     QString sqlNumber = " number like :number";
     QString sqlBusy = " idShip is null and idSet is null";
-    QString sqlParent = " idParent is null";
+    QString sqlNoParent = " idParent is null";
+    QString sqlHasParent = " idParent is not null";
     QString sqlStatus = "ist.idStatus=:idStatus%1 ";
 
     QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
@@ -1205,8 +1220,10 @@ int RepoMSSQL::LoadPartAll(int start, int count, const QString &number, QList<It
     if(!isBusy)
         slWhere.push_back(sqlBusy);
 
-    if(!isParent)
-        slWhere.push_back(sqlParent);
+    if(hasParent == LoadPartType::HAS_PARENT)
+        slWhere.push_back(sqlHasParent);
+    else if(hasParent == LoadPartType::NO_HAS_PARENT)
+        slWhere.push_back(sqlNoParent);
 
     if(slWhere.size() > 0)
     {
@@ -1282,6 +1299,9 @@ int RepoMSSQL::LoadPartAll(int start, int count, const QString &number, QList<It
 }
 
 
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
 bool RepoMSSQL::AddItem(Items &item) const
 {
     bool res;
@@ -1317,6 +1337,9 @@ bool RepoMSSQL::AddItem(Items &item) const
 
 
 
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
 void RepoMSSQL::LoadStatus(Items& item) const
 {
     item.listStatus.clear();
@@ -1347,6 +1370,9 @@ void RepoMSSQL::LoadStatus(Items& item) const
 
 }
 
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
 bool RepoMSSQL::AddStatus(Items &item, Status &status) const
 {
     bool res;
@@ -1375,6 +1401,9 @@ bool RepoMSSQL::AddStatus(Items &item, Status &status) const
     return res;
 }
 
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
 bool RepoMSSQL::DelLastStatus(Items &item, StatusItem status) const
 {
     bool res;
@@ -1393,6 +1422,9 @@ bool RepoMSSQL::DelLastStatus(Items &item, StatusItem status) const
     return res;
 }
 
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
 void RepoMSSQL::LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) const
 {
     listType.clear();

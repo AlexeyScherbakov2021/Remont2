@@ -37,7 +37,7 @@ public:
     virtual QVariant getData(int row, int col, int role) const override;
     virtual void setData(int row, int col, const QVariant value, int role) const override;
     virtual void GetHeader(QStringList& headers) override;
-    int LoadPart(int start, int count, const QString &number, QVector<StatusItem> vStatus, bool isBusy = false, bool isParent = false) override;
+    int LoadPart(int start, int count, const QString &number, QVector<StatusItem> vStatus, bool isBusy = false, LoadPartType hasParent = LoadPartType::NO_HAS_PARENT) override;
     Items* GetItemAtRow(int row) override;
 
     void AddItemToList(Items* item) override;

@@ -30,7 +30,7 @@ public:
     virtual QVariant getData(int row, int col, int role) const = 0;
     virtual void setData(int row, int col, const QVariant value, int role) const = 0;
     virtual void GetHeader(QStringList& headers) = 0;
-    virtual int LoadPart(int /*start*/, int /*count*/, const QString &/*number*/, QVector<StatusItem> /*vStatus*/, bool /*isBusy*/ = false, bool /*isParent*/ = false) {
+    virtual int LoadPart(int, int, const QString&, QVector<StatusItem> , bool = false, LoadPartType  = LoadPartType::NO_HAS_PARENT) {
         return 0;
     }
 

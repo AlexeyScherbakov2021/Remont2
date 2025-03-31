@@ -57,7 +57,7 @@ void ComplectProductWindow::on_tbSearchModul_clicked()
         win = new SelectDeviceWindow(IndexType::Plate, this);
     }
 
-    Items *child = win->SelectDevice(true, stat, ui->leNumModSearch->text(), false, false);
+    Items *child = win->SelectDevice(true, stat, ui->leNumModSearch->text(), false, LoadPartType::NO_HAS_PARENT);
     if(child != nullptr && win->result() == QDialog::Accepted)
     {
         addModulToScreen(*child);
@@ -75,7 +75,7 @@ void ComplectProductWindow::on_tbProdSearch_clicked()
     QScopedPointer<SelectDeviceWindow> win (new SelectDeviceWindow(IndexType::Product, this));
     // win->setAttribute(Qt::WA_DeleteOnClose);
     win->AddSelectedType(IndexType::Modul);
-    Items *res = win->SelectDevice(true, stat, ui->leNumProdSearch->text(), false, false);
+    Items *res = win->SelectDevice(true, stat, ui->leNumProdSearch->text(), false, LoadPartType::NO_HAS_PARENT);
     if(res != nullptr && win->result() == QDialog::Accepted)
     {
         dev = *res;

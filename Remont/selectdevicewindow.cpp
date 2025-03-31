@@ -101,7 +101,7 @@ void SelectDeviceWindow::AddSelectedType(IndexType _type)
 //---------------------------------------------------------------------------------------
 void SelectDeviceWindow::startLoad()
 {
-    model->prepareLoad2(ui->leSearch->text(), vStatus, isBusy, isParent );
+    model->prepareLoad2(ui->leSearch->text(), vStatus, isBusy, hasParent );
 }
 
 
@@ -109,17 +109,17 @@ void SelectDeviceWindow::startLoad()
 //--------------------------------------------------------------------------------------------------
 // Поиск устройства по списку статусов
 //--------------------------------------------------------------------------------------------------
-Items *SelectDeviceWindow::SelectDevice(bool isNow, const QVector<StatusItem> &statusList, QString searchNum, bool _isBusy, bool _isParent)
+Items *SelectDeviceWindow::SelectDevice(bool isNow, const QVector<StatusItem> &statusList, QString searchNum, bool _isBusy, LoadPartType _hasParent)
 {
     vStatus = statusList;
     isBusy = _isBusy;
-    isParent = _isParent;
+    hasParent = _hasParent;
     vStatus = statusList;
 
     ui->leSearch->setText(searchNum);
 
     QList<Items> listTemp;
-    repo.LoadPart(0, 4, type, searchNum, listTemp, statusList, isBusy, isParent);
+    repo.LoadPart(0, 4, type, searchNum, listTemp, statusList, isBusy, hasParent);
 
     if(isNow && !searchNum.isEmpty())
     {

@@ -279,7 +279,7 @@ void MainWindow::on_aCardDevice_triggered()
     win->AddSelectedType(IndexType::Modul);
     win->AddSelectedType(IndexType::Plate);
     QVector<StatusItem> stat;
-    Items *dev = win->SelectDevice(false, stat, "", true, true);
+    Items *dev = win->SelectDevice(false, stat, "", true, LoadPartType::ANY_PARENT);
     if(dev != nullptr)
     {
         CardProdWindow *winCard = new CardProdWindow(dev, this);
@@ -639,7 +639,7 @@ void MainWindow::on_aExchange_triggered()
     SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Modul, this);
     win->AddSelectedType(IndexType::Product);
     win->AddSelectedType(IndexType::Plate);
-    Items *dev = win->SelectDevice(false, {StatusItem::FAULTY_ON_OBJECT}, "", true, true);
+    Items *dev = win->SelectDevice(false, {StatusItem::FAULTY_ON_OBJECT}, "", true, LoadPartType::HAS_PARENT);
     if(dev != nullptr)
     {
         ChangeModulDlg *win = new ChangeModulDlg(dev, this);

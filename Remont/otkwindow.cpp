@@ -36,7 +36,7 @@ void OTKWindow::RestartLoad()
 {
     delete model;
     model = new DeviceModel(IndexType::All, this);
-    model->prepareLoad2(ui->leSearch->text(), stat, false, false);
+    model->prepareLoad2(ui->leSearch->text(), stat, false, LoadPartType::NO_HAS_PARENT);
     ui->tableView->setModel(model);
 
     ui->tableView->setColumnWidth(0, 24);

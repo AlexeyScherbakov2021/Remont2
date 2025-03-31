@@ -40,7 +40,7 @@ void EndRemontWindow::on_tbNumber_clicked()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
     win->AddSelectedType(IndexType::Modul);
-    Items *dev = win->SelectDevice(true, {StatusItem::REMONT}, ui->leNumber->text(), true, true );
+    Items *dev = win->SelectDevice(true, {StatusItem::REMONT}, ui->leNumber->text(), true, LoadPartType::HAS_PARENT );
     if(dev != nullptr && dev->id > 0)
     {
         AddDevice(dev);

@@ -1,6 +1,8 @@
 #ifndef GENERAL_H
 #define GENERAL_H
 
+enum LoadPartType { NO_HAS_PARENT, HAS_PARENT, ANY_PARENT };
+
 enum IndexType : int { Product, Modul, Plate, ClaimType, SetterType, ShipType, All = 100 };
 
 enum TypeStatus : int {

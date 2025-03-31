@@ -39,8 +39,8 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
 
-    void prepareLoad(const QString _number, int _status, bool _isBusy, bool _isParent);
-    void prepareLoad2(const QString _number, QVector<StatusItem>& _status, bool _isBusy, bool _isParent);
+    void prepareLoad(const QString _number, int _status, bool _isBusy, LoadPartType _hasParent);
+    void prepareLoad2(const QString _number, QVector<StatusItem>& _status, bool _isBusy, LoadPartType _hasParent);
     Items* GetItem(int row);
     bool DeleteItem(int row);
     void DeleteItemFromListId(int id) ;
@@ -65,7 +65,8 @@ private:
     int status = 0;
     QVector<StatusItem> vStatus;
     bool isBusy = false;
-    bool isParent = false;
+    // bool isParent = false;
+    LoadPartType hasParent = LoadPartType::NO_HAS_PARENT;
     bool isBaseOff = false;
     // pLoadItems lp = nullptr;
 

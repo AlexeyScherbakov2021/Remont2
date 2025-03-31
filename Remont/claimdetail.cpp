@@ -201,7 +201,7 @@ void ClaimDetail::on_tbAddDevice_clicked()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
     win->AddSelectedType(IndexType::Modul);
-    Items *dev = win->SelectDevice(true, {StatusItem::WORK, StatusItem::SHIPPED}, "", true, true);
+    Items *dev = win->SelectDevice(true, {StatusItem::WORK, StatusItem::SHIPPED}, "", true, LoadPartType::HAS_PARENT);
     if(dev != nullptr && dev->id > 0)
     {
         // проверка на вхождение в незакрытую рекламацию

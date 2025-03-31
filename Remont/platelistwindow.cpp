@@ -124,7 +124,8 @@ void PlateListWindow::on_rbAll_clicked()
 //---------------------------------------------------------------------------------------
 void PlateListWindow::startLoad()
 {
-    model->prepareLoad(ui->leSearch->text(), 0, false, ui->rbAll->isChecked() );
+    LoadPartType hasParent = ui->rbAll->isChecked() ? LoadPartType::ANY_PARENT : LoadPartType::NO_HAS_PARENT;
+    model->prepareLoad(ui->leSearch->text(), 0, false, hasParent );
 }
 
 

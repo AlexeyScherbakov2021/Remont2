@@ -196,7 +196,7 @@ void EnterWorkWindow::SelectDevice()
     SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
     win->AddSelectedType(IndexType::Modul);
 
-    Items *dev = win->SelectDevice(true, {StatusItem::CORRECT_OSO}, ui->leSearch->text(), false, true);
+    Items *dev = win->SelectDevice(true, {StatusItem::CORRECT_OSO}, ui->leSearch->text(), false, LoadPartType::HAS_PARENT);
     // Items *dev = win->SelectDevice(true, {StatusItem::SHIPPED}, ui->leSearch->text(), true);
     if(dev != nullptr && dev->id > 0)
     {

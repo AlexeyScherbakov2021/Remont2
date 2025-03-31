@@ -37,10 +37,10 @@ public:
     // Items
     bool LoadChildItems(int idParent, QList<Items> &listItems) const;
     int LoadPart(int start, int count, IndexType iType, const QString &number,
-                    QList<Items> &listItems, const QVector<StatusItem>& listStatus, bool isBusy = false, bool isParent = false) const;
+                    QList<Items> &listItems, const QVector<StatusItem>& listStatus, bool isBusy = false, LoadPartType hasParent = LoadPartType::NO_HAS_PARENT) const;
 
     int LoadPartAll(int start, int count, const QString &number,
-                    QList<Items> &listItems, QVector<StatusItem>& listStatus, bool isBusy = false, bool isParent = false) const;
+                    QList<Items> &listItems, QVector<StatusItem>& listStatus, bool isBusy = false, LoadPartType hasParent = LoadPartType::NO_HAS_PARENT) const;
 
     bool AddItem(Items &item) const;
     bool UpdateItem(Items &item);
