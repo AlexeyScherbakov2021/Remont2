@@ -20,6 +20,8 @@ public:
     ~LoginDlg();
 
     int idUser;
+    inline static Users CurrUser;
+
 
 private slots:
     void on_pbOK_clicked();

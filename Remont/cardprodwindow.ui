@@ -32,33 +32,89 @@ color: black
       <attribute name="title">
        <string>Карточка</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1">
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>Данные продукта</string>
          </property>
-         <layout class="QFormLayout" name="formLayout">
+         <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,0">
           <property name="verticalSpacing">
            <number>6</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="lbIcon">
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>40</height>
-             </size>
+          <item row="4" column="1">
+           <widget class="QLabel" name="lbNumber2">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
             </property>
             <property name="text">
              <string/>
             </property>
-            <property name="pixmap">
-             <pixmap resource="resource.qrc">:/image/network_adapter.png</pixmap>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_26">
+            <property name="text">
+             <string>№ накладной</string>
             </property>
            </widget>
           </item>
-          <item row="15" column="1">
+          <item row="7" column="1">
+           <widget class="QLabel" name="lbName">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="lbType">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Заводской номер</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_28">
+            <property name="text">
+             <string>Наименование</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QLabel" name="lbNumDoc">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="1">
            <spacer name="verticalSpacer">
             <property name="orientation">
              <enum>Qt::Orientation::Vertical</enum>
@@ -71,33 +127,28 @@ color: black
             </property>
            </spacer>
           </item>
-          <item row="3" column="0">
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_24">
+            <property name="text">
+             <string>№ прош./шкафа</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
            <widget class="QLabel" name="label_21">
             <property name="text">
              <string>Обозначение</string>
             </property>
            </widget>
           </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Дата производства</string>
+            </property>
+           </widget>
+          </item>
           <item row="3" column="1">
-           <widget class="QLabel" name="lbVNFT">
-            <property name="font">
-             <font>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Заводской номер</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
            <widget class="QLabel" name="lbNumber">
             <property name="font">
              <font>
@@ -118,71 +169,37 @@ color: black
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_30">
+            <property name="text">
+             <string>Гарантия мес.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
            <widget class="QLabel" name="label_20">
             <property name="text">
              <string>Тип</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QLabel" name="lbType">
-            <property name="font">
-             <font>
-              <bold>true</bold>
-             </font>
+          <item row="0" column="0">
+           <widget class="QLabel" name="lbIcon">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>40</height>
+             </size>
             </property>
             <property name="text">
              <string/>
             </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_24">
-            <property name="text">
-             <string>№ прош./шкафа</string>
+            <property name="pixmap">
+             <pixmap resource="resource.qrc">:/image/network_adapter.png</pixmap>
             </property>
            </widget>
           </item>
           <item row="5" column="1">
-           <widget class="QLabel" name="lbNumber2">
-            <property name="font">
-             <font>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>Дата производства</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="0">
-           <widget class="QLabel" name="label_26">
-            <property name="text">
-             <string>№ накладной</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="1">
-           <widget class="QLabel" name="lbNumDoc">
-            <property name="font">
-             <font>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
            <widget class="QLabel" name="lbDateCreate">
             <property name="font">
              <font>
@@ -197,15 +214,8 @@ color: black
             </property>
            </widget>
           </item>
-          <item row="9" column="0">
-           <widget class="QLabel" name="label_28">
-            <property name="text">
-             <string>Наименование</string>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="1">
-           <widget class="QLabel" name="lbName">
+          <item row="2" column="1">
+           <widget class="QLabel" name="lbVNFT">
             <property name="font">
              <font>
               <bold>true</bold>
@@ -216,14 +226,7 @@ color: black
             </property>
            </widget>
           </item>
-          <item row="10" column="0">
-           <widget class="QLabel" name="label_30">
-            <property name="text">
-             <string>Гарантия мес.</string>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="1">
+          <item row="8" column="1">
            <widget class="QLabel" name="lbGarantMon">
             <property name="font">
              <font>
@@ -232,6 +235,26 @@ color: black
             </property>
             <property name="text">
              <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QToolButton" name="tbChangeType">
+            <property name="toolTip">
+             <string>Изменить тип и ВНФТ</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/image/edit.png</normaloff>:/image/edit.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>18</width>
+              <height>12</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -263,6 +286,25 @@ color: black
             </property>
             <property name="textInteractionFlags">
              <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_22">
+            <property name="text">
+             <string>счет</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="lbSchet">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string/>
             </property>
            </widget>
           </item>
@@ -423,38 +465,6 @@ color: black
             </property>
            </widget>
           </item>
-          <item row="11" column="1">
-           <spacer name="verticalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Orientation::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_22">
-            <property name="text">
-             <string>счет</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="lbSchet">
-            <property name="font">
-             <font>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
           <item row="9" column="1">
            <widget class="QPushButton" name="pbToShip">
             <property name="sizePolicy">
@@ -482,6 +492,19 @@ color: black
              <bool>false</bool>
             </property>
            </widget>
+          </item>
+          <item row="11" column="1">
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>

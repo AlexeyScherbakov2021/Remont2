@@ -41,24 +41,28 @@ MainWindow::MainWindow(int idUser, QWidget *parent)
 
     ui->setupUi(this);
 
-    Users user; //= Users::getInstance();
+    // Users user; //= Users::getInstance();
 
     if(idUser == 100500)
     {
-        user.UserName = "Admin";
-        user.UserFullName = user.UserName;
-        user.id = idUser;
+        LoginDlg::CurrUser.UserName = "Admin";
+        LoginDlg::CurrUser.UserFullName = LoginDlg::CurrUser.UserName;
+        LoginDlg::CurrUser.id = idUser;
+        for(int i = 1; i < (int)RolesType::COUNT_ROLES; ++i)
+            LoginDlg::CurrUser.listRoles.insert((RolesType)i);
     }
     else
     {
         RepoMSSQL repo;
-        user = repo.LoadUser(idUser);
-        user.LoadRoles(idUser);
+        // user = repo.LoadUser(idUser);
+        LoginDlg::CurrUser = repo.LoadUser(idUser);
+        // user.LoadRoles(idUser);
+        LoginDlg::CurrUser.LoadRoles(idUser);
     }
 
-    SetRoleEnv(user);
+    SetRoleEnv(LoginDlg::CurrUser);
     ui->statusbar->addWidget(new QLabel("Login: "));
-    ui->statusbar->addWidget(new QLabel(user.UserFullName));
+    ui->statusbar->addWidget(new QLabel(LoginDlg::CurrUser.UserFullName));
 
     QSettings setting("HKEY_CURRENT_USER\\Software\\Remont2", QSettings::NativeFormat);
     QString port = setting.value("COMport").toString();
@@ -480,8 +484,8 @@ void MainWindow::on_aNewShip_triggered()
 //----------------------------------------------------------------------------------------------
 void MainWindow::SetRoleEnv(Users &user)
 {
-    if(user.id == 100500)
-        return;
+    // if(user.id == 100500)
+    //     return;
 
     ui->aRegPlate->setVisible(false);
     ui->aListPlate->setVisible(false);

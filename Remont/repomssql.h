@@ -52,6 +52,7 @@ public:
     bool AddStatus(Items &item, Status &status) const;
     bool DelLastStatus(Items &item, StatusItem status) const;
     void LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) const;       //=============
+    void LoadNewTypeItem(IndexType indexType, QVector<ItemType> &listType) const;       //=============
 
     // SetterOut
     int LoadPart(int start, int count, const QString &number, QList<SetterOut> &listItems, bool isBusy = false) const;

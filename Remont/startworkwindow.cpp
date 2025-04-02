@@ -224,17 +224,19 @@ void EnterWorkWindow::SetStatusAllDevice(Items *item, QDateTime &dateOn)
     item->AddStatus(*item, StatusItem::WORK, dateOn, ui->leDoc->text());
 
     Claim claim = repo.GetClaimForItem(item->id);
-    repo.LoadChildClaim(claim);
-    bool resClaim = true;
-    foreach (const Items it, claim.childItems)
-    {
-        resClaim &= it.listStatus.last().idStatus == StatusItem::WORK;
-    }
-    if(resClaim)
-    {
-        claim.isClosed = true;
-        repo.UpdateItem(claim);
-    }
+    claim.CheckAndClose();
+
+    // repo.LoadChildClaim(claim);
+    // bool resClaim = true;
+    // foreach (const Items it, claim.childItems)
+    // {
+    //     resClaim &= it.listStatus.last().idStatus == StatusItem::WORK;
+    // }
+    // if(resClaim)
+    // {
+    //     claim.isClosed = true;
+    //     repo.UpdateItem(claim);
+    // }
 
 
     Items parent = repo.GetItem(item->idParent);

@@ -48,7 +48,8 @@ enum class RolesType : int {
     EndRepair,
     CardDevice,
     GenerateQR,
-
+    EditItems,
+    COUNT_ROLES
 };
 
 

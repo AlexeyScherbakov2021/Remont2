@@ -1,4 +1,6 @@
 #include "cardprodwindow.h"
+#include "changetypedlg.h"
+#include "logindlg.h"
 #include "shipwindow.h"
 #include "ui_cardprodwindow.h"
 #include <models/claim.h>
@@ -6,21 +8,25 @@
 #include <models/remont.h>
 #include <models/setterout.h>
 #include <models/shipment.h>
+#include <QSqlQueryModel>
 
 
 //-------------------------------------------------------------------------------------------------------
 // Конструктор
 //-------------------------------------------------------------------------------------------------------
-CardProdWindow::CardProdWindow(Items *device, QWidget *parent)
+CardProdWindow::CardProdWindow(Items *_device, QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::CardProdWindow)
+    , ui(new Ui::CardProdWindow), device(_device)
 {
+    ui->setupUi(this);
+
     SetterOut setter;
     Items root;
     // int idParent = 0;
 
-    ui->setupUi(this);
     setWindowTitle("Карточка \"" + device->GetDefaultName() + "\"");
+
+    ui->tbChangeType->setVisible(LoginDlg::CurrUser.listRoles.contains(RolesType::EditItems));
 
     QString nameType, iconType;
     device->GetInfo(nameType, iconType);
@@ -188,7 +194,7 @@ void CardProdWindow::LoadShipping()
     // }
 
     // ui->lbContract->setText(ship.schet);
-    // ui->lbCardOrder->setText(ship.cardOrder);
+    // ui->lbCardOrdersetText(ship.cardOrder);
     // ui->lbObjectInstall->setText(ship.objectInstall);
     // ui->lbProduction->setText(prod->name);
     // ui->lbDateUPD->setText(ship.dateUPD.toString("dd.MM.yyyy"));
@@ -265,5 +271,64 @@ void CardProdWindow::on_pbToShip_clicked()
         LoadShipping();
     }
 
+}
+
+//-------------------------------------------------------------------------------------------------------
+// Кнопка редактирования типа
+//-------------------------------------------------------------------------------------------------------
+void CardProdWindow::on_tbChangeType_clicked()
+{
+    ChangeTypeDlg *win = new ChangeTypeDlg(device, this);
+    if(win->exec() == QDialog::Accepted)
+    {
+        ui->lbType->setText(device->type.typeName);
+        ui->lbVNFT->setText(device->type.VNFT);
+        repo.UpdateItem(*device);
+    }
+
+    // QVector<ItemType> listItem;
+    // repo.LoadNewTypeItem(device->type.indexType, listItem);
+    // QWidget *w = new QWidget(this, Qt::Dialog);
+    // w->setMinimumSize(700,500);
+    // w->setWindowTitle("Выбор типа");
+    // QVBoxLayout *lay = new QVBoxLayout(w);
+    // w->setLayout(lay);
+    // QSqlQueryModel *model = new QSqlQueryModel(w);
+    // QString sql = QString("select id,VNFT,typeName from ItemType where indexType=%1 and VNFT is not null order by VNFT").arg(device->type.indexType);
+    // model->setQuery(sql);
+    // model->setHeaderData(1, Qt::Horizontal, "ВНФТ");
+    // model->setHeaderData(2, Qt::Horizontal, "Наименование");
+    // QTableView *tblView = new QTableView(w);
+    // tblView->setModel(model);
+    // tblView->setSelectionMode(QAbstractItemView::SingleSelection);
+    // tblView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    // tblView->hideColumn(0);
+    // tblView->setColumnWidth(1, 200);
+    // tblView->setAlternatingRowColors(true);
+    // tblView->horizontalHeader()->setStretchLastSection(true);
+    // tblView->verticalHeader()->setDefaultSectionSize(24);
+    // lay->addWidget(tblView);
+
+    // connect(tblView, &QTableView::doubleClicked, this, [this, tblView, w, model] {
+    //     auto index = model->index(tblView->currentIndex().row(), 0);
+    //     int id = model->data(index).toInt();
+    //     index = model->index(tblView->currentIndex().row(), 1);
+    //     QString VNFT = model->data(index).toString();
+    //     index = model->index(tblView->currentIndex().row(), 2);
+    //     QString name = model->data(index).toString();
+    //     ui->lbType->setText(name);
+    //     ui->lbVNFT->setText(VNFT);
+    //     device->idType = id;
+    //     device->type.id = id;
+    //     device->type.typeName = name;
+    //     device->type.VNFT = VNFT;
+    //     repo.UpdateItem(*device);
+    //     w->close();
+    //     w->deleteLater();
+    // });
+
+    // w->show();
+
+    // qDebug() << "Exit from on_tbChangeType_clicked";
 }
 

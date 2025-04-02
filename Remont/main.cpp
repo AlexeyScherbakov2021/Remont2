@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
     MainWindow w(win->idUser);
 #else
     MainWindow w(100500);
+    // MainWindow w(107);
 #endif
     w.show();
     return a.exec();

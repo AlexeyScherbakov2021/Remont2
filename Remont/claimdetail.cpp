@@ -205,6 +205,7 @@ void ClaimDetail::on_tbAddDevice_clicked()
     Items *dev = win->SelectDevice(true, {StatusItem::WORK, StatusItem::SHIPPED}, "", true, LoadPartType::ANY_PARENT);
     if(dev != nullptr && dev->id > 0)
     {
+
         // проверка на вхождение в незакрытую рекламацию
         Claim claim = repo.GetClaimForItem(dev->id);
         if(claim.id > 0)

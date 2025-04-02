@@ -17,6 +17,7 @@ SOURCES += \
     acceptremontwindow.cpp \
     cardprodwindow.cpp \
     changemoduldlg.cpp \
+    changetypedlg.cpp \
     claimdetail.cpp \
     claimwindow.cpp \
     complectproductwindow.cpp \
@@ -72,6 +73,7 @@ HEADERS += \
     acceptremontwindow.h \
     cardprodwindow.h \
     changemoduldlg.h \
+    changetypedlg.h \
     claimdetail.h \
     claimwindow.h \
     complectproductwindow.h \
@@ -135,6 +137,7 @@ FORMS += \
     acceptremontwindow.ui \
     cardprodwindow.ui \
     changemoduldlg.ui \
+    changetypedlg.ui \
     claimdetail.ui \
     claimwindow.ui \
     complectproductwindow.ui \

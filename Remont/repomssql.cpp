@@ -1446,6 +1446,29 @@ void RepoMSSQL::LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) c
 }
 
 //------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
+void RepoMSSQL::LoadNewTypeItem(IndexType indexType, QVector<ItemType> &listType) const
+{
+    listType.clear();
+    QSqlQuery query(db);
+    query.prepare("select id,typeName,garantMonth,VNFT from ItemType where indexType=:indexType and VNFT is not null");
+    query.bindValue(":indexType", indexType);
+
+    query.exec();
+    while(query.next())
+    {
+        ItemType mType;
+        mType.id = query.value(0).toInt();
+        mType.typeName = query.value(1).toString();
+        mType.garantMonth = query.value(2).toInt();
+        mType.VNFT = query.value(3).toString();
+        mType.indexType = indexType;
+        listType.push_back(mType);
+    }
+}
+
+//------------------------------------------------------------------------------------------------------
 // Загрузка наборов
 //------------------------------------------------------------------------------------------------------
 int RepoMSSQL::LoadPart(int start, int count, const QString &number, QList<SetterOut> &listItems, bool isFree) const

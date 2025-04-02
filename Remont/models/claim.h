@@ -38,7 +38,8 @@ public:
         for(auto &it : childItems)
         {
             repo.LoadStatus(it);
-            res &= (it.listStatus.last().idStatus != StatusItem::WORK || it.listStatus.last().typeStatus == TypeStatus::REMONT_STATUS);
+            res &= (it.listStatus.last().idStatus == StatusItem::WORK || it.listStatus.last().idStatus == StatusItem::EXCHANGE
+                    /*|| it.listStatus.last().typeStatus == TypeStatus::REMONT_STATUS*/);
         }
         if(res)
         {
@@ -48,6 +49,7 @@ public:
 
         return res;
     }
+
 
 };
 

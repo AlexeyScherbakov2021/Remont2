@@ -17,17 +17,19 @@ class CardProdWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit CardProdWindow(Items *device, QWidget *parent = nullptr);
+    explicit CardProdWindow(Items *_device, QWidget *parent = nullptr);
     ~CardProdWindow();
 
 private slots:
     void on_pbToShip_clicked();
+    void on_tbChangeType_clicked();
 
 private:
     Ui::CardProdWindow *ui;
     RepoMSSQL repo;
     QString number;
     Shipment ship;
+    Items *device;
 
     // RemontEntity *remontEntity;
 

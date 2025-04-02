@@ -20,6 +20,7 @@ ItemVNFTWindow::ItemVNFTWindow(IndexType t, QWidget *parent)
 
     ui->tableView->hideColumn(0);
     ui->tableView->hideColumn(1);
+    ui->tableView->hideColumn(5);
     model2.setEditStrategy(QSqlTableModel::OnManualSubmit);
     model2.setHeaderData(2, Qt::Horizontal, "Наименование");
     model2.setHeaderData(3, Qt::Horizontal, "Гарантия(мес.)");

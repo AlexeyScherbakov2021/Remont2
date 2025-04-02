@@ -4,6 +4,8 @@
 
 #include <QMessageBox>
 
+#include <models/claim.h>
+
 ChangeModulDlg::ChangeModulDlg(Items* dev, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::ChangeModulDlg), brokenDev(dev)
@@ -65,6 +67,16 @@ void ChangeModulDlg::on_pbOK_clicked()
 
         parent = repo.GetItem(parent.idParent);
     } while(parent.idParent > 0);
+
+    Claim claim = repo.GetClaimForItem(brokenDev->id);
+
+    // Remont remont;
+    // remont.idClaim = claim.id;
+    // remont.idItem = device.id;
+    // remont.startDate = ui->deDate->dateTime();
+    // repo.AddRemont(remont);
+
+    claim.CheckAndClose();
 
     QMessageBox::information(this, "Сообщение", QString("%1 №%2 %3 земенен.")
             .arg(brokenDev->type.typeName).arg(brokenDev->number).arg(brokenDev->type.VNFT));
