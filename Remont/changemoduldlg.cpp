@@ -36,7 +36,7 @@ ChangeModulDlg::~ChangeModulDlg()
 void ChangeModulDlg::on_tbSearch_clicked()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(brokenDev->type.indexType);
-    Items *dev =  win->SelectDevice(true, {}, ui->leSwarch->text());
+    Items *dev =  win->SelectDevice(true, {StatusItem::CORRECT, StatusItem::CORRECT_OSO}, ui->leSwarch->text());
     if(dev != nullptr && dev->id > 0)
     {
         // qInfo() << dev->number;
@@ -75,6 +75,9 @@ void ChangeModulDlg::on_pbOK_clicked()
     // remont.idItem = device.id;
     // remont.startDate = ui->deDate->dateTime();
     // repo.AddRemont(remont);
+
+    brokenDev->idParent = 0;
+    repo.UpdateItem(*brokenDev);
 
     claim.CheckAndClose();
 

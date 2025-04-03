@@ -60,11 +60,11 @@ void AcceptRemontWindow::on_pbApply_clicked()
         return;
 
 
-    if(device.listStatus.last().idStatus == StatusItem::EXCHANGE)
-    {
-        device.idParent = 0;
-        repo.UpdateItem(device);
-    }
+    // if(device.listStatus.last().idStatus == StatusItem::EXCHANGE)
+    // {
+    //     device.idParent = 0;
+    //     repo.UpdateItem(device);
+    // }
 
     device.AddStatus(device, StatusItem::FAULTY_ON_OSO, ui->deDate->dateTime());
 
@@ -130,7 +130,7 @@ void AcceptRemontWindow::on_tbNumber_clicked()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
     win->AddSelectedType(IndexType::Modul);
-    Items *dev = win->SelectDevice(true, {StatusItem::FAULTY_ON_OBJECT, StatusItem::EXCHANGE}, ui->leNumber->text(), true, LoadPartType::HAS_PARENT );
+    Items *dev = win->SelectDevice(true, {StatusItem::FAULTY_ON_OBJECT, StatusItem::EXCHANGE}, ui->leNumber->text(), true, LoadPartType::ANY_PARENT );
     if(dev != nullptr && dev->id > 0)
     {
         AddDevice(dev);

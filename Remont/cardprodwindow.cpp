@@ -252,6 +252,7 @@ void CardProdWindow::loadInclude(const Items *item)
         dev = repo.GetItem(dev.idParent);
 
     ui->treeContent->AddItem(&dev);
+    ui->treeContent->AddHistoryChild();
     ui->treeContent->SetSelectItem(item->id, item->type.indexType);
 }
 

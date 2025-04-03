@@ -54,6 +54,10 @@ void TreeItemsForm::AddItem(IEntity *dev, bool isRootVisible)
 {
     QTreeWidgetItem *item = nullptr;
 
+    Q_ASSERT(device == nullptr);
+
+    device = dev;
+
     if(isRootVisible)
     {
         QString nameType, nameIcon;
@@ -136,10 +140,10 @@ void TreeItemsForm::AddChildTree(QTreeWidgetItem *root, Items* dev)
             //     child->setText(0, dev->GetDefaultName() + " неисправен");
             //     break;
 
-            case StatusItem::EXCHANGE:
-                child->setForeground(0, QBrush(Qt::lightGray));
-                child->setText(0, dev->GetDefaultName() + " был заменен");
-                break;
+            // case StatusItem::EXCHANGE:
+            //     child->setForeground(0, QBrush(Qt::lightGray));
+            //     child->setText(0, dev->GetDefaultName() + " был заменен");
+            //     break;
 
             case StatusItem::FAULTY_CHILD:
                 child->setForeground(0, QBrush(Qt::darkGray));
@@ -271,6 +275,33 @@ void TreeItemsForm::ExecMenu(QMenu &menu, const QPoint &pos)
 {
     // qDebug() << "ExecMenu";
     menu.exec(ui->treeWidget->viewport()->mapToGlobal(pos));
+}
+
+//---------------------------------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------------------------------
+void TreeItemsForm::AddHistoryChild()
+{
+    QList<Items> listItems;
+    repo.LoadHistoryChild(device->id, listItems);
+
+    QTreeWidgetItem *root = ui->treeWidget->topLevelItem(0);
+
+    for(auto &it : listItems)
+    {
+        QString nameType, nameIcon;
+        it.GetInfo(nameType, nameIcon);
+
+        QTreeWidgetItem *child = new QTreeWidgetItem();
+        // child->setForeground(0, QBrush(Qt::lightGray));
+        child->setForeground(0, QColor(140,100,100));
+        child->setText(0, it.GetDefaultName() + " был заменен " + it.dateOff.toString("dd.MM.yyyy"));
+        child->setData(0, Qt::UserRole, it.id);
+        child->setData(0, Qt::UserRole + 1, it.type.indexType);
+        child->setIcon(0, QIcon(nameIcon));
+        child->setToolTip(0, nameType);
+        root->addChild(child);
+    }
 }
 
 

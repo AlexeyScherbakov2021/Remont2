@@ -28,6 +28,9 @@ ChangeTypeDlg::~ChangeTypeDlg()
     delete ui;
 }
 
+//---------------------------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------------------------
 void ChangeTypeDlg::slotSelect()
 {
     QModelIndex index = ui->tblView->currentIndex();
@@ -45,6 +48,9 @@ void ChangeTypeDlg::slotSelect()
 
 }
 
+//---------------------------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------------------------
 void ChangeTypeDlg::on_tbSearch_clicked()
 {
     // proxy->setFilterFixedString(ui->leSearch->text());
@@ -52,6 +58,6 @@ void ChangeTypeDlg::on_tbSearch_clicked()
     proxy->setFilterRegularExpression(ui->leSearch->text());
     proxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
     proxy->setFilterKeyColumn(2);
-    qDebug() << ui->leSearch->text();
+    // qDebug() << ui->leSearch->text();
 }
 

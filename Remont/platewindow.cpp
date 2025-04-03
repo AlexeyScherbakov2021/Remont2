@@ -14,7 +14,7 @@ PlateWindow::PlateWindow(QWidget *parent)
     ui->setupUi(this);
     ui->deCreateDate->setDateTime(QDateTime::currentDateTime());
 
-    repo.LoadTypeItem(IndexType::Plate, listVNFT);
+    repo.LoadItemsType(listVNFT, IndexType::Plate);
 
     for(auto const &it : listVNFT)
     {

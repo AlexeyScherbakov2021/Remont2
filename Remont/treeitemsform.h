@@ -29,10 +29,12 @@ public:
     int GetSelectedId();
     QPair<int,IndexType> GetSelectedItem();
     void ExecMenu(QMenu &menu, const QPoint &pos);
+    void AddHistoryChild();
 
 private:
     Ui::TreeItemsForm *ui;
     RepoMSSQL repo;
+    IEntity *device = nullptr;
 
     void AddChildTree(QTreeWidgetItem *item, Items* dev);
     bool SetSelectItemRec(int id, IndexType typeIndex, QTreeWidgetItem* item);

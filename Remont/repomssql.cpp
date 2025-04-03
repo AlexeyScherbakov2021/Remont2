@@ -243,24 +243,6 @@ Items RepoMSSQL::GetItem2( QString number, const QVector<StatusItem>& listStatus
     return item;
 }
 
-void RepoMSSQL::LoadItemsType(QList<ItemType> &listType, IndexType indexType) const
-{
-    listType.clear();
-    QSqlQuery query(db);
-    query.prepare("select id,typeName,garantMonth,VNFT from ItemType where indexType=:indexType");
-    query.bindValue(":indexType", indexType);
-
-    query.exec();
-    while(query.next())
-    {
-        ItemType mType;
-        mType.id = query.value(0).toInt();
-        mType.typeName = query.value(1).toString();
-        mType.garantMonth = query.value(2).toInt();
-        mType.VNFT = query.value(3).toString();
-        listType.push_back(mType);
-    }
-}
 
 
 //------------------------------------------------------------------------------------------------------
@@ -1044,7 +1026,7 @@ bool RepoMSSQL::LoadChildItems(int idParent, QList<Items> &listItems) const
         item.garantMonth = query.value(12).toInt();
         item.dateGarant = query.value(13).toDateTime();
         item.isZip = query.value(14).toBool();
-        item.VNFT = query.value(15).toString();
+        // item.VNFT = query.value(15).toString();
         item.currStatus = query.value(16).toString();
 
         item.type.indexType = (IndexType)query.value(17).toInt();
@@ -1425,7 +1407,48 @@ bool RepoMSSQL::DelLastStatus(Items &item, StatusItem status) const
 //------------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------------
-void RepoMSSQL::LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) const
+bool RepoMSSQL::LoadHistoryChild(int idParent, QList<Items> &listItems) const
+{
+    bool res;
+    listItems.clear();
+    QSqlQuery query(db);
+    query.prepare("select i.id,i.idType,i.number,i.number2,i.nameItem,i.dateCreate,it.typeName,it.indexType,it.VNFT,ist.dateStatus "
+                  "from ItemStatus ist "
+                  "join Items i on i.id=ist.idItem "
+                  "join ItemType it on it.id=i.idType "
+                  "where linkField=:idParent  and idStatus=12 ");
+
+    query.bindValue(":idParent", idParent);
+
+    res = query.exec();
+    while(query.next())
+    {
+        Items item;
+
+        item.id = query.value(0).toInt();
+        item.idParent = idParent;
+        item.idType = query.value(1).toInt();
+        item.number = query.value(2).toString();
+        item.number2 = query.value(3).toString();
+        item.name = query.value(4).toString();
+        item.dateCreate = query.value(5).toDateTime();
+
+        item.type.typeName = query.value(6).toString();
+        item.type.indexType = (IndexType)query.value(7).toInt();
+        item.type.VNFT = query.value(8).toString();
+        item.type.id = item.idType;
+        item.VNFT = item.type.VNFT;
+        item.dateOff = query.value(9).toDateTime();
+        listItems.push_back(item);
+    }
+
+    return res;
+}
+
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
+void RepoMSSQL::LoadItemsType(QList<ItemType> &listType, IndexType indexType) const
 {
     listType.clear();
     QSqlQuery query(db);
@@ -1445,10 +1468,31 @@ void RepoMSSQL::LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) c
     }
 }
 
+
+// void RepoMSSQL::LoadTypeItem(IndexType indexType, QVector<ItemType> &listType) const
+// {
+//     listType.clear();
+//     QSqlQuery query(db);
+//     query.prepare("select id,typeName,garantMonth,VNFT from ItemType where indexType=:indexType");
+//     query.bindValue(":indexType", indexType);
+
+//     query.exec();
+//     while(query.next())
+//     {
+//         ItemType mType;
+//         mType.id = query.value(0).toInt();
+//         mType.typeName = query.value(1).toString();
+//         mType.garantMonth = query.value(2).toInt();
+//         mType.VNFT = query.value(3).toString();
+//         mType.indexType = indexType;
+//         listType.push_back(mType);
+//     }
+// }
+
 //------------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------------
-void RepoMSSQL::LoadNewTypeItem(IndexType indexType, QVector<ItemType> &listType) const
+void RepoMSSQL::LoadNewItemsType(QVector<ItemType> &listType, IndexType indexType) const
 {
     listType.clear();
     QSqlQuery query(db);
