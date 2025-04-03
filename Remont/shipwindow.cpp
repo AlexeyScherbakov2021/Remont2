@@ -58,6 +58,7 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
         ui->leCustomer->setCursorPosition(0);
         ui->deDateUPD->setDateTime(ship->dateUPD);
         ui->deDateOut->setDateTime(ship->dateRegister);
+        ui->leQuestList->setText(ship->questList);
 
         repo.LoadChildShip(*ship);
 

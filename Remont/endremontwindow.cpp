@@ -58,12 +58,10 @@ void EndRemontWindow::on_pbEndRemont_clicked()
     if(device.id == 0)
         return;
 
-    // закрыть рекламацию, если все отремонтировано
-    // claim.isClosed = true;
-    // repo.UpdateItem(claim);
+    // отметка для рекламации о завершении ремонта этого устройства
+    repo.SetEndWorkClaim(device.id, claim.id);
 
     // внести изменения в таблицы ремонтов
-
     Remont rem = repo.GetRemontForItem(device.id, claim.id);
     Q_ASSERT(rem.id != 0);
     Q_ASSERT(ui->cbReason->currentData(Qt::UserRole) != QVariant());

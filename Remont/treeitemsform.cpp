@@ -54,7 +54,7 @@ void TreeItemsForm::AddItem(IEntity *dev, bool isRootVisible)
 {
     QTreeWidgetItem *item = nullptr;
 
-    Q_ASSERT(device == nullptr);
+    Q_ASSERT(dev != nullptr);
 
     device = dev;
 

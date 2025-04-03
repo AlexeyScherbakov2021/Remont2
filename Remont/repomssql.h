@@ -84,6 +84,7 @@ public:
     int LoadPart(int start, int count, const QString &number, QList<Claim> &listItems) const;
     bool LoadChildClaim(Claim &claim);
     bool AddItemToClaim(int idItem, int idClaim);
+    bool SetEndWorkClaim(int idItem, int idClaim);
     bool DelItemFromClaim(int idItem, int idClaim);
     Claim GetClaimForItem(int idItem);
 

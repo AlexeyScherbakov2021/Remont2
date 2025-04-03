@@ -1770,7 +1770,7 @@ bool RepoMSSQL::AddItemToClaim(int idItem, int idClaim)
     bool res;
     QSqlQuery query(db);
 
-    query.prepare("insert into ClaimItems (idClaim,idItem) values(:idClaim,:idItem)");
+    query.prepare("insert into ClaimItems (idClaim,idItem,isWork) values(:idClaim,:idItem,1)");
 
     query.bindValue(":idClaim", idClaim);
     query.bindValue(":idItem", idItem);
@@ -1784,6 +1784,28 @@ bool RepoMSSQL::AddItemToClaim(int idItem, int idClaim)
 
 }
 
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
+bool RepoMSSQL::SetEndWorkClaim(int idItem, int idClaim)
+{
+    bool res;
+    QSqlQuery query(db);
+
+    query.prepare("update ClaimItems set isWork=0 where idItem=:idItem and idClaim=:idClaim");
+    query.bindValue(":idClaim", idClaim);
+    query.bindValue(":idItem", idItem);
+    res = query.exec();
+
+    if(!res)
+        qDebug() << "Ошибка в SetEndWorkClaim";
+
+    return res;
+}
+
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
 bool RepoMSSQL::DelItemFromClaim(int idItem, int idClaim)
 {
     bool res;
@@ -1803,16 +1825,25 @@ bool RepoMSSQL::DelItemFromClaim(int idItem, int idClaim)
 
 }
 
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
 Claim RepoMSSQL::GetClaimForItem(int idItem)
 {
     QSqlQuery query(db);
     Claim claim;
 
+    // query.prepare("select c.id,Number,dateClaim,typeClaimId,idOrg,ObjectInstall,o.OrgName,isClosed "
+    //               "from ClaimItems ci "
+    //               "join Claim c on c.id=ci.idClaim and c.isClosed=0 "
+    //               "left join Organization o on o.id=c.idOrg "
+    //               "where idItem=:idItem");
+
     query.prepare("select c.id,Number,dateClaim,typeClaimId,idOrg,ObjectInstall,o.OrgName,isClosed "
                   "from ClaimItems ci "
-                  "join Claim c on c.id=ci.idClaim and c.isClosed=0 "
+                  "join Claim c on c.id=ci.idClaim "
                   "left join Organization o on o.id=c.idOrg "
-                  "where idItem=:idItem");
+                  "where idItem=:idItem and isWork=1");
 
     query.bindValue(":idItem", idItem);
 
@@ -1837,6 +1868,9 @@ Claim RepoMSSQL::GetClaimForItem(int idItem)
 }
 
 
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
 Claim RepoMSSQL::GetClaim(int id)
 {
     QSqlQuery query(db);

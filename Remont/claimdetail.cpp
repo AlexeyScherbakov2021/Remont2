@@ -13,6 +13,8 @@ ClaimDetail::ClaimDetail(Claim *cl, QWidget *parent)
 {
     ui->setupUi(this);
 
+    ui->pbOK->setVisible(!claim->isClosed);
+
     repo.LoadClaimType(listTypeClaim);
     for(auto it = listTypeClaim.cbegin(); it != listTypeClaim.cend(); ++it)
         ui->cbTypeClaim->addItem(*it, it.key());
