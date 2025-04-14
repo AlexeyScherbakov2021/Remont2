@@ -275,7 +275,7 @@ int RepoMSSQL::LoadPart(int start, int count, const QString &number, QList<Shipm
     QString sqlNumber = " c_schet like :c_schet";
 
     QStringList sql = {"select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
-                        "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,s.id,o.orgName,c_customer "
+                        "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,s.id,o.orgName,c_customer,c_dogovor "
                        "from Shipment s "
                        "left join Organization o on o.id=s.idOrganization "
                        "where c_dateUPD is "};
@@ -321,6 +321,7 @@ int RepoMSSQL::LoadPart(int start, int count, const QString &number, QList<Shipm
         ship.id = query.value(10).toInt();
         ship.org.orgName = query.value(11).toString();
         ship.customer = query.value(12).toString();
+        ship.dogovor = query.value(13).toString();
         listItems.push_back(ship);
         ++res;
     }
@@ -686,9 +687,9 @@ bool RepoMSSQL::AddItem(Shipment &ship)
     QSqlQuery query(db);
 
     query.prepare("insert into Shipment (c_number,c_objectInstall,c_dateOut,c_questList,c_schet,"
-                  "c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,idOrganization) "
+                  "c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,idOrganization,c_dogovor) "
                   "output inserted.id values(:c_number,:c_objectInstall,:c_dateOut,:c_questList,:c_schet,"
-                  ":c_cardOrder,:c_numberUPD,:c_buyer,:c_dateUPD,:idOrganization)");
+                  ":c_cardOrder,:c_numberUPD,:c_buyer,:c_dateUPD,:idOrganization,:c_dogovor)");
 
     query.bindValue(":c_number", ship.number);
     query.bindValue(":c_objectInstall", ship.objectInstall);
@@ -700,6 +701,7 @@ bool RepoMSSQL::AddItem(Shipment &ship)
     query.bindValue(":c_numberUPD", ship.numberUPD);
     query.bindValue(":c_buyer", ship.buyer);
     query.bindValue(":c_dateUPD", ship.dateUPD);
+    query.bindValue(":c_dogovor", ship.dogovor);
     if(ship.idOrganization > 0)
         query.bindValue(":idOrganization", ship.idOrganization);
     res = query.exec();
@@ -778,7 +780,7 @@ bool RepoMSSQL::UpdateItem(Shipment &ship)
     QSqlQuery query(db);
 
     query.prepare("update Shipment set c_number=:c_number,c_objectInstall=:c_objectInstall,c_dateOut=:c_dateOut,"
-                  "c_questList=:c_questList,c_schet=:c_schet,c_cardOrder=:c_cardOrder,"
+                  "c_questList=:c_questList,c_schet=:c_schet,c_cardOrder=:c_cardOrder,c_dogovor=:c_dogovor"
                   "c_numberUPD=:c_numberUPD,c_buyer=:c_buyer,c_dateUPD=:c_dateUPD,idOrganization=:idOrganization where id=:id");
 
 
@@ -797,6 +799,7 @@ bool RepoMSSQL::UpdateItem(Shipment &ship)
     query.bindValue(":c_cardOrder", ship.cardOrder);
     query.bindValue(":c_numberUPD", ship.numberUPD);
     query.bindValue(":c_buyer", ship.buyer);
+    query.bindValue(":c_dogovor", ship.dogovor);
     if(ship.dateUPD.date().year() > 1900)
         query.bindValue(":c_dateUPD", ship.dateUPD);
     else
@@ -879,7 +882,7 @@ Shipment RepoMSSQL::GetShipment(int id)
     Shipment ship;
 
     query.prepare("select c_number,c_objectInstall,c_dateOut,idOrganization,c_questList,"
-                  "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,c_customer "
+                  "c_schet,c_cardOrder,c_numberUPD,c_buyer,c_dateUPD,c_customer,c_dogovor "
                   "from Shipment where id = :id");
 
     query.bindValue(":id", id);
@@ -899,6 +902,7 @@ Shipment RepoMSSQL::GetShipment(int id)
         ship.buyer = query.value(8).toString();
         ship.dateUPD = query.value(9).toDateTime();
         ship.customer = query.value(10).toString();
+        ship.dogovor = query.value(11).toString();
     }
     return ship;
 

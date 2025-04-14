@@ -172,6 +172,7 @@ void CardProdWindow::LoadShipping()
         ui->lbNumberUPD->setText(ship.numberUPD);
         ui->lbDateUPD->setText(ship.dateUPD.toString("dd.MM.yyyy"));
         ui->lbCardOrder->setText(ship.cardOrder);
+        ui->lbContract->setText(ship.dogovor);
     }
 }
 

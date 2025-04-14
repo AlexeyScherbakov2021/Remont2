@@ -190,6 +190,12 @@ void SelectDeviceWindow::on_tbSearch_clicked()
 void SelectDeviceWindow::on_pbSelect_clicked()
 {
     QModelIndex index = ui->tableView->currentIndex();
+    if(index == QModelIndex())
+    {
+        on_tbSearch_clicked();
+        return;
+    }
+
     index = proxy->mapToSource(index);
 
     device = *model->GetItem(&index);

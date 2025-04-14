@@ -25,6 +25,7 @@ public:
     QString customer;
     QString questList;
     QString numberUPD;
+    QString dogovor;
 
     Organization org;
     QList<SetterOut> listSetterOut;

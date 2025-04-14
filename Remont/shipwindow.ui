@@ -274,7 +274,7 @@ background-color: LightGray;
          </property>
          <property name="dateTime">
           <datetime>
-           <hour>18</hour>
+           <hour>21</hour>
            <minute>0</minute>
            <second>0</second>
            <year>1900</year>
@@ -284,7 +284,7 @@ background-color: LightGray;
          </property>
          <property name="time">
           <time>
-           <hour>18</hour>
+           <hour>21</hour>
            <minute>0</minute>
            <second>0</second>
           </time>
@@ -298,7 +298,7 @@ background-color: LightGray;
          </property>
          <property name="minimumTime">
           <time>
-           <hour>18</hour>
+           <hour>21</hour>
            <minute>0</minute>
            <second>0</second>
           </time>
@@ -364,14 +364,14 @@ background-color: LightGray;
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item row="5" column="0">
         <widget class="QLabel" name="label_9">
          <property name="text">
           <string>Счет</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="5" column="1">
         <widget class="QLineEdit" name="leSchet">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -381,14 +381,14 @@ background-color: LightGray;
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item row="6" column="0">
         <widget class="QLabel" name="label_10">
          <property name="text">
           <string>Карта заказа</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item row="6" column="1">
         <widget class="QLineEdit" name="leCardOrder">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -398,14 +398,14 @@ background-color: LightGray;
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
+       <item row="7" column="0">
         <widget class="QLabel" name="label_11">
          <property name="text">
           <string>Покупатель</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item row="7" column="1">
         <widget class="QLineEdit" name="leBuyer">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -415,14 +415,14 @@ background-color: LightGray;
          </property>
         </widget>
        </item>
-       <item row="8" column="0">
+       <item row="9" column="0">
         <widget class="QLabel" name="label_12">
          <property name="text">
           <string>№ реализации</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="1">
+       <item row="9" column="1">
         <widget class="QLineEdit" name="leNumUPD">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -432,14 +432,14 @@ background-color: LightGray;
          </property>
         </widget>
        </item>
-       <item row="9" column="0">
+       <item row="10" column="0">
         <widget class="QLabel" name="label_13">
          <property name="text">
           <string>Дата реализации</string>
          </property>
         </widget>
        </item>
-       <item row="9" column="1">
+       <item row="10" column="1">
         <widget class="DateEdit" name="deDateUPD">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -464,7 +464,7 @@ background-color: LightGray;
          </property>
          <property name="dateTime">
           <datetime>
-           <hour>18</hour>
+           <hour>21</hour>
            <minute>0</minute>
            <second>0</second>
            <year>1900</year>
@@ -474,7 +474,7 @@ background-color: LightGray;
          </property>
          <property name="time">
           <time>
-           <hour>18</hour>
+           <hour>21</hour>
            <minute>0</minute>
            <second>0</second>
           </time>
@@ -488,14 +488,14 @@ background-color: LightGray;
          </property>
          <property name="maximumTime">
           <time>
-           <hour>3</hour>
+           <hour>7</hour>
            <minute>59</minute>
            <second>59</second>
           </time>
          </property>
          <property name="minimumTime">
           <time>
-           <hour>18</hour>
+           <hour>21</hour>
            <minute>0</minute>
            <second>0</second>
           </time>
@@ -521,15 +521,25 @@ background-color: LightGray;
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
+       <item row="8" column="0">
         <widget class="QLabel" name="label_3">
          <property name="text">
           <string>Опросный лист</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
+       <item row="8" column="1">
         <widget class="QLineEdit" name="leQuestList"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Договор</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="leDogovor"/>
        </item>
       </layout>
      </item>
