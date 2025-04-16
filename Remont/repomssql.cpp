@@ -1331,7 +1331,7 @@ void RepoMSSQL::LoadStatus(Items& item) const
     item.listStatus.clear();
 
     QSqlQuery query(db);
-    query.prepare("select ist.id,idItem,idStatus,DateStatus,Comment,sd.nameStatus,sd.typeStatus "
+    query.prepare("select ist.id,idItem,idStatus,DateStatus,Comment,sd.nameStatus,sd.typeStatus,ist.LinkField "
                   "from ItemStatus ist "
                   "join StatusDevice sd on sd.id=ist.idStatus "
                   "where ist.idItem=:id "
@@ -1350,6 +1350,7 @@ void RepoMSSQL::LoadStatus(Items& item) const
         stat.Comment = query.value(4).toString();
         stat.nameStatus = query.value(5).toString();
         stat.typeStatus = query.value(6).toInt();
+        stat.linkField = query.value(7).toInt();
         item.listStatus.push_back(stat);
         item.SetLastStatus(item.currStatus, item.commentStatus);
     }

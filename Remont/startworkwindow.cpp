@@ -82,7 +82,7 @@ void StartWorkWindow::SetStatusAllDevice(Items *item, QDateTime& dateOn)
     item->dateOn = dateOn;
     item->dateGarant = dateOn.addMonths(item->garantMonth);
     repo.UpdateItem(*item);
-    item->AddStatus(*item, StatusItem::WORK, dateOn, ui->leDoc->text());
+    item->AddStatus(*item, StatusItem::WORK, dateOn, "документ № " + ui->leDoc->text());
     repo.LoadChildItems(item->id, item->childItems);
     for(auto &it : item->childItems)
         SetStatusAllDevice(&it, dateOn);

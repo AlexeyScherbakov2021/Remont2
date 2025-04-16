@@ -53,7 +53,9 @@ void ChangeModulDlg::on_tbSearch_clicked()
 //---------------------------------------------------------------------------
 void ChangeModulDlg::on_pbOK_clicked()
 {
-    brokenDev->AddStatus(*brokenDev, StatusItem::EXCHANGE, "", brokenDev->idParent);
+    QString comment = "на № %1";
+    brokenDev->AddStatus(*brokenDev, StatusItem::EXCHANGE, comment.arg(newDev.number), brokenDev->idParent);
+    newDev.AddStatus(newDev, StatusItem::INSTALL);
     newDev.AddStatus(newDev, StatusItem::WORK);
     newDev.idParent = brokenDev->idParent;
     repo.UpdateItem(newDev);
@@ -69,12 +71,6 @@ void ChangeModulDlg::on_pbOK_clicked()
     } while(parent.idParent > 0);
 
     Claim claim = repo.GetClaimForItem(brokenDev->id);
-
-    // Remont remont;
-    // remont.idClaim = claim.id;
-    // remont.idItem = device.id;
-    // remont.startDate = ui->deDate->dateTime();
-    // repo.AddRemont(remont);
 
     brokenDev->idParent = 0;
     repo.UpdateItem(*brokenDev);

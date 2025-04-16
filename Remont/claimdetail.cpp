@@ -131,6 +131,7 @@ void ClaimDetail::ClaimToScreen(/*Claim *claim*/)
     ui->leNumber->setText(claim->number);
     ui->deDateClaim->setDateTime(claim->dateCreate);
     ui->leObjectInst->setText(claim->ObjectInstall);
+    ui->leObjectInst->setCursorPosition(0);
     ui->cbTypeClaim->setCurrentText(listTypeClaim[claim->idTypeClaim]);
 
     // repo.LoadOrganization(listOrg);

@@ -8,6 +8,7 @@
 #include <models/remont.h>
 #include <models/setterout.h>
 #include <models/shipment.h>
+#include <QClipboard>
 #include <QSqlQueryModel>
 
 
@@ -22,7 +23,6 @@ CardProdWindow::CardProdWindow(Items *_device, QWidget *parent)
 
     SetterOut setter;
     Items root;
-    // int idParent = 0;
 
     setWindowTitle("Карточка \"" + device->GetDefaultName() + "\"");
 
@@ -65,14 +65,7 @@ CardProdWindow::CardProdWindow(Items *_device, QWidget *parent)
     ui->lbVNFT->setText(device->type.VNFT);
 
     LoadShipping();
-    // if(setter.id > 0)
-    // {
-    //     ui->lbCardOrder->setText(setter.number);
-    // }
-
     number = device->number;
-    // loadShipmentToForm(device);
-
 
 }
 
@@ -95,6 +88,7 @@ void CardProdWindow::LoadHistoryToForm(QList<Status> &listStatus)
     {
         ui->twHistory->insertRow(row);
         QTableWidgetItem *item = new QTableWidgetItem(it.dateStatus.toString("dd.MM.yyyy"));
+        item->setData(Qt::UserRole, it.linkField);
         ui->twHistory->setItem(row, 0, item);
 
         item = new QTableWidgetItem(it.nameStatus);
@@ -108,6 +102,30 @@ void CardProdWindow::LoadHistoryToForm(QList<Status> &listStatus)
 
     ui->twHistory->resizeColumnsToContents();
     ui->twHistory->resizeRowsToContents();
+
+    ui->twHistory->addAction("Карточка изделия", this, [this] () {
+
+        if(currentIdLink > 0)
+        {
+            Items dev = repo.GetItem(currentIdLink);
+            if(dev.id > 0 && dev.type.indexType <= IndexType::Plate)
+            {
+                CardProdWindow *win = new CardProdWindow(&dev, this);
+                win->exec();
+            }
+        }
+
+    });
+
+    ui->twHistory->addAction("Скопировать номер изделия", this, [this] () {
+        if(currentIdLink > 0)
+        {
+            Items dev = repo.GetItem(currentIdLink);
+            QClipboard *cpb = QApplication::clipboard();
+            cpb->setText(dev.number, QClipboard::Clipboard);
+        }
+    });
+
 }
 
 //-------------------------------------------------------------------------------------------------------
@@ -176,73 +194,6 @@ void CardProdWindow::LoadShipping()
     }
 }
 
-
-//-------------------------------------------------------------------------------------------------------
-// Загрузка набора для выбраннного изделия или модуля
-//-------------------------------------------------------------------------------------------------------
-// void CardProdWindow::loadShipmentToForm(const Items *prod)
-// {
-//     SetterOut setter ;//= repo.GetSetter(prod->idSetterOut);
-    // Shipment ship = repo.GetShipment(setter.idShipment);
-
-    // if(setter.id <= 0)
-    //     return;
-
-    // repo.LoadChildSetter(setter);
-    // for(auto &it: setter.listItems)
-    // {
-    //     repo.LoadChildProduct(it);
-    // }
-
-    // ui->lbContract->setText(ship.schet);
-    // ui->lbCardOrdersetText(ship.cardOrder);
-    // ui->lbObjectInstall->setText(ship.objectInstall);
-    // ui->lbProduction->setText(prod->name);
-    // ui->lbDateUPD->setText(ship.dateUPD.toString("dd.MM.yyyy"));
-    // ui->lbNumberUPD->setText(ship.numberUPD);
-
-    // QTreeWidgetItem *top = new QTreeWidgetItem();
-    // top->setText(0, setter.name);
-    // top->setIcon(0, QIcon("://image/setter.png"));
-    // ui->treeWidget->addTopLevelItem(top);
-    // top->setExpanded(true);
-    // for(auto const &it : setter.listItems)
-    // {
-    //     QTreeWidgetItem *child = new QTreeWidgetItem();
-    //     child->setIcon(0, QIcon("://image/product.png"));
-    //     QString s = it.name + "(" + it.number + ")";
-    //     if(it.getIsRepair())
-    //         s += " неисправен";
-    //     child->setText(0, s);
-    //     if(it.number == number)
-    //     {
-    //         QFont font;
-    //         font.setBold(true);
-    //         child->setFont(0, font);
-    //     }
-    //     top->addChild(child);
-    //     child->setExpanded(true);
-    //     // for(auto mod : it.listModules)
-    //     // {
-    //     //     // Modul modul = mod;
-    //     //     mod.LoadStatus(mod);
-    //     //     QTreeWidgetItem *modItem = new QTreeWidgetItem();
-    //     //     modItem->setIcon(0, QIcon("://image/modul.png"));
-    //     //     s = mod.name + "(" + mod.number + ")";
-    //     //     if(mod.getIsRepair())
-    //     //         s += " неисправен";
-    //     //     modItem->setText(0, s);
-    //     //     if(mod.number == number)
-    //     //     {
-    //     //         QFont font;
-    //     //         font.setBold(true);
-    //     //         modItem->setFont(0, font);
-    //     //     }
-    //     //     child->addChild(modItem);
-    //     // }
-    // }
-// }
-
 //-------------------------------------------------------------------------------------------------------
 // Загрузка состава изделия
 //-------------------------------------------------------------------------------------------------------
@@ -287,50 +238,19 @@ void CardProdWindow::on_tbChangeType_clicked()
         ui->lbVNFT->setText(device->type.VNFT);
         repo.UpdateItem(*device);
     }
+}
 
-    // QVector<ItemType> listItem;
-    // repo.LoadNewTypeItem(device->type.indexType, listItem);
-    // QWidget *w = new QWidget(this, Qt::Dialog);
-    // w->setMinimumSize(700,500);
-    // w->setWindowTitle("Выбор типа");
-    // QVBoxLayout *lay = new QVBoxLayout(w);
-    // w->setLayout(lay);
-    // QSqlQueryModel *model = new QSqlQueryModel(w);
-    // QString sql = QString("select id,VNFT,typeName from ItemType where indexType=%1 and VNFT is not null order by VNFT").arg(device->type.indexType);
-    // model->setQuery(sql);
-    // model->setHeaderData(1, Qt::Horizontal, "ВНФТ");
-    // model->setHeaderData(2, Qt::Horizontal, "Наименование");
-    // QTableView *tblView = new QTableView(w);
-    // tblView->setModel(model);
-    // tblView->setSelectionMode(QAbstractItemView::SingleSelection);
-    // tblView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    // tblView->hideColumn(0);
-    // tblView->setColumnWidth(1, 200);
-    // tblView->setAlternatingRowColors(true);
-    // tblView->horizontalHeader()->setStretchLastSection(true);
-    // tblView->verticalHeader()->setDefaultSectionSize(24);
-    // lay->addWidget(tblView);
 
-    // connect(tblView, &QTableView::doubleClicked, this, [this, tblView, w, model] {
-    //     auto index = model->index(tblView->currentIndex().row(), 0);
-    //     int id = model->data(index).toInt();
-    //     index = model->index(tblView->currentIndex().row(), 1);
-    //     QString VNFT = model->data(index).toString();
-    //     index = model->index(tblView->currentIndex().row(), 2);
-    //     QString name = model->data(index).toString();
-    //     ui->lbType->setText(name);
-    //     ui->lbVNFT->setText(VNFT);
-    //     device->idType = id;
-    //     device->type.id = id;
-    //     device->type.typeName = name;
-    //     device->type.VNFT = VNFT;
-    //     repo.UpdateItem(*device);
-    //     w->close();
-    //     w->deleteLater();
-    // });
-
-    // w->show();
-
-    // qDebug() << "Exit from on_tbChangeType_clicked";
+void CardProdWindow::on_twHistory_currentCellChanged(int currentRow, int currentColumn, int previousRow, int previousColumn)
+{
+    if(currentRow != previousRow)
+    {
+        auto item = ui->twHistory->item(currentRow, 0);
+        currentIdLink = item->data(Qt::UserRole).toInt();
+        if(currentIdLink > 0)
+            ui->twHistory->setContextMenuPolicy(Qt::ActionsContextMenu);
+        else
+            ui->twHistory->setContextMenuPolicy(Qt::NoContextMenu);
+    }
 }
 

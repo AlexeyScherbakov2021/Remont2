@@ -24,12 +24,15 @@ private slots:
     void on_pbToShip_clicked();
     void on_tbChangeType_clicked();
 
+    void on_twHistory_currentCellChanged(int currentRow, int currentColumn, int previousRow, int previousColumn);
+
 private:
     Ui::CardProdWindow *ui;
     RepoMSSQL repo;
     QString number;
     Shipment ship;
     Items *device;
+    int currentIdLink = 0;
 
     // RemontEntity *remontEntity;
 

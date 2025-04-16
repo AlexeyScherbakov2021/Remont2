@@ -190,7 +190,7 @@ void SelectDeviceWindow::on_tbSearch_clicked()
 void SelectDeviceWindow::on_pbSelect_clicked()
 {
     QModelIndex index = ui->tableView->currentIndex();
-    if(index == QModelIndex())
+    if(index == QModelIndex() || ui->leSearch->hasFocus())
     {
         on_tbSearch_clicked();
         return;

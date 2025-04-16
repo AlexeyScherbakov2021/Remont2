@@ -18,7 +18,7 @@ CreateModulWindow::CreateModulWindow(QWidget *parent)
 
     ui->deCreateDate->setDateTime(QDateTime::currentDateTime());
 
-    repo.LoadItemsType(listTypeModule, IndexType::Modul );
+    repo.LoadNewItemsType(listTypeModule, IndexType::Modul );
 
     for(auto &it : listTypeModule)
     {
@@ -69,7 +69,7 @@ void CreateModulWindow::UpdateUseCount()
     else
         ui->lbCount->clear();
 
-    qDebug() << "countUse:" << countUse << "countFromDoc:" << countFromDoc;
+    // qDebug() << "countUse:" << countUse << "countFromDoc:" << countFromDoc;
 
     if(countUse > countFromDoc && countFromDoc > 0)
         ui->lbCount->setStyleSheet("border: 2px solid #FF0000;");
