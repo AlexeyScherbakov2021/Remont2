@@ -94,8 +94,11 @@ void CardProdWindow::LoadHistoryToForm(QList<Status> &listStatus)
         item = new QTableWidgetItem(it.nameStatus);
         ui->twHistory->setItem(row, 1, item);
 
-        item = new QTableWidgetItem(it.Comment);
+        item = new QTableWidgetItem(it.numberDoc);
         ui->twHistory->setItem(row, 2, item);
+
+        item = new QTableWidgetItem(it.Comment);
+        ui->twHistory->setItem(row, 3, item);
 
         ++row;
     }

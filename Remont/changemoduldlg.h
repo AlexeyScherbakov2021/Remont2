@@ -28,8 +28,6 @@ private:
     Items newDev;
     RepoMSSQL repo;
 
-    // bool testChildGoodStatus(Items *dev);
-
 };
 
 #endif // CHANGEMODULDLG_H

@@ -39,7 +39,6 @@ void ChangeModulDlg::on_tbSearch_clicked()
     Items *dev =  win->SelectDevice(true, {StatusItem::CORRECT, StatusItem::CORRECT_OSO}, ui->leSwarch->text());
     if(dev != nullptr && dev->id > 0)
     {
-        // qInfo() << dev->number;
         newDev = *dev;
         ui->lbNumber_2->setText(dev->number);
         ui->lbType_2->setText(dev->type.typeName);
@@ -82,25 +81,4 @@ void ChangeModulDlg::on_pbOK_clicked()
 
     accept();
 }
-
-//---------------------------------------------------------------------------
-// проверка исправности вложенного оборудования
-//---------------------------------------------------------------------------
-// bool ChangeModulDlg::testChildGoodStatus(Items *dev)
-// {
-//     bool res = true;
-//     repo.LoadChildItems(dev->id, dev->childItems);
-//     for(auto &it : dev->childItems)
-//     {
-//         if(it.listStatus.size() > 0 && it.listStatus.last().typeStatus == 1)
-//         {
-//             res = false;
-//             break;
-//         }
-//         // res = testChildGoodStatus(&it);
-//         // if(res == false)
-//         //     break;
-//     }
-//     return res;
-// }
 

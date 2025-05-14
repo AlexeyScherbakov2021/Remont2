@@ -29,13 +29,10 @@ private slots:
 
 private:
     Ui::EndRemontWindow *ui;
-    // int idProd = 0;
-    // int idMod = 0;
     Items device;
     Claim claim;
     RepoMSSQL repo;
     void AddDevice(Items *item);
-    // bool testChildGoodStatus(Items *dev);
 };
 
 #endif // ENDREMONTWINDOW_H

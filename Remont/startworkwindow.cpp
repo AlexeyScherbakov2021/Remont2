@@ -82,7 +82,14 @@ void StartWorkWindow::SetStatusAllDevice(Items *item, QDateTime& dateOn)
     item->dateOn = dateOn;
     item->dateGarant = dateOn.addMonths(item->garantMonth);
     repo.UpdateItem(*item);
-    item->AddStatus(*item, StatusItem::WORK, dateOn, "документ № " + ui->leDoc->text());
+
+    Status stat;
+    stat.idStatus = StatusItem::WORK;
+    stat.dateStatus = dateOn;
+    stat.numberDoc = ui->leDoc->text();
+    item->AddStatus(*item, stat);
+
+    // item->AddStatus(*item, StatusItem::WORK, dateOn, "документ № " + ui->leDoc->text());
     repo.LoadChildItems(item->id, item->childItems);
     for(auto &it : item->childItems)
         SetStatusAllDevice(&it, dateOn);
@@ -218,10 +225,15 @@ void EnterWorkWindow::SetStatusAllDevice(Items *item, QDateTime &dateOn)
     if(item->listStatus.last().idStatus == StatusItem::WORK)
         return;
 
+    Status stat;
+    stat.idStatus = StatusItem::WORK;
+    stat.dateStatus = dateOn;
+    stat.numberDoc = ui->leDoc->text();
+    item->AddStatus(*item, stat);
     // item->dateOn = dateOn;
     // item->dateGarant = dateOn.addMonths(item->garantMonth);
     // repo.UpdateItem(*item);
-    item->AddStatus(*item, StatusItem::WORK, dateOn, ui->leDoc->text());
+    // item->AddStatus(*item, StatusItem::WORK, dateOn, ui->leDoc->text());
 
     Claim claim = repo.GetClaimForItem(item->id);
     claim.CheckAndClose();
@@ -245,7 +257,10 @@ void EnterWorkWindow::SetStatusAllDevice(Items *item, QDateTime &dateOn)
         bool res = parent.TestChildStatus(StatusItem::CORRECT_OSO);
         if(res)
         {
-            parent.AddStatus(parent, StatusItem::WORK);
+            stat.numberDoc = ui->leDoc->text();
+            parent.AddStatus(parent, stat);
+
+            // parent.AddStatus(parent, StatusItem::WORK);
             // Claim claim = repo.GetClaimForItem(parent.id);
             // Q_ASSERT(claim.id != 0);
             // if(claim.id > 0)

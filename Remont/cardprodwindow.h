@@ -34,11 +34,7 @@ private:
     Items *device;
     int currentIdLink = 0;
 
-    // RemontEntity *remontEntity;
-
-    // void loadShipmentToForm(const Items *prod);
     void loadInclude(const Items *prod);
-    // void AddRowRemont(RemontM &rem);
     void LoadHistoryToForm(QList<Status> &listStatus);
     void LoadRemontToForm(int idItem);
     void LoadShipping();

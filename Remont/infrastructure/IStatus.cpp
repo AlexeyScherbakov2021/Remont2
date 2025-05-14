@@ -53,6 +53,22 @@ bool StatusList::AddStatus(Items &item, StatusItem idStat, const QDateTime &date
 //---------------------------------------------------------------------------
 //
 //---------------------------------------------------------------------------
+bool StatusList::AddStatus(Items &item, Status &status)
+{
+    bool res;
+    RepoMSSQL repo;
+    if(res = repo.AddStatus(item, status))
+    {
+        item.listStatus.push_back(status);
+        item.currStatus = status.nameStatus;
+    }
+
+    return res;
+}
+
+//---------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------
 QString StatusList::getNameLastStatus() const
 {
     QString stat;

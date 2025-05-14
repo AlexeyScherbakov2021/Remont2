@@ -89,26 +89,6 @@ void EndRemontWindow::on_pbEndRemont_clicked()
 
 }
 
-//---------------------------------------------------------------------------
-// проверка исправности вложенного оборудования
-//---------------------------------------------------------------------------
-// bool EndRemontWindow::testChildGoodStatus(Items *dev)
-// {
-//     bool res = true;
-//     repo.LoadChildItems(dev->id, dev->childItems);
-//     for(auto &it : dev->childItems)
-//     {
-//         if(it.listStatus.size() > 0 && it.listStatus.last().typeStatus == 1)
-//         {
-//             res = false;
-//             break;
-//         }
-//     }
-//     return res;
-// }
-
-
-
 void EndRemontWindow::slotReadScan(QString s)
 {
     if(isActiveWindow())

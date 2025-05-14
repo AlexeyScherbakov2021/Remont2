@@ -127,21 +127,12 @@ bool DeviceModel::setData(const QModelIndex &index, const QVariant &value, int r
     return false;
 }
 
-// Qt::ItemFlags PlateModel::flags(const QModelIndex &index) const
-// {
-//     if (!index.isValid())
-//         return Qt::NoItemFlags;
-
-//     return QAbstractItemModel::flags(index) | Qt::ItemIsEditable; // FIXME: Implement me!
-// }
-
 //------------------------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------------------------
 bool DeviceModel::insertRows(int row, int count, const QModelIndex &parent)
 {
     beginInsertRows(parent, row, row + count - 1);
-    // FIXME: Implement me!
     endInsertRows();
     return true;
 }
@@ -282,10 +273,6 @@ void DeviceModel::createList(IndexType type)
     }
 }
 
-// void DeviceModel::setFunction(pLoadItems p)
-// {
-//     lp = p;
-// }
 
 //------------------------------------------------------------------------------------------------
 //
@@ -315,10 +302,6 @@ void DeviceModel::setBaseOff()
     isBaseOff = true;
 }
 
-// Items* DeviceModel::GetItem(QString number)
-// {
-//     return listDev->GetItem(number);
-// }
 
 
 

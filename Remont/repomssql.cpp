@@ -1331,7 +1331,7 @@ void RepoMSSQL::LoadStatus(Items& item) const
     item.listStatus.clear();
 
     QSqlQuery query(db);
-    query.prepare("select ist.id,idItem,idStatus,DateStatus,Comment,sd.nameStatus,sd.typeStatus,ist.LinkField "
+    query.prepare("select ist.id,idItem,idStatus,DateStatus,Comment,sd.nameStatus,sd.typeStatus,ist.LinkField,statusDoc "
                   "from ItemStatus ist "
                   "join StatusDevice sd on sd.id=ist.idStatus "
                   "where ist.idItem=:id "
@@ -1351,6 +1351,7 @@ void RepoMSSQL::LoadStatus(Items& item) const
         stat.nameStatus = query.value(5).toString();
         stat.typeStatus = query.value(6).toInt();
         stat.linkField = query.value(7).toInt();
+        stat.numberDoc = query.value(8).toString();
         item.listStatus.push_back(stat);
         item.SetLastStatus(item.currStatus, item.commentStatus);
     }
@@ -1365,8 +1366,8 @@ bool RepoMSSQL::AddStatus(Items &item, Status &status) const
     bool res;
     QSqlQuery query(db);
 
-    query.prepare("insert into ItemStatus (idItem,idStatus,DateStatus,Comment,linkField) "
-                  "output inserted.id values(:idItem,:idStatus,:DateStatus,:Comment,:linkField)");
+    query.prepare("insert into ItemStatus (idItem,idStatus,DateStatus,Comment,linkField,statusDoc) "
+                  "output inserted.id values(:idItem,:idStatus,:DateStatus,:Comment,:linkField,:statusDoc)");
 
     query.bindValue(":idItem", item.id);
     query.bindValue(":idStatus", status.idStatus);
@@ -1375,6 +1376,7 @@ bool RepoMSSQL::AddStatus(Items &item, Status &status) const
     QVariant var;
     if(status.linkField > 0) var = status.linkField;
     query.bindValue(":linkField", var);
+    query.bindValue(":statusDoc", status.numberDoc);
 
     res = query.exec();
     if(!res)

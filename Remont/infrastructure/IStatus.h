@@ -20,6 +20,7 @@ public:
     int typeStatus = 0;
     QString Comment;
     int linkField = 0;
+    QString numberDoc;
 };
 
 
@@ -33,6 +34,7 @@ public:
 
     bool AddStatus(Items &item, StatusItem idStat, const QString &comment = "", int linkField = 0);
     bool AddStatus(Items &item, StatusItem idStat, const QDateTime &dateRegister,  const QString &comment = "", int linkField = 0);
+    bool AddStatus(Items &item, Status& status);
 
     void DeleteLastStatus(Items &device, StatusItem status);
     QString getNameLastStatus() const;

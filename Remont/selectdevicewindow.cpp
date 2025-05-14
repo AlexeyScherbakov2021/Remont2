@@ -79,29 +79,14 @@ void SelectDeviceWindow::AddSelectedType(IndexType _type)
     dev.type.indexType = _type;
     dev.GetInfo(name, sIcon);
 
-    // switch(_type)
-    // {
-    // case ItemType::Product:
-    //     name = "Изделия";
-    //     sIcon = ":/image/product.png";
-    //     break;
-    // case ItemType::Modul:
-    //     name = "Модули";
-    //     sIcon = "://image/modul.png";
-    //     break;
-    // case ItemType::Plate:
-    //     name = "Платы";
-    //     sIcon = "://image/network_adapter.png";
-    //     break;
-    // case ItemType::All:
-    //     break;
-    // }
-
     QStandardItem *item = new QStandardItem(QIcon(sIcon), name);
     item->setData(_type, Qt::UserRole);
     typeModel.setItem(row, 0, item);
 }
 
+//---------------------------------------------------------------------------------------
+// Исключить из списка набор ID
+//---------------------------------------------------------------------------------------
 void SelectDeviceWindow::ExcludeDevice(QSet<int>& _setId)
 {
     setId = _setId;
@@ -115,7 +100,6 @@ void SelectDeviceWindow::startLoad()
 {
     model->prepareLoad2(ui->leSearch->text(), vStatus, isBusy, hasParent );
 }
-
 
 
 //--------------------------------------------------------------------------------------------------
@@ -204,6 +188,9 @@ void SelectDeviceWindow::on_pbSelect_clicked()
 
 
 
+//--------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------
 void SelectDeviceWindow::on_tableView_doubleClicked(const QModelIndex &/*index*/)
 {
     on_pbSelect_clicked();
@@ -211,6 +198,9 @@ void SelectDeviceWindow::on_tableView_doubleClicked(const QModelIndex &/*index*/
 
 
 
+//--------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------
 void SelectDeviceWindow::slotTypeChanged(int row)
 {
     QModelIndex index = typeModel.index(row, 0);
@@ -225,6 +215,9 @@ void SelectDeviceWindow::slotTypeChanged(int row)
 
 }
 
+//--------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------
 void SelectDeviceWindow::slotReadScan(QString s)
 {
     if(isActiveWindow())
@@ -234,10 +227,3 @@ void SelectDeviceWindow::slotReadScan(QString s)
     }
 }
 
-
-
-// int SelectDeviceWindow::exec()
-// {
-//     connect(ui->cbType, SIGNAL(currentIndexChanged(int)), SLOT(slotTypeChanged(int)));
-//     startLoad();
-// }

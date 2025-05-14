@@ -29,21 +29,14 @@ private slots:
 private:
     Ui::ClaimDetail *ui;
     QFutureWatcher<void> *watcher;
-    // explicit ClaimDetail(QWidget *parent = nullptr);
     Claim *claim;
     QMap<int, QString> listTypeClaim;
-    // QMap<int, QString> listTypeModule;
-    // QMap<int, QString> listTypeProduct;
     QList<Organization> listOrg;
     QSet<int> listAddId;
-
     TrackRecord<Items> trackProduct;
-    // TrackRecord<Items> trackModul;
-
     RepoMSSQL repo;
 
-    void ClaimToScreen(/*Claim *claim*/);
-    // void AddModulToTableScreen(const Items &modul);
+    void ClaimToScreen();
     void AddProductToTableScreen(const Items *prod);
 
 };

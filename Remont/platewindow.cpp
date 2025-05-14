@@ -64,7 +64,12 @@ void PlateWindow::on_pbAdd_clicked()
     }
     else
     {
-        plate.AddStatus(plate, StatusItem::CREATE);
+        Status stat;
+        stat.idStatus = StatusItem::CREATE;
+        stat.numberDoc = ui->leNumberDoc->text();
+        plate.AddStatus(plate, stat);
+
+        // plate.AddStatus(plate, StatusItem::CREATE);
         QListWidgetItem *item = new QListWidgetItem(plate.number + " (прош." + plate.number2 + ")");
         item->setData(Qt::UserRole, plate.id);
         ui->listWidget->addItem(item);
@@ -151,7 +156,6 @@ void PlateWindow::on_tbDoc_clicked()
 {
     RepoFP repoFP;
     Nakl nakl;
-    // int useCount;
     QList<Nakl> listNakl;
     repoFP.getDoc(ui->leNumberDoc->text(), listNakl);
 

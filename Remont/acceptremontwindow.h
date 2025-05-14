@@ -20,7 +20,6 @@ public:
     ~AcceptRemontWindow();
 
 private slots:
-    // void on_pbExchange_clicked();
     void on_pbApply_clicked();
     void on_tbNumber_clicked();
     void slotReadScan(QString s);
@@ -30,11 +29,7 @@ private:
     RepoMSSQL repo;
     Claim claim;
     Items device;
-
     void AddDevice(Items *item);
-    // QList<Claim> listClaim;
-    // ListClaim claims;
-    // int idParentProd = 0;
 
 };
 

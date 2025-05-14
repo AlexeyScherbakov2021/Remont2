@@ -33,7 +33,6 @@ public:
     ~RepoMSSQL();
     bool ConnectDb();
 
-
     // Items
     bool LoadChildItems(int idParent, QList<Items> &listItems) const;
     int LoadPart(int start, int count, IndexType iType, const QString &number,

@@ -22,11 +22,8 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
 
     QFuture<void> future =  QtConcurrent::run( [&] (QPromise<void> &promise)
     {
-        // qDebug() << "LoadOrgAsync";
         RepoMSSQL repo2("thread");
-        // repo2.LoadOrganizationAsync(listOrg, promise);
         repo2.LoadOrganizationAsync(listOrg, promise);
-        // qDebug() << "LoadOrgAsync finish";
     });
 
 
@@ -79,8 +76,6 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
         ui->deDateOut->setDateTime(QDateTime::currentDateTime());
     }
 
-    // qDebug() << shipment->dateUPD;
-
     if(!shipment->dateUPD.isNull())
     {
         ui->tbAddSetter->setEnabled(false);
@@ -108,7 +103,6 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
             Items dev = repo.GetItem(id);
             QClipboard *cpb = QApplication::clipboard();
             cpb->setText(dev.number, QClipboard::Clipboard);
-            // qDebug() <<  dev.number;
         }
     });
 
@@ -123,7 +117,6 @@ ShipWindow::~ShipWindow()
     watcher->cancel();
     watcher->waitForFinished();
     delete watcher;
-    // qDebug() << "destructor ShipWindow";
 }
 
 
@@ -143,7 +136,6 @@ void ShipWindow::on_tbNumProd_clicked()
 
     if(dev != nullptr)
     {
-        // qDebug() << dev->number;
         trackItem.AddRecord(/*dev->id,*/ *dev);
         ui->wTreeItems->AddItem(dev);
         listAddId.insert(dev->id);
@@ -207,35 +199,11 @@ void ShipWindow::SetStatusItems(QList<Items> &items)
 }
 
 
-
-//-----------------------------------------------------------------------------------
-// Событие закрытия окна
-//-----------------------------------------------------------------------------------
-// void ShipWindow::on_ShipWindow_finished(int /*result*/)
-// {
-//     ship->buyer = ui->leBuyer->text();
-//     ship->cardOrder = ui->leCardOrder->text();
-//     // ship->customer = ui->leCustomer->text();
-//     ship->numberUPD = ui->leNumUPD->text();
-//     ship->objectInstall = ui->leObjectInstall->text();
-//     ship->schet = ui->leSchet->text();
-//     ship->dateUPD = ui->deDateUPD->dateTime();
-//     if(ui->cbCusomer->currentIndex() >= 0)
-//     {
-//         ship->idOrganization = ui->cbCusomer->currentData().toInt();
-//         ship->customer = ui->cbCusomer->currentText();
-//     }
-//     repo.UpdateItem(*ship);
-// }
-
-
-
 //-----------------------------------------------------------------------------------
 // Событие изменения полей
 //-----------------------------------------------------------------------------------
 void ShipWindow::slotIsEditing()
 {
-    // qDebug() << ui->deDateOut->date();
     isEditing = true;
 }
 
@@ -277,12 +245,6 @@ void ShipWindow::SaveToBase()
     else
         ship->dateUPD = ui->deDateUPD->dateTime();
 
-    // if(ui->deDateUPD->date().year() < 1900)
-    //     ship->dateUPD = QDateTime::fromString("00.00.0000","dd.MM.yyyy");
-    // else
-    //     ship->dateUPD = ui->deDateUPD->dateTime();
-
-    // if(ui->deDateOut->date().year() <  1900)
     if(ui->deDateOut->isNull())
         ship->dateRegister = QDateTime::fromString("00.00.0000","dd.MM.yyyy");
     else
@@ -337,7 +299,6 @@ void ShipWindow::slotReadScan(QString s)
 void ShipWindow::slotShowCard()
 {
     auto [id, indexType] = ui->wTreeItems->GetSelectedItem();
-    // QPair<int, IndexType> pair = ui->wTreeItems->GetSelectedItem();
     if(id > 0 && indexType <= IndexType::Plate)
     {
         Items dev = repo.GetItem(id);
@@ -397,7 +358,6 @@ void ShipWindow::on_pbFinish_clicked()
 
      if(ui->deDateUPD->dateTime() == ui->deDateUPD->minimumDateTime())
         ui->deDateUPD->setDateTime(QDateTime::currentDateTime());
-
 
     // установить статус Отгружен для всех устройств
     for(auto &it : ship->listSetterOut)

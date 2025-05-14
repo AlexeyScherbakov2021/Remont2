@@ -646,6 +646,11 @@ color: black
          </column>
          <column>
           <property name="text">
+           <string>Документ</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
            <string>Комментарий</string>
           </property>
          </column>

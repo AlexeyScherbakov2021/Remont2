@@ -41,8 +41,6 @@ MainWindow::MainWindow(int idUser, QWidget *parent)
 
     ui->setupUi(this);
 
-    // Users user; //= Users::getInstance();
-
     if(idUser == 100500)
     {
         LoginDlg::CurrUser.UserName = "Admin";
@@ -54,9 +52,7 @@ MainWindow::MainWindow(int idUser, QWidget *parent)
     else
     {
         RepoMSSQL repo;
-        // user = repo.LoadUser(idUser);
         LoginDlg::CurrUser = repo.LoadUser(idUser);
-        // user.LoadRoles(idUser);
         LoginDlg::CurrUser.LoadRoles(idUser);
     }
 
@@ -295,29 +291,6 @@ void MainWindow::on_aCardDevice_triggered()
 
 
 //----------------------------------------------------------------------------------------------
-// Замена модуля
-//----------------------------------------------------------------------------------------------
-void MainWindow::on_aExchModul_triggered()
-{
-    // SelectDeviceWindow *win = new SelectDeviceWindow(this);
-    // // win->setTypeSearch(SelectDeviceWindow::MODU);
-    // Items *dev = win->SelectDevice(false, "", Status::NONE );
-    // if(dev != nullptr)
-    // {
-    //     // Items *mod = static_cast<Items*>(dev);
-    //     // RepoMSSQL repo;
-    //     // Items prod = repo.GetProduct(mod->idParent);
-    //     // if(prod.id > 0)
-    //     // {
-    //     //     ComplectProductWindow *win = new ComplectProductWindow(this, &prod);
-    //     //     win->show();
-    //     // }
-    // }
-
-}
-
-
-//----------------------------------------------------------------------------------------------
 // Настройка сканера
 //----------------------------------------------------------------------------------------------
 void MainWindow::on_aScaner_triggered()
@@ -336,7 +309,6 @@ void MainWindow::slotReadScan(QString s)
     if(!isActiveWindow())
         return;
 
-    // CardProdWindow *winCard;
     RepoMSSQL repo;
 
     QVector<StatusItem> stat;
@@ -358,7 +330,6 @@ void MainWindow::slotReadScan(QString s)
 void MainWindow::on_aListPlate_triggered()
 {
     PlateListWindow *win = new PlateListWindow(this);
-    // win->SelectPlate();
     win->setAttribute(Qt::WA_DeleteOnClose);
     win->exec();
 
@@ -484,8 +455,6 @@ void MainWindow::on_aNewShip_triggered()
 //----------------------------------------------------------------------------------------------
 void MainWindow::SetRoleEnv(Users &user)
 {
-    // if(user.id == 100500)
-    //     return;
 
     ui->aRegPlate->setVisible(false);
     ui->aListPlate->setVisible(false);

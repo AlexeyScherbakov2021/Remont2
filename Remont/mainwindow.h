@@ -47,7 +47,6 @@ private slots:
     void on_aGetRepair_triggered();
     void on_aEndRepair_triggered();
     void on_aCardDevice_triggered();
-    void on_aExchModul_triggered();
     void on_aScaner_triggered();
     void slotReadScan(QString s);
     void on_aListPlate_triggered();

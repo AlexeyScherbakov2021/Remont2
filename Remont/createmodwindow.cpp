@@ -78,20 +78,6 @@ void CreateModulWindow::UpdateUseCount()
 
 }
 
-
-//---------------------------------------------------------------------------------
-// Добавление строки в список модулей
-//---------------------------------------------------------------------------------
-// void CreateModulWindow::addLineModul(Items &mod)
-// {
-//     QTreeWidgetItem *item = new QTreeWidgetItem();
-//     item->setText(0, mod.number);
-//     item->setData(0, Qt::UserRole, mod.id);
-//     ui->twModul->addTopLevelItem(item);
-//     item->setExpanded(true);
-// }
-
-
 //---------------------------------------------------------------------------------
 // Кнопка Регистрации модуля
 //---------------------------------------------------------------------------------
@@ -120,7 +106,11 @@ void CreateModulWindow::on_pbRegModul_clicked()
 
     if(repo.AddItem(mod))
     {
-        mod.AddStatus(mod, StatusItem::CREATE);
+        Status stat;
+        stat.idStatus = StatusItem::CREATE;
+        stat.numberDoc = ui->leNumberDoc->text();
+        mod.AddStatus(mod, stat);
+        // mod.AddStatus(mod, StatusItem::CREATE);
 
         // addLineModul(mod);
 
@@ -156,9 +146,6 @@ void CreateModulWindow::on_cbModul_currentIndexChanged(int index)
     QVariant var = ui->cbModul->currentData();
     ItemType *tp = var.value<ItemType*>();
     ui->lbGarantMod->setText(QString::number(tp->garantMonth));
-
-    // int row = ui->cbModul->currentIndex();
-    // ui->lbGarantMod->setText(QString::number(listTypeModule[row].garantMonth));
 }
 
 //---------------------------------------------------------------------------------

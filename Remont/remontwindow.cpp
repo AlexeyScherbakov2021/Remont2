@@ -43,37 +43,6 @@ void RemontWindow::on_pbOK_clicked()
     ui->lbOrgName->clear();
     ui->lbTypeName->clear();
     device.id = 0;
-
-    // Remont remont;
-    // remont.startDate = ui->deDate->dateTime();
-    // remont.idReclamation = claim.id;
-
-    // if(idProd != 0)
-    // {
-    //     Items prod;
-    //     prod.id = idProd;
-    //     prod.AddStatus(prod, StatusItem::REMONT);
-    //     remont.idParent = idProd;
-    //     repo.AddRemont(remont, ev::PRODUCT);
-    // }
-
-    // if(idMod != 0)
-    // {
-    //     Items mod;
-    //     mod.id = idMod;
-    //     mod.AddStatus(mod, StatusItem::REMONT);
-    //     remont.idParent = idMod;
-    //     repo.AddRemont(remont, ev::MODUL);
-    // }
-
-    // QMessageBox::information(this, "Сообщение", QString("%1 #%2 %3 принят в ремонт.")
-    //             .arg(ui->lbDevice->text()).arg(ui->lbNumber->text()).arg(ui->lbTypeName->text()));
-
-    // ui->lbDevice->clear();
-    // ui->lbNumber->clear();
-    // ui->lbTypeName->clear();
-    // ui->lbClaim->clear();
-
 }
 
 
@@ -88,19 +57,6 @@ void RemontWindow::on_tbNumber_clicked()
     if(dev != nullptr && dev->id > 0)
     {
         AddDevice(dev);
-        // device = *dev;
-        // Claim claim = repo.GetClaimForItem(dev->id);
-
-        // QString nameType, iconName;
-        // dev->GetInfo(nameType, iconName);
-        // ui->lbNumber->setText(dev->number);
-        // ui->lbVNFT->setText(dev->type.VNFT);
-        // ui->lbTypeName->setText(dev->type.typeName);
-        // ui->lbDevice->setToolTip(nameType);
-        // ui->lbDevice->setPixmap(QPixmap(iconName));
-        // ui->lbOrgName->setText(claim.nameOrganization);
-        // ui->lbClaim->setText(claim.number + " (" + claim.dateCreate.toString("dd.MM.yyyy") + ")");
-        // ui->leNumber->clear();
     }
 }
 
@@ -114,7 +70,6 @@ void RemontWindow::slotReadScan(QString s)
         {
             AddDevice(&item);
         }
-        // on_tbNumber_clicked();
     }
 }
 

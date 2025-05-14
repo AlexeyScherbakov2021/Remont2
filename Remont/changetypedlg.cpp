@@ -53,11 +53,8 @@ void ChangeTypeDlg::slotSelect()
 //---------------------------------------------------------------------------------------------
 void ChangeTypeDlg::on_tbSearch_clicked()
 {
-    // proxy->setFilterFixedString(ui->leSearch->text());
-    // proxy->setFilterWildcard(ui->leSearch->text());
     proxy->setFilterRegularExpression(ui->leSearch->text());
     proxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
     proxy->setFilterKeyColumn(2);
-    // qDebug() << ui->leSearch->text();
 }
 

@@ -4,6 +4,13 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++20
 
+
+VERSION = 1.1.0.3
+QMAKE_TARGET_COMPANY = NGK
+QMAKE_TARGET_PRODUCT = Remont
+QMAKE_TARGET_DESCRIPTION = Programm Remont
+QMAKE_TARGET_COPYRIGHT = NPO NGK EHZ
+
 # CONFIG(debug) {
 #     DEFINES += TESTBASE
 # }
@@ -171,12 +178,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resource.qrc
-
-VERSION = 1.1.0.2
-QMAKE_TARGET_COMPANY = NGK
-QMAKE_TARGET_PRODUCT = Remont
-QMAKE_TARGET_DESCRIPTION = Programm Remont
-QMAKE_TARGET_COPYRIGHT = NPO NGK EHZ
 
 
 DISTFILES +=

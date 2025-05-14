@@ -1,18 +1,11 @@
 #include "createprodwindow.h"
 #include "platelistwindow.h"
 #include "scan.h"
-// #include "selectplatewindow.h"
 #include "complectproductwindow.h"
 #include "repofp.h"
 #include "ui_createprodwindow.h"
-
-// #include <models/listmodul.h>
-// #include <models/listplate.h>
 #include <models/listmodul.h>
 #include <models/listplate.h>
-// #include <models/modul.h>
-// #include <models/product.h>
-
 #include <QMessageBox>
 
 CreateProductWindow::CreateProductWindow(QWidget *parent)
@@ -61,16 +54,6 @@ void CreateProductWindow::UpdateUseCount()
 
 }
 
-// void CreateProductWindow::addLineContent(Items &prod)
-// {
-//     QTreeWidgetItem *item = new QTreeWidgetItem();
-//     item->setText(0, prod.number);
-//     item->setData(0, Qt::UserRole, prod.id);
-//     ui->twProduct->addTopLevelItem(item);
-//     item->setExpanded(true);
-
-// }
-
 
 //---------------------------------------------------------------------------------
 // Удаление изделия
@@ -117,15 +100,12 @@ void CreateProductWindow::on_pbRegProduct_clicked()
 
     if(repo.AddItem(prod))
     {
-        prod.AddStatus(prod, StatusItem::CREATE);
+        Status stat;
+        stat.idStatus = StatusItem::CREATE;
+        stat.numberDoc = ui->leNumberDocP->text();
+        prod.AddStatus(prod, stat);
 
-
-        // addLineContent(prod);
-
-        // QString s = ui->cbProduct->currentText();
-        // QListWidgetItem *item = new QListWidgetItem(ui->leNumProduct->text() + " (" + s + ")");
-        // item->setData(Qt::UserRole, prod.id);
-        // ui->lwProduct->addItem(item);
+        // prod.AddStatus(prod, StatusItem::CREATE);
 
         ui->leNumProduct->clear();
         ui->leNumProduct->setFocus();
@@ -134,14 +114,10 @@ void CreateProductWindow::on_pbRegProduct_clicked()
 
         if(ui->chComplectation->isChecked())
         {
-            // qDebug() << "This make complectation window.";
             ComplectProductWindow *win = new ComplectProductWindow(this, &prod);
             win->exec();
-
         }
-
         ui->wTree->AddItem(&prod);
-
     }
     else
         QMessageBox::warning(this, "Ошибка", QString("Изделие с серийным номером %1 уже присутствует в базе данных.").arg(prod.number));
@@ -160,10 +136,6 @@ void CreateProductWindow::on_cbProduct_currentIndexChanged(int index)
     QVariant var = ui->cbProduct->currentData();
     ItemType *tp = var.value<ItemType*>();
     ui->lbGarantProd->setText(QString::number(tp->garantMonth));
-
-    // int key = ui->cbProduct->currentData().toInt();
-    // int row = ui->cbProduct->currentIndex();
-    // ui->lbGarantProd->setText(QString::number(listTypeProduct[row].garantMonth));
 }
 
 
@@ -204,7 +176,6 @@ void CreateProductWindow::on_tbDocP_clicked()
             nakl = listNakl.first();
             countFromDoc = nakl.count;
             ui->cbProduct->setCurrentIndex(-1);
-            // qDebug() << nakl.VNFT << listTypeProduct.size();
             for(auto &it : listTypeProduct)
             {
                 if(it.VNFT == nakl.VNFT)

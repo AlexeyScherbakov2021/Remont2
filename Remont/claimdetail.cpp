@@ -37,13 +37,9 @@ ClaimDetail::ClaimDetail(Claim *cl, QWidget *parent)
     ui->tableWidget->addAction("Скопировать номер", this, [this] () {
         auto item = ui->tableWidget->item(ui->tableWidget->currentRow(), 0);
         int id = item->data(Qt::UserRole).toInt();
-        // if(indexType <= IndexType::Plate)
-        // {
-            Items dev = repo.GetItem(id);
-            QClipboard *cpb = QApplication::clipboard();
-            cpb->setText(dev.number, QClipboard::Clipboard);
-            // qDebug() <<  dev.number;
-        // }
+        Items dev = repo.GetItem(id);
+        QClipboard *cpb = QApplication::clipboard();
+        cpb->setText(dev.number, QClipboard::Clipboard);
     });
 
     ui->tableWidget->setContextMenuPolicy(Qt::ActionsContextMenu);
@@ -134,13 +130,10 @@ void ClaimDetail::ClaimToScreen(/*Claim *claim*/)
     ui->leObjectInst->setCursorPosition(0);
     ui->cbTypeClaim->setCurrentText(listTypeClaim[claim->idTypeClaim]);
 
-    // repo.LoadOrganization(listOrg);
-
     QFuture<void> future =  QtConcurrent::run( [&] (QPromise<void> &promise)
         {
             RepoMSSQL repo2("thread");
             repo2.LoadOrganizationAsync(listOrg, promise);
-             // repo2.LoadOrganization(listOrg);
         });
 
     watcher = new QFutureWatcher<void>(this);
@@ -291,9 +284,8 @@ void ClaimDetail::slotShowCard()
 {
     auto item = ui->tableWidget->item(ui->tableWidget->currentRow(), 0);
     int id = item->data(Qt::UserRole).toInt();
-    // IndexType indexType = item->data(Qt::UserRole + 1).toInt();
 
-    if(id > 0 /*&& indexType <= IndexType::Plate*/)
+    if(id > 0)
     {
         Items dev = repo.GetItem(id);
         CardProdWindow *win = new CardProdWindow(&dev, this);
