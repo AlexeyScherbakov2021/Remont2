@@ -238,6 +238,8 @@ void EnterWorkWindow::SetStatusAllDevice(Items *item, QDateTime &dateOn)
     Claim claim = repo.GetClaimForItem(item->id);
     claim.CheckAndClose();
 
+    repo.SetEndWorkClaim(item->id, claim.id);
+
     // repo.LoadChildClaim(claim);
     // bool resClaim = true;
     // foreach (const Items it, claim.childItems)

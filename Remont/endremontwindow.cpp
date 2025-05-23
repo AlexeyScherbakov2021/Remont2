@@ -59,7 +59,7 @@ void EndRemontWindow::on_pbEndRemont_clicked()
         return;
 
     // отметка для рекламации о завершении ремонта этого устройства
-    repo.SetEndWorkClaim(device.id, claim.id);
+    // repo.SetEndWorkClaim(device.id, claim.id);
 
     // внести изменения в таблицы ремонтов
     Remont rem = repo.GetRemontForItem(device.id, claim.id);

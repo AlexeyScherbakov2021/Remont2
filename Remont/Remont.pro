@@ -5,7 +5,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 CONFIG += c++20
 
 
-VERSION = 1.1.0.3
+VERSION = 1.1.0.4
 QMAKE_TARGET_COMPANY = NGK
 QMAKE_TARGET_PRODUCT = Remont
 QMAKE_TARGET_DESCRIPTION = Programm Remont
