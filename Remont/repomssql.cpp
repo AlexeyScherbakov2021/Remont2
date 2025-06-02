@@ -1922,6 +1922,21 @@ void RepoMSSQL::LoadRemontReason(QMap<int, QString> &listReason)
     }
 }
 
+//------------------------------------------------------------------------------------------------------
+// Загрузка предварительных причин ремонта
+//------------------------------------------------------------------------------------------------------
+void RepoMSSQL::LoadRemontPrevReason(QMap<int, QString> &listReason)
+{
+    listReason.clear();
+    QSqlQuery query(db);
+    query.prepare("select id,nameReason from RemontPrevReason");
+
+    query.exec();
+    while(query.next())
+    {
+        listReason.insert(query.value(0).toInt(), query.value(1).toString());
+    }
+}
 
 //------------------------------------------------------------------------------------------------------
 // Загрузка причины ремонта
@@ -2005,8 +2020,13 @@ void RepoMSSQL::LoadRemont(QList<Remont> &list, int idItem)
     list.clear();
     QSqlQuery query(db);
 
-    query.prepare("select id,idItem,idClaim,idReason,dateStart,Action,Defect,Remark,endDate "
-                  "from Remont where idItem=:idItem");
+    query.prepare("select r.id,idItem,idClaim,idReason,dateStart,Action,Defect,Remark,endDate,"
+                "rr.Name,rpr.nameReason,r.regDate,idPrevReason "
+                "from Remont r "
+                "left join RemontReason rr on rr.id=r.idReason "
+                "left join RemontPrevReason rpr on rpr.id=r.idPrevReason "
+                "where idItem=:idItem");
+
     query.bindValue(":idItem", idItem);
 
     query.exec();
@@ -2022,6 +2042,10 @@ void RepoMSSQL::LoadRemont(QList<Remont> &list, int idItem)
         rem.defect = query.value(6).toString();
         rem.remark = query.value(7).toString();
         rem.endDate = query.value(8).toDateTime();
+        rem.nameReason = query.value(9).toString();
+        rem.namePrevReason = query.value(10).toString();
+        rem.regDate = query.value(11).toDateTime();
+        rem.idPrevReason = query.value(12).toInt();
         list.push_back(rem);
     }
 }
@@ -2034,7 +2058,7 @@ Remont RepoMSSQL::GetRemontForItem(int idItem, int idClaim)
     QSqlQuery query(db);
     Remont rem;
 
-    query.prepare("select id,idItem,idClaim,idReason,dateStart,Action,Defect,Remark,endDate "
+    query.prepare("select id,idItem,idClaim,idReason,dateStart,Action,Defect,Remark,endDate,regDate,idPrevReason "
                       "from Remont where endDate is null and idItem=:idItem and idClaim=:idClaim");
     query.bindValue(":idItem", idItem);
     query.bindValue(":idClaim", idClaim);
@@ -2051,6 +2075,8 @@ Remont RepoMSSQL::GetRemontForItem(int idItem, int idClaim)
         rem.defect = query.value(6).toString();
         rem.remark = query.value(7).toString();
         rem.endDate = query.value(8).toDateTime();
+        rem.regDate = query.value(9).toDateTime();
+        rem.idPrevReason = query.value(10).toInt();
     }
     return rem;
 }

@@ -27,6 +27,7 @@
 #include "usersetdlg.h"
 #include "logindlg.h"
 #include "changemoduldlg.h"
+#include "worktodlg.h"
 #include <models/listdevice.h>
 #include <models/ItemsType.h>
 #include <infrastructure/users.h>
@@ -618,5 +619,15 @@ void MainWindow::on_aExchange_triggered()
         ChangeModulDlg *win = new ChangeModulDlg(dev, this);
         win->exec();
     }
+}
+
+
+//----------------------------------------------------------------------------------------------
+// произвести ТО
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aTO_triggered()
+{
+    workTODlg *win = new workTODlg(this);
+    win->exec();
 }
 

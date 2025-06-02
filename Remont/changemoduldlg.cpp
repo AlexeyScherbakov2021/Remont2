@@ -54,7 +54,7 @@ void ChangeModulDlg::on_pbOK_clicked()
 {
     QString comment = "на № %1";
     brokenDev->AddStatus(*brokenDev, StatusItem::EXCHANGE, comment.arg(newDev.number), brokenDev->idParent);
-    newDev.AddStatus(newDev, StatusItem::INSTALL);
+    newDev.AddStatus(newDev, StatusItem::INSTALL, QString("замена № %1").arg(brokenDev->number));
     newDev.AddStatus(newDev, StatusItem::WORK);
     newDev.idParent = brokenDev->idParent;
     repo.UpdateItem(newDev);
@@ -62,8 +62,9 @@ void ChangeModulDlg::on_pbOK_clicked()
     Items parent = repo.GetItem(brokenDev->idParent);
     do
     {
+        parent.LoadStatus(parent);
         bool res = parent.TestChildGoodStatus();
-        if(res)
+        if(res && parent.listStatus.size() > 0 && parent.listStatus.last().idStatus == StatusItem::FAULTY_CHILD)
             parent.AddStatus(parent, StatusItem::WORK);
 
         parent = repo.GetItem(parent.idParent);

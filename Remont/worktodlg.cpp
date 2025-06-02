@@ -1,0 +1,85 @@
+#include "worktodlg.h"
+#include "ui_worktodlg.h"
+#include "selectdevicewindow.h"
+#include "changemoduldlg.h"
+#include "platefwwindow.h"
+
+workTODlg::workTODlg(QWidget *parent)
+    : QDialog(parent)
+    , ui(new Ui::workTO)
+{
+    ui->setupUi(this);
+}
+
+workTODlg::~workTODlg()
+{
+    delete ui;
+}
+
+
+//--------------------------------------------------------------------------------------------------
+// поиск устройства
+//--------------------------------------------------------------------------------------------------
+void workTODlg::on_tbSearch_clicked()
+{
+    SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
+    win->AddSelectedType(IndexType::Modul);
+    win->AddSelectedType(IndexType::Plate);
+
+    // win->ExcludeDevice(listAddId);
+
+    Items *dev = win->SelectDevice(true, {StatusItem::SHIPPED, StatusItem::WORK}, ui->leSearch->text(), true, LoadPartType::ANY_PARENT);
+    if(dev != nullptr && dev->id > 0)
+    {
+        ui->treeDevice->Clear();
+
+        Items parent = *dev;
+        while(parent.idParent > 0)
+            parent = repo.GetItem(dev->idParent);
+
+        ui->treeDevice->AddItem(&parent);
+        ui->treeDevice->SetSelectItem(dev->id, dev->type.indexType);
+    }
+}
+
+
+//--------------------------------------------------------------------------------------------------
+// Замена модуля
+//--------------------------------------------------------------------------------------------------
+void workTODlg::on_pbExchange_clicked()
+{
+    auto sel = ui->treeDevice->GetSelectedItem();
+
+    Items dev = repo.GetItem(sel.first);
+    if(sel.second == IndexType::Modul || sel.second == IndexType::Plate)
+    {
+        ChangeModulDlg *win = new ChangeModulDlg(&dev, this);
+        win->exec();
+    }
+}
+
+
+//--------------------------------------------------------------------------------------------------
+// Замена прошивки
+//--------------------------------------------------------------------------------------------------
+void workTODlg::on_pbFirmware_clicked()
+{
+    auto sel = ui->treeDevice->GetSelectedItem();
+    Items dev = repo.GetItem(sel.first);
+
+    if(sel.second == IndexType::Plate)
+    {
+        PlateFWWindow *win = new PlateFWWindow(this, &dev);
+        win->exec();
+    }
+}
+
+
+//--------------------------------------------------------------------------------------------------
+// Другое действие
+//--------------------------------------------------------------------------------------------------
+void workTODlg::on_pbAnother_clicked()
+{
+
+}
+

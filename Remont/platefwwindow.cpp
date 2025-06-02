@@ -5,7 +5,7 @@
 
 
 
-PlateFWWindow::PlateFWWindow(QWidget *parent)
+PlateFWWindow::PlateFWWindow(QWidget *parent, Items *selectedPlate)
     : QDialog(parent)
     , ui(new Ui::PlateFWWindow)
 {
@@ -23,6 +23,16 @@ PlateFWWindow::PlateFWWindow(QWidget *parent)
     ui->tableView->setColumnWidth(4, 80);
     ui->tableView->setColumnWidth(5, 20);
     ui->tableView->setColumnWidth(6, 150);
+
+    if(selectedPlate != nullptr && selectedPlate->id > 0)
+    {
+        ui->leSearch->setVisible(false);
+        ui->tbSearch->setVisible(false);
+        ui->tbDelete->setVisible(false);
+        ui->label->setVisible(false);
+        model->AddItem(selectedPlate);
+        return;
+    }
 
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 }
@@ -78,6 +88,8 @@ void PlateFWWindow::on_pbApply_clicked()
 
     for(int row = 0; row < model->rowCount(); ++row)
     {
+        Items* dev = model->GetItem(row);
+        mapPrevFW.insert(dev->id, dev->number2);
         model->setData(model->index(row, 1), numberFW);
     }
 
@@ -88,6 +100,8 @@ void PlateFWWindow::on_pbOK_clicked()
 {
     for(int row = 0; row < model->rowCount(); ++row)
     {
+        Items* dev = model->GetItem(row);
+        dev->AddStatus(*dev, StatusItem::CHANGE_FW, QString("Предыдущая прошивка: %1").arg(mapPrevFW.value(dev->id)));
         model->UpdateItem(row);
     }
 

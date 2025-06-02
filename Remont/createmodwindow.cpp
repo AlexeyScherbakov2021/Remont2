@@ -103,6 +103,7 @@ void CreateModulWindow::on_pbRegModul_clicked()
     mod.dateCreate = QDateTime::currentDateTime();
     mod.garantMonth = listTypeModule[ui->cbModul->currentIndex()].garantMonth;
     mod.numberDoc = ui->leNumberDoc->text();
+    mod.number2 = ui->leNumber2->text();
 
     if(repo.AddItem(mod))
     {

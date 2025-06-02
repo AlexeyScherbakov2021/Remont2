@@ -39,8 +39,9 @@ void Scaner::close()
     if(conn.isOpen())
     {
         conn.close();
-        blockSignals(true);
+        // blockSignals(true);
         // qDebug() << "Закрытие и откл. сигналов" << getPort();
+        LogWindow::AddLine(QString("Закрыт порт %1.").arg(getPort()));
     }
 }
 

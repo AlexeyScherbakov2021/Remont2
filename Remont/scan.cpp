@@ -15,15 +15,14 @@ Scan::Scan(QWidget *parent)
     scanPort();
 
     con = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
-    connect(ui->cbCOM, SIGNAL(currentIndexChanged(int)), SLOT(currentIndexChanged(int)));
     // qDebug() << "Подключение сигнала в SCAN";
 
     QSettings setting("HKEY_CURRENT_USER\\Software\\Remont2", QSettings::NativeFormat);
     QString port = setting.value("COMport").toString();
     ui->cbCOM->setCurrentText(port);
-
+    currentIndexChanged(ui->cbCOM->currentIndex());
+    connect(ui->cbCOM, SIGNAL(currentIndexChanged(int)), SLOT(currentIndexChanged(int)));
     // qDebug() << "Из реестра" << port;
-
 
 }
 
@@ -72,7 +71,6 @@ void Scan::scanPort()
 void Scan::slotReadScan(QString s)
 {
     LogWindow::AddLine(QString("Передана в слот строка %1.").arg(s));
-
     ui->lbResult->setText(ui->lbResult->text() + " " + s);
 }
 

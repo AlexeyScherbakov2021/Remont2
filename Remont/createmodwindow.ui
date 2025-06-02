@@ -288,6 +288,16 @@ border: 1px solid #999999;
                </property>
               </widget>
              </item>
+             <item row="7" column="0">
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>№ прошивки</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="1">
+              <widget class="QLineEdit" name="leNumber2"/>
+             </item>
             </layout>
            </item>
           </layout>

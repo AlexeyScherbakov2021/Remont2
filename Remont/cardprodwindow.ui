@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>995</width>
+    <width>1124</width>
     <height>568</height>
    </rect>
   </property>
@@ -560,6 +560,16 @@ color: black
          <column>
           <property name="text">
            <string>Рекламация</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Дата регистрации</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Предв.причина</string>
           </property>
          </column>
          <column>

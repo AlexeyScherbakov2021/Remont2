@@ -94,6 +94,7 @@ public:
     bool UpdateRemont(Remont &remont);
     void LoadRemont(QList<Remont> &list, int idItem);
     Remont GetRemontForItem(int id, int idClaim);
+    void LoadRemontPrevReason(QMap<int, QString> &listReason);
 
 
     // Organization

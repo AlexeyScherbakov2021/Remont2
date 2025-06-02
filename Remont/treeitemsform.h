@@ -30,6 +30,7 @@ public:
     QPair<int,IndexType> GetSelectedItem();
     void ExecMenu(QMenu &menu, const QPoint &pos);
     void AddHistoryChild();
+    void Clear();
 
 private:
     Ui::TreeItemsForm *ui;

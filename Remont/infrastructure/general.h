@@ -24,7 +24,8 @@ enum StatusItem : int {
     CORRECT_OSO,        // исправен б/у в осо
     END_WORK,           // утилизирован
     EXCHANGE,           // Был заменен
-    FAULTY_CHILD        // Неисправны комплектующие
+    FAULTY_CHILD,       // Неисправны комплектующие
+    CHANGE_FW           // замена прошивки
 };
 
 

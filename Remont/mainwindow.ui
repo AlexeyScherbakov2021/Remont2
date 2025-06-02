@@ -223,6 +223,7 @@ background-color: LightGray;
     <addaction name="aEndRepair"/>
     <addaction name="aExchModul"/>
     <addaction name="aEnterWork"/>
+    <addaction name="aTO"/>
    </widget>
    <widget class="QMenu" name="menu_5">
     <property name="title">
@@ -449,6 +450,11 @@ background-color: LightGray;
   <action name="aExchange">
    <property name="text">
     <string>Произвести замену</string>
+   </property>
+  </action>
+  <action name="aTO">
+   <property name="text">
+    <string>Проведение ТО</string>
    </property>
   </action>
  </widget>

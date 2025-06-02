@@ -61,10 +61,9 @@ private slots:
     void on_aSetter_triggered();
     void on_aNewShip_triggered();
     void on_aRole_triggered();
-
     void on_aEnterWork_triggered();
-
     void on_aExchange_triggered();
+    void on_aTO_triggered();
 
 private:
     Ui::MainWindow *ui;

@@ -15,7 +15,7 @@ class PlateFWWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit PlateFWWindow(QWidget *parent = nullptr);
+    explicit PlateFWWindow(QWidget *parent = nullptr, Items *selectedPlate = nullptr);
     ~PlateFWWindow();
 
     void LoadItems(QList<Items>& items);
@@ -33,7 +33,7 @@ private:
     ListPlate listPlate;
     QMetaObject::Connection conn;
     DeviceModel *model;
-
+    QMap<int, QString> mapPrevFW;
 
 };
 

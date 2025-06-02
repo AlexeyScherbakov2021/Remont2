@@ -73,7 +73,8 @@ SOURCES += \
     shipwindow.cpp \
     startworkwindow.cpp \
     treeitemsform.cpp \
-    usersetdlg.cpp
+    usersetdlg.cpp \
+    worktodlg.cpp
 
 HEADERS += \
     Itemvnftwindow.h \
@@ -137,7 +138,8 @@ HEADERS += \
     shipwindow.h \
     startworkwindow.h \
     treeitemsform.h \
-    usersetdlg.h
+    usersetdlg.h \
+    worktodlg.h
 
 FORMS += \
     Itemvnftwindow.ui \
@@ -169,7 +171,8 @@ FORMS += \
     shipwindow.ui \
     startworkwindow.ui \
     treeitemsform.ui \
-    usersetdlg.ui
+    usersetdlg.ui \
+    worktodlg.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

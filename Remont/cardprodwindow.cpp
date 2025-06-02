@@ -145,35 +145,44 @@ void CardProdWindow::LoadRemontToForm(int idItem)
     for(auto &it : listRemont)
     {
         Claim claim = repo.GetClaim(it.idClaim);
-        QString reason = repo.GetRemontReason(it.idReason);
+        // QString reason = repo.GetRemontReason(it.idReason);
 
         QTableWidgetItem *item = new QTableWidgetItem();
         item->setText(claim.number);
         ui->twRemont->setItem(row, 0, item);
 
         item = new QTableWidgetItem();
-        item->setText(it.startDate.toString("dd.MM.yyyy"));
+        item->setText(it.regDate.toString("dd.MM.yyyy"));
         ui->twRemont->setItem(row, 1, item);
 
         item = new QTableWidgetItem();
-        item->setText(it.endDate.toString("dd.MM.yyyy"));
+        item->setText(it.namePrevReason);
         ui->twRemont->setItem(row, 2, item);
 
+
         item = new QTableWidgetItem();
-        item->setText(reason);
+        item->setText(it.startDate.toString("dd.MM.yyyy"));
         ui->twRemont->setItem(row, 3, item);
 
         item = new QTableWidgetItem();
-        item->setText(it.action);
+        item->setText(it.endDate.toString("dd.MM.yyyy"));
         ui->twRemont->setItem(row, 4, item);
 
         item = new QTableWidgetItem();
-        item->setText(it.defect);
+        item->setText(it.nameReason);
         ui->twRemont->setItem(row, 5, item);
 
         item = new QTableWidgetItem();
-        item->setText(it.remark);
+        item->setText(it.action);
         ui->twRemont->setItem(row, 6, item);
+
+        item = new QTableWidgetItem();
+        item->setText(it.defect);
+        ui->twRemont->setItem(row, 7, item);
+
+        item = new QTableWidgetItem();
+        item->setText(it.remark);
+        ui->twRemont->setItem(row, 8, item);
 
         ++row;
     }
