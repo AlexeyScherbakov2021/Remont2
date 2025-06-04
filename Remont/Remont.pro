@@ -4,11 +4,10 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++20
 
-
-VERSION = 1.1.0.4
+VERSION = 1.1.0.5
 QMAKE_TARGET_COMPANY = NGK
-QMAKE_TARGET_PRODUCT = Remont
-QMAKE_TARGET_DESCRIPTION = Programm Remont
+QMAKE_TARGET_PRODUCT = ReestrNumbers
+QMAKE_TARGET_DESCRIPTION = Reestr Numbers
 QMAKE_TARGET_COPYRIGHT = NPO NGK EHZ
 
 # CONFIG(debug) {
@@ -53,6 +52,7 @@ SOURCES += \
     models/listsetter.cpp \
     models/listshipment.cpp \
     models/modelproxy.cpp \
+    models/modelvnft.cpp \
     models/settermodel.cpp \
     models/shipmodel.cpp \
     otkactiondlg.cpp \
@@ -114,6 +114,7 @@ HEADERS += \
     models/listsetter.h \
     models/listshipment.h \
     models/modelproxy.h \
+    models/modelvnft.h \
     models/organization.h \
     models/remont.h \
     models/settermodel.h \

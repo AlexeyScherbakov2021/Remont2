@@ -263,8 +263,17 @@ QPair<int,IndexType> TreeItemsForm::GetSelectedItem()
 {
     QPair<int,IndexType> pair;
     auto selItem = ui->treeWidget->currentItem();
-    pair.first = selItem->data(0, Qt::UserRole).toInt();
-    pair.second = (IndexType)selItem->data(0, Qt::UserRole + 1).toInt();
+
+    if(selItem != nullptr)
+    {
+        pair.first = selItem->data(0, Qt::UserRole).toInt();
+        pair.second = (IndexType)selItem->data(0, Qt::UserRole + 1).toInt();
+    }
+    else
+    {
+        pair.first = 0;
+        // pair.second = ;
+    }
     return pair;
 }
 
@@ -311,6 +320,18 @@ void TreeItemsForm::Clear()
 {
 
     ui->treeWidget->clear();
+}
+
+
+//---------------------------------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------------------------------
+void TreeItemsForm::setExpand(bool isExpand)
+{
+    if(isExpand)
+        ui->treeWidget->expandAll();
+    else
+        ui->treeWidget->collapseAll();
 }
 
 

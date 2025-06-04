@@ -7,6 +7,7 @@
 #include <models/listmodul.h>
 #include <models/listplate.h>
 #include <QMessageBox>
+#include <QCompleter>
 
 CreateProductWindow::CreateProductWindow(QWidget *parent)
     : QDialog(parent)
@@ -16,17 +17,25 @@ CreateProductWindow::CreateProductWindow(QWidget *parent)
     ui->setupUi(this);
 
     ui->deCreateDateP->setDateTime(QDateTime::currentDateTime());
-
-    repo.LoadNewItemsType(listTypeProduct, IndexType::Product);
-    for(auto &it : listTypeProduct)
-    {
-        QVariant var;
-        var.setValue(&it);
-        ui->cbProduct->addItem(it.VNFT + " " + it.typeName, var);
-    }
-
-    ui->cbProduct->view()->setMaximumWidth(900);
+    model.loadList(IndexType::Product);
+    proxy.setSourceModel(&model);
+    proxy.sort(0);
+    proxy.setFilterCaseSensitivity(Qt::CaseInsensitive);
+    ui->cbProduct->setModel(&proxy);
     ui->cbProduct->setCurrentIndex(-1);
+    ui->cbProduct->lineEdit()->completer()->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
+
+    // repo.LoadNewItemsType(listTypeProduct, IndexType::Product);
+    // for(auto &it : listTypeProduct)
+    // {
+    //     QVariant var;
+    //     var.setValue(&it);
+    //     ui->cbProduct->addItem(it.VNFT + " " + it.typeName, var);
+    // }
+    // ui->cbProduct->view()->setMaximumWidth(900);
+
+
+
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
 }
@@ -77,25 +86,37 @@ void CreateProductWindow::on_tbDeleteProduct_clicked()
 //---------------------------------------------------------------------------------
 void CreateProductWindow::on_pbRegProduct_clicked()
 {
-    if(ui->leNumProduct->text().isEmpty())
-        return;
+    // if(ui->leNumProduct->text().isEmpty())
+    // if(ui->cbProduct->currentIndex() < 0)
+    //     return;
 
     Items prod;
 
-    QVariant var = ui->cbProduct->currentData();
-    if(!var.isValid())
+    if(ui->cbProduct->currentIndex() < 0)
     {
         QMessageBox::critical(this, "Ошибка", "Нужно выбрать обозначение изделия (ВНФТ)", QMessageBox::Ok);
         return;
     }
 
+    QModelIndex index = proxy.index(ui->cbProduct->currentIndex(), 0);
+    index = proxy.mapToSource(index);
+    ItemType *type = model.getType(index.row());
+
+    // qDebug() << type->typeName;
+    // QVariant var = ui->cbProduct->currentData();
+    // if(!var.isValid())
+
+    // return;
+
     // Добавление изделия в  базу данных со статусом Создан
-    prod.type = *var.value<ItemType*>();
+    // prod.type = *var.value<ItemType*>();
+    prod.type = *type;
     prod.number = ui->leNumProduct->text();
     prod.name = ui->leNameProd->text();
     prod.idType = prod.type.id;
     prod.dateCreate = QDateTime::currentDateTime();
-    prod.garantMonth = listTypeProduct[ui->cbProduct->currentIndex()].garantMonth;
+    prod.garantMonth = type->garantMonth;
+    // prod.garantMonth = listTypeProduct[ui->cbProduct->currentIndex()].garantMonth;
     prod.numberDoc = ui->leNumberDocP->text();
     prod.number2 = ui->leNumber2->text();
 
@@ -134,8 +155,10 @@ void CreateProductWindow::on_cbProduct_currentIndexChanged(int index)
     if(index < 0)
         return;
 
-    QVariant var = ui->cbProduct->currentData();
-    ItemType *tp = var.value<ItemType*>();
+    QModelIndex ind = proxy.mapToSource(proxy.index(index, 0));
+    index = ind.row();
+    ItemType *tp = model.getType(index);
+
     ui->lbGarantProd->setText(QString::number(tp->garantMonth));
 }
 
@@ -173,20 +196,33 @@ void CreateProductWindow::on_tbDocP_clicked()
     {
         if(size == 1)
         {
-            int i = 0;
+            // int i = 0;
             nakl = listNakl.first();
             countFromDoc = nakl.count;
+
             ui->cbProduct->setCurrentIndex(-1);
-            for(auto &it : listTypeProduct)
+
+            ItemType *type = model.searchVNFT(nakl.VNFT);
+
+            if(type != nullptr)
             {
-                if(it.VNFT == nakl.VNFT)
-                {
-                    ui->cbProduct->setCurrentIndex(i);
-                    countUse = repo.GetCountRegisterPlate(ui->leNumberDocP->text(), it.id);
-                    break;
-                }
-                ++i;
+                countUse = repo.GetCountRegisterPlate(ui->leNumberDocP->text(), type->id);
+                countFromDoc = nakl.count;
+                proxy.setFilterFixedString(type->typeName);
+                ui->cbProduct->setCurrentIndex(0);
             }
+            // ui->cbProduct->setCurrentIndex(index);
+
+            // for(auto &it : listTypeProduct)
+            // {
+            //     if(it.VNFT == nakl.VNFT)
+            //     {
+            //         ui->cbProduct->setCurrentIndex(i);
+            //         countUse = repo.GetCountRegisterPlate(ui->leNumberDocP->text(), it.id);
+            //         break;
+            //     }
+            //     ++i;
+            // }
         }
         else
         {
@@ -197,6 +233,17 @@ void CreateProductWindow::on_tbDocP_clicked()
     ui->lbDocNameP->setText(nakl.name);
     ui->lbPlanP->setText(nakl.plan);
     UpdateUseCount();
-
 }
+
+
+
+void CreateProductWindow::on_cbProduct_editTextChanged(const QString &arg1)
+{
+    // qDebug() << arg1;
+    proxy.setFilterFixedString(arg1);
+}
+
+
+
+
 

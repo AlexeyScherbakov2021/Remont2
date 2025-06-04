@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>829</width>
+    <width>945</width>
     <height>476</height>
    </rect>
   </property>
@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="3,2">
+    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="4,3">
      <item>
       <widget class="QFrame" name="frame">
        <property name="frameShape">
@@ -159,12 +159,18 @@
           </property>
           <property name="maximumSize">
            <size>
-            <width>350</width>
+            <width>16777215</width>
             <height>16777215</height>
            </size>
           </property>
           <property name="editable">
-           <bool>false</bool>
+           <bool>true</bool>
+          </property>
+          <property name="maxVisibleItems">
+           <number>20</number>
+          </property>
+          <property name="insertPolicy">
+           <enum>QComboBox::InsertPolicy::NoInsert</enum>
           </property>
           <property name="sizeAdjustPolicy">
            <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>

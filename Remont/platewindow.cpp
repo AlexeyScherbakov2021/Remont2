@@ -2,7 +2,7 @@
 #include "repofp.h"
 #include "scan.h"
 #include "ui_platewindow.h"
-
+#include <QCompleter>
 #include <QMessageBox>
 
 // #include <models/platetype.h>
@@ -14,13 +14,21 @@ PlateWindow::PlateWindow(QWidget *parent)
     ui->setupUi(this);
     ui->deCreateDate->setDateTime(QDateTime::currentDateTime());
 
-    repo.LoadItemsType(listVNFT, IndexType::Plate);
-
-    for(auto const &it : listVNFT)
-    {
-        ui->cbVNFT->addItem(it.VNFT + " " + it.typeName, it.id);
-    }
+    model.loadList(IndexType::Plate);
+    proxy.setSourceModel(&model);
+    proxy.sort(0);
+    proxy.setFilterCaseSensitivity(Qt::CaseInsensitive);
+    ui->cbVNFT->setModel(&proxy);
     ui->cbVNFT->setCurrentIndex(-1);
+    ui->cbVNFT->lineEdit()->completer()->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
+
+    // repo.LoadItemsType(listVNFT, IndexType::Plate);
+
+    // for(auto const &it : listVNFT)
+    // {
+    //     ui->cbVNFT->addItem(it.VNFT + " " + it.typeName, it.id);
+    // }
+    // ui->cbVNFT->setCurrentIndex(-1);
 
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
@@ -49,13 +57,22 @@ void PlateWindow::on_pbAdd_clicked()
     if(ui->leNumber->text().isEmpty())
         return;
 
+    QModelIndex index = proxy.index(ui->cbVNFT->currentIndex(), 0);
+    index = proxy.mapToSource(index);
+    ItemType *type = model.getType(index.row());
+
+
     Items plate;
     plate.dateCreate = ui->deCreateDate->dateTime();
     plate.number = ui->leNumber->text();
     plate.number2 = ui->leNumberFW->text();
     plate.numberDoc = ui->leNumberDoc->text();
-    plate.idType = ui->cbVNFT->currentData().toInt();
-    plate.garantMonth = listVNFT[ui->cbVNFT->currentIndex()].garantMonth;
+    plate.type = *type;
+    plate.idType = type->id;
+    plate.garantMonth = type->garantMonth;
+
+    // plate.idType = ui->cbVNFT->currentData().toInt();
+    // plate.garantMonth = listVNFT[ui->cbVNFT->currentIndex()].garantMonth;
 
     if(!repo.AddItem(plate))
     {
@@ -70,7 +87,7 @@ void PlateWindow::on_pbAdd_clicked()
         plate.AddStatus(plate, stat);
 
         // plate.AddStatus(plate, StatusItem::CREATE);
-        QListWidgetItem *item = new QListWidgetItem(plate.number + " (прош." + plate.number2 + ")");
+        QListWidgetItem *item = new QListWidgetItem(plate.number + " (прош." + plate.number2 + ") " + type->typeName);
         item->setData(Qt::UserRole, plate.id);
         ui->listWidget->addItem(item);
         ui->leNumber->clear();
@@ -169,20 +186,31 @@ void PlateWindow::on_tbDoc_clicked()
     {
         if(size == 1)
         {
-            int i = 0;
+            // int i = 0;
             nakl = listNakl.first();
             ui->cbVNFT->setCurrentIndex(-1);
-            for(auto &it : listVNFT)
+
+            ItemType *type = model.searchVNFT(nakl.VNFT);
+            if(type != nullptr)
             {
-                if(it.VNFT == nakl.VNFT)
-                {
-                    ui->cbVNFT->setCurrentIndex(i);
-                    countUse = repo.GetCountRegisterPlate(ui->leNumberDoc->text(), it.id);
-                    countFromDoc = nakl.count;
-                    break;
-                }
-                ++i;
+                // ui->cbVNFT->setCurrentIndex(i);
+                countUse = repo.GetCountRegisterPlate(ui->leNumberDoc->text(), type->id);
+                countFromDoc = nakl.count;
+                proxy.setFilterFixedString(type->typeName);
+                ui->cbVNFT->setCurrentIndex(0);
             }
+
+            // for(auto &it : listVNFT)
+            // {
+            //     if(it.VNFT == nakl.VNFT)
+            //     {
+            //         ui->cbVNFT->setCurrentIndex(i);
+            //         countUse = repo.GetCountRegisterPlate(ui->leNumberDoc->text(), it.id);
+            //         countFromDoc = nakl.count;
+            //         break;
+            //     }
+            //     ++i;
+            // }
         }
         else
         {
@@ -193,5 +221,11 @@ void PlateWindow::on_tbDoc_clicked()
     ui->lbName->setText(nakl.name);
     ui->lbPlan->setText(nakl.plan);
     UpdateUseCount();
+}
+
+
+void PlateWindow::on_cbVNFT_editTextChanged(const QString &arg1)
+{
+    proxy.setFilterFixedString(arg1);
 }
 

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>937</width>
+    <width>1024</width>
     <height>518</height>
    </rect>
   </property>
@@ -90,7 +90,7 @@ border: 1px solid #999999;
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="3,2">
+        <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="4,3">
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
@@ -244,6 +244,12 @@ border: 1px solid #999999;
              </item>
              <item row="5" column="1">
               <widget class="QComboBox" name="cbModul">
+               <property name="editable">
+                <bool>true</bool>
+               </property>
+               <property name="insertPolicy">
+                <enum>QComboBox::InsertPolicy::NoInsert</enum>
+               </property>
                <property name="placeholderText">
                 <string>{Выбрать обозначение}</string>
                </property>

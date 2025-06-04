@@ -31,6 +31,7 @@ public:
     void ExecMenu(QMenu &menu, const QPoint &pos);
     void AddHistoryChild();
     void Clear();
+    void setExpand(bool isExpand = true);
 
 private:
     Ui::TreeItemsForm *ui;

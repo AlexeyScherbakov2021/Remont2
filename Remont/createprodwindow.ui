@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>937</width>
+    <width>1024</width>
     <height>564</height>
    </rect>
   </property>
@@ -90,7 +90,7 @@ border: 1px solid #999999;
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="3,2">
+        <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="4,3">
          <item>
           <layout class="QGridLayout" name="gridLayout_2">
            <item row="6" column="2">
@@ -282,6 +282,15 @@ border: 1px solid #999999;
                <width>16777215</width>
                <height>16777215</height>
               </size>
+             </property>
+             <property name="editable">
+              <bool>true</bool>
+             </property>
+             <property name="maxVisibleItems">
+              <number>20</number>
+             </property>
+             <property name="insertPolicy">
+              <enum>QComboBox::InsertPolicy::NoInsert</enum>
              </property>
              <property name="minimumContentsLength">
               <number>0</number>

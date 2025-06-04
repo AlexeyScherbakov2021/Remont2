@@ -4,9 +4,11 @@
 #include "repomssql.h"
 
 #include <QDialog>
+#include <QSortFilterProxyModel>
 #include <QTreeWidget>
 
 #include <models/ItemsType.h>
+#include <models/modelvnft.h>
 // #include <models/modultype.h>
 // #include <models/modultype.h>
 // #include <models/plate.h>
@@ -32,16 +34,21 @@ private slots:
     void slotReadScan(QString s);
     void on_tbDoc_clicked();
 
+    void on_cbModul_editTextChanged(const QString &arg1);
+
 private:
     Ui::CreateModulWindow *ui;
     RepoMSSQL repo;
     int countFromDoc = 0;
     int countUse = 0;
-    QVector<ItemType> listTypeModule;
+    // QVector<ItemType> listTypeModule;
 
     // void addLineModul(Items &mod);
     QMetaObject::Connection conn;
     void UpdateUseCount();
+
+    ModelVNFT model;
+    QSortFilterProxyModel proxy;
 
 };
 

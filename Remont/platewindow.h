@@ -4,9 +4,11 @@
 #include "repomssql.h"
 
 #include <QDialog>
+#include <QSortFilterProxyModel>
 #include <qsqlquerymodel.h>
 
 #include <models/listplate.h>
+#include <models/modelvnft.h>
 // #include <models/plate.h>
 
 namespace Ui {
@@ -32,14 +34,19 @@ private:
     RepoMSSQL repo;
     QMetaObject::Connection conn;
     // QSqlQueryModel model;
-    QVector<ItemType> listVNFT;
+    // QVector<ItemType> listVNFT;
     int countFromDoc = 0;
     int countUse = 0;
     void UpdateUseCount();
 
+    ModelVNFT model;
+    QSortFilterProxyModel proxy;
+
+
 private slots:
     void slotReadScan(QString s);
     void on_tbDoc_clicked();
+    void on_cbVNFT_editTextChanged(const QString &arg1);
 };
 
 #endif // PLATEWINDOW_H

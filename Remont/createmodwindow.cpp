@@ -6,7 +6,7 @@
 #include "ui_createmodwindow.h"
 #include <models/listmodul.h>
 #include <models/listplate.h>
-
+#include <QCompleter>
 #include <QMessageBox>
 
 CreateModulWindow::CreateModulWindow(QWidget *parent)
@@ -18,17 +18,26 @@ CreateModulWindow::CreateModulWindow(QWidget *parent)
 
     ui->deCreateDate->setDateTime(QDateTime::currentDateTime());
 
-    repo.LoadNewItemsType(listTypeModule, IndexType::Modul );
-
-    for(auto &it : listTypeModule)
-    {
-        QVariant var;
-        var.setValue(&it);
-        ui->cbModul->addItem(it.VNFT + " " + it.typeName, var);
-    }
-
-    ui->cbModul->view()->setMaximumWidth(900);
+    model.loadList(IndexType::Modul);
+    proxy.setSourceModel(&model);
+    proxy.sort(0);
+    proxy.setFilterCaseSensitivity(Qt::CaseInsensitive);
+    ui->cbModul->setModel(&proxy);
     ui->cbModul->setCurrentIndex(-1);
+    ui->cbModul->lineEdit()->completer()->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
+
+
+    // repo.LoadNewItemsType(listTypeModule, IndexType::Modul );
+
+    // for(auto &it : listTypeModule)
+    // {
+    //     QVariant var;
+    //     var.setValue(&it);
+    //     ui->cbModul->addItem(it.VNFT + " " + it.typeName, var);
+    // }
+
+    // ui->cbModul->view()->setMaximumWidth(900);
+    // ui->cbModul->setCurrentIndex(-1);
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
 }
@@ -89,19 +98,25 @@ void CreateModulWindow::on_pbRegModul_clicked()
     // ListModul lModul;
     Items mod;
     // добавить устройство в базу со статусом Создан
-    QVariant var = ui->cbModul->currentData();
-    if(!var.isValid())
+    // QVariant var = ui->cbModul->currentData();
+    // if(!var.isValid())
+    if(ui->cbModul->currentIndex() < 0)
     {
         QMessageBox::critical(this, "Ошибка", "Нужно выбрать обозначение модуля (ВНФТ)", QMessageBox::Ok);
         return;
     }
 
-    mod.type = *var.value<ItemType*>();
+    QModelIndex index = proxy.index(ui->cbModul->currentIndex(), 0);
+    index = proxy.mapToSource(index);
+    ItemType *type = model.getType(index.row());
+
+
+    mod.type = *type;
     mod.number = ui->leNumModul->text();
     mod.name = ui->leModulName->text();
     mod.idType = mod.type.id;
     mod.dateCreate = QDateTime::currentDateTime();
-    mod.garantMonth = listTypeModule[ui->cbModul->currentIndex()].garantMonth;
+    mod.garantMonth = type->garantMonth;
     mod.numberDoc = ui->leNumberDoc->text();
     mod.number2 = ui->leNumber2->text();
 
@@ -144,8 +159,13 @@ void CreateModulWindow::on_cbModul_currentIndexChanged(int index)
     if(index < 0)
         return;
 
-    QVariant var = ui->cbModul->currentData();
-    ItemType *tp = var.value<ItemType*>();
+    // QVariant var = ui->cbModul->currentData();
+    // ItemType *tp = var.value<ItemType*>();
+
+    QModelIndex ind = proxy.mapToSource(proxy.index(index, 0));
+    index = ind.row();
+    ItemType *tp = model.getType(index);
+
     ui->lbGarantMod->setText(QString::number(tp->garantMonth));
 }
 
@@ -182,20 +202,31 @@ void CreateModulWindow::on_tbDoc_clicked()
     {
         if(size == 1)
         {
-            int i = 0;
+            // int i = 0;
             nakl = listNakl.first();
             countFromDoc = nakl.count;
             ui->cbModul->setCurrentIndex(-1);
-            for(auto &it : listTypeModule)
+            ItemType *type = model.searchVNFT(nakl.VNFT);
+
+            if(type != nullptr)
             {
-                if(it.VNFT == nakl.VNFT)
-                {
-                    ui->cbModul->setCurrentIndex(i);
-                    countUse = repo.GetCountRegisterPlate(ui->leNumberDoc->text(), it.id);
-                    break;
-                }
-                ++i;
+                countUse = repo.GetCountRegisterPlate(ui->leNumberDoc->text(), type->id);
+                countFromDoc = nakl.count;
+                proxy.setFilterFixedString(type->typeName);
+                ui->cbModul->setCurrentIndex(0);
             }
+
+
+            // for(auto &it : listTypeModule)
+            // {
+            //     if(it.VNFT == nakl.VNFT)
+            //     {
+            //         ui->cbModul->setCurrentIndex(i);
+            //         countUse = repo.GetCountRegisterPlate(ui->leNumberDoc->text(), it.id);
+            //         break;
+            //     }
+            //     ++i;
+            // }
         }
         else
         {
@@ -207,5 +238,11 @@ void CreateModulWindow::on_tbDoc_clicked()
     ui->lbPlan->setText(nakl.plan);
     UpdateUseCount();
 
+}
+
+
+void CreateModulWindow::on_cbModul_editTextChanged(const QString &arg1)
+{
+    proxy.setFilterFixedString(arg1);
 }
 

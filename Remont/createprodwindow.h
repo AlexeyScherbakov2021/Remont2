@@ -4,9 +4,11 @@
 #include "repomssql.h"
 
 #include <QDialog>
+#include <QSortFilterProxyModel>
 #include <QTreeWidget>
 
 #include <models/ItemsType.h>
+#include <models/modelvnft.h>
 // #include <models/modultype.h>
 // #include <models/modultype.h>
 // #include <models/plate.h>
@@ -31,6 +33,7 @@ private slots:
     void on_cbProduct_currentIndexChanged(int index);
     void slotReadScan(QString s);
     void on_tbDocP_clicked();
+    void on_cbProduct_editTextChanged(const QString &arg1);
 
 private:
     Ui::CreateProductWindow *ui;
@@ -38,11 +41,13 @@ private:
     int countFromDoc = 0;
     int countUse = 0;
 
-    QVector<ItemType> listTypeProduct;
+    // QVector<ItemType> listTypeProduct;
     QMetaObject::Connection conn;
     void UpdateUseCount();
     // void addLineContent(Items &prod);
 
+    ModelVNFT model;
+    QSortFilterProxyModel proxy;
 
     QList<Items> listAddingPlate;
 };
