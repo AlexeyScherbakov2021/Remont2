@@ -65,6 +65,8 @@ private slots:
     void on_aExchange_triggered();
     void on_aTO_triggered();
 
+    void on_aEditor_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;

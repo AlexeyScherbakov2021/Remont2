@@ -239,6 +239,7 @@ background-color: LightGray;
     <addaction name="aLog"/>
     <addaction name="aGenQR"/>
     <addaction name="aRole"/>
+    <addaction name="aEditor"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -455,6 +456,11 @@ background-color: LightGray;
   <action name="aTO">
    <property name="text">
     <string>Проведение ТО</string>
+   </property>
+  </action>
+  <action name="aEditor">
+   <property name="text">
+    <string>Редактор</string>
    </property>
   </action>
  </widget>

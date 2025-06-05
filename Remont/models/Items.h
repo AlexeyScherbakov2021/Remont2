@@ -17,6 +17,7 @@ public:
     int garantMonth = 0;
     QDateTime dateGarant;
     bool isZip = false;
+    QString descript;
 
     ItemType type;
 

@@ -121,6 +121,8 @@ public:
     void LoadUsers(QList<Users> &listUsers);
     bool SaveUserRoles(Users &user);
     Users LoadUser(int idUser);
+
+    bool loadAllSatus(QMap<QString, int> &listStatus);
 };
 
 #endif

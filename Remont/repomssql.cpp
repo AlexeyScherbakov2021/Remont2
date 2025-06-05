@@ -71,7 +71,7 @@ bool RepoMSSQL::UpdateItem(Items &item)
 
     query.prepare("update Items set idParent=:idParent,idShip=:idShip,idSet=:idSet,idType=:idType,"
                   "number=:number,number2=:number2,numberDoc=:numberDoc,nameItem=:nameItem,dateCreate=:dateCreate,"
-                  "dateOn=:dateOn,dateOff=:dateOff,garantMonth=:garantMonth,dateGarant=:dateGarant,isZip=:isZip "
+                  "dateOn=:dateOn,dateOff=:dateOff,garantMonth=:garantMonth,dateGarant=:dateGarant,isZip=:isZip,descript=:descript "
                   "where id=:id");
 
     QVariant var = item.idParent > 0 ? item.idParent : QVariant();
@@ -91,6 +91,7 @@ bool RepoMSSQL::UpdateItem(Items &item)
     query.bindValue(":garantMonth", item.garantMonth);
     query.bindValue(":dateGarant", item.dateGarant);
     query.bindValue(":isZip", item.isZip);
+    query.bindValue(":descript", item.descript);
     query.bindValue(":id", item.id);
 
     res = query.exec();
@@ -124,7 +125,7 @@ Items RepoMSSQL::GetItem(int id) const
     QSqlQuery query(db);
 
     query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-                  "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,it.indexType,it.VNFT,it.garantMonth "
+                  "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,it.indexType,it.VNFT,it.garantMonth,descript "
                   "from Items i join ItemType it on it.id=i.idType "
                   "where i.id=:id");
 
@@ -147,6 +148,7 @@ Items RepoMSSQL::GetItem(int id) const
         item.garantMonth = query.value(12).toInt();
         item.dateGarant = query.value(13).toDateTime();
         item.isZip = query.value(14).toBool();
+        item.descript = query.value(19).toString();
         item.type.typeName = query.value(15).toString();
         item.type.indexType = (IndexType)query.value(16).toInt();
         item.type.VNFT = query.value(17).toString();
@@ -175,7 +177,7 @@ Items RepoMSSQL::GetItem2( QString number, const QVector<StatusItem>& listStatus
     QString sqlStatus = "ist.idStatus=:idStatus%1 ";
 
     QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
-                       "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,it.indexType,it.VNFT,it.garantMonth "
+                       "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,it.indexType,it.VNFT,it.garantMonth,i.descript "
                        "from Items i join ItemType it on it.id=i.idType "
                        "join (select idItem, max(DateStatus) dateStatus from ItemStatus group by idItem "
                        ") ms on ms.idItem=i.id "
@@ -230,6 +232,7 @@ Items RepoMSSQL::GetItem2( QString number, const QVector<StatusItem>& listStatus
         item.garantMonth = query.value(12).toInt();
         item.dateGarant = query.value(13).toDateTime();
         item.isZip = query.value(14).toBool();
+        item.descript = query.value(19).toString();
         item.type.typeName = query.value(15).toString();
         item.type.indexType = (IndexType)query.value(16).toInt();
         item.type.VNFT = query.value(17).toString();
@@ -1000,7 +1003,7 @@ bool RepoMSSQL::LoadChildItems(int idParent, QList<Items> &listItems) const
     QSqlQuery query(db);
     query.prepare("select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
                     "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus,it.indexType,it.VNFT,it.garantMonth,"
-                    "ist.dateStatus,ist.idStatus,ist.comment,sd.TypeStatus "
+                    "ist.dateStatus,ist.idStatus,ist.comment,sd.TypeStatus,i.descript "
                     "from Items i join ItemType it on it.id=i.idType "
                     "join (select idItem, max(DateStatus) dateStatus from ItemStatus group by idItem "
                     ") ms on ms.idItem=i.id "
@@ -1030,6 +1033,7 @@ bool RepoMSSQL::LoadChildItems(int idParent, QList<Items> &listItems) const
         item.garantMonth = query.value(12).toInt();
         item.dateGarant = query.value(13).toDateTime();
         item.isZip = query.value(14).toBool();
+        item.descript = query.value(24).toString();
         // item.VNFT = query.value(15).toString();
         item.currStatus = query.value(16).toString();
 
@@ -1077,7 +1081,7 @@ int RepoMSSQL::LoadPart(int start, int count, IndexType iType,
 
     QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
                        "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus,it.indexType,it.VNFT,it.garantMonth,"
-                       "ist.dateStatus,ist.idStatus,ist.comment,sd.TypeStatus "
+                       "ist.dateStatus,ist.idStatus,ist.comment,sd.TypeStatus,i.descript "
                        "from Items i join ItemType it on it.id=i.idType and it.indexType=:indexType "
                        "join (select idItem, max(DateStatus) dateStatus from ItemStatus group by idItem "
                        ") ms on ms.idItem=i.id "
@@ -1154,6 +1158,7 @@ int RepoMSSQL::LoadPart(int start, int count, IndexType iType,
         item.type.indexType = (IndexType)query.value(17).toInt();
         item.type.VNFT = query.value(18).toString();
         item.type.garantMonth = query.value(19).toInt();
+        item.descript = query.value(24).toString();
         item.type.id = item.idType;
         item.VNFT = item.type.VNFT;
 
@@ -1192,7 +1197,7 @@ int RepoMSSQL::LoadPartAll(int start, int count, const QString &number, QList<It
 
     QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,dateCreate,dateOn,"
                        "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus,it.indexType,it.VNFT,it.garantMonth,"
-                       "ist.dateStatus,ist.idStatus,ist.comment,sd.TypeStatus "
+                       "ist.dateStatus,ist.idStatus,ist.comment,sd.TypeStatus,i.descript "
                        "from Items i join ItemType it on it.id=i.idType "
                        "join (select idItem, max(DateStatus) dateStatus from ItemStatus group by idItem "
                        ") ms on ms.idItem=i.id "
@@ -1264,6 +1269,7 @@ int RepoMSSQL::LoadPartAll(int start, int count, const QString &number, QList<It
         item.type.indexType = (IndexType)query.value(17).toInt();
         item.type.VNFT = query.value(18).toString();
         item.type.garantMonth = query.value(19).toInt();
+        item.descript = query.value(24).toString();
         item.VNFT = item.type.VNFT;
         item.type.id = item.idType;
 
@@ -1293,8 +1299,8 @@ bool RepoMSSQL::AddItem(Items &item) const
     bool res;
     QSqlQuery query(db);
 
-    query.prepare("insert into Items (idType,number,number2,numberDoc,nameItem,dateCreate,garantMonth,isZip) "
-                  "output inserted.id values(:idType,:number,:number2,:numberDoc,:nameItem,:dateCreate,:garantMonth,:isZip)");
+    query.prepare("insert into Items (idType,number,number2,numberDoc,nameItem,dateCreate,garantMonth,isZip,descript) "
+                  "output inserted.id values(:idType,:number,:number2,:numberDoc,:nameItem,:dateCreate,:garantMonth,:isZip,:descript)");
 
     query.bindValue(":idType", item.idType);
     query.bindValue(":number", item.number);
@@ -1304,6 +1310,7 @@ bool RepoMSSQL::AddItem(Items &item) const
     query.bindValue(":dateCreate", item.dateCreate);
     query.bindValue(":garantMonth", item.garantMonth);
     query.bindValue(":isZip", item.isZip);
+    query.bindValue(":descript", item.descript);
 
     res = query.exec();
     if(!res)
@@ -2274,6 +2281,27 @@ Users RepoMSSQL::LoadUser(int idUser)
     }
 
     return user;
+}
+
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
+bool RepoMSSQL::loadAllSatus(QMap<QString, int> &listStatus)
+{
+    bool res = false;
+    QSqlQuery query(db);
+
+    query.prepare("SELECT id,NameStatus FROM StatusDevice");
+    res = query.exec();
+
+    listStatus.clear();
+    while(query.next())
+    {
+        int id = query.value(0).toInt();
+        QString nameStatus = query.value(1).toString();
+        listStatus.insert(nameStatus, id);
+    }
+    return res;
 }
 
 

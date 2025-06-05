@@ -28,6 +28,7 @@
 #include "logindlg.h"
 #include "changemoduldlg.h"
 #include "worktodlg.h"
+#include "editdevicedlg.h"
 #include <models/listdevice.h>
 #include <models/ItemsType.h>
 #include <infrastructure/users.h>
@@ -489,6 +490,7 @@ void MainWindow::SetRoleEnv(Users &user)
     ui->aCardDevice->setVisible(false);
     ui->pbCard->setVisible(false);
     ui->aGenQR->setVisible(false);
+    ui->aEditor->setVisible(false);
     ui->aRole->setVisible(user.id == 100500);
 
     for(RolesType role : user.listRoles)
@@ -580,6 +582,10 @@ void MainWindow::SetRoleEnv(Users &user)
         case RolesType::GenerateQR:
             ui->aGenQR->setVisible(true);
             break;
+
+        case RolesType::EditItems:
+            ui->aEditor->setVisible(true);
+            break;
         }
     }
 
@@ -628,6 +634,16 @@ void MainWindow::on_aExchange_triggered()
 void MainWindow::on_aTO_triggered()
 {
     workTODlg *win = new workTODlg(this);
+    win->exec();
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Редактор устройств
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aEditor_triggered()
+{
+    EditDeviceDlg *win = new EditDeviceDlg(this);
     win->exec();
 }
 

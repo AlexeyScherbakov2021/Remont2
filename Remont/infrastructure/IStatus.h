@@ -12,7 +12,7 @@ class Status
 public:
 
     int id = 0;
-    int idDevice = 0;
+    // int idDevice = 0;
     int idItem = 0;
     StatusItem idStatus = StatusItem::NONE;
     QString nameStatus;

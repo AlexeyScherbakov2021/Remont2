@@ -4,7 +4,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++20
 
-VERSION = 1.1.0.5
+VERSION = 1.1.0.6
 QMAKE_TARGET_COMPANY = NGK
 QMAKE_TARGET_PRODUCT = ReestrNumbers
 QMAKE_TARGET_DESCRIPTION = Reestr Numbers
@@ -29,6 +29,7 @@ SOURCES += \
     complectproductwindow.cpp \
     createmodwindow.cpp \
     createprodwindow.cpp \
+    editdevicedlg.cpp \
     endremontwindow.cpp \
     infrastructure/IStatus.cpp \
     infrastructure/dateedit.cpp \
@@ -72,6 +73,7 @@ SOURCES += \
     settereditdlg.cpp \
     shipwindow.cpp \
     startworkwindow.cpp \
+    statusdlg.cpp \
     treeitemsform.cpp \
     usersetdlg.cpp \
     worktodlg.cpp
@@ -87,6 +89,7 @@ HEADERS += \
     complectproductwindow.h \
     createmodwindow.h \
     createprodwindow.h \
+    editdevicedlg.h \
     endremontwindow.h \
     infrastructure/IStatus.h \
     infrastructure/dateedit.h \
@@ -138,6 +141,7 @@ HEADERS += \
     settereditdlg.h \
     shipwindow.h \
     startworkwindow.h \
+    statusdlg.h \
     treeitemsform.h \
     usersetdlg.h \
     worktodlg.h
@@ -153,6 +157,7 @@ FORMS += \
     complectproductwindow.ui \
     createmodwindow.ui \
     createprodwindow.ui \
+    editdevicedlg.ui \
     endremontwindow.ui \
     listshipwindow.ui \
     logindlg.ui \
@@ -171,6 +176,7 @@ FORMS += \
     settereditdlg.ui \
     shipwindow.ui \
     startworkwindow.ui \
+    statusdlg.ui \
     treeitemsform.ui \
     usersetdlg.ui \
     worktodlg.ui
