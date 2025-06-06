@@ -63,6 +63,8 @@ CardProdWindow::CardProdWindow(Items *_device, QWidget *parent)
     ui->lbNumber2->setText(device->number2);
     ui->lbType->setText(device->type.typeName);
     ui->lbVNFT->setText(device->type.VNFT);
+    ui->lbNumDoc->setText(device->numberDoc);
+    ui->lbDescript->setText(device->descript);
 
     LoadShipping();
     number = device->number;

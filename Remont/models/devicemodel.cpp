@@ -83,17 +83,31 @@ void DeviceModel::fetchMore(const QModelIndex &/*parent*/)
 
     if(!isBaseOff)
     {
-        int resLoad = listDev->LoadPart(startLoad, cntLoad, number, vStatus, isBusy, hasParent);
-
-        if(resLoad > 0)
+        if(isSearch)
         {
-            beginInsertRows(QModelIndex(), startLoad, startLoad + resLoad - 1);
-            endInsertRows();
-        }
-
-        startLoad += resLoad;
-        if(resLoad < cntLoad || resLoad == 0)
             isFetch = false;
+            // qDebug() << "fetchMore Search";
+            bool res = listDev->loadSearch(opt);
+            if(res && listDev->items.size() > 0)
+            {
+                beginInsertRows(QModelIndex(), 0, listDev->items.size() - 1);
+                endInsertRows();
+            }
+        }
+        else
+        {
+            int resLoad = listDev->LoadPart(startLoad, cntLoad, number, vStatus, isBusy, hasParent);
+
+            if(resLoad > 0)
+            {
+                beginInsertRows(QModelIndex(), startLoad, startLoad + resLoad - 1);
+                endInsertRows();
+            }
+
+            startLoad += resLoad;
+            if(resLoad < cntLoad || resLoad == 0)
+                isFetch = false;
+        }
     }
 }
 
@@ -245,6 +259,22 @@ void DeviceModel::DeleteItemFromList(int row)
     beginRemoveRows(QModelIndex(), row, row);
     listDev->DeleteItemFromList(row);
     endRemoveRows();
+}
+
+//------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------
+void DeviceModel::prepareSearch(optionSearch &options)
+{
+    // qDebug() << "DeviceModel::prepareSearch";
+
+    beginResetModel();
+    opt = options;
+    isSearch = true;
+    isBaseOff = false;
+    isFetch = true;
+    listDev->items.clear();
+    endResetModel();
 }
 
 

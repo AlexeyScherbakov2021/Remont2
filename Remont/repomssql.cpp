@@ -1290,6 +1290,141 @@ int RepoMSSQL::LoadPartAll(int start, int count, const QString &number, QList<It
 
 }
 
+//------------------------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------------------------
+bool RepoMSSQL::loadSearch(optionSearch &opt, QList<Items> &listItems)
+{
+    bool res = false;
+    QStringList slStatus;
+    QSqlQuery query(db);
+    QStringList slWhere;
+    // QStringList slShip1;
+    // QStringList slShip2;
+
+    QString sqlNumber2 = " number2 like :number2 ";
+    QString sqlnumDoc = " numberDoc like :numberDoc ";
+    QString sqlName = " nameItem like :nameItem ";
+    QString sqlDescr = " descript like :descript ";
+
+    QString sqlSchet = " (s1.c_schet like :c_schet or s2.c_schet like :c_schet)";
+    QString sqlDog = " (s1.c_dogovor like :c_dogovor or s2.c_dogovor like :c_dogovor)";
+    QString sqlObjInst = " (s1.c_objectInstall like :c_objectInstall or s2.c_objectInstall like :c_objectInstall)";
+    QString sqlNumUPD = " (s1.c_numberUPD like :c_numberUPD or s2.c_numberUPD like :c_numberUPD)";
+    QString sqlOrder = " so.s_orderNum like :s_orderNum ";
+
+    QStringList sql = {"select i.id,idParent,idShip,idSet,idType,number,number2,numberDoc,nameItem,i.dateCreate,dateOn,"
+                    "dateOff,i.garantMonth,dateGarant,isZip,it.typeName,sd.NameStatus,it.indexType,it.VNFT,it.garantMonth,"
+                    "ist.dateStatus,ist.idStatus,ist.comment,sd.TypeStatus,i.descript "
+                    "from items i "
+                    "join ItemType it on it.id=i.idType "
+                    "join (select idItem, max(DateStatus) dateStatus from ItemStatus group by idItem "
+                    ") ms on ms.idItem=i.id "
+                    "join ItemStatus ist on ist.idItem=ms.idItem and ist.dateStatus=ms.dateStatus "
+                    "join StatusDevice sd on sd.id=ist.idStatus "
+                    "left join SetterOut so on so.id=i.idSet "
+                    "left join Shipment s1 on s1.id=so.idShipment "
+                    "left join Shipment s2 on s2.id=i.idShip "
+                       };
+
+    if(!opt.cardOrder.isEmpty())
+        slWhere.push_back(sqlOrder);
+
+    if(!opt.schet.isEmpty())
+        slWhere.push_back(sqlSchet);
+
+    if(!opt.dogovor.isEmpty())
+        slWhere.push_back(sqlDog);
+
+    if(!opt.objInstall.isEmpty())
+        slWhere.push_back(sqlObjInst);
+
+    if(!opt.numRelease.isEmpty())
+        slWhere.push_back(sqlNumUPD);
+
+
+    if(!opt.number2.isEmpty())
+        slWhere.push_back(sqlNumber2);
+
+    if(!opt.numberDoc.isEmpty())
+        slWhere.push_back(sqlnumDoc);
+
+    if(!opt.name.isEmpty())
+        slWhere.push_back(sqlName);
+
+    if(!opt.descript.isEmpty())
+        slWhere.push_back(sqlDescr);
+
+    if(slWhere.size() > 0)
+    {
+        sql.push_back("where ");
+        sql.push_back(slWhere.join(" and "));
+    }
+    else
+        return res;
+
+    sql.push_back(" order by number");
+
+    QString sql2 = sql.join("");
+
+    query.prepare(sql2);
+
+    // qDebug() << slWhere;
+
+    query.bindValue(":number2", QString("%%1%").arg(opt.number2));
+    query.bindValue(":numberDoc", QString("%%1%").arg(opt.numberDoc));
+    query.bindValue(":nameItem", QString("%%1%").arg(opt.name));
+    query.bindValue(":descript", QString("%%1%").arg(opt.descript));
+    query.bindValue(":c_schet", QString("%%1%").arg(opt.schet));
+    query.bindValue(":c_dogovor", QString("%%1%").arg(opt.dogovor));
+    query.bindValue(":c_objectInstall", QString("%%1%").arg(opt.objInstall));
+    query.bindValue(":c_numberUPD", QString("%%1%").arg(opt.numRelease));
+    query.bindValue(":s_orderNum", QString("%%1%").arg(opt.cardOrder));
+
+    res = query.exec();
+    while(query.next())
+    {
+        Items item;
+
+        item.id = query.value(0).toInt();
+        item.idParent = query.value(1).toInt();
+        item.idShip = query.value(2).toInt();
+        item.idSet = query.value(3).toInt();
+        item.idType = query.value(4).toInt();
+        item.number = query.value(5).toString();
+        item.number2 = query.value(6).toString();
+        item.numberDoc = query.value(7).toString();
+        item.name = query.value(8).toString();
+        item.dateCreate = query.value(9).toDateTime();
+        item.dateOn = query.value(10).toDateTime();
+        item.dateOff = query.value(11).toDateTime();
+        item.garantMonth = query.value(12).toInt();
+        item.dateGarant = query.value(13).toDateTime();
+        item.isZip = query.value(14).toBool();
+        item.type.typeName = query.value(15).toString();
+        item.currStatus = query.value(16).toString();
+        item.type.indexType = (IndexType)query.value(17).toInt();
+        item.type.VNFT = query.value(18).toString();
+        item.type.garantMonth = query.value(19).toInt();
+        item.descript = query.value(24).toString();
+        item.VNFT = item.type.VNFT;
+        item.type.id = item.idType;
+
+        Status status;
+        status.idItem = item.id;
+        status.dateStatus = query.value(20).toDateTime();
+        status.idStatus = (StatusItem)query.value(21).toInt();
+        status.Comment = query.value(22).toString();
+        status.typeStatus = query.value(23).toInt();
+        status.nameStatus = item.currStatus;
+        item.listStatus.push_back(status);
+
+        listItems.push_back(item);
+    }
+
+    return res;
+}
+
 
 //------------------------------------------------------------------------------------------------------
 //

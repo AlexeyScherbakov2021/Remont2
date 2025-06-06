@@ -193,3 +193,9 @@ void ListDevice::AddItemToList(Items *item)
 {
     items.push_back(*item);
 }
+
+bool ListDevice::loadSearch(optionSearch &opt)
+{
+    // items.clear();
+    return repo.loadSearch(opt, items);
+}

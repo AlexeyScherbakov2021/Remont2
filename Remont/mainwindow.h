@@ -67,6 +67,8 @@ private slots:
 
     void on_aEditor_triggered();
 
+    void on_aSearchDevice_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;

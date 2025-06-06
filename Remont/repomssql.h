@@ -22,6 +22,19 @@ class Organization;
 class Items;
 class Users;
 
+struct optionSearch {
+    QString numberDoc;
+    QString number2;
+    QString name;
+    QString descript;
+    QString cardOrder;
+    QString schet;
+    QString dogovor;
+    QString objInstall;
+    QString numRelease;
+};
+
+
 class RepoMSSQL
 {
 private:
@@ -40,6 +53,8 @@ public:
 
     int LoadPartAll(int start, int count, const QString &number,
                     QList<Items> &listItems, QVector<StatusItem>& listStatus, bool isBusy = false, LoadPartType hasParent = LoadPartType::NO_HAS_PARENT) const;
+
+    bool loadSearch(optionSearch &opt, QList<Items> &listItems);
 
     bool AddItem(Items &item) const;
     bool UpdateItem(Items &item);

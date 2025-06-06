@@ -68,6 +68,7 @@ SOURCES += \
     repofp.cpp \
     repomssql.cpp \
     scan.cpp \
+    searchdevdlg.cpp \
     selectdevicewindow.cpp \
     setterdlg.cpp \
     settereditdlg.cpp \
@@ -136,6 +137,7 @@ HEADERS += \
     repofp.h \
     repomssql.h \
     scan.h \
+    searchdevdlg.h \
     selectdevicewindow.h \
     setterdlg.h \
     settereditdlg.h \
@@ -171,6 +173,7 @@ FORMS += \
     qrwindow.ui \
     remontwindow.ui \
     scan.ui \
+    searchdevdlg.ui \
     selectdevicewindow.ui \
     setterdlg.ui \
     settereditdlg.ui \

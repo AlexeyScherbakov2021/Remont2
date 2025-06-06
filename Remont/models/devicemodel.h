@@ -7,6 +7,7 @@
 #include <QAbstractTableModel>
 #include <infrastructure/IStatus.h>
 
+
 class DeviceModel : public QAbstractTableModel
 {
     Q_OBJECT
@@ -42,8 +43,11 @@ public:
     Items* GetItem(int row);
     Items* GetItem(QModelIndex *index);
     bool DeleteItem(int row);
-    void DeleteItemFromListId(int id) ;
-    void DeleteItemFromList(int row) ;
+    void DeleteItemFromListId(int id);
+    void DeleteItemFromList(int row);
+
+    void prepareSearch(optionSearch &opt);
+    bool isSearch = false;
 
     void createList(IndexType);
 
@@ -66,6 +70,8 @@ private:
     bool isBusy = false;
     LoadPartType hasParent = LoadPartType::NO_HAS_PARENT;
     bool isBaseOff = false;
+
+    optionSearch opt;
 
 };
 

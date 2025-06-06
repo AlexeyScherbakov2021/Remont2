@@ -41,11 +41,8 @@ public:
     Items* GetItemAtRow(int row) override;
 
     void AddItemToList(Items* item) override;
-    // size_t LoadPart(int start, int count, const QString &number, int status = 0, bool isBusy = false, bool isParent = false)
-    // {
-    //     return repo.LoadPart(start, count, typeDev, number, items, status, isBusy, isParent);
-    // }
 
+    bool loadSearch(optionSearch &opt);
 
 };
 

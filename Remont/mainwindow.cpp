@@ -29,6 +29,7 @@
 #include "changemoduldlg.h"
 #include "worktodlg.h"
 #include "editdevicedlg.h"
+#include "searchdevdlg.h"
 #include <models/listdevice.h>
 #include <models/ItemsType.h>
 #include <infrastructure/users.h>
@@ -644,6 +645,16 @@ void MainWindow::on_aTO_triggered()
 void MainWindow::on_aEditor_triggered()
 {
     EditDeviceDlg *win = new EditDeviceDlg(this);
+    win->exec();
+}
+
+
+//----------------------------------------------------------------------------------------------
+// Поиск устройств по критериям
+//----------------------------------------------------------------------------------------------
+void MainWindow::on_aSearchDevice_triggered()
+{
+    SearchDevDlg *win = new SearchDevDlg(this);
     win->exec();
 }
 

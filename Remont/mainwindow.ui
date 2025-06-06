@@ -230,6 +230,7 @@ background-color: LightGray;
      <string>Отчеты</string>
     </property>
     <addaction name="aCardDevice"/>
+    <addaction name="aSearchDevice"/>
    </widget>
    <widget class="QMenu" name="menu_6">
     <property name="title">
@@ -461,6 +462,11 @@ background-color: LightGray;
   <action name="aEditor">
    <property name="text">
     <string>Редактор</string>
+   </property>
+  </action>
+  <action name="aSearchDevice">
+   <property name="text">
+    <string>Поиск устройств</string>
    </property>
   </action>
  </widget>
