@@ -5,7 +5,7 @@ ListPlate::ListPlate() : ListDevice(IndexType::Plate) { /*qDebug() << "construct
 
 void ListPlate::GetHeader(QStringList& headers)
 {
-    headers << "" << "Номер" << "№ прошивки" << "Обозначение" << "Дата регистрации" << "Документ" << "Статус";
+    headers << "" << "Номер" << "№ прошивки" << "Тип" << "Обозначение" << "Дата регистрации" << "Документ" << "Статус";
 }
 
 
@@ -39,15 +39,18 @@ QVariant ListPlate::getData(int row, int col, int role) const
             var = item.number2;
             break;
         case 3:
-            var = item.VNFT;
+            var = item.type.typeName;
             break;
         case 4:
-            var = item.dateCreate.toString("dd.MM.yyyy");
+            var = item.VNFT;
             break;
         case 5:
-            var = item.numberDoc;
+            var = item.dateCreate.toString("dd.MM.yyyy");
             break;
         case 6:
+            var = item.numberDoc;
+            break;
+        case 7:
             var = item.currStatus;
             break;
         }
@@ -62,7 +65,7 @@ QVariant ListPlate::getData(int row, int col, int role) const
             item.GetInfo(nameType, nameIcon);
             var = QIcon(nameIcon);
         }
-        if(col == 6)
+        if(col == 7)
         {
             if(item.idParent > 0)
                 var = QIcon("://image/Apply24x24.png");
@@ -114,19 +117,22 @@ void ListPlate::setData(int row, int col, const QVariant value, int role) const
     {
         switch(col)
         {
-        case 0:
+        case 1:
             item->number = value.toString();
             break;
-        case 1:
+        case 2:
             item->number2 = value.toString();
             break;
-        case 2:
+        // case 2:
+        //     item-> = value.toString();
+        //     break;
+        case 4:
             item->VNFT = value.toString();
             break;
-        case 3:
+        case 5:
             item->dateCreate = value.toDateTime();
             break;
-        case 4:
+        case 6:
             item->numberDoc = value.toString();
             break;
 

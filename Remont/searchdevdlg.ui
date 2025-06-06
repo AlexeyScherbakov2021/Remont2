@@ -207,11 +207,11 @@
         </size>
        </property>
        <property name="text">
-        <string>Отменить</string>
+        <string>Закрыть</string>
        </property>
        <property name="icon">
         <iconset resource="resource.qrc">
-         <normaloff>:/image/cancel2.png</normaloff>:/image/cancel2.png</iconset>
+         <normaloff>:/image/Exit.png</normaloff>:/image/Exit.png</iconset>
        </property>
        <property name="iconSize">
         <size>

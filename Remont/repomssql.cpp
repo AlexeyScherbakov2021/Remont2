@@ -2067,7 +2067,7 @@ void RepoMSSQL::LoadRemontReason(QMap<int, QString> &listReason)
 //------------------------------------------------------------------------------------------------------
 // Загрузка предварительных причин ремонта
 //------------------------------------------------------------------------------------------------------
-void RepoMSSQL::LoadRemontPrevReason(QMap<int, QString> &listReason)
+void RepoMSSQL::LoadRemontPrevReason(QMap<QString, int> &listReason)
 {
     listReason.clear();
     QSqlQuery query(db);
@@ -2076,8 +2076,26 @@ void RepoMSSQL::LoadRemontPrevReason(QMap<int, QString> &listReason)
     query.exec();
     while(query.next())
     {
-        listReason.insert(query.value(0).toInt(), query.value(1).toString());
+        listReason.insert(query.value(1).toString(), query.value(0).toInt());
     }
+}
+
+//------------------------------------------------------------------------------------------------------
+// Удаление ремонта
+//------------------------------------------------------------------------------------------------------
+bool RepoMSSQL::DeleteRemont(int id)
+{
+    bool res;
+    QSqlQuery query(db);
+
+    query.prepare("delete from Remont where id=:id");
+    query.bindValue(":id", id);
+    res = query.exec();
+
+    if(!res)
+        qDebug() << "Ошибка при удалении записи в Remont";
+
+    return res;
 }
 
 //------------------------------------------------------------------------------------------------------
@@ -2108,12 +2126,13 @@ bool RepoMSSQL::AddRemont(Remont &remont)
     bool res;
     QSqlQuery query(db);
 
-    query.prepare("insert into Remont (idItem,idClaim,dateStart) "
-              "output inserted.id values(:idItem,:idClaim,:dateStart)");
+    query.prepare("insert into Remont (idItem,idClaim,dateStart,idPrevReason) "
+              "output inserted.id values(:idItem,:idClaim,:dateStart,:idPrevReason)");
     query.bindValue(":idItem", remont.idItem);
 
     query.bindValue(":idClaim", remont.idClaim);
     query.bindValue(":dateStart", remont.startDate);
+    query.bindValue(":idPrevReason", remont.idPrevReason);
 
     res = query.exec();
 

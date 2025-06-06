@@ -97,7 +97,7 @@ void workTODlg::on_pbFirmware_clicked()
 
     Items dev = repo.GetItem(sel.first);
 
-    if(sel.second == IndexType::Plate)
+    if(sel.second == IndexType::Plate || sel.second == IndexType::Modul)
     {
         PlateFWWindow *win = new PlateFWWindow(this, &dev);
         win->exec();

@@ -119,6 +119,7 @@ void CreateProductWindow::on_pbRegProduct_clicked()
     // prod.garantMonth = listTypeProduct[ui->cbProduct->currentIndex()].garantMonth;
     prod.numberDoc = ui->leNumberDocP->text();
     prod.number2 = ui->leNumber2->text();
+    prod.descript = ui->leDescript->text();
 
     if(repo.AddItem(prod))
     {

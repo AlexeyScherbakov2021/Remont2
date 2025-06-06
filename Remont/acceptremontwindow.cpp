@@ -50,27 +50,27 @@ void AcceptRemontWindow::on_pbApply_clicked()
                 .arg(device.type.typeName).arg(device.number).arg(device.type.VNFT));
 
     // Добавление в ремонт изделия, если есть
-    Items parent = repo.GetItem(device.idParent);
-    while(parent.id > 0)
-    {
-        Remont remontParent = repo.GetRemontForItem(parent.id, claim.id);
-        if(remontParent.id == 0)
-        {
-            // создаем в ремонте, если не было
-            remontParent.idClaim = claim.id;
-            remontParent.idItem = parent.id;
-            remontParent.startDate = ui->deDate->dateTime();
-            repo.AddRemont(remontParent);
-        }
-        parent = repo.GetItem(parent.idParent);
-    }
+    // Items parent = repo.GetItem(device.idParent);
+    // while(parent.id > 0)
+    // {
+    //     Remont remontParent = repo.GetRemontForItem(parent.id, claim.id);
+    //     if(remontParent.id == 0)
+    //     {
+    //         // создаем в ремонте, если не было
+    //         remontParent.idClaim = claim.id;
+    //         remontParent.idItem = parent.id;
+    //         remontParent.startDate = ui->deDate->dateTime();
+    //         repo.AddRemont(remontParent);
+    //     }
+    //     parent = repo.GetItem(parent.idParent);
+    // }
 
-    // Добавление в ремонт
-    Remont remont;
-    remont.idClaim = claim.id;
-    remont.idItem = device.id;
-    remont.startDate = ui->deDate->dateTime();
-    repo.AddRemont(remont);
+    // // Добавление в ремонт
+    // Remont remont;
+    // remont.idClaim = claim.id;
+    // remont.idItem = device.id;
+    // remont.startDate = ui->deDate->dateTime();
+    // repo.AddRemont(remont);
 
     ui->lbDevice->clear();
     ui->lbNumber->clear();

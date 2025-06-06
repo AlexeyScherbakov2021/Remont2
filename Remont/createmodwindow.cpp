@@ -119,6 +119,7 @@ void CreateModulWindow::on_pbRegModul_clicked()
     mod.garantMonth = type->garantMonth;
     mod.numberDoc = ui->leNumberDoc->text();
     mod.number2 = ui->leNumber2->text();
+    mod.descript = ui->leDescript->text();
 
     if(repo.AddItem(mod))
     {
@@ -126,9 +127,6 @@ void CreateModulWindow::on_pbRegModul_clicked()
         stat.idStatus = StatusItem::CREATE;
         stat.numberDoc = ui->leNumberDoc->text();
         mod.AddStatus(mod, stat);
-        // mod.AddStatus(mod, StatusItem::CREATE);
-
-        // addLineModul(mod);
 
         ui->leNumModul->clear();
         ui->leNumModul->setFocus();

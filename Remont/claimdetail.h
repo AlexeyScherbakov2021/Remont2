@@ -35,9 +35,11 @@ private:
     QSet<int> listAddId;
     TrackRecord<Items> trackProduct;
     RepoMSSQL repo;
+    QMap<int,int> listPrevId;
 
     void ClaimToScreen();
     void AddProductToTableScreen(const Items *prod);
+    void AddPrevReason(const Items *prod);
 
 };
 

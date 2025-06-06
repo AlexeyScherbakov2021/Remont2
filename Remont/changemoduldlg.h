@@ -27,6 +27,8 @@ private:
     Items *brokenDev;
     Items newDev;
     RepoMSSQL repo;
+    QMap<QString, int> listReason;
+
 
 };
 

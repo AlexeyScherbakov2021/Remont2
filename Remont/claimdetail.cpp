@@ -4,7 +4,9 @@
 #include "ui_claimdetail.h"
 #include <qmessagebox.h>
 #include <models/organization.h>
+#include <models/remont.h>
 #include <QClipboard>
+#include <QInputDialog>
 #include <QtConcurrent>
 
 ClaimDetail::ClaimDetail(Claim *cl, QWidget *parent)
@@ -86,6 +88,31 @@ void ClaimDetail::on_pbOK_clicked()
         {
             it.AddStatus(it, StatusItem::FAULTY_ON_OBJECT);
 
+            // Добавление в ремонт
+            Remont remont;
+            remont.idClaim = claim->id;
+            remont.idItem = it.id;
+            remont.startDate = claim->dateCreate;
+            remont.idPrevReason = listPrevId.value(it.id);
+            repo.AddRemont(remont);
+
+            // Добавление в ремонт изделия, если есть
+            Items parent = repo.GetItem(it.idParent);
+            while(parent.id > 0)
+            {
+                Remont remontParent = repo.GetRemontForItem(parent.id, claim->id);
+                if(remontParent.id == 0)
+                {
+                    // создаем в ремонте, если не было
+                    remontParent.idClaim = claim->id;
+                    remontParent.idItem = parent.id;
+                    remontParent.startDate = claim->dateCreate;
+                    repo.AddRemont(remontParent);
+                }
+                parent = repo.GetItem(parent.idParent);
+            }
+
+
             // установка статуса для родителей
             Items dev = it;
             while(dev.idParent > 0)
@@ -106,16 +133,21 @@ void ClaimDetail::on_pbOK_clicked()
         {
             it.DeleteLastStatus(it, StatusItem::FAULTY_ON_OBJECT);
 
+            Remont remont = repo.GetRemontForItem(it.id, claim->id);
+            if(remont.id != 0)
+            {
+                repo.DeleteRemont(remont.id);
+            }
+
             // удаление статуса для родителей
             Items dev = it;
             while(dev.idParent > 0)
             {
                 dev = repo.GetItem(dev.idParent);
-                dev.DeleteLastStatus(dev, StatusItem::FAULTY_ON_OBJECT);
+                dev.DeleteLastStatus(dev, StatusItem::FAULTY_CHILD);
             }
         }
     }
-
     accept();
 }
 
@@ -189,12 +221,40 @@ void ClaimDetail::AddProductToTableScreen(const Items *prod)
 
 }
 
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
+void ClaimDetail::AddPrevReason(const Items *prod)
+{
+    QMap<QString, int> listReason;
+    repo.LoadRemontPrevReason(listReason);
+
+    QStringList sl;
+    bool ok;
+
+    for(auto it = listReason.cbegin(); it != listReason.cend(); ++it)
+        sl << it.key();
+
+    QString s = QInputDialog::getItem(this, "Укажите предварительную причину", "Предварительная причина", sl, 0, false, &ok);
+
+    if(ok)
+    {
+        listPrevId.insert(prod->id, listReason[s]);
+    }
+
+    // qDebug() << s << ok << listReason[s];
+
+}
+
 
 //-----------------------------------------------------------------------------------------
 // Кнопка добавления устройства
 //-----------------------------------------------------------------------------------------
 void ClaimDetail::on_tbAddDevice_clicked()
 {
+    if(claim->isClosed)
+        return;
+
     SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
     win->AddSelectedType(IndexType::Modul);
     win->ExcludeDevice(listAddId);
@@ -210,6 +270,8 @@ void ClaimDetail::on_tbAddDevice_clicked()
             return;
         }
 
+        AddPrevReason(dev);
+
         AddProductToTableScreen(dev);
         trackProduct.AddRecord(*dev);
         listAddId.insert(dev->id);
@@ -221,6 +283,9 @@ void ClaimDetail::on_tbAddDevice_clicked()
 //-----------------------------------------------------------------------------------------
 void ClaimDetail::on_tbDeleteDevice_clicked()
 {
+    if(claim->isClosed)
+        return;
+
     QTableWidgetItem *item = ui->tableWidget->item(ui->tableWidget->currentRow(), 0);
     if(item == nullptr)
         return;

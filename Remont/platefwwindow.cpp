@@ -90,7 +90,7 @@ void PlateFWWindow::on_pbApply_clicked()
     {
         Items* dev = model->GetItem(row);
         mapPrevFW.insert(dev->id, dev->number2);
-        model->setData(model->index(row, 1), numberFW);
+        model->setData(model->index(row, 2), numberFW);
     }
 
 }
@@ -101,7 +101,7 @@ void PlateFWWindow::on_pbOK_clicked()
     for(int row = 0; row < model->rowCount(); ++row)
     {
         Items* dev = model->GetItem(row);
-        dev->AddStatus(*dev, StatusItem::CHANGE_FW, QString("Предыдущая прошивка: %1").arg(mapPrevFW.value(dev->id)));
+        // dev->AddStatus(*dev, StatusItem::CHANGE_FW, QString("Предыдущая прошивка: %1").arg(mapPrevFW.value(dev->id)));
         model->UpdateItem(row);
     }
 

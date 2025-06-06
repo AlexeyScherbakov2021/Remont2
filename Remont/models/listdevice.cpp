@@ -120,18 +120,21 @@ QVariant ListDevice::getData(int row, int col, int role) const
             var = item.number;
             break;
         case 2:
-            var = item.type.typeName;
+            var = item.number2;
             break;
         case 3:
-            var = item.type.VNFT;
+            var = item.type.typeName;
             break;
         case 4:
-            var = item.name;
+            var = item.type.VNFT;
             break;
         case 5:
-            var = item.dateCreate.toString("dd.MM.yyyy");
+            var = item.name;
             break;
         case 6:
+            var = item.dateCreate.toString("dd.MM.yyyy");
+            break;
+        case 7:
             var = item.currStatus;
             break;
         }
@@ -163,7 +166,7 @@ void ListDevice::setData(int, int, const QVariant, int) const
 //-----------------------------------------------------------------------------
 void ListDevice::GetHeader(QStringList &headers)
 {
-    headers << "" << "Номер" << "Тип" << "Обозначение" << "Наименование" << "Дата рег." << "Статус";
+    headers << "" << "Номер" << "№ шкафа/прош." << "Тип" << "Обозначение" << "Наименование" << "Дата рег." << "Статус";
 }
 
 

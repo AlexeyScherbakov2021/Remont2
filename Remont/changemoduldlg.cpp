@@ -20,6 +20,11 @@ ChangeModulDlg::ChangeModulDlg(Items* dev, QWidget *parent)
     ui->lbType->setText(dev->type.typeName);
     ui->lbVNFT->setText(dev->type.VNFT);
 
+    repo.LoadRemontPrevReason(listReason);
+
+    for(auto it = listReason.cbegin(); it != listReason.cend(); ++it)
+        ui->cbPrevReason->addItem(it.key(), it.value());
+
     Items parentDev = repo.GetItem(dev->idParent);
     ui->wTree->AddItem(&parentDev);
     ui->wTree->SetSelectItem(dev->id, dev->type.indexType);
@@ -76,6 +81,15 @@ void ChangeModulDlg::on_pbOK_clicked()
     repo.UpdateItem(*brokenDev);
 
     claim.CheckAndClose();
+
+
+    // Добавление в ремонт
+    // Remont remont;
+    // remont.idClaim = claim.id;
+    // remont.idItem = brokenDev.id;
+    // remont.startDate = claim.dateCreate;
+    // remont.idPrevReason = listPrevId.value(it.id);
+    // repo.AddRemont(remont);
 
     QMessageBox::information(this, "Сообщение", QString("%1 №%2 %3 земенен.")
             .arg(brokenDev->type.typeName).arg(brokenDev->number).arg(brokenDev->type.VNFT));
