@@ -88,29 +88,31 @@ void ClaimDetail::on_pbOK_clicked()
         {
             it.AddStatus(it, StatusItem::FAULTY_ON_OBJECT);
 
-            // Добавление в ремонт
-            Remont remont;
-            remont.idClaim = claim->id;
-            remont.idItem = it.id;
-            remont.startDate = claim->dateCreate;
-            remont.idPrevReason = listPrevId.value(it.id);
-            repo.AddRemont(remont);
+            Remont::AddRemont(claim->id, &it, listPrevId.value(it.id), claim->dateCreate);
 
-            // Добавление в ремонт изделия, если есть
-            Items parent = repo.GetItem(it.idParent);
-            while(parent.id > 0)
-            {
-                Remont remontParent = repo.GetRemontForItem(parent.id, claim->id);
-                if(remontParent.id == 0)
-                {
-                    // создаем в ремонте, если не было
-                    remontParent.idClaim = claim->id;
-                    remontParent.idItem = parent.id;
-                    remontParent.startDate = claim->dateCreate;
-                    repo.AddRemont(remontParent);
-                }
-                parent = repo.GetItem(parent.idParent);
-            }
+            // Добавление в ремонт
+            // Remont remont;
+            // remont.idClaim = claim->id;
+            // remont.idItem = it.id;
+            // remont.startDate = claim->dateCreate;
+            // remont.idPrevReason = listPrevId.value(it.id);
+            // repo.AddRemont(remont);
+
+            // // Добавление в ремонт изделия, если есть
+            // Items parent = repo.GetItem(it.idParent);
+            // while(parent.id > 0)
+            // {
+            //     Remont remontParent = repo.GetRemontForItem(parent.id, claim->id);
+            //     if(remontParent.id == 0)
+            //     {
+            //         // создаем в ремонте, если не было
+            //         remontParent.idClaim = claim->id;
+            //         remontParent.idItem = parent.id;
+            //         remontParent.startDate = claim->dateCreate;
+            //         repo.AddRemont(remontParent);
+            //     }
+            //     parent = repo.GetItem(parent.idParent);
+            // }
 
 
             // установка статуса для родителей

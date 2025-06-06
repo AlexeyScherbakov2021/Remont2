@@ -17,6 +17,9 @@ RemontWindow::RemontWindow(QWidget *parent)
 
 }
 
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
 RemontWindow::~RemontWindow()
 {
     delete ui;
@@ -33,8 +36,13 @@ void RemontWindow::on_pbOK_clicked()
 
     device.AddStatus(device, StatusItem::REMONT, ui->deDate->dateTime());
 
+    Remont remont = repo.GetCurrentRemontForItem(device.id);
+    Q_ASSERT(remont.id > 0);
+    remont.startDate = ui->deDate->dateTime();
+    repo.UpdateRemont(remont);
+
     QMessageBox::information(this, "Сообщение", QString("%1 №%2 %3 принят в ремонт.")
-                                                    .arg(device.type.typeName).arg(device.number).arg(device.type.VNFT));
+            .arg(device.type.typeName).arg(device.number).arg(device.type.VNFT));
 
     ui->lbDevice->clear();
     ui->lbNumber->clear();
@@ -60,6 +68,9 @@ void RemontWindow::on_tbNumber_clicked()
     }
 }
 
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
 void RemontWindow::slotReadScan(QString s)
 {
     if(isActiveWindow())
@@ -73,11 +84,12 @@ void RemontWindow::slotReadScan(QString s)
     }
 }
 
-
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
 void RemontWindow::AddDevice(Items *dev)
 {
     device = *dev;
-    claim = repo.GetClaimForItem(dev->id);
 
     QString nameType, iconName;
     dev->GetInfo(nameType, iconName);
@@ -86,8 +98,13 @@ void RemontWindow::AddDevice(Items *dev)
     ui->lbTypeName->setText(dev->type.typeName);
     ui->lbDevice->setToolTip(nameType);
     ui->lbDevice->setPixmap(QPixmap(iconName));
-    ui->lbOrgName->setText(claim.nameOrganization);
-    ui->lbClaim->setText(claim.number + " (" + claim.dateCreate.toString("dd.MM.yyyy") + ")");
+
+    claim = repo.GetClaimForItem(dev->id);
+    if(claim.id > 0)
+    {
+        ui->lbOrgName->setText(claim.nameOrganization);
+        ui->lbClaim->setText(claim.number + " (" + claim.dateCreate.toString("dd.MM.yyyy") + ")");
+    }
     ui->leNumber->clear();
 
 }

@@ -25,7 +25,7 @@ enum StatusItem : int {
     END_WORK,           // утилизирован
     EXCHANGE,           // Был заменен
     FAULTY_CHILD,       // Неисправны комплектующие
-    CHANGE_FW           // замена прошивки
+    EXCHANGE_TO         // замена по ТО
 };
 
 

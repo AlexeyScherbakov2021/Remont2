@@ -54,6 +54,7 @@ SOURCES += \
     models/listshipment.cpp \
     models/modelproxy.cpp \
     models/modelvnft.cpp \
+    models/remont.cpp \
     models/settermodel.cpp \
     models/shipmodel.cpp \
     otkactiondlg.cpp \

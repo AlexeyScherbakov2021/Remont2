@@ -6,6 +6,8 @@
 
 #include <QMessageBox>
 
+#include <models/remont.h>
+
 workTODlg::workTODlg(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::workTO)
@@ -71,7 +73,7 @@ void workTODlg::on_pbExchange_clicked()
     Items dev = repo.GetItem(sel.first);
     if(sel.second == IndexType::Modul || sel.second == IndexType::Plate)
     {
-        ChangeModulDlg *win = new ChangeModulDlg(&dev, this);
+        ChangeModulDlg *win = new ChangeModulDlg(&dev, this, true);
         if(win->exec() == QDialog::Accepted)
         {
             ui->treeDevice->Clear();
@@ -81,6 +83,10 @@ void workTODlg::on_pbExchange_clicked()
                 parent = repo.GetItem(dev.idParent);
             ui->treeDevice->AddItem(&parent);
             ui->treeDevice->SetSelectItem(dev.id, dev.type.indexType);
+
+            Remont remont = repo.GetCurrentRemontForItem(dev.id);
+            remont.regDate = ui->dateEdit->dateTime();
+            repo.UpdateRemont(remont);
         }
     }
 }

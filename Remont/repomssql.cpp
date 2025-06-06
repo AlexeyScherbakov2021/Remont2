@@ -2126,10 +2126,14 @@ bool RepoMSSQL::AddRemont(Remont &remont)
     bool res;
     QSqlQuery query(db);
 
-    query.prepare("insert into Remont (idItem,idClaim,dateStart,idPrevReason) "
+    if(remont.idClaim == 0)
+        query.prepare("insert into Remont (idItem,dateStart,idPrevReason) "
+                "output inserted.id values(:idItem,:dateStart,:idPrevReason)");
+    else
+        query.prepare("insert into Remont (idItem,idClaim,dateStart,idPrevReason) "
               "output inserted.id values(:idItem,:idClaim,:dateStart,:idPrevReason)");
-    query.bindValue(":idItem", remont.idItem);
 
+    query.bindValue(":idItem", remont.idItem);
     query.bindValue(":idClaim", remont.idClaim);
     query.bindValue(":dateStart", remont.startDate);
     query.bindValue(":idPrevReason", remont.idPrevReason);
@@ -2223,6 +2227,36 @@ Remont RepoMSSQL::GetRemontForItem(int idItem, int idClaim)
                       "from Remont where endDate is null and idItem=:idItem and idClaim=:idClaim");
     query.bindValue(":idItem", idItem);
     query.bindValue(":idClaim", idClaim);
+
+    query.exec();
+    if(query.next())
+    {
+        rem.id = query.value(0).toInt();
+        rem.idItem = query.value(1).toInt();
+        rem.idClaim = query.value(2).toInt();
+        rem.idReason = query.value(3).toInt();
+        rem.startDate = query.value(4).toDateTime();
+        rem.action = query.value(5).toString();
+        rem.defect = query.value(6).toString();
+        rem.remark = query.value(7).toString();
+        rem.endDate = query.value(8).toDateTime();
+        rem.regDate = query.value(9).toDateTime();
+        rem.idPrevReason = query.value(10).toInt();
+    }
+    return rem;
+}
+
+//------------------------------------------------------------------------------------------------------
+// Загрузка текущего ремонта для id
+//------------------------------------------------------------------------------------------------------
+Remont RepoMSSQL::GetCurrentRemontForItem(int idItem)
+{
+    QSqlQuery query(db);
+    Remont rem;
+
+    query.prepare("select id,idItem,idClaim,idReason,dateStart,Action,Defect,Remark,endDate,regDate,idPrevReason "
+                  "from Remont where endDate is null and idItem=:idItem ");
+    query.bindValue(":idItem", idItem);
 
     query.exec();
     if(query.next())

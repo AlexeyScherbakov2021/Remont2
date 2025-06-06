@@ -5,8 +5,9 @@
 #include <QMessageBox>
 
 #include <models/claim.h>
+#include <models/remont.h>
 
-ChangeModulDlg::ChangeModulDlg(Items* dev, QWidget *parent)
+ChangeModulDlg::ChangeModulDlg(Items* dev, QWidget *parent, bool isTO)
     : QDialog(parent)
     , ui(new Ui::ChangeModulDlg), brokenDev(dev)
 {
@@ -20,10 +21,21 @@ ChangeModulDlg::ChangeModulDlg(Items* dev, QWidget *parent)
     ui->lbType->setText(dev->type.typeName);
     ui->lbVNFT->setText(dev->type.VNFT);
 
-    repo.LoadRemontPrevReason(listReason);
+    if(isTO)
+    {
+        statItem = StatusItem::EXCHANGE_TO;
+        repo.LoadRemontPrevReason(listReason);
 
-    for(auto it = listReason.cbegin(); it != listReason.cend(); ++it)
-        ui->cbPrevReason->addItem(it.key(), it.value());
+        for(auto it = listReason.cbegin(); it != listReason.cend(); ++it)
+            ui->cbPrevReason->addItem(it.key(), it.value());
+
+        // ui->cbPrevReason->setCurrentIndex(-1);
+    }
+    else
+    {
+        ui->cbPrevReason->setVisible(false);
+        ui->lbReason->setVisible(false);
+    }
 
     Items parentDev = repo.GetItem(dev->idParent);
     ui->wTree->AddItem(&parentDev);
@@ -58,7 +70,8 @@ void ChangeModulDlg::on_tbSearch_clicked()
 void ChangeModulDlg::on_pbOK_clicked()
 {
     QString comment = "на № %1";
-    brokenDev->AddStatus(*brokenDev, StatusItem::EXCHANGE, comment.arg(newDev.number), brokenDev->idParent);
+
+    brokenDev->AddStatus(*brokenDev, statItem, comment.arg(newDev.number), brokenDev->idParent);
     newDev.AddStatus(newDev, StatusItem::INSTALL, QString("замена № %1").arg(brokenDev->number));
     newDev.AddStatus(newDev, StatusItem::WORK);
     newDev.idParent = brokenDev->idParent;
@@ -75,21 +88,20 @@ void ChangeModulDlg::on_pbOK_clicked()
         parent = repo.GetItem(parent.idParent);
     } while(parent.idParent > 0);
 
-    Claim claim = repo.GetClaimForItem(brokenDev->id);
 
     brokenDev->idParent = 0;
     repo.UpdateItem(*brokenDev);
 
-    claim.CheckAndClose();
-
+    Claim claim = repo.GetClaimForItem(brokenDev->id);
+    if(claim.id > 0)
+        claim.CheckAndClose();
 
     // Добавление в ремонт
-    // Remont remont;
-    // remont.idClaim = claim.id;
-    // remont.idItem = brokenDev.id;
-    // remont.startDate = claim.dateCreate;
-    // remont.idPrevReason = listPrevId.value(it.id);
-    // repo.AddRemont(remont);
+    if(statItem == StatusItem::EXCHANGE_TO)
+    {
+        int idReason = ui->cbPrevReason->currentData().toInt();
+        Remont::AddRemont(0, brokenDev, idReason, QDateTime::currentDateTime());
+    }
 
     QMessageBox::information(this, "Сообщение", QString("%1 №%2 %3 земенен.")
             .arg(brokenDev->type.typeName).arg(brokenDev->number).arg(brokenDev->type.VNFT));

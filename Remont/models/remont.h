@@ -1,6 +1,8 @@
 #ifndef REMONT_H
 #define REMONT_H
 
+#include "Items.h"
+
 #include <QDateTime>
 #include <QString>
 
@@ -21,6 +23,11 @@ public:
     QDateTime endDate;
     QString nameReason;
     QString namePrevReason;
+
+    static void AddRemont(int idClaim, Items* item, int idPrevReason, QDateTime dateCreate);
 };
+
+
+
 
 #endif // REMONT_H

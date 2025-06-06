@@ -14,12 +14,11 @@ class ChangeModulDlg : public QDialog
     Q_OBJECT
 
 public:
-    explicit ChangeModulDlg(Items* dev, QWidget *parent = nullptr);
+    explicit ChangeModulDlg(Items* dev, QWidget *parent = nullptr, bool isTO = false);
     ~ChangeModulDlg();
 
 private slots:
     void on_tbSearch_clicked();
-
     void on_pbOK_clicked();
 
 private:
@@ -28,7 +27,7 @@ private:
     Items newDev;
     RepoMSSQL repo;
     QMap<QString, int> listReason;
-
+    StatusItem statItem = StatusItem::EXCHANGE;
 
 };
 

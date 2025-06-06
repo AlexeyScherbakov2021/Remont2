@@ -90,19 +90,22 @@ void AcceptRemontWindow::on_tbNumber_clicked()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
     win->AddSelectedType(IndexType::Modul);
-    Items *dev = win->SelectDevice(true, {StatusItem::FAULTY_ON_OBJECT, StatusItem::EXCHANGE}, ui->leNumber->text(), true, LoadPartType::ANY_PARENT );
+    Items *dev = win->SelectDevice(true, {StatusItem::FAULTY_ON_OBJECT, StatusItem::EXCHANGE_TO}, ui->leNumber->text(), true, LoadPartType::ANY_PARENT );
     if(dev != nullptr && dev->id > 0)
     {
         AddDevice(dev);
     }
 }
 
+//-------------------------------------------------------------------------------------------------
+//
+//-------------------------------------------------------------------------------------------------
 void AcceptRemontWindow::slotReadScan(QString s)
 {
     if(isActiveWindow())
     {
         ui->leNumber->setText(s);
-        Items item = repo.GetItem2(s, {StatusItem::FAULTY_ON_OBJECT}, true, true);
+        Items item = repo.GetItem2(s, {StatusItem::FAULTY_ON_OBJECT, StatusItem::EXCHANGE_TO}, true, true);
         if(item.id > 0)
         {
             AddDevice(&item);
@@ -110,6 +113,9 @@ void AcceptRemontWindow::slotReadScan(QString s)
     }
 }
 
+//-------------------------------------------------------------------------------------------------
+//
+//-------------------------------------------------------------------------------------------------
 void AcceptRemontWindow::AddDevice(Items *dev)
 {
     device = *dev;
