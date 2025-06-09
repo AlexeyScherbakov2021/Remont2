@@ -34,7 +34,7 @@ void EditDeviceDlg::on_tbSearch_clicked()
     win->AddSelectedType(IndexType::Modul);
     win->AddSelectedType(IndexType::Plate);
     QVector<StatusItem> stat;
-    Items *dev = win->SelectDevice(false, stat, "", true, LoadPartType::ANY_PARENT);
+    Items *dev = win->SelectDevice(true, stat, ui->leSearch->text(), true, LoadPartType::ANY_PARENT);
     if(dev != nullptr)
     {
         // qDebug() << dev->number;

@@ -62,8 +62,9 @@ void EndRemontWindow::on_pbEndRemont_clicked()
     // repo.SetEndWorkClaim(device.id, claim.id);
 
     // внести изменения в таблицы ремонтов
-    Remont rem = repo.GetRemontForItem(device.id, claim.id);
-    Q_ASSERT(rem.id != 0);
+    // Remont rem = repo.GetRemontForItem(device.id, claim.id);
+    Remont rem = repo.GetCurrentRemontForItem(device.id);
+    Q_ASSERT(rem.id > 0);
     Q_ASSERT(ui->cbReason->currentData(Qt::UserRole) != QVariant());
 
     rem.action = ui->leAction->text();

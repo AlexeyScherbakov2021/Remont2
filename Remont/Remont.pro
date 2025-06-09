@@ -4,7 +4,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++20
 
-VERSION = 1.1.0.7
+VERSION = 1.1.0.9
 QMAKE_TARGET_COMPANY = NGK
 QMAKE_TARGET_PRODUCT = ReestrNumbers
 QMAKE_TARGET_DESCRIPTION = Reestr Numbers

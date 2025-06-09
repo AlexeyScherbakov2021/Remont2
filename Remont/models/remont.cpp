@@ -1,7 +1,7 @@
 #include "remont.h"
 
 
-void Remont::AddRemont(int idClaim, Items* item, int idPrevReason, QDateTime dateCreate)
+void Remont::AddRemont(int idClaim, Items* item, int idPrevReason, QDateTime regDate)
 {
     RepoMSSQL repo;
 
@@ -9,7 +9,7 @@ void Remont::AddRemont(int idClaim, Items* item, int idPrevReason, QDateTime dat
     Remont remont;
     remont.idClaim = idClaim;
     remont.idItem = item->id;
-    remont.startDate = dateCreate;
+    remont.regDate = regDate;
     remont.idPrevReason = idPrevReason;
     repo.AddRemont(remont);
 
@@ -23,7 +23,7 @@ void Remont::AddRemont(int idClaim, Items* item, int idPrevReason, QDateTime dat
             // создаем в ремонте, если не было
             remontParent.idClaim = idClaim;
             remontParent.idItem = parent.id;
-            remontParent.startDate = dateCreate;
+            remontParent.regDate = regDate;
             repo.AddRemont(remontParent);
         }
         parent = repo.GetItem(parent.idParent);

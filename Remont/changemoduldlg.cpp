@@ -72,7 +72,7 @@ void ChangeModulDlg::on_pbOK_clicked()
     QString comment = "на № %1";
 
     brokenDev->AddStatus(*brokenDev, statItem, comment.arg(newDev.number), brokenDev->idParent);
-    newDev.AddStatus(newDev, StatusItem::INSTALL, QString("замена № %1").arg(brokenDev->number));
+    newDev.AddStatus(newDev, StatusItem::INSTALL, QString("замена № %1").arg(brokenDev->number), brokenDev->id);
     newDev.AddStatus(newDev, StatusItem::WORK);
     newDev.idParent = brokenDev->idParent;
     repo.UpdateItem(newDev);
@@ -87,7 +87,6 @@ void ChangeModulDlg::on_pbOK_clicked()
 
         parent = repo.GetItem(parent.idParent);
     } while(parent.idParent > 0);
-
 
     brokenDev->idParent = 0;
     repo.UpdateItem(*brokenDev);

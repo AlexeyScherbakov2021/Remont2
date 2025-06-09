@@ -90,7 +90,7 @@ void AcceptRemontWindow::on_tbNumber_clicked()
 {
     SelectDeviceWindow *win = new SelectDeviceWindow(IndexType::Product, this);
     win->AddSelectedType(IndexType::Modul);
-    Items *dev = win->SelectDevice(true, {StatusItem::FAULTY_ON_OBJECT, StatusItem::EXCHANGE_TO}, ui->leNumber->text(), true, LoadPartType::ANY_PARENT );
+    Items *dev = win->SelectDevice(true, {StatusItem::FAULTY_ON_OBJECT, StatusItem::EXCHANGE_TO, StatusItem::EXCHANGE}, ui->leNumber->text(), true, LoadPartType::ANY_PARENT );
     if(dev != nullptr && dev->id > 0)
     {
         AddDevice(dev);

@@ -77,12 +77,13 @@ void workTODlg::on_pbExchange_clicked()
         if(win->exec() == QDialog::Accepted)
         {
             ui->treeDevice->Clear();
+            // Items parent = dev;
+            // while(parent.idParent > 0)
+            //     parent = repo.GetItem(dev.idParent);
+            // ui->treeDevice->AddItem(&parent);
+            // ui->treeDevice->SetSelectItem(dev.id, dev.type.indexType);
 
-            Items parent = dev;
-            while(parent.idParent > 0)
-                parent = repo.GetItem(dev.idParent);
-            ui->treeDevice->AddItem(&parent);
-            ui->treeDevice->SetSelectItem(dev.id, dev.type.indexType);
+            ui->treeDevice->AddItem(&mainDev);
 
             Remont remont = repo.GetCurrentRemontForItem(dev.id);
             remont.regDate = ui->dateEdit->dateTime();
@@ -136,8 +137,36 @@ void workTODlg::on_pbGarantLong_clicked()
     if(QMessageBox::question(this, "Предупреждение", "Новый срок гарантии будет " + stringDate, QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
     {
         ui->lbGarant->setText(stringDate);
-        mainDev.dateGarant = newGarantDate;
+        // mainDev.dateGarant = newGarantDate;
+
+        if(mainDev.idSet > 0)
+        {
+            SetterOut setter = repo.GetSetter(mainDev.idSet);
+            repo.LoadChildSetter(setter);
+
+            for(auto &it : setter.childItems)
+            {
+                SetNewGarantDate(&it, newGarantDate);
+            }
+        }
+        else
+            SetNewGarantDate(&mainDev, newGarantDate);
+
+
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+// установка нового срока гарантии для устройства и его содержимого
+//--------------------------------------------------------------------------------------------------
+void workTODlg::SetNewGarantDate(Items *dev, QDateTime &date)
+{
+    dev->dateGarant = date;
+    repo.UpdateItem(*dev);
+
+    repo.LoadChildItems(dev->id, dev->childItems);
+    for(auto &it : dev->childItems)
+        SetNewGarantDate(&it, date);
 
 }
 

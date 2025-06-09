@@ -31,6 +31,8 @@ private:
     Items mainDev;
     SetterOut setter;
 
+    void SetNewGarantDate(Items *dev, QDateTime &date);
+
 };
 
 #endif // WORKTODLG_H

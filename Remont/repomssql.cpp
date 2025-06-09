@@ -1565,7 +1565,7 @@ bool RepoMSSQL::LoadHistoryChild(int idParent, QList<Items> &listItems) const
                   "from ItemStatus ist "
                   "join Items i on i.id=ist.idItem "
                   "join ItemType it on it.id=i.idType "
-                  "where linkField=:idParent  and idStatus=12 ");
+                  "where linkField=:idParent and (idStatus=12 or idStatus=14) ");
 
     query.bindValue(":idParent", idParent);
 
@@ -2127,15 +2127,15 @@ bool RepoMSSQL::AddRemont(Remont &remont)
     QSqlQuery query(db);
 
     if(remont.idClaim == 0)
-        query.prepare("insert into Remont (idItem,dateStart,idPrevReason) "
-                "output inserted.id values(:idItem,:dateStart,:idPrevReason)");
+        query.prepare("insert into Remont (idItem,regDate,idPrevReason) "
+                "output inserted.id values(:idItem,:regDate,:idPrevReason)");
     else
-        query.prepare("insert into Remont (idItem,idClaim,dateStart,idPrevReason) "
-              "output inserted.id values(:idItem,:idClaim,:dateStart,:idPrevReason)");
+        query.prepare("insert into Remont (idItem,idClaim,regDate,idPrevReason) "
+              "output inserted.id values(:idItem,:idClaim,:regDate,:idPrevReason)");
 
     query.bindValue(":idItem", remont.idItem);
     query.bindValue(":idClaim", remont.idClaim);
-    query.bindValue(":dateStart", remont.startDate);
+    query.bindValue(":regDate", remont.regDate);
     query.bindValue(":idPrevReason", remont.idPrevReason);
 
     res = query.exec();
@@ -2159,15 +2159,19 @@ bool RepoMSSQL::UpdateRemont(Remont &remont)
 {
     bool res;
     QSqlQuery query(db);
-        query.prepare("update Remont set idReason=:idReason,Action=:Action,Defect=:Defect,Remark=:Remark,endDate=:endDate "
+        query.prepare("update Remont set idReason=:idReason,Action=:Action,Defect=:Defect,Remark=:Remark,endDate=:endDate,dateStart=:dateStart "
                   "where id=:id");
 
     query.bindValue(":id", remont.id);
-    query.bindValue(":idReason", remont.idReason);
+
+    if(remont.idReason > 0)
+        query.bindValue(":idReason", remont.idReason);
+
     query.bindValue(":Action", remont.action);
     query.bindValue(":Defect", remont.defect);
     query.bindValue(":Remark", remont.remark);
     query.bindValue(":endDate", remont.endDate);
+    query.bindValue(":dateStart", remont.startDate);
     res = query.exec();
 
     if(!res)

@@ -493,6 +493,9 @@ void MainWindow::SetRoleEnv(Users &user)
     ui->aGenQR->setVisible(false);
     ui->aEditor->setVisible(false);
     ui->aRole->setVisible(user.id == 100500);
+    ui->aEnterWork->setVisible(false);
+    ui->aExchange->setVisible(false);
+    ui->aTO->setVisible(false);
 
     for(RolesType role : user.listRoles)
     {
@@ -587,9 +590,20 @@ void MainWindow::SetRoleEnv(Users &user)
         case RolesType::EditItems:
             ui->aEditor->setVisible(true);
             break;
+
+        case RolesType::Work_TO:
+            ui->aTO->setVisible(true);
+            break;
+
+        case RolesType::ExchangeModul:
+            ui->aExchange->setVisible(true);
+            break;
+
+        case RolesType::ToWorkAfterRemont:
+            ui->aEnterWork->setVisible(true);
+            break;
         }
     }
-
 }
 
 

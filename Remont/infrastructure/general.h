@@ -50,7 +50,9 @@ enum class RolesType : int {
     CardDevice,
     GenerateQR,
     EditItems,
-
+    Work_TO,
+    ExchangeModul,
+    ToWorkAfterRemont,
     COUNT_ROLES
 };
 
