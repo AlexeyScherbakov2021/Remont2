@@ -23,7 +23,16 @@ CreateProductWindow::CreateProductWindow(QWidget *parent)
     proxy.setFilterCaseSensitivity(Qt::CaseInsensitive);
     ui->cbProduct->setModel(&proxy);
     ui->cbProduct->setCurrentIndex(-1);
-    ui->cbProduct->lineEdit()->completer()->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
+
+    QCompleter *comp = new QCompleter(&proxy,ui->cbProduct);
+    comp->setModel(&proxy);
+    comp->setCaseSensitivity( Qt::CaseInsensitive );
+    comp->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+    ui->cbProduct->setCompleter(comp);
+    ui->cbProduct->setCurrentIndex(-1);
+    connect(ui->cbProduct->lineEdit(), &QLineEdit::textEdited, this, &CreateProductWindow::lineEdit_textEdited);
+
+    // ui->cbProduct->lineEdit()->completer()->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
 
     // repo.LoadNewItemsType(listTypeProduct, IndexType::Product);
     // for(auto &it : listTypeProduct)
@@ -238,7 +247,7 @@ void CreateProductWindow::on_tbDocP_clicked()
 
 
 
-void CreateProductWindow::on_cbProduct_editTextChanged(const QString &arg1)
+void CreateProductWindow::lineEdit_textEdited(const QString &arg1)
 {
     // qDebug() << arg1;
     proxy.setFilterFixedString(arg1);

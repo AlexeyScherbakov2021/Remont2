@@ -96,6 +96,7 @@ void SearchDevDlg::on_pbSearch_clicked()
     opt.numRelease = ui->cbRelease->isChecked() ? ui->leNumRelease->text() : "";
     opt.objInstall = ui->cbObjInst->isChecked() ? ui->leObjInstall->text() : "";
     opt.schet = ui->cbSchet->isChecked() ? ui->leSchet->text() : "";
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     model->prepareSearch(opt);
 }
 

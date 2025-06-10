@@ -19,25 +19,19 @@ CreateModulWindow::CreateModulWindow(QWidget *parent)
     ui->deCreateDate->setDateTime(QDateTime::currentDateTime());
 
     model.loadList(IndexType::Modul);
+
     proxy.setSourceModel(&model);
     proxy.sort(0);
     proxy.setFilterCaseSensitivity(Qt::CaseInsensitive);
     ui->cbModul->setModel(&proxy);
+
+    QCompleter *comp = new QCompleter(&proxy,ui->cbModul);
+    comp->setModel(&proxy);
+    comp->setCaseSensitivity( Qt::CaseInsensitive );
+    comp->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+    ui->cbModul->setCompleter(comp);
     ui->cbModul->setCurrentIndex(-1);
-    ui->cbModul->lineEdit()->completer()->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
-
-
-    // repo.LoadNewItemsType(listTypeModule, IndexType::Modul );
-
-    // for(auto &it : listTypeModule)
-    // {
-    //     QVariant var;
-    //     var.setValue(&it);
-    //     ui->cbModul->addItem(it.VNFT + " " + it.typeName, var);
-    // }
-
-    // ui->cbModul->view()->setMaximumWidth(900);
-    // ui->cbModul->setCurrentIndex(-1);
+    connect(ui->cbModul->lineEdit(), &QLineEdit::textEdited, this, &CreateModulWindow::lineEdit_textEdited);
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
 }
@@ -108,8 +102,10 @@ void CreateModulWindow::on_pbRegModul_clicked()
 
     QModelIndex index = proxy.index(ui->cbModul->currentIndex(), 0);
     index = proxy.mapToSource(index);
+
     ItemType *type = model.getType(index.row());
 
+    // ItemType *type = model.getType(ui->cbModul->currentIndex());
 
     mod.type = *type;
     mod.number = ui->leNumModul->text();
@@ -154,13 +150,14 @@ void CreateModulWindow::on_pbRegModul_clicked()
 //---------------------------------------------------------------------------------
 void CreateModulWindow::on_cbModul_currentIndexChanged(int index)
 {
-    if(index < 0)
+    // if(index < 0)
         return;
 
     // QVariant var = ui->cbModul->currentData();
     // ItemType *tp = var.value<ItemType*>();
 
     QModelIndex ind = proxy.mapToSource(proxy.index(index, 0));
+    // QModelIndex ind = model.index(index, 0);
     index = ind.row();
     ItemType *tp = model.getType(index);
 
@@ -239,8 +236,11 @@ void CreateModulWindow::on_tbDoc_clicked()
 }
 
 
-void CreateModulWindow::on_cbModul_editTextChanged(const QString &arg1)
+void CreateModulWindow::lineEdit_textEdited(const QString &arg1)
 {
+    // qDebug() << "до" << proxy.rowCount();
     proxy.setFilterFixedString(arg1);
+    // qDebug() << "после" << proxy.rowCount();
+
 }
 

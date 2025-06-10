@@ -458,152 +458,291 @@ void MainWindow::on_aNewShip_triggered()
 //----------------------------------------------------------------------------------------------
 void MainWindow::SetRoleEnv(Users &user)
 {
+    if(user.id == 100500)
+        return;
 
-    ui->aRegPlate->setVisible(false);
-    ui->aListPlate->setVisible(false);
-    ui->pbCreatePlate->setVisible(false);
-    ui->aReplaceFW->setVisible(false);
-    ui->aPlateVNFT->setVisible(false);
-    ui->aRegProduct->setVisible(false);
-    ui->pbRegister->setVisible(false);
-    ui->aRegModul->setVisible(false);
-    ui->aInstallModul->setVisible(false);
-    ui->pbComplect->setVisible(false);
-    ui->aControlOTK->setVisible(false);
-    ui->pbOTK->setVisible(false);
-    ui->aProdVNFT->setVisible(false);
-    ui->aModVNFT->setVisible(false);
-    ui->aSetter->setVisible(false);
-    ui->aNewShip->setVisible(false);
-    ui->aShipBefore->setVisible(false);
-    ui->aShipping->setVisible(false);
-    ui->pbShip->setVisible(false);
-    ui->aStartWork->setVisible(false);
-    ui->pbStartWork->setVisible(false);
-    ui->aClaim->setVisible(false);
-    ui->pbClaim->setVisible(false);
-    ui->aGetOSO->setVisible(false);
-    ui->pbApplyRemont->setVisible(false);
-    ui->aGetRepair->setVisible(false);
-    ui->pbStartRemont->setVisible(false);
-    ui->aEndRepair->setVisible(false);
-    ui->pbEndRemont->setVisible(false);
-    ui->aCardDevice->setVisible(false);
-    ui->pbCard->setVisible(false);
-    ui->aGenQR->setVisible(false);
-    ui->aEditor->setVisible(false);
-    ui->aRole->setVisible(user.id == 100500);
-    ui->aEnterWork->setVisible(false);
-    ui->aExchange->setVisible(false);
-    ui->aTO->setVisible(false);
+    ui->aRole->setVisible(false);
 
-    for(RolesType role : user.listRoles)
+    if(!user.listRoles.contains(RolesType::RegisterPlate))
     {
-        switch (role)
-        {
-        case RolesType::RegisterPlate:
-            ui->aRegPlate->setVisible(true);
-            ui->aListPlate->setVisible(true);
-            ui->pbCreatePlate->setVisible(true);
-            break;
-
-        case RolesType::FWPlate:
-            ui->aReplaceFW->setVisible(true);
-            break;
-
-        case RolesType::VNFTPlate:
-            ui->aPlateVNFT->setVisible(true);
-            break;
-
-        case RolesType::RegisterProd:
-            ui->aRegProduct->setVisible(true);
-            ui->pbRegister->setVisible(true);
-            break;
-
-        case RolesType::RegisterModul:
-            ui->aRegModul->setVisible(true);
-            break;
-
-        case RolesType::ComplectDevice:
-            ui->aInstallModul->setVisible(true);
-            ui->pbComplect->setVisible(true);
-            break;
-
-        case RolesType::CheckOTK:
-            ui->aControlOTK->setVisible(true);
-            ui->pbOTK->setVisible(true);
-            break;
-
-        case RolesType::VNFTProd:
-            ui->aProdVNFT->setVisible(true);
-            break;
-
-        case RolesType::VNFTModul:
-            ui->aModVNFT->setVisible(true);
-            break;
-
-        case RolesType::ComplectSetter:
-            ui->aSetter->setVisible(true);
-            break;
-
-        case RolesType::ComplectShip:
-            ui->aNewShip->setVisible(true);
-            ui->aShipBefore->setVisible(true);
-            ui->aShipping->setVisible(true);
-            ui->pbShip->setVisible(true);
-            break;
-
-        case RolesType::StartWork:
-            ui->aStartWork->setVisible(true);
-            ui->pbStartWork->setVisible(true);
-            break;
-
-        case RolesType::EditClaim:
-            ui->aClaim->setVisible(true);
-            ui->pbClaim->setVisible(true);
-            break;
-
-        case RolesType::ApplyOSO:
-            ui->aGetOSO->setVisible(true);
-            ui->pbApplyRemont->setVisible(true);
-            break;
-
-        case RolesType::ApplyRepair:
-            ui->aGetRepair->setVisible(true);
-            ui->pbStartRemont->setVisible(true);
-            break;
-
-        case RolesType::EndRepair:
-            ui->aEndRepair->setVisible(true);
-            ui->pbEndRemont->setVisible(true);
-            break;
-
-        case RolesType::CardDevice:
-            ui->aCardDevice->setVisible(true);
-            ui->pbCard->setVisible(true);
-            break;
-
-        case RolesType::GenerateQR:
-            ui->aGenQR->setVisible(true);
-            break;
-
-        case RolesType::EditItems:
-            ui->aEditor->setVisible(true);
-            break;
-
-        case RolesType::Work_TO:
-            ui->aTO->setVisible(true);
-            break;
-
-        case RolesType::ExchangeModul:
-            ui->aExchange->setVisible(true);
-            break;
-
-        case RolesType::ToWorkAfterRemont:
-            ui->aEnterWork->setVisible(true);
-            break;
-        }
+        delete ui->pbCreatePlate;
+        ui->aRegPlate->setVisible(false);
+        ui->aListPlate->setVisible(false);
     }
+
+    if(!user.listRoles.contains(RolesType::FWPlate))
+    {
+        ui->aReplaceFW->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::VNFTPlate))
+    {
+        ui->aPlateVNFT->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::RegisterProd))
+    {
+        delete ui->pbRegister;
+        ui->aRegProduct->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::RegisterModul))
+    {
+        ui->aRegModul->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::ComplectDevice))
+    {
+        delete ui->pbComplect;
+        ui->aInstallModul->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::CheckOTK))
+    {
+        delete ui->pbOTK;
+        ui->aControlOTK->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::VNFTProd))
+    {
+        ui->aProdVNFT->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::VNFTModul))
+    {
+        ui->aModVNFT->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::ComplectSetter))
+    {
+        ui->aSetter->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::ComplectShip))
+    {
+        delete ui->pbShip;
+        ui->aNewShip->setVisible(false);
+        ui->aShipBefore->setVisible(false);
+        ui->aShipping->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::StartWork))
+    {
+        delete ui->pbStartWork;
+        ui->aStartWork->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::EditClaim))
+    {
+        delete ui->pbClaim;
+        ui->aClaim->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::ApplyOSO))
+    {
+        delete ui->pbApplyRemont;
+        ui->aGetOSO->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::ApplyRepair))
+    {
+        delete ui->pbStartRemont;
+        ui->aGetRepair->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::EndRepair))
+    {
+        delete ui->pbEndRemont;
+        ui->aEndRepair->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::CardDevice))
+    {
+        delete ui->pbCard;
+        ui->aCardDevice->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::GenerateQR))
+    {
+        ui->aGenQR->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::EditItems))
+    {
+        ui->aEditor->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::Work_TO))
+    {
+        ui->aTO->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::ExchangeModul))
+    {
+        ui->aExchange->setVisible(false);
+    }
+
+    if(!user.listRoles.contains(RolesType::ToWorkAfterRemont))
+    {
+        ui->aEnterWork->setVisible(false);
+    }
+
+    // if(!user.listRoles.contains(RolesType::))
+    // {
+    //     delete ui->;
+    //     ui->->setVisible(false);
+    // }
+
+
+    // return;
+
+    // ui->aRegPlate->setVisible(false);
+    // ui->aListPlate->setVisible(false);
+    // ui->pbCreatePlate->setVisible(false);
+    // ui->aReplaceFW->setVisible(false);
+    // ui->aPlateVNFT->setVisible(false);
+    // ui->aRegProduct->setVisible(false);
+    // ui->pbRegister->setVisible(false);
+    // ui->aRegModul->setVisible(false);
+    // ui->aInstallModul->setVisible(false);
+    // ui->pbComplect->setVisible(false);
+    // ui->aControlOTK->setVisible(false);
+    // ui->pbOTK->setVisible(false);
+    // ui->aProdVNFT->setVisible(false);
+    // ui->aModVNFT->setVisible(false);
+    // ui->aSetter->setVisible(false);
+    // ui->aNewShip->setVisible(false);
+    // ui->aShipBefore->setVisible(false);
+    // ui->aShipping->setVisible(false);
+    // ui->pbShip->setVisible(false);
+    // ui->aStartWork->setVisible(false);
+    // ui->pbStartWork->setVisible(false);
+    // ui->aClaim->setVisible(false);
+    // ui->pbClaim->setVisible(false);
+    // ui->aGetOSO->setVisible(false);
+    // ui->pbApplyRemont->setVisible(false);
+    // ui->aGetRepair->setVisible(false);
+    // ui->pbStartRemont->setVisible(false);
+    // ui->aEndRepair->setVisible(false);
+    // ui->pbEndRemont->setVisible(false);
+    // ui->aCardDevice->setVisible(false);
+    // ui->pbCard->setVisible(false);
+    // ui->aGenQR->setVisible(false);
+    // ui->aEditor->setVisible(false);
+    // ui->aRole->setVisible(user.id == 100500);
+    // ui->aEnterWork->setVisible(false);
+    // ui->aExchange->setVisible(false);
+    // ui->aTO->setVisible(false);
+
+    // for(RolesType role : user.listRoles)
+    // {
+    //     switch (role)
+    //     {
+    //     case RolesType::RegisterPlate:
+    //         ui->aRegPlate->setVisible(true);
+    //         ui->aListPlate->setVisible(true);
+    //         ui->pbCreatePlate->setVisible(true);
+    //         delete ui->pbCreatePlate;
+    //         break;
+
+    //     case RolesType::FWPlate:
+    //         ui->aReplaceFW->setVisible(true);
+    //         break;
+
+    //     case RolesType::VNFTPlate:
+    //         ui->aPlateVNFT->setVisible(true);
+    //         break;
+
+    //     case RolesType::RegisterProd:
+    //         ui->aRegProduct->setVisible(true);
+    //         ui->pbRegister->setVisible(true);
+    //         delete ui->pbRegister;
+    //         break;
+
+    //     case RolesType::RegisterModul:
+    //         ui->aRegModul->setVisible(true);
+    //         break;
+
+    //     case RolesType::ComplectDevice:
+    //         ui->aInstallModul->setVisible(true);
+    //         ui->pbComplect->setVisible(true);
+    //         break;
+
+    //     case RolesType::CheckOTK:
+    //         ui->aControlOTK->setVisible(true);
+    //         ui->pbOTK->setVisible(true);
+    //         break;
+
+    //     case RolesType::VNFTProd:
+    //         ui->aProdVNFT->setVisible(true);
+    //         break;
+
+    //     case RolesType::VNFTModul:
+    //         ui->aModVNFT->setVisible(true);
+    //         break;
+
+    //     case RolesType::ComplectSetter:
+    //         ui->aSetter->setVisible(true);
+    //         break;
+
+    //     case RolesType::ComplectShip:
+    //         ui->aNewShip->setVisible(true);
+    //         ui->aShipBefore->setVisible(true);
+    //         ui->aShipping->setVisible(true);
+    //         ui->pbShip->setVisible(true);
+    //         break;
+
+    //     case RolesType::StartWork:
+    //         ui->aStartWork->setVisible(true);
+    //         ui->pbStartWork->setVisible(true);
+    //         break;
+
+    //     case RolesType::EditClaim:
+    //         ui->aClaim->setVisible(true);
+    //         ui->pbClaim->setVisible(true);
+    //         break;
+
+    //     case RolesType::ApplyOSO:
+    //         ui->aGetOSO->setVisible(true);
+    //         ui->pbApplyRemont->setVisible(true);
+    //         break;
+
+    //     case RolesType::ApplyRepair:
+    //         ui->aGetRepair->setVisible(true);
+    //         ui->pbStartRemont->setVisible(true);
+    //         break;
+
+    //     case RolesType::EndRepair:
+    //         ui->aEndRepair->setVisible(true);
+    //         ui->pbEndRemont->setVisible(true);
+    //         break;
+
+    //     case RolesType::CardDevice:
+    //         ui->aCardDevice->setVisible(true);
+    //         ui->pbCard->setVisible(true);
+    //         break;
+
+    //     case RolesType::GenerateQR:
+    //         ui->aGenQR->setVisible(true);
+    //         break;
+
+    //     case RolesType::EditItems:
+    //         ui->aEditor->setVisible(true);
+    //         break;
+
+    //     case RolesType::Work_TO:
+    //         ui->aTO->setVisible(true);
+    //         break;
+
+    //     case RolesType::ExchangeModul:
+    //         ui->aExchange->setVisible(true);
+    //         break;
+
+    //     case RolesType::ToWorkAfterRemont:
+    //         ui->aEnterWork->setVisible(true);
+    //         break;
+    //     }
+    // }
 }
 
 

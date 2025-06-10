@@ -33,8 +33,7 @@ private slots:
     void on_cbModul_currentIndexChanged(int index);
     void slotReadScan(QString s);
     void on_tbDoc_clicked();
-
-    void on_cbModul_editTextChanged(const QString &arg1);
+    void lineEdit_textEdited(const QString &arg1);
 
 private:
     Ui::CreateModulWindow *ui;

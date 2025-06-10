@@ -20,7 +20,17 @@ PlateWindow::PlateWindow(QWidget *parent)
     proxy.setFilterCaseSensitivity(Qt::CaseInsensitive);
     ui->cbVNFT->setModel(&proxy);
     ui->cbVNFT->setCurrentIndex(-1);
-    ui->cbVNFT->lineEdit()->completer()->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
+
+    QCompleter *comp = new QCompleter(&proxy,ui->cbVNFT);
+    comp->setModel(&proxy);
+    comp->setCaseSensitivity( Qt::CaseInsensitive );
+    comp->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+    ui->cbVNFT->setCompleter(comp);
+    ui->cbVNFT->setCurrentIndex(-1);
+    connect(ui->cbVNFT->lineEdit(), &QLineEdit::textEdited, this, &PlateWindow::lineEdit_textEdited);
+
+
+    // ui->cbVNFT->lineEdit()->completer()->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
 
     // repo.LoadItemsType(listVNFT, IndexType::Plate);
 
@@ -224,7 +234,7 @@ void PlateWindow::on_tbDoc_clicked()
 }
 
 
-void PlateWindow::on_cbVNFT_editTextChanged(const QString &arg1)
+void PlateWindow::lineEdit_textEdited(const QString &arg1)
 {
     proxy.setFilterFixedString(arg1);
 }

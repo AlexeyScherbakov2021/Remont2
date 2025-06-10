@@ -28,6 +28,9 @@ private slots:
     void on_tbDelete_clicked();
     void on_leNumber_textChanged(const QString &arg1);
     void on_listWidget_currentRowChanged(int currentRow);
+    void slotReadScan(QString s);
+    void on_tbDoc_clicked();
+    void lineEdit_textEdited(const QString &arg1);
 
 private:
     Ui::PlateWindow *ui;
@@ -43,10 +46,6 @@ private:
     QSortFilterProxyModel proxy;
 
 
-private slots:
-    void slotReadScan(QString s);
-    void on_tbDoc_clicked();
-    void on_cbVNFT_editTextChanged(const QString &arg1);
 };
 
 #endif // PLATEWINDOW_H

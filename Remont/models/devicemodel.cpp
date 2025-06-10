@@ -4,6 +4,7 @@
 #include "listmodul.h"
 #include "listproduct.h"
 
+#include <QApplication>
 #include <QIcon>
 
 DeviceModel::DeviceModel(IndexType type, QObject *parent)
@@ -93,6 +94,7 @@ void DeviceModel::fetchMore(const QModelIndex &/*parent*/)
                 beginInsertRows(QModelIndex(), 0, listDev->items.size() - 1);
                 endInsertRows();
             }
+            QApplication::restoreOverrideCursor();
         }
         else
         {
