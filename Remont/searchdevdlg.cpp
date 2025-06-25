@@ -42,6 +42,29 @@ SearchDevDlg::SearchDevDlg(QWidget *parent)
 
     ui->tableView->setContextMenuPolicy(Qt::ActionsContextMenu);
 
+    connect(ui->leCardOrder, &QLineEdit::textChanged, this, &SearchDevDlg::UpdateButtonEnabled);
+    connect(ui->leNumber2, &QLineEdit::textChanged, this, &SearchDevDlg::UpdateButtonEnabled);
+    connect(ui->leNumDoc, &QLineEdit::textChanged, this, &SearchDevDlg::UpdateButtonEnabled);
+    connect(ui->leName, &QLineEdit::textChanged, this, &SearchDevDlg::UpdateButtonEnabled);
+    connect(ui->leDescript, &QLineEdit::textChanged, this, &SearchDevDlg::UpdateButtonEnabled);
+    connect(ui->leSchet, &QLineEdit::textChanged, this, &SearchDevDlg::UpdateButtonEnabled);
+    connect(ui->leDogovor, &QLineEdit::textChanged, this, &SearchDevDlg::UpdateButtonEnabled);
+    connect(ui->leObjInstall, &QLineEdit::textChanged, this, &SearchDevDlg::UpdateButtonEnabled);
+    connect(ui->leNumRelease, &QLineEdit::textChanged, this, &SearchDevDlg::UpdateButtonEnabled);
+
+    connect(ui->cbCardOrder, &QCheckBox::toggled, this, &SearchDevDlg::UpdateButtonEnabled);
+    connect(ui->cbNumber2, &QCheckBox::toggled, this, &SearchDevDlg::UpdateButtonEnabled);
+    connect(ui->cbNumDoc, &QCheckBox::toggled, this, &SearchDevDlg::UpdateButtonEnabled);
+    connect(ui->cbName, &QCheckBox::toggled, this, &SearchDevDlg::UpdateButtonEnabled);
+    connect(ui->cbDescript, &QCheckBox::toggled, this, &SearchDevDlg::UpdateButtonEnabled);
+    connect(ui->cbSchet, &QCheckBox::toggled, this, &SearchDevDlg::UpdateButtonEnabled);
+    connect(ui->cbDog, &QCheckBox::toggled, this, &SearchDevDlg::UpdateButtonEnabled);
+    connect(ui->cbObjInst, &QCheckBox::toggled, this, &SearchDevDlg::UpdateButtonEnabled);
+    connect(ui->cbRelease, &QCheckBox::toggled, this, &SearchDevDlg::UpdateButtonEnabled);
+
+    connect(ui->tableView->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &SearchDevDlg::UpdateButtonEnabled);
+
+    UpdateButtonEnabled();
 
 }
 
@@ -69,6 +92,7 @@ void SearchDevDlg::on_pbSelect_clicked()
     {
         CardProdWindow *win = new CardProdWindow(dev, this);
         win->exec();
+        UpdateButtonEnabled();
     }
 }
 
@@ -78,6 +102,30 @@ void SearchDevDlg::on_pbSelect_clicked()
 void SearchDevDlg::on_tableView_doubleClicked(const QModelIndex &index)
 {
     on_pbSelect_clicked();
+}
+
+//-------------------------------------------------------------------------------------------
+//
+//-------------------------------------------------------------------------------------------
+void SearchDevDlg::UpdateButtonEnabled()
+{
+    bool enable;
+    if(ui->tableView->selectionModel() != nullptr)
+    {
+        enable = ui->tableView->selectionModel()->currentIndex() != QModelIndex();
+        ui->pbSelect->setEnabled(enable);
+    }
+
+    enable = (!ui->leCardOrder->text().isEmpty() && ui->cbCardOrder->isChecked())
+             || (!ui->leDescript->text().isEmpty() && ui->cbDescript->isChecked())
+             || (!ui->leNumber2->text().isEmpty() && ui->cbNumber2->isChecked())
+             || (!ui->leNumDoc->text().isEmpty() && ui->cbNumDoc->isChecked())
+             || (!ui->leName->text().isEmpty() && ui->cbName->isChecked())
+             || (!ui->leSchet->text().isEmpty() && ui->cbSchet->isChecked())
+             || (!ui->leDogovor->text().isEmpty() && ui->cbDog->isChecked())
+             || (!ui->leObjInstall->text().isEmpty() && ui->cbObjInst->isChecked())
+             || (!ui->leNumRelease->text().isEmpty() && ui->cbRelease->isChecked());
+    ui->pbSearch->setEnabled(enable);
 }
 
 
@@ -98,6 +146,7 @@ void SearchDevDlg::on_pbSearch_clicked()
     opt.schet = ui->cbSchet->isChecked() ? ui->leSchet->text() : "";
     QApplication::setOverrideCursor(Qt::WaitCursor);
     model->prepareSearch(opt);
+    UpdateButtonEnabled();
 }
 
 

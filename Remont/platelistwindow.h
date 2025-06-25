@@ -33,6 +33,7 @@ private slots:
     void on_rbAll_clicked();
     void on_pbSelect_clicked();
     void slotReadScan(QString s);
+    void UpdateButtonEnabled();
 
 private:
     Ui::PlateListWindow *ui;
@@ -46,6 +47,8 @@ private:
     void startLoad();
     void UpdateForm();
     DeviceModel *model;
+
+
 };
 
 #endif // PLATELISTWINDOW_H

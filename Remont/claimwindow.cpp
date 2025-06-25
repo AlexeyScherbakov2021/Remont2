@@ -19,6 +19,9 @@ ClaimWindow::ClaimWindow(QWidget *parent)
     ui->twClaim->setColumnWidth(2,300);
     ui->twClaim->setColumnWidth(3,300);
 
+    UpdateButtonEnabled();
+
+    connect(ui->twClaim->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &ClaimWindow::UpdateButtonEnabled);
     // QStringList header;
     // claims.GetHeader(header);
 
@@ -59,6 +62,7 @@ void ClaimWindow::on_pbAdd_clicked()
         // if(repo.AddItem(claim))
         // if(claim.id > 0)
         //     claims.listItems.push_back(claim);
+        UpdateButtonEnabled();
     }
 }
 
@@ -66,8 +70,8 @@ void ClaimWindow::on_pbAdd_clicked()
 //----------------------------------------------------------------------------------------
 // Добавить рекламацию строку в таблицу
 //----------------------------------------------------------------------------------------
-int ClaimWindow::AddLineScreen(const Claim */*claim*/)
-{
+// int ClaimWindow::AddLineScreen(const Claim */*claim*/)
+// {
     // int row = ui->twClaim->rowCount();
     // ui->twClaim->insertRow(row);
 
@@ -141,7 +145,16 @@ int ClaimWindow::AddLineScreen(const Claim */*claim*/)
     // item->setText(claim->DateOut.toString("dd.MM.yyyy"));
     // ui->twClaim->setItem(row, 7, item);
 
-    return 0;
+    // return 0;
+// }
+
+//---------------------------------------------------------------------------
+// Включение кнопок
+//---------------------------------------------------------------------------
+void ClaimWindow::UpdateButtonEnabled()
+{
+    ui->pbEdit->setEnabled(ui->twClaim->currentIndex().row() >= 0);
+    ui->pbDelete->setEnabled(ui->twClaim->currentIndex().row() >= 0);
 }
 
 //----------------------------------------------------------------------------------------

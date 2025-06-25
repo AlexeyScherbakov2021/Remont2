@@ -28,6 +28,7 @@ PlateWindow::PlateWindow(QWidget *parent)
     ui->cbVNFT->setCompleter(comp);
     ui->cbVNFT->setCurrentIndex(-1);
     connect(ui->cbVNFT->lineEdit(), &QLineEdit::textEdited, this, &PlateWindow::lineEdit_textEdited);
+    connect(ui->cbVNFT, &QComboBox::currentIndexChanged, this, &PlateWindow::UpdateButtonEnabled);
 
 
     // ui->cbVNFT->lineEdit()->completer()->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
@@ -104,7 +105,6 @@ void PlateWindow::on_pbAdd_clicked()
         ++countUse;
         UpdateUseCount();
     }
-
 }
 
 
@@ -134,7 +134,7 @@ void PlateWindow::on_tbDelete_clicked()
 //-----------------------------------------------------------------------------------------------------
 void PlateWindow::on_leNumber_textChanged(const QString &arg1)
 {
-    ui->pbAdd->setEnabled(!arg1.isEmpty());
+    UpdateButtonEnabled();
 }
 
 
@@ -234,8 +234,19 @@ void PlateWindow::on_tbDoc_clicked()
 }
 
 
+//-----------------------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------------------
 void PlateWindow::lineEdit_textEdited(const QString &arg1)
 {
     proxy.setFilterFixedString(arg1);
+}
+
+//-----------------------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------------------
+void PlateWindow::UpdateButtonEnabled()
+{
+    ui->pbAdd->setEnabled(!ui->leNumber->text().isEmpty() && ui->cbVNFT->currentIndex() >= 0);
 }
 

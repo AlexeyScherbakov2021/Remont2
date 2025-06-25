@@ -27,8 +27,8 @@ private slots:
     void on_pbDeleteModul_clicked();
     void on_pbOK_clicked();
     void slotReadScan(QString s);
-
     void on_tbClear_clicked();
+    void UpdateButtonEnabled();
 
 private:
     Ui::ComplectProductWindow *ui;

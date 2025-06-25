@@ -19,6 +19,7 @@ AcceptRemontWindow::AcceptRemontWindow(QWidget *parent)
     ui->deDate->setDateTime(QDateTime::currentDateTime());
     connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
+    UpdateButtonEnabled();
 }
 
 AcceptRemontWindow::~AcceptRemontWindow()
@@ -80,6 +81,8 @@ void AcceptRemontWindow::on_pbApply_clicked()
     ui->lbTypeName->clear();
     device.id = 0;
 
+    UpdateButtonEnabled();
+
 }
 
 
@@ -94,6 +97,7 @@ void AcceptRemontWindow::on_tbNumber_clicked()
     if(dev != nullptr && dev->id > 0)
     {
         AddDevice(dev);
+        UpdateButtonEnabled();
     }
 }
 
@@ -109,6 +113,7 @@ void AcceptRemontWindow::slotReadScan(QString s)
         if(item.id > 0)
         {
             AddDevice(&item);
+            UpdateButtonEnabled();
         }
     }
 }
@@ -134,5 +139,13 @@ void AcceptRemontWindow::AddDevice(Items *dev)
 
     Q_ASSERT(dev->listStatus.size() > 0);
 
+}
+
+//-------------------------------------------------------------------------------------------------
+// Обновление включения кнопок
+//-------------------------------------------------------------------------------------------------
+void AcceptRemontWindow::UpdateButtonEnabled()
+{
+    ui->pbApply->setEnabled(device.id > 0);
 }
 

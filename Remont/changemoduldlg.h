@@ -29,6 +29,7 @@ private:
     QMap<QString, int> listReason;
     StatusItem statItem = StatusItem::EXCHANGE;
 
+    void UpdateButtonEnabled();
 };
 
 #endif // CHANGEMODULDLG_H

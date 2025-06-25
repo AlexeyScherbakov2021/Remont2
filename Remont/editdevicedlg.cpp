@@ -15,6 +15,7 @@ EditDeviceDlg::EditDeviceDlg(QWidget *parent)
     ui->deDateGarant->setNullDate(QDate(1900,1,1));
     ui->twHistory->horizontalHeader()->resizeSection(0, 110);
     ui->twHistory->horizontalHeader()->resizeSection(1, 166);
+    UpdateButtonEnabled();
 }
 
 //--------------------------------------------------------------------------
@@ -115,6 +116,7 @@ void EditDeviceDlg::on_pbAddStatus_clicked()
         ui->twHistory->setItem(row, 3, item);
 
         device.AddStatus(device, stat);
+        UpdateButtonEnabled();
     }
 }
 
@@ -134,6 +136,7 @@ void EditDeviceDlg::on_pbDeleteStatus_clicked()
     {
         device.DeleteLastStatus(device, stat.idStatus);
         ui->twHistory->removeRow(ui->twHistory->rowCount() - 1);
+        UpdateButtonEnabled();
     }
 }
 
@@ -165,5 +168,11 @@ void EditDeviceDlg::ShowStatus()
 
         ++row;
     }
+    UpdateButtonEnabled();
+}
+
+void EditDeviceDlg::UpdateButtonEnabled()
+{
+    ui->pbDeleteStatus->setEnabled(device.listStatus.size() > 0);
 }
 

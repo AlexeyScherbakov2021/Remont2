@@ -14,7 +14,7 @@ RemontWindow::RemontWindow(QWidget *parent)
 
     ui->deDate->setDateTime(QDateTime::currentDateTime());
     connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
-
+    UpdateButtonEnabled();
 }
 
 //-----------------------------------------------------------------------------------------
@@ -51,6 +51,7 @@ void RemontWindow::on_pbOK_clicked()
     ui->lbOrgName->clear();
     ui->lbTypeName->clear();
     device.id = 0;
+    UpdateButtonEnabled();
 }
 
 
@@ -106,7 +107,16 @@ void RemontWindow::AddDevice(Items *dev)
         ui->lbClaim->setText(claim.number + " (" + claim.dateCreate.toString("dd.MM.yyyy") + ")");
     }
     ui->leNumber->clear();
+    UpdateButtonEnabled();
 
+}
+
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
+void RemontWindow::UpdateButtonEnabled()
+{
+    ui->pbOK->setEnabled(device.id > 0);
 }
 
 

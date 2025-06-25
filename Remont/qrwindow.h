@@ -32,6 +32,7 @@ private:
     // void formatDocument(QTextDocument *doc);
     void paintStick(QPainter &painter, int x, int y, QString number);
     void ShowCurrentNumber();
+    void UpdateButtonEnabled();
 };
 
 #endif // QRWINDOW_H

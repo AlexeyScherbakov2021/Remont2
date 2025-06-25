@@ -30,7 +30,6 @@ SelectDeviceWindow::SelectDeviceWindow(IndexType _type, QWidget *parent)
 
     connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
 
-
     ui->tableView->addAction("Карточка устройства", this, [this] () {
 
         QModelIndex index = ui->tableView->currentIndex();
@@ -53,6 +52,8 @@ SelectDeviceWindow::SelectDeviceWindow(IndexType _type, QWidget *parent)
 
     ui->tableView->setContextMenuPolicy(Qt::ActionsContextMenu);
 
+    connect(ui->tableView->selectionModel(), &QItemSelectionModel::currentChanged, this, &SelectDeviceWindow::UpdateButtonEnabled);
+    UpdateButtonEnabled();
 }
 
 
@@ -99,6 +100,18 @@ void SelectDeviceWindow::ExcludeDevice(QSet<int>& _setId)
 void SelectDeviceWindow::startLoad()
 {
     model->prepareLoad2(ui->leSearch->text(), vStatus, isBusy, hasParent );
+}
+
+//---------------------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------------------
+void SelectDeviceWindow::UpdateButtonEnabled()
+{
+    if(ui->tableView->selectionModel() != nullptr)
+    {
+        ui->pbSelect->setEnabled(ui->tableView->selectionModel()->currentIndex() != QModelIndex());
+    }
+
 }
 
 
@@ -156,6 +169,7 @@ void SelectDeviceWindow::Search(QString /*number*/)
     QApplication::setOverrideCursor(Qt::WaitCursor);
     startLoad();
     QApplication::restoreOverrideCursor();
+    UpdateButtonEnabled();
 }
 
 

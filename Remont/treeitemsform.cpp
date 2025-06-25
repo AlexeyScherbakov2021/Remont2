@@ -253,7 +253,10 @@ void TreeItemsForm::SetSelectItem(int id, IndexType typeIndex)
 int TreeItemsForm::GetSelectedId()
 {
     auto selItem = ui->treeWidget->currentItem();
-    return selItem->data(0, Qt::UserRole).toInt();
+    if(selItem != nullptr)
+        return selItem->data(0, Qt::UserRole).toInt();
+    else
+        return 0;
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -361,5 +364,11 @@ bool TreeItemsForm::SetSelectItemRec(int id, IndexType typeIndex, QTreeWidgetIte
 }
 
 
-
+//---------------------------------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------------------------------
+void TreeItemsForm::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+{
+    emit currentItemChanged(current, previous);
+}
 

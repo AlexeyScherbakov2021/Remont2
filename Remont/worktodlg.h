@@ -22,7 +22,6 @@ private slots:
     void on_tbSearch_clicked();
     void on_pbExchange_clicked();
     void on_pbFirmware_clicked();
-    void on_pbAnother_clicked();
     void on_pbGarantLong_clicked();
 
 private:

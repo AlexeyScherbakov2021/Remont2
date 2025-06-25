@@ -30,18 +30,18 @@ private slots:
     // void on_pbSelect_clicked();
 
     void on_twClaim_doubleClicked(const QModelIndex &index);
+    void UpdateButtonEnabled();
 
 private:
     Ui::ClaimWindow *ui;
     // QList<Claim> listClaim;
     ListClaim claims;
     void AddLineToWidget(int row);
-
     RepoMSSQL repo;
     // bool isSelected;
     ClaimModel *model;
 
-    int AddLineScreen(const Claim *claim);
+    // int AddLineScreen(const Claim *claim);
 };
 
 #endif // CLAIMWINDOW_H

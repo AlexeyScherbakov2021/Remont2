@@ -31,6 +31,7 @@ private slots:
     void on_pbSave_clicked();
     void slotReadScan(QString s);
     void slotShowCard();
+    // void lineEdit_textEdited(const QString &arg1);
 
 private:
     Ui::ShipWindow *ui;
@@ -48,6 +49,7 @@ private:
     void SetStatusItems(QList<Items>& items);
     void SaveToBase();
     void SyncTrack();
+    void UpdateButtonEnabled();
 
 };
 

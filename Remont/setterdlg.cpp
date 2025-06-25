@@ -18,6 +18,8 @@ SetterDlg::SetterDlg(bool isSelect, bool _isFree, QWidget *parent)
     model = new SetterModel(this);
     model->prepareLoad("", isFree);
     ui->tableView->setModel(model);
+    connect(ui->tableView->selectionModel(), &QItemSelectionModel::currentChanged, this, &SetterDlg::UpdateButtonEnabled);
+    UpdateButtonEnabled();
 }
 
 //-------------------------------------------------------------------------
@@ -34,6 +36,7 @@ SetterDlg::~SetterDlg()
 void SetterDlg::on_tbSearch_clicked()
 {
     model->prepareLoad(ui->leSearch->text(), isFree);
+    UpdateButtonEnabled();
 }
 
 
@@ -49,6 +52,7 @@ void SetterDlg::on_pbNew_clicked()
         model->AddItem(&setter);
         RepoMSSQL repo;
         repo.ItemsSyncSet(setter.id, &win->track);
+        UpdateButtonEnabled();
     }
 }
 
@@ -67,6 +71,7 @@ void SetterDlg::on_pbDelete_clicked()
     if(QMessageBox::warning(this, "Предупреждение",QString("Удалить '%1 (%2)' ?").arg(setter->numberDoc).arg(setter->name), QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
     {
         model->DeleteItem(index.row());
+        UpdateButtonEnabled();
     }
 }
 
@@ -98,6 +103,7 @@ void SetterDlg::on_tableView_doubleClicked(const QModelIndex &index)
 
         RepoMSSQL repo;
         repo.ItemsSyncSet(setter->id, &win->track);
+        UpdateButtonEnabled();
 
     }
 }
@@ -114,5 +120,20 @@ void SetterDlg::on_pbSelect_clicked()
         selectSetter = model->GetItem(index.row());
         accept();
     }
+}
+
+//-------------------------------------------------------------------------
+//
+//-------------------------------------------------------------------------
+void SetterDlg::UpdateButtonEnabled()
+{
+    if(ui->tableView->selectionModel() == nullptr)
+        return;
+
+    bool enabled = ui->tableView->selectionModel()->currentIndex() != QModelIndex();
+
+    ui->pbEdit->setEnabled(enabled);
+    ui->pbDelete->setEnabled(enabled);
+    ui->pbSelect->setEnabled(enabled);
 }
 

@@ -34,6 +34,7 @@ private slots:
     void slotReadScan(QString s);
     void on_tbDocP_clicked();
     void lineEdit_textEdited(const QString &arg1);
+    void UpdateButtonEnabled();
 
 private:
     Ui::CreateProductWindow *ui;

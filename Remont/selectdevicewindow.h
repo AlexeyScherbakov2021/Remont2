@@ -58,6 +58,8 @@ private:
     LoadPartType hasParent = LoadPartType::NO_HAS_PARENT;
     QSet<int> setId;
 
+    void UpdateButtonEnabled();
+
     // QDialog interface
 // public slots:
 //     int exec() override;

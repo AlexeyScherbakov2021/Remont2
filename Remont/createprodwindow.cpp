@@ -43,9 +43,10 @@ CreateProductWindow::CreateProductWindow(QWidget *parent)
     // }
     // ui->cbProduct->view()->setMaximumWidth(900);
 
-
-
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
+    connect(ui->leNumProduct, &QLineEdit::textChanged, this, &CreateProductWindow::UpdateButtonEnabled);
+    connect(ui->cbProduct, &QComboBox::currentIndexChanged, this, &CreateProductWindow::UpdateButtonEnabled);
+    UpdateButtonEnabled();
 
 }
 
@@ -95,9 +96,8 @@ void CreateProductWindow::on_tbDeleteProduct_clicked()
 //---------------------------------------------------------------------------------
 void CreateProductWindow::on_pbRegProduct_clicked()
 {
-    // if(ui->leNumProduct->text().isEmpty())
-    // if(ui->cbProduct->currentIndex() < 0)
-    //     return;
+    if(ui->leNumProduct->text().isEmpty())
+        return;
 
     Items prod;
 
@@ -123,7 +123,7 @@ void CreateProductWindow::on_pbRegProduct_clicked()
     prod.number = ui->leNumProduct->text();
     prod.name = ui->leNameProd->text();
     prod.idType = prod.type.id;
-    prod.dateCreate = QDateTime::currentDateTime();
+    prod.dateCreate = ui->deCreateDateP->dateTime(); // QDateTime::currentDateTime();
     prod.garantMonth = type->garantMonth;
     // prod.garantMonth = listTypeProduct[ui->cbProduct->currentIndex()].garantMonth;
     prod.numberDoc = ui->leNumberDocP->text();
@@ -168,7 +168,6 @@ void CreateProductWindow::on_cbProduct_currentIndexChanged(int index)
     QModelIndex ind = proxy.mapToSource(proxy.index(index, 0));
     index = ind.row();
     ItemType *tp = model.getType(index);
-
     ui->lbGarantProd->setText(QString::number(tp->garantMonth));
 }
 
@@ -222,7 +221,6 @@ void CreateProductWindow::on_tbDocP_clicked()
                 ui->cbProduct->setCurrentIndex(0);
             }
             // ui->cbProduct->setCurrentIndex(index);
-
             // for(auto &it : listTypeProduct)
             // {
             //     if(it.VNFT == nakl.VNFT)
@@ -247,10 +245,21 @@ void CreateProductWindow::on_tbDocP_clicked()
 
 
 
+//---------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------
 void CreateProductWindow::lineEdit_textEdited(const QString &arg1)
 {
     // qDebug() << arg1;
     proxy.setFilterFixedString(arg1);
+}
+
+//---------------------------------------------------------------------------
+// Включение кнопок
+//---------------------------------------------------------------------------
+void CreateProductWindow::UpdateButtonEnabled()
+{
+    ui->pbRegProduct->setEnabled(!ui->leNumProduct->text().isEmpty() && ui->cbProduct->currentIndex() >= 0);
 }
 
 

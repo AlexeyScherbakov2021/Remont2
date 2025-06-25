@@ -1,4 +1,5 @@
 #include <QClipboard>
+#include <QCompleter>
 #include <QInputDialog>
 #include <QMenu>
 #include <QMessageBox>
@@ -17,8 +18,8 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
 
     ui->setupUi(this);
 
-    ui->deDateOut->setNullDate(QDate(1900,1,1));
-    ui->deDateUPD->setNullDate(QDate(1900,1,1));
+    ui->deDateOut->setNullDate(QDate(1901,1,1));
+    ui->deDateUPD->setNullDate(QDate(1901,1,1));
 
     QFuture<void> future =  QtConcurrent::run( [&] (QPromise<void> &promise)
     {
@@ -108,6 +109,22 @@ ShipWindow::ShipWindow(Shipment *shipment, QWidget *parent)
 
     ui->wTreeItems->setContextMenuPolicy(Qt::ActionsContextMenu);
 
+    connect(ui->wTreeItems, &TreeItemsForm::currentItemChanged, this, &ShipWindow::UpdateButtonEnabled);
+    connect(ui->cbCusomer, &QComboBox::currentIndexChanged, this, &ShipWindow::UpdateButtonEnabled);
+    connect(ui->leNumUPD, &QLineEdit::textChanged, this, &ShipWindow::UpdateButtonEnabled);
+    connect(ui->deDateUPD, &DateEdit::dateChanged, this, &ShipWindow::UpdateButtonEnabled);
+
+    UpdateButtonEnabled();
+
+    // QCompleter *comp = new QCompleter(&proxy,ui->cbCusomer);
+    // comp->setModel(&proxy);
+    // comp->setCaseSensitivity( Qt::CaseInsensitive );
+    // comp->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+    // ui->cbCusomer->setCompleter(comp);
+    // ui->cbCusomer->setCurrentIndex(-1);
+    // connect(ui->cbCusomer->lineEdit(), &QLineEdit::textEdited, this, &ShipWindow::lineEdit_textEdited);
+
+
 }
 
 
@@ -118,8 +135,6 @@ ShipWindow::~ShipWindow()
     watcher->waitForFinished();
     delete watcher;
 }
-
-
 
 
 //-----------------------------------------------------------------------------------
@@ -139,6 +154,7 @@ void ShipWindow::on_tbNumProd_clicked()
         trackItem.AddRecord(/*dev->id,*/ *dev);
         ui->wTreeItems->AddItem(dev);
         listAddId.insert(dev->id);
+        UpdateButtonEnabled();
     }
 
 }
@@ -177,6 +193,7 @@ void ShipWindow::on_pbDelete_clicked()
             }
         listAddId.remove(id);
     }
+    UpdateButtonEnabled();
 
 }
 
@@ -218,6 +235,7 @@ void ShipWindow::on_tbAddSetter_clicked()
     {
         trackSet.AddRecord(/*win->selectSetter->id,*/ *win->selectSetter);
         ui->wTreeItems->AddItem(win->selectSetter);
+        UpdateButtonEnabled();
     }
 }
 
@@ -289,6 +307,7 @@ void ShipWindow::slotReadScan(QString s)
         {
             trackItem.AddRecord(/*dev.id,*/ dev);
             ui->wTreeItems->AddItem(&dev);
+            UpdateButtonEnabled();
         }
     }
 }
@@ -336,6 +355,18 @@ void ShipWindow::SyncTrack()
 
 }
 
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+void ShipWindow::UpdateButtonEnabled()
+{
+    bool enable;
+    ui->pbDelete->setEnabled(ui->wTreeItems->GetSelectedId() > 0);
+
+    enable = !ui->leNumUPD->text().isEmpty() && !ui->deDateUPD->dateTime().isNull() && ui->cbCusomer->currentIndex() >= 0;
+    ui->pbFinish->setEnabled(enable);
+}
+
 
 //-----------------------------------------------------------------------------------
 // Кнопка Отгрузить
@@ -371,5 +402,10 @@ void ShipWindow::on_pbFinish_clicked()
 }
 
 
+// void CreateModulWindow::lineEdit_textEdited(const QString &arg1)
+// {
+//     proxy.setFilterFixedString(arg1);
+
+// }
 
 

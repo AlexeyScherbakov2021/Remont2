@@ -37,6 +37,7 @@ private:
     QList<Items> listDev;
     virtual void SelectDevice();
     virtual void SetStatusAllDevice(Items* item, QDateTime& dateOn);
+    void UpdateButtonEnabled();
 };
 
 

@@ -33,6 +33,9 @@ CreateModulWindow::CreateModulWindow(QWidget *parent)
     ui->cbModul->setCurrentIndex(-1);
     connect(ui->cbModul->lineEdit(), &QLineEdit::textEdited, this, &CreateModulWindow::lineEdit_textEdited);
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
+    connect(ui->leNumModul, &QLineEdit::textChanged, this, &CreateModulWindow::UpdateButtonEnabled);
+    connect(ui->cbModul, &QComboBox::currentIndexChanged, this, &CreateModulWindow::UpdateButtonEnabled);
+    UpdateButtonEnabled();
 
 }
 
@@ -81,6 +84,14 @@ void CreateModulWindow::UpdateUseCount()
 
 }
 
+//---------------------------------------------------------------------------
+// Включение кнопок
+//---------------------------------------------------------------------------
+void CreateModulWindow::UpdateButtonEnabled()
+{
+    ui->pbRegModul->setEnabled(!ui->leNumModul->text().isEmpty()&& ui->cbModul->currentIndex() >= 0);
+}
+
 //---------------------------------------------------------------------------------
 // Кнопка Регистрации модуля
 //---------------------------------------------------------------------------------
@@ -111,7 +122,7 @@ void CreateModulWindow::on_pbRegModul_clicked()
     mod.number = ui->leNumModul->text();
     mod.name = ui->leModulName->text();
     mod.idType = mod.type.id;
-    mod.dateCreate = QDateTime::currentDateTime();
+    mod.dateCreate =  ui->deCreateDate->dateTime(); // QDateTime::currentDateTime();
     mod.garantMonth = type->garantMonth;
     mod.numberDoc = ui->leNumberDoc->text();
     mod.number2 = ui->leNumber2->text();
@@ -150,7 +161,7 @@ void CreateModulWindow::on_pbRegModul_clicked()
 //---------------------------------------------------------------------------------
 void CreateModulWindow::on_cbModul_currentIndexChanged(int index)
 {
-    // if(index < 0)
+    if(index < 0)
         return;
 
     // QVariant var = ui->cbModul->currentData();

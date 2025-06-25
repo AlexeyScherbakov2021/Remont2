@@ -19,7 +19,10 @@ StartWorkWindow::StartWorkWindow(QWidget *parent)
     ui->lwProduct->setColumnWidth(0, 400);
     ui->lwProduct->setColumnWidth(1, 150);
     connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
+    connect(ui->leDoc, &QLineEdit::textChanged, this, &StartWorkWindow::UpdateButtonEnabled);
+    connect(ui->lwProduct, &QTableWidget::currentCellChanged, this, &StartWorkWindow::UpdateButtonEnabled);
 
+    UpdateButtonEnabled();
 }
 
 StartWorkWindow::~StartWorkWindow()
@@ -95,6 +98,16 @@ void StartWorkWindow::SetStatusAllDevice(Items *item, QDateTime& dateOn)
         SetStatusAllDevice(&it, dateOn);
 }
 
+
+//----------------------------------------------------------------------------
+//
+//----------------------------------------------------------------------------
+void StartWorkWindow::UpdateButtonEnabled()
+{
+    ui->pbProdToWork->setEnabled(ui->lwProduct->rowCount() > 0 && !ui->leDoc->text().isEmpty());
+    ui->tbDelete->setEnabled(ui->lwProduct->currentRow() >= 0);
+}
+
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -152,6 +165,7 @@ void StartWorkWindow::AddDevice(Items* dev)
     ui->lwProduct->setItem(row, 1, item);
 
     listDev.push_back(*dev);
+    UpdateButtonEnabled();
 }
 
 
@@ -169,6 +183,7 @@ void StartWorkWindow::on_tbDelete_clicked()
 
     ui->lwProduct->removeRow(row);
     listDev.removeAt(row);
+    UpdateButtonEnabled();
 
 }
 

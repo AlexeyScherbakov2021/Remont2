@@ -35,7 +35,7 @@ RepoMSSQL::~RepoMSSQL()
 bool RepoMSSQL::ConnectDb()
 {
 
-#ifdef WORKBASE
+// #ifdef WORKBASE
     qDebug() << "Рабочая версия.";
     // db.setUserName("sa");
     // db.setPassword("gonduras");
@@ -44,13 +44,13 @@ bool RepoMSSQL::ConnectDb()
     db.setPassword("ctcnhjt,s");
 
 
-#else
-    qDebug() << "Отладочная версия.";
-    db.setDatabaseName("DRIVER={SQL Server};SERVER=SFP\\FPSQLN;DATABASE=TrackProdTest;");
-    db.setUserName("fpLoginName");
-    db.setPassword("ctcnhjt,s");
+// #else
+//     qDebug() << "Отладочная версия.";
+//     db.setDatabaseName("DRIVER={SQL Server};SERVER=SFP\\FPSQLN;DATABASE=TrackProdTest;");
+//     db.setUserName("fpLoginName");
+//     db.setPassword("ctcnhjt,s");
 
-#endif
+// #endif
 
     if(!db.open())
     {
@@ -1645,7 +1645,7 @@ void RepoMSSQL::LoadNewItemsType(QVector<ItemType> &listType, IndexType indexTyp
 {
     listType.clear();
     QSqlQuery query(db);
-    query.prepare("select id,typeName,garantMonth,VNFT from ItemType where indexType=:indexType and VNFT is not null");
+    query.prepare("select id,typeName,garantMonth,VNFT,garantMonth from ItemType where indexType=:indexType and VNFT is not null");
     query.bindValue(":indexType", indexType);
 
     query.exec();
@@ -1657,6 +1657,7 @@ void RepoMSSQL::LoadNewItemsType(QVector<ItemType> &listType, IndexType indexTyp
         mType.garantMonth = query.value(2).toInt();
         mType.VNFT = query.value(3).toString();
         mType.indexType = indexType;
+        mType.garantMonth = query.value(4).toInt();
         listType.push_back(mType);
     }
 }

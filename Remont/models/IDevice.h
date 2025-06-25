@@ -4,7 +4,7 @@
 #include "entity.h"
 #include "enumvariable.h"
 
-class IDevice : public IEntity
+class IDevice1 : public IEntity
 {
 public:
     int idParent;

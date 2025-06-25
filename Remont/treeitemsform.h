@@ -40,6 +40,12 @@ private:
 
     void AddChildTree(QTreeWidgetItem *item, Items* dev);
     bool SetSelectItemRec(int id, IndexType typeIndex, QTreeWidgetItem* item);
+
+signals:
+    void currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+
+private slots:
+    void on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 };
 
 #endif // TREEITEMSFORM_H

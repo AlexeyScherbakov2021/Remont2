@@ -4,7 +4,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++20
 
-VERSION = 1.1.0.9
+VERSION = 1.1.0.12
 QMAKE_TARGET_COMPANY = NGK
 QMAKE_TARGET_PRODUCT = ReestrNumbers
 QMAKE_TARGET_DESCRIPTION = Reestr Numbers
@@ -102,7 +102,6 @@ HEADERS += \
     listshipwindow.h \
     logindlg.h \
     logwindow.h \
-    models/IDevice.h \
     models/Items.h \
     models/ItemsType.h \
     models/claim.h \

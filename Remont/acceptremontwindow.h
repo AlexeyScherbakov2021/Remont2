@@ -31,6 +31,7 @@ private:
     Items device;
     void AddDevice(Items *item);
 
+    void UpdateButtonEnabled();
 };
 
 #endif // ACCEPTREMONTWINDOW_H

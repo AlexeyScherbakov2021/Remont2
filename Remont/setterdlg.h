@@ -31,6 +31,7 @@ private:
     Ui::SetterDlg *ui;
     SetterModel* model;
     bool isFree = false;
+    void UpdateButtonEnabled();
 };
 
 #endif // SETTERDLG_H

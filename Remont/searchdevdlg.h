@@ -26,6 +26,7 @@ private slots:
 private:
     Ui::SearchDevDlg *ui;
     DeviceModel *model = nullptr;
+    void UpdateButtonEnabled();
 };
 
 #endif // SEARCHDEVDLG_H

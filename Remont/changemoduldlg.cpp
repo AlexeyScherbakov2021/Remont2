@@ -40,6 +40,8 @@ ChangeModulDlg::ChangeModulDlg(Items* dev, QWidget *parent, bool isTO)
     Items parentDev = repo.GetItem(dev->idParent);
     ui->wTree->AddItem(&parentDev);
     ui->wTree->SetSelectItem(dev->id, dev->type.indexType);
+
+    UpdateButtonEnabled();
 }
 
 ChangeModulDlg::~ChangeModulDlg()
@@ -60,6 +62,7 @@ void ChangeModulDlg::on_tbSearch_clicked()
         ui->lbNumber_2->setText(dev->number);
         ui->lbType_2->setText(dev->type.typeName);
         ui->lbVNFT_2->setText(dev->type.VNFT);
+        UpdateButtonEnabled();
     }
 }
 
@@ -106,5 +109,13 @@ void ChangeModulDlg::on_pbOK_clicked()
             .arg(brokenDev->type.typeName).arg(brokenDev->number).arg(brokenDev->type.VNFT));
 
     accept();
+}
+
+//---------------------------------------------------------------------------
+// Включение кнопок
+//---------------------------------------------------------------------------
+void ChangeModulDlg::UpdateButtonEnabled()
+{
+    ui->pbOK->setEnabled(brokenDev != nullptr && newDev.id > 0);
 }
 

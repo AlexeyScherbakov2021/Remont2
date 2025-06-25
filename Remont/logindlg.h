@@ -26,6 +26,8 @@ public:
 private slots:
     void on_pbOK_clicked();
 
+    void on_cbUsers_currentIndexChanged(int index);
+
 private:
     Ui::LoginDlg *ui;
     RepoMSSQL repo;

@@ -26,7 +26,8 @@ PlateListWindow::PlateListWindow(QWidget *parent)
     ui->tableView->setColumnWidth(5, 80);
 
     conn = connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
-
+    connect(ui->tableView->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &PlateListWindow::UpdateButtonEnabled);
+    UpdateButtonEnabled();
 }
 
 PlateListWindow::~PlateListWindow()
@@ -110,6 +111,8 @@ void PlateListWindow::startLoad()
 {
     LoadPartType hasParent = ui->rbAll->isChecked() ? LoadPartType::ANY_PARENT : LoadPartType::NO_HAS_PARENT;
     model->prepareLoad(ui->leSearch->text(), 0, false, hasParent );
+    UpdateButtonEnabled();
+
 }
 
 
@@ -122,6 +125,19 @@ void PlateListWindow::UpdateForm()
     ui->pbDelete->setVisible(!isSelectPlate);
     ui->rbAll->setVisible(!isNotLinked);
     ui->rbNotLink->setVisible(!isNotLinked);
+}
+
+//---------------------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------------------
+void PlateListWindow::UpdateButtonEnabled()
+{
+    if(ui->tableView->selectionModel() == nullptr)
+        return;
+
+    bool enable = ui->tableView->selectionModel()->currentIndex() != QModelIndex();
+    ui->pbSelect->setEnabled(enable);
+    ui->pbDelete->setEnabled(enable);
 }
 
 //---------------------------------------------------------------------------------------
@@ -146,8 +162,8 @@ void PlateListWindow::on_pbDelete_clicked()
     if(QMessageBox::warning(this, "Предупреждение",
                              QString("Удалить \"%1\"").arg(plate->number), QMessageBox::No | QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
     {
-
         model->DeleteItem(row);
+        UpdateButtonEnabled();
     }
 
 }

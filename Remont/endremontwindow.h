@@ -33,6 +33,7 @@ private:
     Claim claim;
     RepoMSSQL repo;
     void AddDevice(Items *item);
+    void UpdateButtonEnabled();
 };
 
 #endif // ENDREMONTWINDOW_H

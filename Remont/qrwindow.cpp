@@ -19,13 +19,20 @@ QRWindow::QRWindow(QWidget *parent)
     ui->setupUi(this);
     ui->cbYear->setCurrentIndex(QDate::currentDate().year() - 2024);
     ShowCurrentNumber();
+    UpdateButtonEnabled();
 }
 
+//-------------------------------------------------------------------------------------------------------------
+//
+//-------------------------------------------------------------------------------------------------------------
 QRWindow::~QRWindow()
 {
     delete ui;
 }
 
+//-------------------------------------------------------------------------------------------------------------
+//
+//-------------------------------------------------------------------------------------------------------------
 void QRWindow::on_pbGenerate_clicked()
 {
     listNumbers.clear();
@@ -46,9 +53,13 @@ void QRWindow::on_pbGenerate_clicked()
     // QImage image = gen.generateQr(ui->leText->text(), 500, 1);
     // ui->lbImage->setPixmap(QPixmap::fromImage(image));
     ShowCurrentNumber();
+    UpdateButtonEnabled();
 }
 
 
+//-------------------------------------------------------------------------------------------------------------
+//
+//-------------------------------------------------------------------------------------------------------------
 void QRWindow::on_pbPrint_clicked()
 {
     if(listNumbers.empty())
@@ -72,6 +83,9 @@ void QRWindow::on_pbPrint_clicked()
 
 }
 
+//-------------------------------------------------------------------------------------------------------------
+//
+//-------------------------------------------------------------------------------------------------------------
 void QRWindow::paintPages(QPrinter *printer)
 {
     QTextDocument doc;
@@ -161,6 +175,9 @@ void QRWindow::paintPages(QPrinter *printer)
 
 // }
 
+//-------------------------------------------------------------------------------------------------------------
+//
+//-------------------------------------------------------------------------------------------------------------
 void QRWindow::paintStick(QPainter &painter, int x, int y, QString number)
 {
     painter.setPen(QPen(Qt::black, 1));
@@ -175,6 +192,9 @@ void QRWindow::paintStick(QPainter &painter, int x, int y, QString number)
     painter.drawText(r, Qt::AlignCenter, QString("№ %1").arg(number));
 }
 
+//-------------------------------------------------------------------------------------------------------------
+//
+//-------------------------------------------------------------------------------------------------------------
 void QRWindow::ShowCurrentNumber()
 {
     RepoMSSQL repo;
@@ -182,7 +202,14 @@ void QRWindow::ShowCurrentNumber()
     int currNumber = repo.GetCurrentNumber(year);
     ui->lbCurrentNum->setText(QString::number(currNumber));
 
+}
 
+//-------------------------------------------------------------------------------------------------------------
+//
+//-------------------------------------------------------------------------------------------------------------
+void QRWindow::UpdateButtonEnabled()
+{
+    ui->pbPrint->setEnabled(!ui->lbResult->text().isEmpty());
 }
 
 

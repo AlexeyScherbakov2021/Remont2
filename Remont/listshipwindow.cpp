@@ -29,7 +29,8 @@ ListShipWindow::ListShipWindow(QWidget *parent, bool _isShip)
 
     QApplication::restoreOverrideCursor();
 
-
+    connect(ui->tableView->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &ListShipWindow::UpdateButtonEnabled);
+    UpdateButtonEnabled();
 
 }
 
@@ -50,6 +51,7 @@ void ListShipWindow::on_pbNew_clicked()
     if(res == QDialog::Accepted)
     {
         model->AddItemToList(&ship);
+        UpdateButtonEnabled();
     }
 }
 
@@ -69,6 +71,7 @@ void ListShipWindow::on_pbDeleteShip_clicked()
             QString("Удалить отгрузку счет \"%1\"?").arg(ship->schet), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
     {
         model->DeleteItem(row);
+        UpdateButtonEnabled();
 
         // if(repo.DeleteShipment(ship.id))
         // {
@@ -114,8 +117,22 @@ void ListShipWindow::on_tableView_doubleClicked(const QModelIndex &index)
 }
 
 
+//----------------------------------------------------------------------------
+//
+//----------------------------------------------------------------------------
 void ListShipWindow::on_tbSearch_clicked()
 {
     model->prepareLoad(ui->leSearch->text(), isShip);
+    UpdateButtonEnabled();
+}
+
+//----------------------------------------------------------------------------
+//
+//----------------------------------------------------------------------------
+void ListShipWindow::UpdateButtonEnabled()
+{
+    bool enabled = ui->tableView->selectionModel()->currentIndex() != QModelIndex();
+    ui->pbEdit->setEnabled(enabled);
+    ui->pbDeleteShip->setEnabled(enabled);
 }
 

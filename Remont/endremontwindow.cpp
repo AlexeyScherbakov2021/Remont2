@@ -24,7 +24,7 @@ EndRemontWindow::EndRemontWindow(QWidget *parent)
 
     ui->cbReason->setCurrentIndex(0);
     connect(&Scan::scan, SIGNAL(sigRead(QString)), SLOT(slotReadScan(QString)));
-
+    UpdateButtonEnabled();
 }
 
 EndRemontWindow::~EndRemontWindow()
@@ -44,6 +44,7 @@ void EndRemontWindow::on_tbNumber_clicked()
     if(dev != nullptr && dev->id > 0)
     {
         AddDevice(dev);
+        UpdateButtonEnabled();
     }
 }
 
@@ -87,9 +88,13 @@ void EndRemontWindow::on_pbEndRemont_clicked()
     ui->lbOrgName->clear();
     ui->lbTypeName->clear();
     device.id = 0;
+    UpdateButtonEnabled();
 
 }
 
+//---------------------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------------------
 void EndRemontWindow::slotReadScan(QString s)
 {
     if(isActiveWindow())
@@ -99,12 +104,16 @@ void EndRemontWindow::slotReadScan(QString s)
         if(item.id > 0)
         {
             AddDevice(&item);
+            UpdateButtonEnabled();
         }
         // on_tbNumber_clicked();
     }
 }
 
 
+//---------------------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------------------
 void EndRemontWindow::AddDevice(Items *dev)
 {
     device = *dev;
@@ -121,4 +130,12 @@ void EndRemontWindow::AddDevice(Items *dev)
     ui->lbClaim->setText(claim.number + " (" + claim.dateCreate.toString("dd.MM.yyyy") + ")");
     ui->leNumber->clear();
 
+}
+
+//---------------------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------------------
+void EndRemontWindow::UpdateButtonEnabled()
+{
+    ui->pbEndRemont->setEnabled(device.id > 0);
 }

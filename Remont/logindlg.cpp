@@ -63,3 +63,9 @@ void LoginDlg::on_pbOK_clicked()
     }
 }
 
+
+void LoginDlg::on_cbUsers_currentIndexChanged(int index)
+{
+    ui->lePass->setFocus();
+}
+

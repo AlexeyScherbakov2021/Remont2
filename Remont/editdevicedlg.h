@@ -29,6 +29,8 @@ private:
     RepoMSSQL repo;
 
     void ShowStatus();
+    void UpdateButtonEnabled();
+
 };
 
 #endif // EDITDEVICEDLG_H

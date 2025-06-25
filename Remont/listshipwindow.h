@@ -23,10 +23,9 @@ private slots:
     void on_pbEdit_clicked();
     // void on_tableWidget_cellDoubleClicked(int row, int column);
     void on_pbDeleteShip_clicked();
-
     void on_tableView_doubleClicked(const QModelIndex &index);
-
     void on_tbSearch_clicked();
+    void UpdateButtonEnabled();
 
 private:
     Ui::ListShipWindow *ui;
@@ -34,6 +33,8 @@ private:
     ListShipment Ship;
     bool isShip;
     ShipModel *model;
+
+
 };
 
 #endif // LISTSHIPWINDOW_H
